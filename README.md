@@ -26,10 +26,10 @@ Or install it yourself as:
 
 First, you need to get an API key for a Clerk instance. This is done via the [Clerk dashboard](https://dashboard.clerk.dev/applications).
 
-Then you can instantiate a `Clerk::Client` instance and access all [Backend API](https://docs.clerk.dev/backend/backend-api-reference) endpoints.
+Then you can instantiate a `Clerk::SDK` instance and access all [Backend API](https://docs.clerk.dev/backend/backend-api-reference) endpoints.
 
 ```ruby
-clerk = Clerk::Client.new(api_key: "your_api_key")
+clerk = Clerk::SDK.new(api_key: "your_api_key")
 # List all users
 clerk.users.all
 # Get your first user
@@ -50,7 +50,7 @@ clerk.emails.create(
 The SDK can be configured in two ways: environment variables and constructor arguments. Constructor arguments have priority over environment variables. If an argument is not provided, the environment variable will be `fetch`ed. Here's an example with all supported constructor arguments and their environment variable equivalents:
 
 ```ruby
-clerk = Clerk::Client.new(
+clerk = Clerk::SDK.new(
     # Fallback: ENV.fetch("CLERK_API_KEY") - fails if not set!
     api_key: "your_api_key",
     # Fallback: ENV.fetch("CLERK_API_BASE", "https://api.clerk.dev/v1/")
@@ -64,7 +64,7 @@ clerk = Clerk::Client.new(
 
 ## Internals
 
-The API client sends all requests as `application/x-www-form-urlencoded`. The API then responds with JSON is then converted and returned as a Ruby `Hash`, or `Array` of hashes. Errors are also returned as a JSON object, with a single key (`errors`) containing an array of error objects.
+The API client sends all requests as `application/x-www-form-urlencoded`. The API then responds with JSON which is then converted and returned as a Ruby `Hash`, or `Array` of hashes. Errors are also returned as a JSON object, with a single key (`errors`) containing an array of error objects.
 
 Read the [API documentation](https://docs.clerk.dev/backend/backend-api-reference) for details on expected parameters and response formats.
 

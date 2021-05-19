@@ -13,7 +13,7 @@ require_relative "resources/sms_messages"
 require_relative "resources/users"
 
 module Clerk
-  class Client
+  class SDK
     PRODUCTION_BASE_URL = "https://api.clerk.dev/v1/".freeze
 
     def initialize(api_key: nil, base_url: nil, logger: nil, ssl_verify_mode: nil)
