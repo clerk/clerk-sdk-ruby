@@ -1,0 +1,21 @@
+PATH
+  remote: .
+  specs:
+    clerk-sdk-ruby (1.0.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.14.2)
+    rake (13.0.3)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  clerk-sdk-ruby!
+  minitest (~> 5.0)
+  rake (~> 13.0)
+
+BUNDLED WITH
+   2.2.15
