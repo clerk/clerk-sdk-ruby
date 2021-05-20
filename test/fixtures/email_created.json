@@ -1,0 +1,10 @@
+{
+    "id": "ema_1",
+    "object": "email",
+    "from_email_name": "support",
+    "to_email_address": "boss@clerk.dev",
+    "email_address_id": "idn_1n5AVtYAHNQY73d6dY6GVJt8gmD",
+    "subject": "green test",
+    "body": "this is a green test",
+    "status": "queued"
+}
