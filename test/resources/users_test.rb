@@ -7,6 +7,7 @@ class Clerk::Resources::UsersTest < Minitest::Test
     faraday = Faraday.new do |faraday|
       faraday.adapter :test do |stub|
         stub.get("/users") { json_ok("all_users") }
+        stub.get("/users?limit=10") { json_ok("all_users") }
         stub.get("/users/user_1") { json_ok("user_1") }
         stub.patch("/users/user_1") { json_ok("user_1_updated") }
         stub.delete("/users/user_1") { json_ok("user_1_deleted") }
@@ -19,6 +20,11 @@ class Clerk::Resources::UsersTest < Minitest::Test
 
   def test_all_users
     users = mock_sdk.users.all
+    assert_equal ["user", "user"], users.map { |h| h.dig("object") }
+  end
+
+  def test_all_users_query_params
+    users = mock_sdk.users.all(limit: 1)
     assert_equal ["user", "user"], users.map { |h| h.dig("object") }
   end
 
