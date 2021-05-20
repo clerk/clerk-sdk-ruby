@@ -20,7 +20,13 @@ module Clerk
       "User-Agent" => "Clerk/#{Clerk::VERSION}; Faraday/#{Faraday::VERSION}; Ruby/#{RUBY_VERSION}"
     }
 
-    def initialize(api_key: nil, base_url: nil, logger: nil, ssl_verify: true, connection: nil)
+    def initialize(api_key: nil, base_url: nil, logger: nil, ssl_verify: true,
+                   connection: nil)
+      if connection # Inject a Faraday::Connection for testing or full control over Faraday
+        @conn = connection
+        return
+      else
+
       base_url = base_url || ENV.fetch("CLERK_API_BASE", PRODUCTION_BASE_URL)
       base_uri = if !base_url.end_with?("/")
                     URI("#{base_url}/")
@@ -28,9 +34,6 @@ module Clerk
                     URI(base_url)
                   end
       api_key = api_key || ENV.fetch("CLERK_API_KEY")
-      if connection # Inject a Faraday::Connection for testing
-        @conn = connection
-      else
         @conn = Faraday.new(
           url: base_uri, headers: DEFAULT_HEADERS, ssl: {verify: ssl_verify}
         ) do |f|
