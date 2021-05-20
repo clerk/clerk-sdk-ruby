@@ -2,12 +2,24 @@ PATH
   remote: .
   specs:
     clerk-sdk-ruby (1.0.0)
+      faraday (~> 1.4.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    faraday (1.4.1)
+      faraday-excon (~> 1.1)
+      faraday-net_http (~> 1.0)
+      faraday-net_http_persistent (~> 1.1)
+      multipart-post (>= 1.2, < 3)
+      ruby2_keywords (>= 0.0.4)
+    faraday-excon (1.1.0)
+    faraday-net_http (1.0.1)
+    faraday-net_http_persistent (1.1.0)
     minitest (5.14.2)
+    multipart-post (2.1.1)
     rake (13.0.3)
+    ruby2_keywords (0.0.4)
 
 PLATFORMS
   x86_64-linux
