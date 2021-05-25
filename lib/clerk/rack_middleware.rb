@@ -18,10 +18,14 @@ module Clerk
         user = @cache.fetch(payload, expires_in: 1.minute) do
           sdk = Clerk::SDK.new
           if client = sdk.clients.verify_token(token)
-            sdk.users.find(client["user_id"])
+            sess_id = client["last_active_session_id"]
+            session = client["sessions"].find do |sess|
+              sess["id"] == sess_id
+            end
+            session && sdk.users.find(session["user_id"])
           end
         end
-        env["clerk_user"] = user.first
+        env["clerk_user"] = user
       end
       status, headers, body = @app.call(env)
       [status, headers, body]
