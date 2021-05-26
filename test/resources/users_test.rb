@@ -48,7 +48,8 @@ class Clerk::Resources::UsersTest < Minitest::Test
   end
 
   def test_find_user_404
-    user = mock_sdk.users.find("unknown_id")
-    assert_equal "not found", user.dig("errors", 0, "message")
+    assert_raises Clerk::Errors::Fatal do
+      user = mock_sdk.users.find("unknown_id")
+    end
   end
 end
