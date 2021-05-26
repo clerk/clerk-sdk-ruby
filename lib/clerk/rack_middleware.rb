@@ -2,13 +2,8 @@ require_relative "sdk"
 
 module Clerk
   class RackMiddleware
-    class NullCache
-      def fetch(key, options = nil, &block); yield; end
-    end
-
-    def initialize(app, cache_store: nil)
+    def initialize(app)
       @app = app
-      @cache = cache_store || NullCache.new
     end
 
     def call(env)
@@ -37,12 +32,12 @@ module Clerk
     def fetch_session(token, sess_id)
       cache_key = token.split(".")[1]
       if sess_id
-        session = @cache.fetch("clerk_session:#{sess_id}:#{cache_key}", expires_in: cache_ttl) do
+        session = cached_fetch("clerk_session:#{sess_id}:#{cache_key}") do
           sdk = clerk_sdk
           sdk.sessions.verify_token(sess_id, token)
         end
       else
-        session = @cache.fetch("clerk_session:#{cache_key}", expires_in: cache_ttl) do
+        session = cached_fetch("clerk_session:#{cache_key}") do
           sdk = clerk_sdk
           client = sdk.clients.verify_token(token)
           sess_id = client["last_active_session_id"]
@@ -55,8 +50,16 @@ module Clerk
 
     def fetch_user(user_id)
       sdk = clerk_sdk
-      @cache.fetch("clerk_user:#{user_id}", expires_in: cache_ttl) do
+      cached_fetch("clerk_user:#{user_id}") do
         sdk.users.find(user_id)
+      end
+    end
+
+    def cached_fetch(key, &block)
+      if store = Clerk.configuration.middleware_cache_store
+        store.fetch(key, expires_in: cache_ttl, &block)
+      else
+        yield
       end
     end
 
