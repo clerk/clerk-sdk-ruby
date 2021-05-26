@@ -12,6 +12,7 @@ require_relative "resources/emails"
 require_relative "resources/sessions"
 require_relative "resources/sms_messages"
 require_relative "resources/users"
+require_relative "errors"
 
 module Clerk
   class SDK
@@ -60,10 +61,22 @@ module Clerk
                    @conn.delete(path)
                  end
 
-      if response["Content-Type"] == "application/json"
-        JSON.parse(response.body)
+      body = if response["Content-Type"] == "application/json"
+               JSON.parse(response.body)
+             else
+               response.body
+             end
+
+      if response.success?
+        body
       else
-        response.body
+        klass = case body.dig("errors", 0, "code")
+                when "cookie_invalid", "client_not_found", "resource_not_found"
+                  Errors::Authentication
+                else
+                  Errors::Fatal
+                end
+        raise klass.new(body, status: response.status)
       end
     end
 

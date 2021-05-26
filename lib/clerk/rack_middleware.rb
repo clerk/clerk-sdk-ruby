@@ -14,21 +14,54 @@ module Clerk
     def call(env)
       req = Rack::Request.new(env)
       token = req.cookies["__session"]
-      if token && payload = token.split(".")[1]
-        user = @cache.fetch(payload, expires_in: 1.minute) do
-          sdk = Clerk::SDK.new
-          if client = sdk.clients.verify_token(token)
-            sess_id = client["last_active_session_id"]
-            session = client["sessions"].find do |sess|
-              sess["id"] == sess_id
-            end
-            session && sdk.users.find(session["user_id"])
+
+      if token
+        sess_id = req.params["_clerk_session_id"]
+        begin
+          env["clerk_session"] = fetch_session(token, sess_id)
+        rescue Errors::Authentication => e
+          env["clerk_error"] = e
+        end
+      end
+      if sess = env["clerk_session"]
+        env["clerk_user"] = fetch_user(sess["user_id"])
+      end
+      @app.call(env)
+    end
+
+    private
+    def clerk_sdk
+      SDK.new
+    end
+
+    def fetch_session(token, sess_id)
+      cache_key = token.split(".")[1]
+      if sess_id
+        session = @cache.fetch("clerk_session:#{sess_id}:#{cache_key}", expires_in: cache_ttl) do
+          sdk = clerk_sdk
+          sdk.sessions.verify_token(sess_id, token)
+        end
+      else
+        session = @cache.fetch("clerk_session:#{cache_key}", expires_in: cache_ttl) do
+          sdk = clerk_sdk
+          client = sdk.clients.verify_token(token)
+          sess_id = client["last_active_session_id"]
+          client["sessions"].find do |sess|
+            sess["id"] == sess_id
           end
         end
-        env["clerk_user"] = user
       end
-      status, headers, body = @app.call(env)
-      [status, headers, body]
+    end
+
+    def fetch_user(user_id)
+      sdk = clerk_sdk
+      @cache.fetch("clerk_user:#{user_id}", expires_in: cache_ttl) do
+        sdk.users.find(user_id)
+      end
+    end
+
+    def cache_ttl
+      60
     end
   end
 end
