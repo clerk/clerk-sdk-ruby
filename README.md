@@ -11,7 +11,7 @@ to implement the calls yourself.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'clerk-sdk-ruby'
+gem 'clerk-sdk-ruby', require: "clerk"
 ```
 
 And then execute:
@@ -50,27 +50,39 @@ clerk.emails.create(
 
 ## Configuration
 
-The SDK can be configured in two ways: environment variables and constructor
-arguments. Constructor arguments have priority over environment variables. If
-an argument is not provided, the associated environment variable will be
-`fetch`ed. Here's an example with all supported constructor arguments and their
-environment variable equivalents:
+The SDK can be configured in three ways: environment variables, configuration
+singleton and constructor arguments. The priority goes like this:
+
+1. Constructor arguments
+2. Configuration object
+3. Environment variables
+
+If an argument is not provided, the configuration object is looked up, which
+falls back to the associated environment variable. Here's an example with all
+supported configuration settings their environment variable equivalents:
+
+```ruby
+Clerk.configure do |c|
+  c.api_key = "your_api_key" # if omitted: ENV.fetch("CLERK_API_KEY") - will fail if unset
+  c.base_url = "https://..." # if omitted: "https://api.clerk.dev/v1/"
+  c.logger = Logger.new(STDOUT) # if omitted, no logging
+  c.middleware_cache_store = ActiveSupport::Cache::FileStore.new("/tmp/clerk_middleware_cache") # if omitted: Rails.cache or no caching (if not in a Rails app)
+end
+```
+
+You can customize each instance of the `Clerk::SDK` object by passing keyword
+arguments to the constructor:
 
 ```ruby
 clerk = Clerk::SDK.new(
-    # Fallback: ENV.fetch("CLERK_API_KEY") - fails if not set!
-    api_key: "your_api_key",
-    # Fallback: ENV.fetch("CLERK_API_BASE", "https://api.clerk.dev/v1/")
-    base_url: "https://...",
-    # Fallback: no logging
-    logger: Logger.new(STDOUT),
-    # Fallback: true - only for debugging, avoid to use on production!
-    ssl_verify: false,
+    api_key: "X",
+    base_url: "Y",
+    logger: Logger.new()
 )
 ```
 
-For full customization, you can pass your own `Faraday::Connection` instance.
-This option ignores all the others mentioned above!
+For full customization, you can instead pass a `Faraday` object directly, which
+will ignore all the other arguments, if passed:
 
 ```ruby
 faraday = Faraday.new()
@@ -79,6 +91,34 @@ clerk = Clerk::SDK.new(connection: faraday)
 
 Refer to the [Faraday documentation](https://lostisland.github.io/faraday/usage/#customizing-faradayconnection)
 for details.
+
+## Rack middleware
+
+The SDK comes with a Rack middleware which sets the Clerk session and user in
+the Rack environment. The keys are: `clerk_session` and `clerk_user` for the
+session and user respectively. If the API responds with an error `clerk_error`
+will be set.
+
+## Rails integration
+
+The SDK will automatically add the [Rack middleware](#rack-middleware) to the
+middleware stack, using `Rails.cache` for its cache. For easier access to the
+Clerk session and user, include the `Clerk::Authenticatable` concern in your
+controller:
+
+```ruby
+require "clerk/authenticatable"
+
+class ApplicationController < ActionController::Base
+  include Clerk::Authenticatable
+end
+```
+
+This gives your controller and views access to the following methods:
+
+- `clerk_session`
+- `clerk_user`
+- `clerk_user_signed_in?`
 
 ## Internals
 
