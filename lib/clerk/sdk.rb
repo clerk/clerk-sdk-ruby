@@ -12,10 +12,10 @@ require_relative "resources/emails"
 require_relative "resources/sessions"
 require_relative "resources/sms_messages"
 require_relative "resources/users"
+require_relative "errors"
 
 module Clerk
   class SDK
-    PRODUCTION_BASE_URL = "https://api.clerk.dev/v1/".freeze
     DEFAULT_HEADERS = {
       "User-Agent" => "Clerk/#{Clerk::VERSION}; Faraday/#{Faraday::VERSION}; Ruby/#{RUBY_VERSION}"
     }
@@ -26,14 +26,14 @@ module Clerk
         @conn = connection
         return
       else
-
-      base_url = base_url || ENV.fetch("CLERK_API_BASE", PRODUCTION_BASE_URL)
-      base_uri = if !base_url.end_with?("/")
-                    URI("#{base_url}/")
-                  else
-                    URI(base_url)
-                  end
-      api_key = api_key || ENV.fetch("CLERK_API_KEY")
+        base_url = base_url || Clerk.configuration.base_url
+        base_uri = if !base_url.end_with?("/")
+                     URI("#{base_url}/")
+                   else
+                     URI(base_url)
+                   end
+        api_key = api_key || Clerk.configuration.api_key
+        logger = logger || Clerk.configuration.logger
         @conn = Faraday.new(
           url: base_uri, headers: DEFAULT_HEADERS, ssl: {verify: ssl_verify}
         ) do |f|
@@ -44,7 +44,7 @@ module Clerk
               l.filter(/(Authorization: "Bearer) (\w+)/, '\1 [SECRET]')
             end
           end
-      end
+        end
       end
     end
 
@@ -60,10 +60,22 @@ module Clerk
                    @conn.delete(path)
                  end
 
-      if response["Content-Type"] == "application/json"
-        JSON.parse(response.body)
+      body = if response["Content-Type"] == "application/json"
+               JSON.parse(response.body)
+             else
+               response.body
+             end
+
+      if response.success?
+        body
       else
-        response.body
+        klass = case body.dig("errors", 0, "code")
+                when "cookie_invalid", "client_not_found", "resource_not_found"
+                  Errors::Authentication
+                else
+                  Errors::Fatal
+                end
+        raise klass.new(body, status: response.status)
       end
     end
 
