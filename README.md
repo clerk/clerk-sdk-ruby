@@ -94,10 +94,11 @@ for details.
 
 ## Rack middleware
 
-The SDK comes with a Rack middleware which sets the Clerk session and user in
-the Rack environment. The keys are: `clerk_session` and `clerk_user` for the
-session and user respectively. If the API responds with an error `clerk_error`
-will be set.
+The SDK comes with a Rack middleware which lazily loads the Clerk session and
+user. It inserts a `clerk` key in the Rack environment, which is an instance
+of `Clerk::Proxy`. To get the session or the user of the session, you call
+`session` or `user` respectively. In case there is no session, you can retrieve
+the API error with the `error` getter method.
 
 ## Rails integration
 
