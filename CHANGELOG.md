@@ -1,5 +1,9 @@
 ## unreleased
 
+## 1.0.2 - 2021-06-03
+
+- fix: Instantiation of `Clerk::SDK` without prior call to `Clerk.configure`
+
 ## 1.0.1 - 2021-06-03
 
 ### enhancements
