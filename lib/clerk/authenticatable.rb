@@ -6,11 +6,11 @@ module Clerk
 
     protected
     def clerk_session
-      request.env["clerk_session"]
+      request.env["clerk"].session
     end
 
     def clerk_user
-      request.env["clerk_user"]
+      request.env["clerk"].user
     end
 
     def clerk_user_signed_in?
