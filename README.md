@@ -66,7 +66,7 @@ Clerk.configure do |c|
   c.api_key = "your_api_key" # if omitted: ENV.fetch("CLERK_API_KEY") - will fail if unset
   c.base_url = "https://..." # if omitted: "https://api.clerk.dev/v1/"
   c.logger = Logger.new(STDOUT) # if omitted, no logging
-  c.middleware_cache_store = ActiveSupport::Cache::FileStore.new("/tmp/clerk_middleware_cache") # if omitted: Rails.cache or no caching (if not in a Rails app)
+  c.middleware_cache_store = ActiveSupport::Cache::FileStore.new("/tmp/clerk_middleware_cache") # if omitted: no caching
 end
 ```
 
@@ -102,9 +102,8 @@ will be set.
 ## Rails integration
 
 The SDK will automatically add the [Rack middleware](#rack-middleware) to the
-middleware stack, using `Rails.cache` for its cache. For easier access to the
-Clerk session and user, include the `Clerk::Authenticatable` concern in your
-controller:
+middleware stack. For easier access to the Clerk session and user, include the
+`Clerk::Authenticatable` concern in your controller:
 
 ```ruby
 require "clerk/authenticatable"
