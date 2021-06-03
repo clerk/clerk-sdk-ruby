@@ -5,11 +5,12 @@ require_relative "clerk/sdk"
 
 module Clerk
   class << self
-    attr_accessor :configuration
-
     def configure
-      self.configuration ||= Config.new
       yield(configuration)
+    end
+
+    def configuration
+      @configuration ||= Config.new
     end
   end
 
@@ -19,7 +20,7 @@ module Clerk
 
     def initialize
       @base_url = ENV.fetch("CLERK_API_BASE", PRODUCTION_BASE_URL)
-      @api_key = ENV.fetch("CLERK_API_KEY")
+      @api_key = ENV["CLERK_API_KEY"]
     end
   end
 end

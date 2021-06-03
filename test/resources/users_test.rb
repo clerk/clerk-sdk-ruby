@@ -49,7 +49,7 @@ class Clerk::Resources::UsersTest < Minitest::Test
 
   def test_find_user_404
     assert_raises Clerk::Errors::Fatal do
-      user = mock_sdk.users.find("unknown_id")
+      mock_sdk.users.find("unknown_id")
     end
   end
 end

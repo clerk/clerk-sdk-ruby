@@ -63,7 +63,7 @@ supported configuration settings their environment variable equivalents:
 
 ```ruby
 Clerk.configure do |c|
-  c.api_key = "your_api_key" # if omitted: ENV.fetch("CLERK_API_KEY") - will fail if unset
+  c.api_key = "your_api_key" # if omitted: ENV["CLERK_API_KEY"] - API calls will fail if unset
   c.base_url = "https://..." # if omitted: "https://api.clerk.dev/v1/"
   c.logger = Logger.new(STDOUT) # if omitted, no logging
   c.middleware_cache_store = ActiveSupport::Cache::FileStore.new("/tmp/clerk_middleware_cache") # if omitted: no caching
