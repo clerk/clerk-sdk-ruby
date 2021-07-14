@@ -14,7 +14,7 @@ module Clerk
       def_delegators :@resource, :all, :find, :update, :delete
 
       def oauth_access_token(user_id, provider)
-        @client.request(:get, "#{@resource.resource_path(user_id)}/oauth_access_token/#{provider}")
+        @client.request(:get, "#{@resource.resource_path(user_id)}/oauth_access_tokens/#{provider}")
       end
     end
   end
