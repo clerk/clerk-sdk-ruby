@@ -12,7 +12,7 @@ class Clerk::Resources::UsersTest < Minitest::Test
         stub.patch("/users/user_1") { json_ok("user_1_updated") }
         stub.delete("/users/user_1") { json_ok("user_1_deleted") }
         stub.get("/users/unknown_id") { json_404 }
-        stub.get("/users/user_1/oauth_access_token/oauth_hubspot") { json_ok("users_oauth_access_token") }
+        stub.get("/users/user_1/oauth_access_tokens/hubspot") { json_ok("users_oauth_access_token") }
       end
     end
 
@@ -55,9 +55,9 @@ class Clerk::Resources::UsersTest < Minitest::Test
   end
 
   def test_oauth_access_token
-    response = mock_sdk.users.oauth_access_token("user_1", "oauth_hubspot")
+    response = mock_sdk.users.oauth_access_token("user_1", "hubspot")
     assert_equal "xxxx", response["token"]
-    assert_equal "oauth_hubspot", response["provider"]
+    assert_equal "hubspot", response["provider"]
     assert_equal ["oauth", "contacts"], response["scopes"]
   end
 end
