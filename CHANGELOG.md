@@ -1,5 +1,9 @@
 ## unreleased
 
+## 1.0.3 - 2021-07-21
+
+- fix: Proper endpoint for oauth_access_token method
+
 ## 1.0.2 - 2021-06-03
 
 - fix: Instantiation of `Clerk::SDK` without prior call to `Clerk.configure`
