@@ -16,6 +16,10 @@ module Clerk
                         body: {token: token})
       end
 
+      def exchange_nonce(nonce)
+        @client.request(:get, "#{@resource.collection_path}/exchange_nonce?nonce=#{nonce}")
+      end
+
       def_delegators :@resource, :all, :find
     end
   end

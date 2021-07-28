@@ -8,7 +8,7 @@ module Clerk
 
     def call(env)
       req = Rack::Request.new(env)
-      env["clerk"] = Proxy.new(env)
+      #env["clerk"] = Proxy.new(env)
       @app.call(env)
     end
   end
