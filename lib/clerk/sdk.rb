@@ -163,13 +163,7 @@ module Clerk
         end
       end
 
-      opts = {
-        aud: ["clerk"], verify_aud: true,
-        algorithms: algorithms,
-        jwks: jwk_loader
-      }
-
-      JWT.decode(token, nil, true, opts).first
+      JWT.decode(token, nil, true, algorithms: algorithms, jwks: jwk_loader).first
     end
   end
 end
