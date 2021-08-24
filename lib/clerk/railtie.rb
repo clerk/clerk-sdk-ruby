@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 #
 require_relative "rack_middleware"
+require_relative "rack_middleware_v2"
 
 module Clerk
   class Railtie < ::Rails::Railtie
