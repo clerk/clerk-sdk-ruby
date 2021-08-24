@@ -129,6 +129,10 @@ module Clerk
       Resources::JWKS.new(self)
     end
 
+    def interstitial(refresh=false)
+      request(:get, "internal/interstitial")
+    end
+
     # Returns the decoded JWT payload without verifying if the signature is
     # valid.
     #
@@ -163,13 +167,7 @@ module Clerk
         end
       end
 
-      opts = {
-        aud: ["clerk"], verify_aud: true,
-        algorithms: algorithms,
-        jwks: jwk_loader
-      }
-
-      JWT.decode(token, nil, true, opts).first
+      JWT.decode(token, nil, true, algorithms: algorithms, jwks: jwk_loader).first
     end
   end
 end
