@@ -105,7 +105,6 @@ module Clerk
       def initialize(env)
         @req = Rack::Request.new(env)
 
-        @session_id = @req.params["_clerk_session_id"]
         @session = nil
         @user_id = nil
         @user = nil
