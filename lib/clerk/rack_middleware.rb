@@ -100,14 +100,14 @@ module Clerk
     end
 
     class ProxyNetworkless
-      attr_reader :session_id, :errors
+      attr_reader :errors
 
       def initialize(env)
         @req = Rack::Request.new(env)
 
         @session = nil
-        @user_id = nil
         @user = nil
+        @user_id = nil
         @errors = []
       end
 
@@ -118,16 +118,10 @@ module Clerk
         @session
       end
 
-      def verify_token(token)
-        return false if token.nil? || token.strip.empty?
+      def session_id
+        return nil if session.nil?
 
-        begin
-          @session = sdk.verify_token(token)
-          true
-        rescue JWT::DecodeError, JWT::RequiredDependencyError => e
-          @errors << e
-          false
-        end
+        session["sid"]
       end
 
       def user
@@ -143,6 +137,18 @@ module Clerk
       end
 
       private
+
+      def verify_token(token)
+        return false if token.nil? || token.strip.empty?
+
+        begin
+          @session = sdk.verify_token(token)
+          true
+        rescue JWT::DecodeError, JWT::RequiredDependencyError => e
+          @errors << e
+          false
+        end
+      end
 
       def sdk
         @sdk ||= SDK.new
