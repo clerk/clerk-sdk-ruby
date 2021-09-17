@@ -87,7 +87,8 @@ module Clerk
         return signed_out
       end
 
-      if verify_token(@cookie_token) && @client_uat && @client_uat <= sdk.decode_token(@cookie_token)["iat"]
+      token = verify_token(@cookie_token)
+      if token && token["iat"] @client_uat && @client_uat <= token["iat"]
         return sign_in
       end
 
