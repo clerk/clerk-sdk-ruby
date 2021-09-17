@@ -58,14 +58,24 @@ module Clerk
       #                             COOKIE AUTHENTICATION                      #
       #                                                                        #
       ##########################################################################
+      log "proceeding to cookie authentication..."
 
       # DISCUSSION(agis): This might throw a lot of interstitials, since the
       # default Referrer-Policy is strict-origin-when-cross-origin. This means
       # that HTTPS->HTTP requests will omit the header, which will be the case
       # with https://accounts.* -> http://localhost navigations.
       #
+      # Furthermore, Referrer will always be unset on direct navigations
+      # (meaning I type "localhost:3000" in the address bar and hit "Enter").
+      #
+      # So I think this part needs to be reworked, cause otherwise we run into
+      # an interstitial loop if we use `window.location.reload()`. We might need
+      # something like this: https://stackoverflow.com/questions/4762254/javascript-window-location-does-not-set-referer-in-the-request-header
+      #
       # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
       if development_or_staging? && (@req.referrer.nil? || cross_origin_request?(@req))
+        log "development + empty referrer or cross-origin request"
+
         return unknown(interstitial: true)
       end
 
@@ -77,10 +87,11 @@ module Clerk
         return signed_out
       end
 
-      token_iat = sdk.decode_token(@cookie_token)
-      if verify_token(@cookie_token) && @client_uat && @client_uat < token_iat
+      if verify_token(@cookie_token) && @client_uat && @client_uat <= sdk.decode_token(@cookie_token)["iat"]
         return sign_in
       end
+
+      log "fallthrough (client_uat: #{@client_uat} | token: #{@cookie_token})"
 
       unknown(interstitial: true)
     end
@@ -117,10 +128,10 @@ module Clerk
           <body>
             <script src="https://js.lclclerk.com/npm/clerk.browser.js"
              crossorigin="anonymous"
-             data-clerk-frontend-api="#{ENV['CLERK_FRONTEND_API']}"
-             onload="Clerk.load({authVersion: 2})">
+             data-clerk-frontend-api="#{ENV['CLERK_FRONTEND_API']}" >
             </script>
             <script>
+              console.log('Clerk loaded! Lets refresh the page...')
               window.location.reload()
             </script>
           </body>
