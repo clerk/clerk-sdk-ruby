@@ -1,5 +1,11 @@
 ## unreleased
 
+This release introduces the new networkless middleware which works with the new 
+authentication scheme, dubbed *AuthV2*. See instructions below.
+
+- [BREAKING]: In order to use this version, you must set the authVersion prop 
+    accordingly in your frontend: `Clerk.load({authVersion: 2})`
+
 ## 1.0.3 - 2021-07-21
 
 - fix: Proper endpoint for oauth_access_token method
