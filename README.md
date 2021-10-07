@@ -1,5 +1,15 @@
 # Clerk Ruby SDK
 
+**NOTE**: This is the v2 branch of the SDK, which requires that you use AuthV2 
+in your frontend. This means that you have to set the `authVersion` prop 
+accordingly in your frontend:
+
+```javascript
+Clerk.load({authVersion: 2})
+```
+
+----------
+
 Thank you for choosing [Clerk](https://clerk.dev/) for your authentication,
 session & user management needs!
 
