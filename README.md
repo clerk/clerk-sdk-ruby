@@ -1,10 +1,16 @@
 # Clerk Ruby SDK
 
+
+
 Thank you for choosing [Clerk](https://clerk.dev/) for your authentication,
 session & user management needs!
 
 This SDK allows you to call the Clerk Backend API from Ruby code without having
 to implement the calls yourself.
+
+------
+
+**Note**: If you're looking to use the new authentication scheme, dubbed AuthV2, refer to the [`v2`](https://github.com/clerkinc/clerk-sdk-ruby/tree/v2) branch.
 
 ## Installation
 
