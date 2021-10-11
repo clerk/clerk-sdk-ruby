@@ -8,9 +8,9 @@ to implement the calls yourself.
 
 ---------
 
-**Note**: This is the v2 branch, which requires that you use AuthV2 
-in your frontend. AuthV2 is a new experimental authentication scheme that we're rolling out currently. This means that you have to set the `authVersion` prop 
-accordingly in your frontend:
+**Note**: This is the v2 branch, which requires that you use AuthV2. AuthV2 is a 
+new experimental authentication scheme that we're rolling out currently. This 
+means that you have to set the `authVersion` prop accordingly in your frontend:
 
 ```javascript
 Clerk.load({authVersion: 2})
