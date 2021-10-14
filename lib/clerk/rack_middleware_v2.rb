@@ -86,7 +86,7 @@ module Clerk
       end
 
       # in cross-origin XHRs the use of Authorization header is mandatory.
-      if cross_origin_request?(@req) && @header_token.nil?
+      if cross_origin_request?(@req)
         return signed_out
       end
 
