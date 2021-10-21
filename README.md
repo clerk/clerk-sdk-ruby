@@ -8,15 +8,11 @@ to implement the calls yourself.
 
 ---------
 
-**Note**: This is the v2 branch, which requires that you use AuthV2. AuthV2 is a 
-new experimental authentication scheme that we're rolling out currently. This 
-means that you have to set the `authVersion` prop accordingly in your frontend:
+**Note**: This is the v2 branch, which requires that you use [Auth 
+v2](https://docs.clerk.dev/main-concepts/auth-v2).
 
-```javascript
-Clerk.load({authVersion: 2})
-```
-
-If you're looking for the standard way of authentication (AuthV1), refer to the [`main`](https://github.com/clerkinc/clerk-sdk-ruby/tree/main) branch.
+If you're looking for the legacy authentication scheme (Auth v1), refer to the 
+[`main`](https://github.com/clerkinc/clerk-sdk-ruby/tree/main) branch.
 
 ----------
 
