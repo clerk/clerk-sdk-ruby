@@ -148,7 +148,7 @@ module Clerk
 
     def cross_origin_request?(req)
       origin = req.env["HTTP_ORIGIN"]
-      origin && origin != req.host
+      origin && origin.sub(/(^\w+:|^)\/\//, '') != req.host
     end
 
     def verify_token(token)
