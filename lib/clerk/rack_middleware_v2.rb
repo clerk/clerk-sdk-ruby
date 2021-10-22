@@ -147,8 +147,21 @@ module Clerk
     end
 
     def cross_origin_request?(req)
+      # origin contains scheme+host and optionally port (ommitted if 80 or 443)
+      # ref. https://www.rfc-editor.org/rfc/rfc6454#section-6.1
       origin = req.env["HTTP_ORIGIN"]
-      origin && origin.sub(/(^\w+:|^)\/\//, '') != req.host
+      return false if origin.nil?
+
+      # strip scheme
+      origin = origin.strip.sub(/(^\w+:|^)\/\//, '')
+      return false if origin.empty?
+
+      # Rack's host and port helpers are reverse-proxy-aware; that
+      # is, they prefer the de-facto X-Forwarded-* headers if they're set
+      request_host = req.host
+      request_host << ":#{req.port}" if req.port != 80 && req.port != 443
+
+      origin == request_host
     end
 
     def verify_token(token)
