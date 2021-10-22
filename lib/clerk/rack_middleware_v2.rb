@@ -161,7 +161,7 @@ module Clerk
       request_host = req.host
       request_host << ":#{req.port}" if req.port != 80 && req.port != 443
 
-      origin == request_host
+      origin != request_host
     end
 
     def verify_token(token)
