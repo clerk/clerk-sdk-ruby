@@ -66,7 +66,8 @@ module Clerk
       @env = env
       @req = Rack::Request.new(env)
       @env["clerk"] = ProxyV2.new
-      @header_token = @req.env["HTTP_AUTHORIZATION"]&.strip
+      @header_token = @req.env["HTTP_AUTHORIZATION"]
+      @header_token = @header_token.strip.sub(/\ABearer /, '') if @header_token
       @cookie_token = @req.cookies["__session"]
       @client_uat = @req.cookies["__client_uat"]
 
@@ -153,7 +154,7 @@ module Clerk
       return false if origin.nil?
 
       # strip scheme
-      origin = origin.strip.sub(/(^\w+:|^)\/\//, '')
+      origin = origin.strip.sub(/\A(\w+:)?\/\//, '')
       return false if origin.empty?
 
       # Rack's host and port helpers are reverse-proxy-aware; that
