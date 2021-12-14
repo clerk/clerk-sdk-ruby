@@ -91,6 +91,15 @@ module Clerk
         return signed_out
       end
 
+      if development_or_staging? && !browser_request?(@req)
+        # the interstitial won't work if the user agent is not a browser, so
+        # short-circuit and avoid rendering it
+        #
+        # We only limit this to dev/stg because we're not yet sure how robust
+        # this strategy is, yet. In the future, we might enable it for prod too.
+        return signed_out
+      end
+
       ##########################################################################
       #                                                                        #
       #                             COOKIE AUTHENTICATION                      #
@@ -163,6 +172,12 @@ module Clerk
       request_host << ":#{req.port}" if req.port != 80 && req.port != 443
 
       origin != request_host
+    end
+
+    def browser_request?(req)
+      user_agent = req.env["HTTP_USER_AGENT"]
+
+      !user_agent.nil? && user_agent.starts_with?("Mozilla/")
     end
 
     def verify_token(token)
