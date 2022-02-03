@@ -20,7 +20,8 @@ require_relative "errors"
 module Clerk
   class SDK
     DEFAULT_HEADERS = {
-      "User-Agent" => "Clerk/#{Clerk::VERSION}; Faraday/#{Faraday::VERSION}; Ruby/#{RUBY_VERSION}"
+      "User-Agent" => "Clerk/#{Clerk::VERSION}; Faraday/#{Faraday::VERSION}; Ruby/#{RUBY_VERSION}",
+      "X-Clerk-SDK" => "ruby/#{Clerk::VERSION}"
     }
 
     # How often (in seconds) should JWKs be refreshed
