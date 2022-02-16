@@ -13,6 +13,14 @@ v2](https://docs.clerk.dev/main-concepts/auth-v2).
 If you're looking for the legacy authentication scheme, refer to the 
 [`v1`](https://github.com/clerkinc/clerk-sdk-ruby/tree/v1) branch.
 
+---
+
+**Clerk is Hiring!**
+
+Would you like to work on Open Source software and help maintain this repository? Apply today https://apply.workable.com/clerk-dev/.
+
+---
+
 ## Installation
 
 Add this line to your application's Gemfile:
