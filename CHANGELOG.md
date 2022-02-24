@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.1.1 - 2022-02-24
+
+- fix: Make Authv2 middleware thread-safe
+
 ## 2.0.0 - 2021-10-21
 
 This release introduces the new networkless middleware which works with the new 
