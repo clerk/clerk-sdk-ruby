@@ -141,10 +141,7 @@ module Clerk
     # should not use this for untrusted messages! You most likely want to use
     # verify_token.
     def decode_token(token)
-      begin
-        JWT.decode(token, nil, false).first
-      rescue JWT::DecodeError
-      end
+      JWT.decode(token, nil, false).first
     end
 
     # Decode the JWT and verify it's valid (verify claims, signature etc.) using
