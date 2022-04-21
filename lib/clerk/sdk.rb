@@ -168,10 +168,7 @@ module Clerk
         end
       end
 
-      begin
-        JWT.decode(token, nil, true, algorithms: algorithms, jwks: jwk_loader).first
-      rescue JWT::DecodeError
-      end
+      JWT.decode(token, nil, true, algorithms: algorithms, jwks: jwk_loader).first
     end
   end
 end
