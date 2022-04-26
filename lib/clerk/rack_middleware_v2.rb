@@ -77,8 +77,12 @@ module Clerk
       #                                                                        #
       ##########################################################################
       if header_token
-        return signed_out(env) if !sdk.decode_token(header_token) # malformed JWT
-
+        begin
+          return signed_out(env) if !sdk.decode_token(header_token) # malformed JWT
+        rescue JWT::DecodeError
+          return signed_out(env)  # malformed JSON authorization header
+        end
+        
         token = verify_token(header_token)
         return signed_in(env, token, header_token) if token
 
