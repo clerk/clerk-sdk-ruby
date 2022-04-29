@@ -10,7 +10,7 @@ module Clerk
     # the Session object. Subsequent calls to this method will return the cached
     # Session object.
     #
-    # NOTE: For better performance, you can instead use `#clerk_session_claims`
+    # NOTE: For better performance, you can instead use `#clerk_verified_session_claims`
     # which already contains the verified claims as retrieved from the session
     # token.
     def clerk_session
@@ -20,7 +20,7 @@ module Clerk
     # Makes a request to the Clerk API to verify the session again. Returns the
     # session object as fetched from the API.
     #
-    # NOTE: For better performance, you can instead use `#clerk_session_claims`
+    # NOTE: For better performance, you can instead use `#clerk_verified_session_claims`
     # which already contains the verified claims as retrieved from the session
     # token.
     #
