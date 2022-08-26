@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.1.2 - 2022-08-26
+
+- fix: Gracefully handle invalid JSON in Authorization header [https://github.com/clerkinc/clerk-sdk-ruby/pull/16]
+
 ## 2.1.1 - 2022-02-24
 
 - fix: Make Authv2 middleware thread-safe
