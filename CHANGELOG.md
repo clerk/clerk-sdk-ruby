@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.2.0 - 2022-08-26
+
+- feat: Add support for [users.create](https://reference.clerk.dev/reference/backend-api-reference/users#create-a-user) endpoint
+
 ## 2.1.2 - 2022-08-26
 
 - fix: Gracefully handle invalid JSON in Authorization header [https://github.com/clerkinc/clerk-sdk-ruby/pull/16]
