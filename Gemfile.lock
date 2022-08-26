@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    clerk-sdk-ruby (1.0.3)
+    clerk-sdk-ruby (2.1.2)
       faraday (~> 1.4.1)
       jwt (~> 2.2)
 
@@ -22,9 +22,9 @@ GEM
     faraday-excon (1.1.0)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
-    jwt (2.2.3)
+    jwt (2.5.0)
     minitest (5.14.2)
-    multipart-post (2.1.1)
+    multipart-post (2.2.3)
     rake (13.0.3)
     ruby2_keywords (0.0.5)
     timecop (0.9.4)
@@ -40,4 +40,4 @@ DEPENDENCIES
   timecop (~> 0.9.4)
 
 BUNDLED WITH
-   2.2.24
+   2.2.32
