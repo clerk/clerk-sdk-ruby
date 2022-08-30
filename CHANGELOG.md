@@ -1,8 +1,12 @@
 ## unreleased
 
+## 2.3.0 - 2022-08-30
+
+- feat: Add support for the users.verify_password endpoint
+
 ## 2.2.0 - 2022-08-26
 
-- feat: Add support for [users.create](https://reference.clerk.dev/reference/backend-api-reference/users#create-a-user) endpoint
+- feat: Add support for the [users.create](https://reference.clerk.dev/reference/backend-api-reference/users#create-a-user) endpoint
 
 ## 2.1.2 - 2022-08-26
 
