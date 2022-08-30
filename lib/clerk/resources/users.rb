@@ -16,6 +16,10 @@ module Clerk
       def oauth_access_token(user_id, provider)
         @client.request(:get, "#{@resource.resource_path(user_id)}/oauth_access_tokens/#{provider}")
       end
+
+      def verify_password(user_id, password)
+        @client.request(:post, "#{@resource.resource_path(user_id)}/verify_password", body: { password: password })
+      end
     end
   end
 end
