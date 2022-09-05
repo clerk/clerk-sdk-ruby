@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.4.0 - 2022-09-05
+
+- feat: Add support for the users.disable_mfa endpoint
+
 ## 2.3.0 - 2022-08-30
 
 - feat: Add support for the users.verify_password endpoint
