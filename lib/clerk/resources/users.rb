@@ -20,6 +20,10 @@ module Clerk
       def verify_password(user_id, password)
         @client.request(:post, "#{@resource.resource_path(user_id)}/verify_password", body: { password: password })
       end
+
+      def disable_mfa(user_id)
+        @client.request(:delete, "#{@resource.resource_path(user_id)}/mfa")
+      end
     end
   end
 end
