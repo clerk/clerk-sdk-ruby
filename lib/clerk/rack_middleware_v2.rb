@@ -60,11 +60,34 @@ module Clerk
   class RackMiddlewareV2
     def initialize(app)
       @app = app
+      @excluded_routes = {}
+      @excluded_routes_wildcards = []
+
+      Clerk.configuration.excluded_routes.each do |route|
+        route = route.strip
+
+        if route.ends_with?("/*")
+          @excluded_routes_wildcards << route[0..-2]
+        else
+          @excluded_routes[route] = true
+        end
+      end
+
+      @excluded_routes_wildcards.uniq!
     end
 
     def call(env)
       env = env
       req = Rack::Request.new(env)
+
+      if @excluded_routes[req.path]
+        return @app.call(env)
+      end
+
+      @excluded_routes_wildcards.each do |route|
+        return @app.call(env) if req.path.starts_with?(route)
+      end
+
       env["clerk"] = Clerk::ProxyV2.new
       header_token = req.env["HTTP_AUTHORIZATION"]
       header_token = header_token.strip.sub(/\ABearer /, '') if header_token

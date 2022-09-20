@@ -82,6 +82,7 @@ Clerk.configure do |c|
   c.base_url = "https://..." # if omitted: "https://api.clerk.dev/v1/"
   c.logger = Logger.new(STDOUT) # if omitted, no logging
   c.middleware_cache_store = ActiveSupport::Cache::FileStore.new("/tmp/clerk_middleware_cache") # if omitted: no caching
+  c.excluded_routes ["/foo", "/bar/*"]
 end
 ```
 
