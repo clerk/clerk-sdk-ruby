@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.5.0 - 2022-09-20
+
+- feat: Add support for disabling the middleware on specific routes [https://github.com/clerkinc/clerk-sdk-ruby/pull/19]
+
 ## 2.4.0 - 2022-09-05
 
 - feat: Add support for the users.disable_mfa endpoint
