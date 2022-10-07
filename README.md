@@ -1,25 +1,34 @@
+<p align="center">
+  <a href="https://www.clerk.dev/?utm_source=github&utm_medium=starter_repos&utm_campaign=sdk_ruby" target="_blank" align="center">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./docs/clerk-logo-dark.png">
+      <img src="./docs/clerk-logo-light.png" height="64">
+    </picture>
+  </a>
+  <br />
+</p>
+
 # Clerk Ruby SDK
 
+This SDK allows you to call the [Clerk](https://www.clerk.dev/?utm_source=github&utm_medium=starter_repos&utm_campaign=sdk_ruby) Backend API from Ruby code without having to implement the calls yourself.
 
-Thank you for choosing [Clerk](https://clerk.dev/) for your authentication,
-session & user management needs!
-
-This SDK allows you to call the Clerk Backend API from Ruby code without having
-to implement the calls yourself.
-
-**Note**: You're looking at the main branch, which requires that you use [Auth 
-v2](https://docs.clerk.dev/main-concepts/auth-v2).
-
-If you're looking for the legacy authentication scheme, refer to the 
-[`v1`](https://github.com/clerkinc/clerk-sdk-ruby/tree/v1) branch.
+[![chat on Discord](https://img.shields.io/discord/856971667393609759.svg?logo=discord)](https://discord.com/invite/b5rXHjAg7A)
+[![documentation](https://img.shields.io/badge/documentation-clerk-green.svg)](https://docs.clerk.dev)
+[![twitter](https://img.shields.io/twitter/follow/ClerkDev?style=social)](https://twitter.com/intent/follow?screen_name=ClerkDev)
 
 ---
 
 **Clerk is Hiring!**
 
-Would you like to work on Open Source software and help maintain this repository? Apply today https://apply.workable.com/clerk-dev/.
+Would you like to work on Open Source software and help maintain this repository? [Apply today!](https://apply.workable.com/clerk-dev/)
 
 ---
+
+**Note**: You're looking at the main branch, which requires that you use [Auth
+v2](https://clerk.dev/docs/upgrade-guides/auth-v2).
+
+If you're looking for the legacy authentication scheme, refer to the
+[`v1`](https://github.com/clerkinc/clerk-sdk-ruby/tree/v1) branch.
 
 ## Installation
 
