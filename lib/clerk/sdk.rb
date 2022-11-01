@@ -10,6 +10,7 @@ require_relative "resources/allowlist_identifiers"
 require_relative "resources/allowlist"
 require_relative "resources/clients"
 require_relative "resources/emails"
+require_relative "resources/organizations"
 require_relative "resources/sessions"
 require_relative "resources/sms_messages"
 require_relative "resources/users"
@@ -112,6 +113,10 @@ module Clerk
 
     def emails
       Resources::Emails.new(self)
+    end
+
+    def organizations
+      Resources::Organizations.new(self)
     end
 
     def sessions
