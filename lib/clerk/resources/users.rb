@@ -24,6 +24,10 @@ module Clerk
       def disable_mfa(user_id)
         @client.request(:delete, "#{@resource.resource_path(user_id)}/mfa")
       end
+
+      def organization_memberships(user_id, query_params = {})
+        @client.request(:get, "#{@resource.resource_path(user_id)}/organization_memberships", query: query_params)
+      end
     end
   end
 end
