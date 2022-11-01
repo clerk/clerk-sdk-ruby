@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.6.0 - 2022-11-01
+
+- feat: Implement Organization endpoints [https://github.com/clerkinc/clerk-sdk-ruby/pull/20]
+
 ## 2.5.0 - 2022-09-20
 
 - feat: Add support for disabling the middleware on specific routes [https://github.com/clerkinc/clerk-sdk-ruby/pull/19]
