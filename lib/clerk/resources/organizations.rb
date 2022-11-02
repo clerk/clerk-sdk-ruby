@@ -13,6 +13,14 @@ module Clerk
 
       def_delegators :@resource, :all, :find, :create, :update, :delete
 
+      def update_metadata(org_id, private_metadata: {}, public_metadata: {})
+        data = {}
+        data["private_metadata"] = private_metadata.to_json if !private_metadata.empty?
+        data["public_metadata"] = public_metadata.to_json if !public_metadata.empty?
+
+        @client.request(:patch, "#{@resource.resource_path(org_id)}/metadata", body: data)
+      end
+
       #
       # Invitations
       #
