@@ -49,6 +49,18 @@ module Clerk
       request.env["clerk"].user_id
     end
 
+    # Makes a request to the Clerk API to fetch the data of the authenticated
+    # session's organization. If caching is configured (see
+    # Config.middleware_cache_store), subsequent calls will return the cached
+    # object.
+    def clerk_organization
+      request.env["clerk"].org
+    end
+
+    def clerk_organization_id
+      request.env["clerk"].org_id
+    end
+
     def clerk_user_signed_in?
       !!clerk_verified_session_claims
     end
@@ -69,7 +81,8 @@ module Clerk
       helper_method :clerk_session, :clerk_reverify_session!,
         :clerk_verified_session_claims, :clerk_verified_session_token,
         :clerk_user, :clerk_user_id, :clerk_user_signed_in?, :clerk_sign_in_url,
-        :clerk_sign_up_url, :clerk_user_profile_url
+        :clerk_sign_up_url, :clerk_user_profile_url,
+        :clerk_organization, :clerk_organization_id
     end
   end
 end
