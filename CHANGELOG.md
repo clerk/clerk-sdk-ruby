@@ -1,5 +1,10 @@
 ## unreleased
 
+## 2.7.0 - 2022-11-02
+
+- feat: Add `#clerk_organization` and `#clerk_organization_id` helpers to fetch the current user's active organization [https://github.com/clerkinc/clerk-sdk-ruby/pull/22]
+- feat: Implement Organization Metadata update endpoint [https://github.com/clerkinc/clerk-sdk-ruby/pull/21]
+
 ## 2.6.0 - 2022-11-01
 
 - feat: Implement Organization endpoints [https://github.com/clerkinc/clerk-sdk-ruby/pull/20]
