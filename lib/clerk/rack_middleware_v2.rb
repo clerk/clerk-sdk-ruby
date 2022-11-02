@@ -36,11 +36,29 @@ module Clerk
       @session_claims["sub"]
     end
 
+    def org
+      return nil if org_id.nil?
+
+      @org ||= fetch_org(org_id)
+    end
+
+    def org_id
+      return nil if user_id.nil?
+
+      @session_claims["org_id"]
+    end
+
     private
 
     def fetch_user(user_id)
       cached_fetch("clerk_user:#{user_id}") do
         sdk.users.find(user_id)
+      end
+    end
+
+    def fetch_org(org_id)
+      cached_fetch("clerk_org:#{org_id}") do
+        sdk.organizations.find(org_id)
       end
     end
 
@@ -105,7 +123,7 @@ module Clerk
         rescue JWT::DecodeError
           return signed_out(env)  # malformed JSON authorization header
         end
-        
+
         token = verify_token(header_token)
         return signed_in(env, token, header_token) if token
 
