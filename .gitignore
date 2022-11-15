@@ -9,3 +9,5 @@
 
 .byebug_history
 *.gem
+
+.idea

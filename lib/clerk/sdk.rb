@@ -9,8 +9,10 @@ require "jwt"
 require_relative "resources/allowlist_identifiers"
 require_relative "resources/allowlist"
 require_relative "resources/clients"
+require_relative "resources/email_addresses"
 require_relative "resources/emails"
 require_relative "resources/organizations"
+require_relative "resources/phone_numbers"
 require_relative "resources/sessions"
 require_relative "resources/sms_messages"
 require_relative "resources/users"
@@ -111,12 +113,20 @@ module Clerk
       Resources::Clients.new(self)
     end
 
+    def email_addresses
+      Resources::EmailAddresses.new(self)
+    end
+
     def emails
       Resources::Emails.new(self)
     end
 
     def organizations
       Resources::Organizations.new(self)
+    end
+
+    def phone_numbers
+      Resources::PhoneNumbers.new(self)
     end
 
     def sessions

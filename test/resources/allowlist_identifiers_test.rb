@@ -20,7 +20,7 @@ class Clerk::Resources::AllowlistIdentifierTest < Minitest::Test
     assert_equal ["allowlist_identifier"], allowlist_identifiers.map { |h| h.dig("object") }
   end
 
-  def test_delete_user
+  def test_delete_allowlist_identifier
     user = mock_sdk.allowlist_identifiers.delete("alid_1")
     assert_equal true, user["deleted"]
     assert_equal "allowlist_identifier", user["object"]
