@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.8.0 - 2022-11-29
+
+- feat: Add support for the users.verify_totp endpoint
+
 ## 2.7.0 - 2022-11-02
 
 - feat: Add `#clerk_organization` and `#clerk_organization_id` helpers to fetch the current user's active organization [https://github.com/clerkinc/clerk-sdk-ruby/pull/22]
