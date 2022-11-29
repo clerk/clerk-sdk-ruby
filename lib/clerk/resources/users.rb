@@ -21,6 +21,10 @@ module Clerk
         @client.request(:post, "#{@resource.resource_path(user_id)}/verify_password", body: { password: password })
       end
 
+      def verify_totp(user_id, totp_or_backup_code)
+        @client.request(:post, "#{@resource.resource_path(user_id)}/verify_totp", body: { code: totp_or_backup_code })
+      end
+
       def disable_mfa(user_id)
         @client.request(:delete, "#{@resource.resource_path(user_id)}/mfa")
       end
