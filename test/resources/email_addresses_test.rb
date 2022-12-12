@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class Clerk::Resources::EmailAddressTest < Minitest::Test
+class Clerk::Resources::EmailAddressesTest < Minitest::Test
 
   def mock_sdk
     faraday = Faraday.new do |faraday|

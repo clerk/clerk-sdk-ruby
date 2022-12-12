@@ -1,0 +1,47 @@
+{
+  "object": "sign_up_attempt",
+  "id": "sua_sign_up",
+  "status": "missing_requirements",
+  "required_fields": [
+    "email_address",
+    "password"
+  ],
+  "optional_fields": [],
+  "missing_fields": [
+    "email_address",
+    "password"
+  ],
+  "unverified_fields": [],
+  "verifications": {
+    "email_address": null,
+    "phone_number": null,
+    "web3_wallet": null,
+    "external_account": null
+  },
+  "username": null,
+  "email_address": null,
+  "phone_number": null,
+  "web3_wallet": null,
+  "password_enabled": false,
+  "first_name": null,
+  "last_name": null,
+  "unsafe_metadata": {},
+  "public_metadata": {},
+  "custom_action": false,
+  "external_id": null,
+  "created_session_id": null,
+  "created_user_id": null,
+  "abandon_at": 449971200000,
+  "identification_requirements": [
+    ["email_address"],
+    []
+  ],
+  "missing_requirements": [
+    "password",
+    "email_address"
+  ],
+  "email_address_verification": null,
+  "phone_number_verification": null,
+  "external_account_strategy": null,
+  "external_account_verification": null
+}

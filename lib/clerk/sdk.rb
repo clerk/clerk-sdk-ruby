@@ -14,8 +14,8 @@ require_relative "resources/emails"
 require_relative "resources/organizations"
 require_relative "resources/phone_numbers"
 require_relative "resources/sessions"
+require_relative "resources/sign_ups"
 require_relative "resources/sms_messages"
-require_relative "resources/users"
 require_relative "resources/users"
 require_relative "resources/jwks"
 require_relative "errors"
@@ -131,6 +131,10 @@ module Clerk
 
     def sessions
       Resources::Sessions.new(self)
+    end
+
+    def sign_ups
+      Resources::SignUps.new(self)
     end
 
     def sms_messages
