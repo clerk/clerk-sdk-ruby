@@ -194,7 +194,8 @@ module Clerk
     end
 
     def development_or_staging?
-      Clerk.configuration.api_key.start_with?("test_")
+      Clerk.configuration.api_key.start_with?("test_") ||
+        Clerk.configuration.api_key.start_with?("sk_test_")
     end
 
     def production?
@@ -202,7 +203,7 @@ module Clerk
     end
 
     def cross_origin_request?(req)
-      # origin contains scheme+host and optionally port (ommitted if 80 or 443)
+      # origin contains scheme+host and optionally port (omitted if 80 or 443)
       # ref. https://www.rfc-editor.org/rfc/rfc6454#section-6.1
       origin = req.env["HTTP_ORIGIN"]
       return false if origin.nil?
