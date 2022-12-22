@@ -5,6 +5,7 @@ require "logger"
 require "net/http"
 require "json"
 require "jwt"
+require "concurrent-ruby"
 
 require_relative "resources/allowlist_identifiers"
 require_relative "resources/allowlist"
@@ -19,6 +20,7 @@ require_relative "resources/users"
 require_relative "resources/users"
 require_relative "resources/jwks"
 require_relative "errors"
+require_relative "jwks_cache"
 
 module Clerk
   class SDK
@@ -30,10 +32,14 @@ module Clerk
     # How often (in seconds) should JWKs be refreshed
     JWKS_CACHE_LIFETIME = 3600 # 1 hour
 
+    @@jwks_cache = JWKSCache.new(JWKS_CACHE_LIFETIME)
+
+    def self.jwks_cache
+      @@jwks_cache
+    end
+
     def initialize(api_key: nil, base_url: nil, logger: nil, ssl_verify: true,
                    connection: nil)
-      @jwks_fetched_at = nil
-
       if connection # Inject a Faraday::Connection for testing or full control over Faraday
         @conn = connection
         return
@@ -170,17 +176,9 @@ module Clerk
     # `timeout` argument.
     def verify_token(token, force_refresh_jwks: false, algorithms: ['RS256'], timeout: 5)
       jwk_loader = ->(options) do
-        @cached_jwks = nil if options[:invalidate] || force_refresh_jwks
-        @cached_jwks = nil if @jwks_fetched_at && Time.now.to_i - @jwks_fetched_at > JWKS_CACHE_LIFETIME
-
-        @cached_jwks ||= begin
-          keys = jwks.all["keys"]
-          @jwks_fetched_at = Time.now.to_i
-
-          # JWT.decode requires that the 'keys' key in the Hash is a symbol (as
-          # opposed to a string which our SDK returns by default)
-          { keys: keys }
-        end
+        # JWT.decode requires that the 'keys' key in the Hash is a symbol (as
+        # opposed to a string which our SDK returns by default)
+        { keys: SDK.jwks_cache.fetch(self, kid_not_found: (options[:invalidate] || options[:kid_not_found]), force_refresh: force_refresh_jwks) }
       end
 
       JWT.decode(token, nil, true, algorithms: algorithms, jwks: jwk_loader).first

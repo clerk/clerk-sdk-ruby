@@ -63,19 +63,20 @@ class Clerk::SdkTest < Minitest::Test
     sdk = ::Clerk::SDK.new(connection: conn)
 
     Timecop.freeze(TIME_WHEN_JWT_IS_VALID) do
-      sdk.verify_token(json_fixture("jwt_valid"))
-      assert_equal jwks_endpoint_hits, 1
+      sdk.verify_token(json_fixture("jwt_valid"), force_refresh_jwks: true)
+      assert_equal 1, jwks_endpoint_hits
 
       sdk.verify_token(json_fixture("jwt_valid"))
-      assert_equal jwks_endpoint_hits, 1
+      assert_equal 1, jwks_endpoint_hits
 
       sdk.verify_token(json_fixture("jwt_valid"), force_refresh_jwks: true)
-      assert_equal jwks_endpoint_hits, 2
+      assert_equal 2, jwks_endpoint_hits
 
       sdk.verify_token(json_fixture("jwt_valid"))
-      assert_equal jwks_endpoint_hits, 2
+      assert_equal 2, jwks_endpoint_hits
     end
 
+    # cache expired
     Timecop.freeze(TIME_WHEN_JWT_IS_VALID+Clerk::SDK::JWKS_CACHE_LIFETIME+1) do
       begin
         sdk.verify_token(json_fixture("jwt_valid"))
@@ -83,31 +84,30 @@ class Clerk::SdkTest < Minitest::Test
         # we know the token is going to be expired in this travelled to time
       end
 
-      assert_equal jwks_endpoint_hits, 3
+      assert_equal 3, jwks_endpoint_hits
     end
 
-
-    # assert that if the last server API request to the JWKS endpoint returned
-    # an error, then we're skipping the cache in the next request
+    # assert that if the server (BAPI) returns an error to the JWKS request
+    # (i.e. BAPI was down momentarily) and therefore the received token couldn't
+    # be verified, then we're going to try one more time
     jwks_endpoint_hits = 0
     conn = Faraday.new do |faraday|
       faraday.adapter :test do |stub|
         stub.get("/jwks") do
           jwks_endpoint_hits += 1
-          json_404
+          jwks_endpoint_hits < 2 ? json_404 : json_ok("jwks")
         end
       end
     end
 
     sdk = ::Clerk::SDK.new(connection: conn)
     Timecop.freeze(TIME_WHEN_JWT_IS_VALID) do
-      begin
-        sdk.verify_token(json_fixture("jwt_valid")) rescue Clerk::Errors::Fatal
-        sdk.verify_token(json_fixture("jwt_valid")) rescue Clerk::Errors::Fatal
-        sdk.verify_token(json_fixture("jwt_valid")) rescue Clerk::Errors::Fatal
-      end
+      claims = sdk.verify_token(json_fixture("jwt_valid"), force_refresh_jwks: true)
+      assert_equal 2, jwks_endpoint_hits
+      assert_equal "foo@bar.com", claims["email"]
 
-      assert_equal 3, jwks_endpoint_hits
+      sdk.verify_token(json_fixture("jwt_valid"))
+      assert_equal 2, jwks_endpoint_hits # cached response
     end
   end
 end
