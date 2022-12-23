@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.9.0.beta1 - 2022-12-23
+
+- fix: Make JWKS cache work across different SDK instances [https://github.com/clerkinc/clerk-sdk-ruby/pull/27]
+
 ## 2.8.0 - 2022-11-29
 
 - feat: Add support for the users.verify_totp endpoint
