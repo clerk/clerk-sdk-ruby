@@ -1,5 +1,10 @@
 ## unreleased
 
+## 2.9.0.beta2 - 2023-01-05
+
+- feat: Support setting the secret key (previously called Backend API key) using
+  the `CLERK_SECRET_KEY` environment variable [https://github.com/clerkinc/clerk-sdk-ruby/pull/28]
+
 ## 2.9.0.beta1 - 2022-12-23
 
 - fix: Make JWKS cache work across different SDK instances [https://github.com/clerkinc/clerk-sdk-ruby/pull/27]
