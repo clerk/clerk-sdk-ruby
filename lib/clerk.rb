@@ -44,6 +44,12 @@ module Clerk
     def initialize
       @base_url = ENV.fetch("CLERK_API_BASE", PRODUCTION_BASE_URL)
       @api_key = ENV["CLERK_API_KEY"]
+
+      secret_key = ENV["CLERK_SECRET_KEY"]
+      if secret_key && !secret_key.empty?
+        @api_key = secret_key
+      end
+
       @excluded_routes = []
     end
   end
