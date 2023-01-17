@@ -1,5 +1,11 @@
 ## unreleased
 
+## 2.9.0.beta3 - 2023-01-17
+
+## Changed
+
+- internal: Change request payloads to `application/json` content type [https://github.com/clerkinc/clerk-sdk-ruby/pull/29]
+
 ## 2.9.0.beta2 - 2023-01-05
 
 - feat: Support setting the secret key (previously called Backend API key) using
