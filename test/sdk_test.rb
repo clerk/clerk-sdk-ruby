@@ -11,6 +11,30 @@ class Clerk::SdkTest < Minitest::Test
     assert sdk
   end
 
+  def test_application_json_encoding
+    unparsed_payload  = { a: "b", c: ["d"], d: { e: 3 } }
+    json_payload      = '{"a":"b","c":["d"],"d":{"e":3}}'
+
+    conn = Faraday.new do |faraday|
+      faraday.adapter :test do |stub|
+        stub.patch("/users/user_1", json_payload, { "Content-Type" => "application/json" } ) do |env|
+          parsed = JSON.parse(env.request_body)
+          parsed["a"] = "b"
+          parsed["c"] = ["d"]
+          parsed["d"] = { "e" => 3 }
+
+          json_ok("user_1_updated")
+        end
+      end
+    end
+
+    sdk = ::Clerk::SDK.new(connection: conn)
+    user = sdk.users.update("user_1", unparsed_payload)
+
+    assert_equal "Mary", user["first_name"]
+    assert_equal "user_1", user["id"]
+  end
+
   def test_no_api_key_raises_on_api_call
     sdk = ::Clerk::SDK.new
     assert_raises ArgumentError do

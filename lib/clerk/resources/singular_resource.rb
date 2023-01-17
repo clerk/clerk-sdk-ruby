@@ -7,7 +7,7 @@ module Clerk
       end
 
       def update(changes = {})
-        @client.request(:patch, @resource_path, body:changes)
+        @client.request(:patch, @resource_path, body: changes)
       end
     end
   end

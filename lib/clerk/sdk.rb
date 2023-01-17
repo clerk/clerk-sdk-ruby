@@ -74,12 +74,14 @@ module Clerk
                    end
                  when :post
                    @conn.post(path, body) do |req|
-                     req.body = body
+                     req.body = body.to_json
+                     req.headers[:content_type] = "application/json"
                      req.options.timeout = timeout if timeout
                    end
                  when :patch
                    @conn.patch(path, body) do |req|
-                     req.body = body
+                     req.body = body.to_json
+                     req.headers[:content_type] = "application/json"
                      req.options.timeout = timeout if timeout
                    end
                  when :delete
