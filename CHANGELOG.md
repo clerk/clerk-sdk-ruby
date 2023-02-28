@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.9.0
+
+Identical to 2.9.0.beta3
+
 ## 2.9.0.beta3 - 2023-01-17
 
 ## Changed
