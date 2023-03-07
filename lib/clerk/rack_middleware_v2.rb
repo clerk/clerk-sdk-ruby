@@ -124,8 +124,12 @@ module Clerk
           return signed_out(env)  # malformed JSON authorization header
         end
 
-        token = verify_token(header_token)
-        return signed_in(env, token, header_token) if token
+        begin
+          token = verify_token(header_token)
+          return signed_in(env, token, header_token) if token
+        rescue JWT::ExpiredSignature, JWT::InvalidIatError
+          unknown(interstitial: false)
+        end
 
         # Clerk.js should refresh the token and retry
         return unknown(interstitial: false)
@@ -162,10 +166,15 @@ module Clerk
         return signed_out(env)
       end
 
-      token = verify_token(cookie_token)
+      begin
+        token = verify_token(cookie_token)
+        return signed_out(env) if !token
 
-      if token && token["iat"] && client_uat && Integer(client_uat) <= token["iat"]
-        return signed_in(env, token, cookie_token)
+        if token["iat"] && client_uat && Integer(client_uat) <= token["iat"]
+          return signed_in(env, token, cookie_token)
+        end
+      rescue JWT::ExpiredSignature, JWT::InvalidIatError
+        unknown(interstitial: true)
       end
 
       unknown(interstitial: true)
@@ -186,11 +195,11 @@ module Clerk
     end
 
     # Outcome C
-    def unknown(interstitial: false)
-      return [401, {}, []] if !interstitial
+    def unknown(interstitial: false, opts: {})
+      return [401, interstitial_headers(opts), []] if !interstitial
 
       # Load Clerk.js to update the __session and __client_uat cookies.
-      [401, {"Content-Type" => "text/html"}, [sdk.interstitial]]
+      [401, interstitial_headers(opts), [sdk.interstitial]]
     end
 
     def development_or_staging?
@@ -231,6 +240,8 @@ module Clerk
 
       begin
         sdk.verify_token(token)
+      rescue JWT::ExpiredSignature, JWT::InvalidIatError => e
+        raise e
       rescue JWT::DecodeError, JWT::RequiredDependencyError => e
         false
       end
@@ -238,6 +249,15 @@ module Clerk
 
     def sdk
       Clerk::SDK.new
+    end
+
+    def interstitial_headers(reason: nil, message: nil, status: nil)
+      {
+        "Content-Type" => "text/html",
+        "X-Clerk-Auth-Reason" => reason,
+        "X-Clerk-Auth-Message" => message,
+        "X-Clerk-Auth-Status" => status,
+      }.compact
     end
   end
 end

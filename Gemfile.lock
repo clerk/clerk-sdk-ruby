@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    clerk-sdk-ruby (2.9.0.beta3)
+    clerk-sdk-ruby (2.9.0)
       concurrent-ruby (~> 1.1)
       faraday (~> 1.4.1)
       jwt (~> 2.5)
@@ -32,6 +32,7 @@ GEM
     timecop (0.9.6)
 
 PLATFORMS
+  arm64-darwin-22
   universal-darwin-21
   x86_64-linux
 
