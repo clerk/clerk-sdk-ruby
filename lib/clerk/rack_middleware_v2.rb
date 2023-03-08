@@ -195,11 +195,11 @@ module Clerk
     end
 
     # Outcome C
-    def unknown(interstitial: false, opts: {})
-      return [401, interstitial_headers(opts), []] if !interstitial
+    def unknown(interstitial: false, **opts)
+      return [401, interstitial_headers(**opts), []] if !interstitial
 
       # Load Clerk.js to update the __session and __client_uat cookies.
-      [401, interstitial_headers(opts), [sdk.interstitial]]
+      [401, interstitial_headers(**opts), [sdk.interstitial]]
     end
 
     def development_or_staging?
