@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.10.0.beta1 - 2023-03-08
+
+- fix: Change signed-out & interstitial request state conditions [https://github.com/clerkinc/clerk-sdk-ruby/pull/30]
+
 ## 2.9.0
 
 Identical to 2.9.0.beta3
