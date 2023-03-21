@@ -24,7 +24,7 @@ module Clerk
     # which already contains the verified claims as retrieved from the session
     # token.
     #
-    # See https://docs.clerk.dev/reference/backend-api-reference/sessions#verify-a-session
+    # See https://clerk.com/docs/reference/backend-api/tag/Sessions#operation/VerifySession
     def clerk_reverify_session!
       request.env["clerk"].verify_session
     end
