@@ -54,7 +54,7 @@ Identical to 2.9.0.beta3
 
 ## 2.2.0 - 2022-08-26
 
-- feat: Add support for the [users.create](https://reference.clerk.dev/reference/backend-api-reference/users#create-a-user) endpoint
+- feat: Add support for the [users.create](https://clerk.com/docs/reference/backend-api/tag/Users#operation/CreateUser) endpoint
 
 ## 2.1.2 - 2022-08-26
 
@@ -67,15 +67,15 @@ Identical to 2.9.0.beta3
 ## 2.0.0 - 2021-10-21
 
 This release introduces the new networkless middleware which works with the new 
-authentication scheme, [Auth v2](https://docs.clerk.dev/main-concepts/auth-v2).
+authentication scheme, [Auth v2](https://clerk.com/docs/upgrade-guides/auth-v2).
 
 It is backwards-incompatible with applications using Auth v1.
 
 - [BREAKING]: In order to use this version, you must set the authVersion prop 
     accordingly in your frontend: `Clerk.load({authVersion: 2})`
 
-For more information on Auth v2, please refer to 
-https://docs.clerk.dev/main-concepts/auth-v2.
+For more information on Auth v2, please refer to
+https://clerk.com/docs/upgrade-guides/auth-v2.
 
 ## 1.0.3 - 2021-07-21
 

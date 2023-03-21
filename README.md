@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://www.clerk.dev/?utm_source=github&utm_medium=starter_repos&utm_campaign=sdk_ruby" target="_blank" align="center">
+  <a href="https://www.clerk.com/?utm_source=github&utm_medium=starter_repos&utm_campaign=sdk_ruby" target="_blank" align="center">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="./docs/clerk-logo-dark.png">
       <img src="./docs/clerk-logo-light.png" height="64">
@@ -10,10 +10,10 @@
 
 # Clerk Ruby SDK
 
-This SDK allows you to call the [Clerk](https://www.clerk.dev/?utm_source=github&utm_medium=starter_repos&utm_campaign=sdk_ruby) Backend API from Ruby code without having to implement the calls yourself.
+This SDK allows you to call the [Clerk](https://www.clerk.com/?utm_source=github&utm_medium=starter_repos&utm_campaign=sdk_ruby) Backend API from Ruby code without having to implement the calls yourself.
 
 [![chat on Discord](https://img.shields.io/discord/856971667393609759.svg?logo=discord)](https://discord.com/invite/b5rXHjAg7A)
-[![documentation](https://img.shields.io/badge/documentation-clerk-green.svg)](https://docs.clerk.dev)
+[![documentation](https://img.shields.io/badge/documentation-clerk-green.svg)](https://clerk.com/docs)
 [![twitter](https://img.shields.io/twitter/follow/ClerkDev?style=social)](https://twitter.com/intent/follow?screen_name=ClerkDev)
 
 ---
@@ -25,7 +25,7 @@ Would you like to work on Open Source software and help maintain this repository
 ---
 
 **Note**: You're looking at the main branch, which requires that you use [Auth
-v2](https://clerk.dev/docs/upgrade-guides/auth-v2).
+v2](https://clerk.com/docs/upgrade-guides/auth-v2).
 
 If you're looking for the legacy authentication scheme, refer to the
 [`v1`](https://github.com/clerkinc/clerk-sdk-ruby/tree/v1) branch.
@@ -49,10 +49,10 @@ Or install it yourself as:
 ## Quick Start
 
 First, you need to get an API key for a Clerk instance. This is done via the
-[Clerk dashboard](https://dashboard.clerk.dev/applications).
+[Clerk dashboard](https://dashboard.clerk.com/applications).
 
 Then you can instantiate a `Clerk::SDK` instance and access all
-[Backend API](https://docs.clerk.dev/backend/backend-api-reference) endpoints.
+[Backend API](https://clerk.com/docs/reference/backend-api) endpoints.
 Here's a quick example:
 
 ```ruby
@@ -156,7 +156,7 @@ API then responds with JSON which is then converted and returned as a Ruby
 `Hash`, or `Array` of hashes. Errors are also returned as a JSON object, with a
 single key (`errors`) containing an array of error objects.
 
-Read the [API documentation](https://docs.clerk.dev/backend/backend-api-reference)
+Read the [API documentation](https://clerk.com/docs/reference/backend-api)
 for details on expected parameters and response formats.
 
 ## Development
