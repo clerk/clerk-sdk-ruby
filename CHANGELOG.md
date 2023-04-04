@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.10.0 - 2023-04-04
+
+Identical to 2.10.0.beta2
+
 ## 2.10.0.beta2 - 2023-03-08
 
 - fix: incorrect usage keyword parameter (fix for 2.10.0.beta1)
