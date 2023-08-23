@@ -50,11 +50,14 @@ module Clerk
                    else
                      URI(base_url)
                    end
-        api_key = api_key || Clerk.configuration.api_key
+
+        api_key = api_key || Faraday::VERSION.to_i < 2 ?
+          Clerk.configuration.api_key : -> { fetch_auth }
         logger = logger || Clerk.configuration.logger
         @conn = Faraday.new(
           url: base_uri, headers: DEFAULT_HEADERS, ssl: {verify: ssl_verify}
         ) do |f|
+          f.adapter Faraday.default_adapter
           f.request :url_encoded
           f.request :authorization, "Bearer", api_key
           if logger
@@ -155,6 +158,13 @@ module Clerk
 
     def interstitial(refresh=false)
       request(:get, "internal/interstitial")
+    end
+
+    def fetch_auth
+      key = Clerk.configuration.api_key
+      raise ArgumentError, "Clerk Auth key is required" unless key
+
+      key
     end
 
     # Returns the decoded JWT payload without verifying if the signature is

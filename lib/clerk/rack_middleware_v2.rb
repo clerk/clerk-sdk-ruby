@@ -203,7 +203,8 @@ module Clerk
     end
 
     def development_or_staging?
-      Clerk.configuration.api_key.start_with?("test_") ||
+      Clerk.configuration.api_key.nil? ||
+        Clerk.configuration.api_key.start_with?("test_") ||
         Clerk.configuration.api_key.start_with?("sk_test_")
     end
 
