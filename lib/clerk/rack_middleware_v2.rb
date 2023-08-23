@@ -95,8 +95,9 @@ module Clerk
     end
 
     def call(env)
-      env = env
       req = Rack::Request.new(env)
+
+      return @app.call(env) if Clerk.configuration.api_key.nil?
 
       if @excluded_routes[req.path]
         return @app.call(env)
