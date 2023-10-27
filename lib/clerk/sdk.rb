@@ -40,7 +40,8 @@ module Clerk
 
     def initialize(api_key: nil, base_url: nil, logger: nil, ssl_verify: true,
                    connection: nil)
-      if connection # Inject a Faraday::Connection for testing or full control over Faraday
+      if connection
+        # Inject a Faraday::Connection for testing or full control over Faraday
         @conn = connection
         return
       else
@@ -50,7 +51,13 @@ module Clerk
                    else
                      URI(base_url)
                    end
-        api_key = api_key || Clerk.configuration.api_key
+
+        api_key ||= if Faraday::VERSION.to_i < 2
+            Clerk.configuration.api_key
+        elsif Clerk.configuration.api_key.nil?
+          -> { raise ArgumentError, "Clerk secret key is not set" }
+        end
+
         logger = logger || Clerk.configuration.logger
         @conn = Faraday.new(
           url: base_uri, headers: DEFAULT_HEADERS, ssl: {verify: ssl_verify}
