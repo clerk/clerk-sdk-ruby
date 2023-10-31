@@ -1,5 +1,9 @@
 ## unreleased
 
+## 2.11.1 - 2023-10-31
+
+- fix: Properly set Clerk API key (secret) when using Faraday v2 [https://github.com/clerkinc/clerk-sdk-ruby/pull/37]
+
 ## 2.11.0 - 2023-10-27
 
 - feat: Added support for Faraday v2 [https://github.com/clerkinc/clerk-sdk-ruby/pull/37]
