@@ -203,12 +203,15 @@ module Clerk
     end
 
     def development_or_staging?
-      Clerk.configuration.api_key.start_with?("test_") ||
-        Clerk.configuration.api_key.start_with?("sk_test_")
+      Clerk.configuration.api_key &&
+      (Clerk.configuration.api_key.start_with?("test_") ||
+        Clerk.configuration.api_key.start_with?("sk_test_"))
     end
 
     def production?
-      !development_or_staging?
+      Clerk.configuration.api_key &&
+      (Clerk.configuration.api_key.start_with?("live_") ||
+        Clerk.configuration.api_key.start_with?("sk_live_"))
     end
 
     def cross_origin_request?(req)
