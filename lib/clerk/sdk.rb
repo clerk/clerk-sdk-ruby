@@ -52,10 +52,10 @@ module Clerk
                      URI(base_url)
                    end
 
-        api_key ||= if Faraday::VERSION.to_i < 2
-            Clerk.configuration.api_key
-        elsif Clerk.configuration.api_key.nil?
-          -> { raise ArgumentError, "Clerk secret key is not set" }
+        api_key ||= Clerk.configuration.api_key
+
+        if Faraday::VERSION.to_i >= 2 && api_key.nil?
+          api_key = -> { raise ArgumentError, "Clerk secret key is not set" }
         end
 
         logger = logger || Clerk.configuration.logger
