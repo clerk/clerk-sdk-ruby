@@ -1,9 +1,0 @@
-{
-    "object": "sms_message",
-    "id": "sms_1q8uR4AxV2G8l6dgbtuwh4Gorws",
-    "from_phone_number": "9738321914",
-    "to_phone_number": "+12019613198",
-    "phone_number_id": "idn_1oDEYpGZ9m7XbIyqaML55jEaETE",
-    "message": "Welcome to Clerk!",
-    "status": "queued"
-}
