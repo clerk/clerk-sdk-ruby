@@ -15,7 +15,6 @@ require_relative "resources/emails"
 require_relative "resources/organizations"
 require_relative "resources/phone_numbers"
 require_relative "resources/sessions"
-require_relative "resources/sms_messages"
 require_relative "resources/users"
 require_relative "resources/users"
 require_relative "resources/jwks"
@@ -146,10 +145,6 @@ module Clerk
 
     def sessions
       Resources::Sessions.new(self)
-    end
-
-    def sms_messages
-      Resources::SMSMessages.new(self)
     end
 
     def users
