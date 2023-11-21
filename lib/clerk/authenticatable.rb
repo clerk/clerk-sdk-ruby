@@ -61,6 +61,14 @@ module Clerk
       request.env["clerk"].org_id
     end
 
+    def clerk_organization_role
+      request.env["clerk"].org_role
+    end
+
+    def clerk_organization_permissions
+      request.env["clerk"].org_permissions
+    end
+
     def clerk_user_signed_in?
       !!clerk_verified_session_claims
     end
@@ -82,7 +90,8 @@ module Clerk
         :clerk_verified_session_claims, :clerk_verified_session_token,
         :clerk_user, :clerk_user_id, :clerk_user_signed_in?, :clerk_sign_in_url,
         :clerk_sign_up_url, :clerk_user_profile_url,
-        :clerk_organization, :clerk_organization_id
+        :clerk_organization, :clerk_organization_id, :clerk_organization_role,
+        :clerk_organization_permissions
     end
   end
 end
