@@ -48,6 +48,18 @@ module Clerk
       @session_claims["org_id"]
     end
 
+    def org_role
+      return nil if @session_claims.nil?
+
+      @session_claims["org_role"]
+    end
+
+    def org_permissions
+      return nil if @session_claims.nil?
+
+      @session_claims["org_permissions"]
+    end
+
     private
 
     def fetch_user(user_id)
