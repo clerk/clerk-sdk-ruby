@@ -44,8 +44,10 @@
         "external_accounts": [],
         "public_metadata": {},
         "private_metadata": {},
-        "created_at": 1621421265,
-        "updated_at": 1621421326
+        "created_at": 1621421265000,
+        "updated_at": 1621421326000,
+        "last_sign_in_at": null,
+        "last_active_at": 1700690400000 
     },
     {
         "id": "user_1skey1AXIL5UvH5B6XdMWawkEsX",
@@ -78,7 +80,9 @@
         "external_accounts": [],
         "public_metadata": {},
         "private_metadata": {},
-        "created_at": 1621421265,
-        "updated_at": 1621421326
+        "created_at": 1621421265123,
+        "updated_at": 1621421326678,
+        "last_sign_in_at": 1701677564411,
+        "last_active_at": 1701734400000 
     }
 ]
