@@ -1,5 +1,10 @@
 ## unreleased
 
+## 2.12.0 - 2024-01-09
+
+- feat: Add org role/permission helpers [https://github.com/clerk/clerk-sdk-ruby/pull/40]
+- changed: drop create sms endpoint [https://github.com/clerk/clerk-sdk-ruby/pull/39]
+
 ## 2.11.1 - 2023-10-31
 
 - fix: Properly set Clerk API key (secret) when using Faraday v2 [https://github.com/clerkinc/clerk-sdk-ruby/pull/37]
@@ -78,12 +83,12 @@ Identical to 2.9.0.beta3
 
 ## 2.0.0 - 2021-10-21
 
-This release introduces the new networkless middleware which works with the new 
+This release introduces the new networkless middleware which works with the new
 authentication scheme, [Auth v2](https://clerk.com/docs/upgrade-guides/auth-v2).
 
 It is backwards-incompatible with applications using Auth v1.
 
-- [BREAKING]: In order to use this version, you must set the authVersion prop 
+- [BREAKING]: In order to use this version, you must set the authVersion prop
     accordingly in your frontend: `Clerk.load({authVersion: 2})`
 
 For more information on Auth v2, please refer to
