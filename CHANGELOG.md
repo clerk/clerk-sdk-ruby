@@ -1,6 +1,14 @@
 ## unreleased
 
-## 2.12.0 - 2024-01-09
+## 3.0.0 - 2024-01-09
+
+Note: this is identical to 2.12.0, which was yanked because it contained a
+breaking change.
+
+- feat: Add org role/permission helpers [https://github.com/clerk/clerk-sdk-ruby/pull/40]
+- changed: drop create sms endpoint [https://github.com/clerk/clerk-sdk-ruby/pull/39]
+
+## [YANKED] 2.12.0 - 2024-01-09
 
 - feat: Add org role/permission helpers [https://github.com/clerk/clerk-sdk-ruby/pull/40]
 - changed: drop create sms endpoint [https://github.com/clerk/clerk-sdk-ruby/pull/39]
