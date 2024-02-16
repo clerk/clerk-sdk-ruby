@@ -17,7 +17,7 @@ module Clerk
     attr_reader :session_id, :error
     def initialize(env)
       req = Rack::Request.new(env)
-      @token = req.cookies["__session"]
+      @token = req.cookies[SESSION_COOKIE]
       @session_id = req.params["_clerk_session_id"]
       @session = nil
       @user_id = nil

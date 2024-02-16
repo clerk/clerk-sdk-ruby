@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "clerk/version"
+require_relative "clerk/constants"
 require_relative "clerk/sdk"
 
 module Clerk
@@ -16,7 +17,7 @@ module Clerk
 
   class Config
     PRODUCTION_BASE_URL = "https://api.clerk.dev/v1/".freeze
-    attr_accessor :api_key, :base_url, :logger, :middleware_cache_store
+    attr_accessor :api_key, :base_url, :logger, :middleware_cache_store, :publishable_key
 
     # An array of route paths on which the middleware will not execute.
     #
@@ -49,6 +50,8 @@ module Clerk
       if secret_key && !secret_key.empty?
         @api_key = secret_key
       end
+
+      @publishable_key = ENV["CLERK_PUBLISHABLE_KEY"]
 
       @excluded_routes = []
     end

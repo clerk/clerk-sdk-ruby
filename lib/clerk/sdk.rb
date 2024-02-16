@@ -96,7 +96,7 @@ module Clerk
                    end
                  end
 
-      body = if response["Content-Type"] == "application/json"
+      body = if response[CONTENT_TYPE_HEADER] == "application/json"
                JSON.parse(response.body)
              else
                response.body
@@ -155,10 +155,6 @@ module Clerk
       Resources::JWKS.new(self)
     end
 
-    def interstitial(refresh=false)
-      request(:get, "internal/interstitial")
-    end
-
     # Returns the decoded JWT payload without verifying if the signature is
     # valid.
     #
@@ -185,7 +181,7 @@ module Clerk
         { keys: SDK.jwks_cache.fetch(self, kid_not_found: (options[:invalidate] || options[:kid_not_found]), force_refresh: force_refresh_jwks) }
       end
 
-      JWT.decode(token, nil, true, algorithms: algorithms, jwks: jwk_loader).first
+      JWT.decode(token, nil, true, algorithms: algorithms, exp_leeway: timeout, jwks: jwk_loader).first
     end
   end
 end
