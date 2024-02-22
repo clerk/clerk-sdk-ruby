@@ -1,4 +1,6 @@
 require "clerk"
+require_relative "authenticate_context"
+require_relative "authenticate_request"
 
 module Clerk
   class ProxyV2
@@ -119,160 +121,47 @@ module Clerk
       end
 
       env["clerk"] = Clerk::ProxyV2.new
-      header_token = req.env["HTTP_AUTHORIZATION"]
-      header_token = header_token.strip.sub(/\ABearer /, '') if header_token
-      cookie_token = req.cookies["__session"]
-      client_uat = req.cookies["__client_uat"]
 
-      ##########################################################################
-      #                                                                        #
-      #                          HEADER AUTHENTICATION                         #
-      #                                                                        #
-      ##########################################################################
-      if header_token
-        begin
-          return signed_out(env) if !sdk.decode_token(header_token) # malformed JWT
-        rescue JWT::DecodeError
-          return signed_out(env)  # malformed JSON authorization header
-        end
+      auth_context = AuthenticateContext.new(req, Clerk.configuration)
+      auth_request = AuthenticateRequest.new(auth_context)
 
-        begin
-          token = verify_token(header_token)
-          return signed_in(env, token, header_token) if token
-        rescue JWT::ExpiredSignature, JWT::InvalidIatError
-          unknown(interstitial: false)
-        end
+      status, auth_request_headers, body = auth_request.resolve(env)
+      return [status, auth_request_headers, body] if status
+      
+      status, headers, body = @app.call(env)
 
-        # Clerk.js should refresh the token and retry
-        return unknown(interstitial: false)
+      if !auth_request_headers.empty?
+        # Remove them to avoid overriding existing cookies set in headers by other middlewares
+        auth_request_cookies = auth_request_headers.delete(COOKIE_HEADER)
+        # merge non-cookie related headers into response headers
+        headers.merge!(auth_request_headers)
+
+        set_cookie_headers!(headers, auth_request_cookies) if auth_request_cookies
       end
 
-      # in cross-origin XHRs the use of Authorization header is mandatory.
-      if cross_origin_request?(req)
-        return signed_out(env)
-      end
-
-      if development_or_staging? && !browser_request?(req)
-        # the interstitial won't work if the user agent is not a browser, so
-        # short-circuit and avoid rendering it
-        #
-        # We only limit this to dev/stg because we're not yet sure how robust
-        # this strategy is, yet. In the future, we might enable it for prod too.
-        return signed_out(env)
-      end
-
-      ##########################################################################
-      #                                                                        #
-      #                             COOKIE AUTHENTICATION                      #
-      #                                                                        #
-      ##########################################################################
-      if development_or_staging? && (req.referrer.nil? || cross_origin_request?(req))
-        return unknown(interstitial: true)
-      end
-
-      if production? && client_uat.nil?
-        return signed_out(env)
-      end
-
-      if client_uat == "0"
-        return signed_out(env)
-      end
-
-      begin
-        token = verify_token(cookie_token)
-        return signed_out(env) if !token
-
-        if token["iat"] && client_uat && Integer(client_uat) <= token["iat"]
-          return signed_in(env, token, cookie_token)
-        end
-      rescue JWT::ExpiredSignature, JWT::InvalidIatError
-        unknown(interstitial: true)
-      end
-
-      unknown(interstitial: true)
+      [status, headers, body]
     end
 
     private
 
-    # Outcome A
-    def signed_in(env, claims, token)
-      env["clerk"] = ProxyV2.new(session_claims: claims, session_token: token)
-
-      @app.call(env)
-    end
-
-    # Outcome B
-    def signed_out(env)
-      @app.call(env)
-    end
-
-    # Outcome C
-    def unknown(interstitial: false, **opts)
-      return [401, interstitial_headers(**opts), []] if !interstitial
-
-      # Load Clerk.js to update the __session and __client_uat cookies.
-      [401, interstitial_headers(**opts), [sdk.interstitial]]
-    end
-
-    def development_or_staging?
-      Clerk.configuration.api_key &&
-      (Clerk.configuration.api_key.start_with?("test_") ||
-        Clerk.configuration.api_key.start_with?("sk_test_"))
-    end
-
-    def production?
-      Clerk.configuration.api_key &&
-      (Clerk.configuration.api_key.start_with?("live_") ||
-        Clerk.configuration.api_key.start_with?("sk_live_"))
-    end
-
-    def cross_origin_request?(req)
-      # origin contains scheme+host and optionally port (omitted if 80 or 443)
-      # ref. https://www.rfc-editor.org/rfc/rfc6454#section-6.1
-      origin = req.env["HTTP_ORIGIN"]
-      return false if origin.nil?
-
-      # strip scheme
-      origin = origin.strip.sub(/\A(\w+:)?\/\//, '')
-      return false if origin.empty?
-
-      # Rack's host and port helpers are reverse-proxy-aware; that
-      # is, they prefer the de-facto X-Forwarded-* headers if they're set
-      request_host = req.host
-      request_host << ":#{req.port}" if req.port != 80 && req.port != 443
-
-      origin != request_host
-    end
-
-    def browser_request?(req)
-      user_agent = req.env["HTTP_USER_AGENT"]
-
-      !user_agent.nil? && user_agent.starts_with?("Mozilla/")
-    end
-
-    def verify_token(token)
-      return false if token.nil? || token.strip.empty?
-
-      begin
-        sdk.verify_token(token)
-      rescue JWT::ExpiredSignature, JWT::InvalidIatError => e
-        raise e
-      rescue JWT::DecodeError, JWT::RequiredDependencyError => e
-        false
+    def set_cookie_headers!(headers, cookie_headers)
+      cookie_headers.each do |cookie_header|
+        cookie_key = cookie_header.split(';')[0].split('=')[0]
+        cookie =  Rack::Utils.parse_cookies_header(cookie_header)
+        cookie_params = convert_http_cookie_to_cookie_setter_params(cookie, cookie_key)
+        Rack::Utils.set_cookie_header!(headers, cookie_key, cookie_params)
       end
     end
 
-    def sdk
-      Clerk::SDK.new
-    end
-
-    def interstitial_headers(reason: nil, message: nil, status: nil)
-      {
-        "Content-Type" => "text/html",
-        "X-Clerk-Auth-Reason" => reason,
-        "X-Clerk-Auth-Message" => message,
-        "X-Clerk-Auth-Status" => status,
-      }.compact
+    def convert_http_cookie_to_cookie_setter_params(cookie, cookie_key)
+      # convert cookie to to match cookie setter method params (lowercase symbolized keys with `:value` key)
+      cookie_params = cookie.transform_keys { |k| k.downcase.to_sym }
+      # drop the current cookie name key to avoid polluting the expected cookie params
+      cookie_params[:value] = cookie.delete(cookie_key)
+      # fix issue with cookie expiration expected to be Date type
+      cookie_params[:expires] = Date.parse(cookie_params[:expires]) if cookie_params[:expires]
+      
+      cookie_params
     end
   end
 end

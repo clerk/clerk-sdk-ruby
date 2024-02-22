@@ -87,8 +87,9 @@ supported configuration settings their environment variable equivalents:
 
 ```ruby
 Clerk.configure do |c|
-  c.api_key = "your_api_key" # if omitted: ENV["CLERK_API_KEY"] - API calls will fail if unset
-  c.base_url = "https://..." # if omitted: "https://api.clerk.dev/v1/"
+  c.api_key = "your_api_key" # if omitted: ENV["CLERK_SECRET_KEY"] - API calls will fail if unset
+  c.base_url = "https://..." # if omitted: ENV["CLERK_API_BASE"] - defaults to "https://api.clerk.com/v1/"
+  c.publishable_key = "pk_(test|live)_...." # if omitted: ENV["CLERK_PUBLISHABLE_KEY"] - Handshake mechanism (check section below) will fail if unset
   c.logger = Logger.new(STDOUT) # if omitted, no logging
   c.middleware_cache_store = ActiveSupport::Cache::FileStore.new("/tmp/clerk_middleware_cache") # if omitted: no caching
   c.excluded_routes ["/foo", "/bar/*"]
@@ -102,6 +103,7 @@ arguments to the constructor:
 clerk = Clerk::SDK.new(
     api_key: "X",
     base_url: "Y",
+    publishable_key: "Z",
     logger: Logger.new()
 )
 ```
@@ -158,6 +160,14 @@ single key (`errors`) containing an array of error objects.
 
 Read the [API documentation](https://clerk.com/docs/reference/backend-api)
 for details on expected parameters and response formats.
+
+<a name="handshake"></a>
+
+### Handshake
+
+The Client Handshake is a mechanism that is used to resolve a request’s authentication state from “unknown” to definitively signed in or signed out. Clerk’s session management architecture relies on a short-lived session JWT to validate requests, along with a long-lived session that is used to keep the session JWT fresh by interacting with the Frontend API. The long-lived session token is stored in an HttpOnly cookie associated with the Frontend API domain. If a short-lived session JWT is expired on a request to an application’s backend, the SDK doesn’t know if the session has ended, or if a new short-lived JWT needs to be issued. When an SDK gets into this state, it triggers the handshake.
+
+With the handshake, we can resolve the authentication state on the backend and ensure the request is properly handled as signed in or out, instead of being in a potentially “unknown” state. The handshake flow relies on redirects to exchange session information between FAPI and the application, ensuring the resolution of unknown authentication states minimizes performance impact and behaves consistently across different framework and language implementations.
 
 ## Development
 
