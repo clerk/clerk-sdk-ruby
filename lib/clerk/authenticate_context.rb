@@ -179,8 +179,7 @@ module Clerk
         end
 
         def retrieve_from_query_string(url, key)
-            request_qs = Rack::Utils.parse_query(url.query)
-            request_qs[key]
+            Rack::Utils.parse_query(url.query)[key]
         end
     end
 end
