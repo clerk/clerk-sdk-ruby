@@ -103,7 +103,6 @@ arguments to the constructor:
 clerk = Clerk::SDK.new(
     api_key: "X",
     base_url: "Y",
-    publishable_key: "Z",
     logger: Logger.new()
 )
 ```
