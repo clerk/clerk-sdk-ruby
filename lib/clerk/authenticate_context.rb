@@ -102,12 +102,10 @@ module Clerk
         end
 
         def development_instance?
-            # TODO(dimkl): Consolidate with @clerk/backend to use pk instead of sk
             secret_key.start_with?("sk_test_")
         end
 
         def production_instance?
-            # TODO(dimkl): Consolidate with @clerk/backend to use pk instead of sk
             secret_key.start_with?("sk_live_")
         end
 
