@@ -21,12 +21,12 @@ class Clerk::Resources::UsersTest < Minitest::Test
 
   def test_all_users
     users = mock_sdk.users.all
-    assert_equal ["user", "user"], users.map { |h| h.dig("object") }
+    assert_equal(%w[user user], users.map { |h| h.dig("object") })
   end
 
   def test_all_users_query_params
     users = mock_sdk.users.all(limit: 1)
-    assert_equal ["user", "user"], users.map { |h| h.dig("object") }
+    assert_equal(%w[user user], users.map { |h| h.dig("object") })
   end
 
   def test_find_user
@@ -36,7 +36,7 @@ class Clerk::Resources::UsersTest < Minitest::Test
   end
 
   def test_update_user
-    user = mock_sdk.users.update("user_1", {first_name: "Mary"})
+    user = mock_sdk.users.update("user_1", { first_name: "Mary" })
     assert_equal "Mary", user["first_name"]
     assert_equal "user_1", user["id"]
   end
@@ -58,6 +58,6 @@ class Clerk::Resources::UsersTest < Minitest::Test
     response = mock_sdk.users.oauth_access_token("user_1", "hubspot")
     assert_equal "xxxx", response["token"]
     assert_equal "hubspot", response["provider"]
-    assert_equal ["oauth", "contacts"], response["scopes"]
+    assert_equal %w[oauth contacts], response["scopes"]
   end
 end

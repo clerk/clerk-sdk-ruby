@@ -3,7 +3,6 @@
 require "test_helper"
 
 class Clerk::Resources::EmailAddressTest < Minitest::Test
-
   def mock_sdk
     faraday = Faraday.new do |faraday|
       faraday.adapter :test do |stub|
@@ -49,5 +48,4 @@ class Clerk::Resources::EmailAddressTest < Minitest::Test
     assert_equal email_address_id, deleted_object["id"]
     assert deleted_object["deleted"]
   end
-
 end

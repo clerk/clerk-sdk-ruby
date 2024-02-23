@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-#
+
 require "test_helper"
 
 class Clerk::SdkTest < Minitest::Test
   TIME_WHEN_JWT_IS_VALID = Time.new(2021, 7, 29, 13, 31, 30, "+03:00")
-  TIME_WHEN_JWT_HAS_EXPIRED = Time.new(2021, 7, 29, 13, 33, 00, "+03:00")
+  TIME_WHEN_JWT_HAS_EXPIRED = Time.new(2021, 7, 29, 13, 33, 0o0, "+03:00")
 
   def test_sdk_init_without_config
     sdk = ::Clerk::SDK.new
@@ -17,7 +17,7 @@ class Clerk::SdkTest < Minitest::Test
 
     conn = Faraday.new do |faraday|
       faraday.adapter :test do |stub|
-        stub.patch("/users/user_1", json_payload, { "Content-Type" => "application/json" } ) do |env|
+        stub.patch("/users/user_1", json_payload, { "Content-Type" => "application/json" }) do |env|
           parsed = JSON.parse(env.request_body)
           parsed["a"] = "b"
           parsed["c"] = ["d"]
@@ -101,7 +101,7 @@ class Clerk::SdkTest < Minitest::Test
     end
 
     # cache expired
-    Timecop.freeze(TIME_WHEN_JWT_IS_VALID+Clerk::SDK::JWKS_CACHE_LIFETIME+1) do
+    Timecop.freeze(TIME_WHEN_JWT_IS_VALID + Clerk::SDK::JWKS_CACHE_LIFETIME + 1) do
       begin
         sdk.verify_token(json_fixture("jwt_valid"))
       rescue JWT::ExpiredSignature

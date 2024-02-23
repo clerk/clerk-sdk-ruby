@@ -15,6 +15,7 @@ module Clerk
 
   class Proxy
     attr_reader :session_id, :error
+
     def initialize(env)
       req = Rack::Request.new(env)
       @token = req.cookies[SESSION_COOKIE]
@@ -42,6 +43,7 @@ module Clerk
 
     def user
       return nil if session.nil?
+
       @user ||= fetch_user(user_id)
     end
 
@@ -52,6 +54,7 @@ module Clerk
     end
 
     private
+
     def sdk
       @sdk ||= SDK.new
     end

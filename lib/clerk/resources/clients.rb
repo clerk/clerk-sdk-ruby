@@ -13,11 +13,10 @@ module Clerk
 
       def verify_token(token)
         @client.request(:post, "#{@resource.collection_path}/verify",
-                        body: {token: token})
+                        body: { token: token })
       end
 
       def_delegators :@resource, :all, :find
     end
   end
 end
-

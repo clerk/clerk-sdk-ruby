@@ -15,11 +15,11 @@ class Clerk::Resources::EmailsTest < Minitest::Test
 
   def test_create_email
     resp = mock_sdk.emails.create({
-      email_address_id: "idn_xxx",
-      from_email_name: "noreply",
-      subject: "hi",
-      body: "hello",
-    })
+                                    email_address_id: "idn_xxx",
+                                    from_email_name: "noreply",
+                                    subject: "hi",
+                                    body: "hello"
+                                  })
     assert_equal "email", resp["object"]
   end
 end

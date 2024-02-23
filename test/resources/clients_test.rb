@@ -17,7 +17,7 @@ class Clerk::Resources::ClientsTest < Minitest::Test
 
   def test_all_clients
     sess = mock_sdk.clients.all
-    assert_equal ["client"], sess.map { |h| h.dig("object") }
+    assert_equal(["client"], sess.map { |h| h.dig("object") })
   end
 
   def test_find_client

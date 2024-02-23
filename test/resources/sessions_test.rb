@@ -18,7 +18,7 @@ class Clerk::Resources::SessionsTest < Minitest::Test
 
   def test_all_sessions
     sess = mock_sdk.sessions.all
-    assert_equal ["session"], sess.map { |h| h.dig("object") }
+    assert_equal(["session"], sess.map { |h| h.dig("object") })
   end
 
   def test_find_session
