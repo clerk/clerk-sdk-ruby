@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "ostruct"
 require "forwardable"
 require "base64"
@@ -116,7 +118,7 @@ module Clerk
     end
 
     def accepts_html?
-      @headers.accept && @headers.accept.start_with?("text/html")
+      @headers.accept.to_s.start_with?("text/html")
     end
 
     def eligible_for_multi_domain?
@@ -124,7 +126,7 @@ module Clerk
     end
 
     def active_client?
-      @cookies.client_uat.to_i > 0
+      @cookies.client_uat.to_i.positive?
     end
 
     def cross_origin_request?

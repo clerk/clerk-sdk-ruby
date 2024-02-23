@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Clerk
   ##
   # This class represents a service object used to determine the current request state
@@ -215,7 +217,7 @@ module Clerk
         sdk.verify_token(token, **opts)
       rescue JWT::ExpiredSignature, JWT::InvalidIatError => e
         raise e
-      rescue JWT::DecodeError, JWT::RequiredDependencyError => e
+      rescue JWT::DecodeError, JWT::RequiredDependencyError
         false
       end
     end

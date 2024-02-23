@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "clerk"
 require_relative "authenticate_context"
 require_relative "authenticate_request"
@@ -77,7 +79,7 @@ module Clerk
     end
 
     def cached_fetch(key, &block)
-      if store = Clerk.configuration.middleware_cache_store
+      if (store = Clerk.configuration.middleware_cache_store)
         store.fetch(key, expires_in: CACHE_TTL, &block)
       else
         yield

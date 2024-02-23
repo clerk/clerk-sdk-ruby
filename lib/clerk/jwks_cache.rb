@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class JWKSCache
   def initialize(lifetime)
     @lifetime = lifetime

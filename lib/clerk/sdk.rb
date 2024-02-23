@@ -16,7 +16,6 @@ require_relative "resources/organizations"
 require_relative "resources/phone_numbers"
 require_relative "resources/sessions"
 require_relative "resources/users"
-require_relative "resources/users"
 require_relative "resources/jwks"
 require_relative "errors"
 require_relative "jwks_cache"
@@ -26,7 +25,7 @@ module Clerk
     DEFAULT_HEADERS = {
       "User-Agent" => "Clerk/#{Clerk::VERSION}; Faraday/#{Faraday::VERSION}; Ruby/#{RUBY_VERSION}",
       "X-Clerk-SDK" => "ruby/#{Clerk::VERSION}"
-    }
+    }.freeze
 
     # How often (in seconds) should JWKs be refreshed
     JWKS_CACHE_LIFETIME = 3600 # 1 hour
