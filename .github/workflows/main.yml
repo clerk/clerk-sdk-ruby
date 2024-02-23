@@ -16,3 +16,5 @@ jobs:
         gem install bundler -v 2.2.15
         bundle install
         bundle exec rake
+env:
+  CLERK_PUBLISHABLE_KEY: 'pk_test_ZXhhbXBsZS5jb20k'

@@ -119,9 +119,12 @@ module Clerk
             
             session_token = ''
 
+            # Return signed-out outcome if the handshake verification fails
             handshake_payload = verify_token(auth_context.handshake_token)
             return signed_out(enforce_auth: true, reason: TokenVerificationErrorReason::JWK_FAILED_TO_RESOLVE) if !handshake_payload
 
+            # Retrieve the cookie directives included in handshake token payload and convert it to set-cookie headers
+            # Also retrieve the session token separately to determine the outcome of the request
             cookies_to_set = handshake_payload[HANDSHAKE_COOKIE_DIRECTIVES_KEY] || []
             cookies_to_set.each do |cookie|
                 headers[COOKIE_HEADER] ||= []
@@ -132,6 +135,7 @@ module Clerk
                 end
             end
 
+            # Clear handshake token from query params and set headers to redirect to the initial request url
             if auth_context.development_instance?
                 redirect_url = auth_context.clerk_url.dup
                 remove_from_query_string(redirect_url, HANDSHAKE_COOKIE)
@@ -144,21 +148,7 @@ module Clerk
                 return signed_out(reason: AuthErrorReason::SESSION_TOKEN_MISSING, headers: headers)
             end
 
-            begin
-                claims = verify_token(session_token)
-                return signed_in(env, claims, session_token) if claims
-            rescue JWT::ExpiredSignature, JWT::InvalidIatError => e
-                if auth_context.development_instance?
-                    # TODO: log possible Clock skew detected
-                
-                    # Retry with a generous clock skew allowance (1 day)
-                    claims = verify_token(session_token, timeout: 86_400)
-                    return signed_in(env, claims, session_token) if claims
-                end
-                
-                # Raise error if handshake resolution fails in production
-                raise e
-            end
+            verify_token_with_retry(env, session_token)
         end
 
         def handle_handshake_maybe_status(env, **opts)
@@ -228,6 +218,24 @@ module Clerk
             rescue JWT::DecodeError, JWT::RequiredDependencyError => e
                 false
             end
+        end
+
+        # Verify session token and provide a 1-day leeway for development if initial verification
+        # fails for development instance due to invalid exp or iat
+        def verify_token_with_retry(env, token)
+            claims = verify_token(token)
+            return signed_in(env, claims, token) if claims
+        rescue JWT::ExpiredSignature, JWT::InvalidIatError => e
+            if auth_context.development_instance?
+                # TODO: log possible Clock skew detected
+            
+                # Retry with a generous clock skew allowance (1 day)
+                claims = verify_token(token, timeout: 86_400)
+                return signed_in(env, claims, token) if claims
+            end
+            
+            # Raise error if handshake resolution fails in production
+            raise e
         end
 
         def sdk

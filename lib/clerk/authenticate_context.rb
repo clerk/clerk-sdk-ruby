@@ -102,12 +102,10 @@ module Clerk
         end
 
         def development_instance?
-            # TODO(dimkl): Consolidate with @clerk/backend to use pk instead of sk
             secret_key.start_with?("sk_test_")
         end
 
         def production_instance?
-            # TODO(dimkl): Consolidate with @clerk/backend to use pk instead of sk
             secret_key.start_with?("sk_live_")
         end
 
@@ -179,8 +177,7 @@ module Clerk
         end
 
         def retrieve_from_query_string(url, key)
-            request_qs = Rack::Utils.parse_query(url.query)
-            request_qs[key]
+            Rack::Utils.parse_query(url.query)[key]
         end
     end
 end
