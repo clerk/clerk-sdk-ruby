@@ -1,5 +1,13 @@
 
-## 4.0.0.beta1 - 2024-02-26
+## 4.0.0.beta2 - 2024-02-26
+
+Note: this is identical to 4.0.0.beta1, which was yanked because it was not generated from the main branch.
+
+- feat: replace interstitial with handshake (internal mechanisms) [https://github.com/clerk/clerk-sdk-ruby/pull/45]
+- chore: re-organize and refactor internal code to extract functionality of rack middleware [https://github.com/clerk/clerk-sdk-ruby/pull/45]
+- changed: `CLERK_PUBLISHABLE_KEY` or `publishable_key` in `Clerk.configure` is **required** [https://github.com/clerk/clerk-sdk-ruby/pull/46]
+
+## [YANKED] 4.0.0.beta1 - 2024-02-26
 
 - feat: replace interstitial with handshake (internal mechanisms) [https://github.com/clerk/clerk-sdk-ruby/pull/45]
 - chore: re-organize and refactor internal code to extract functionality of rack middleware [https://github.com/clerk/clerk-sdk-ruby/pull/45]
