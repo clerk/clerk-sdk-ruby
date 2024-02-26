@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Clerk
-  VERSION = "3.0.0"
+  VERSION = "4.0.0.beta1"
 end

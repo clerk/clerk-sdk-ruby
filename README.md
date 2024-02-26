@@ -174,18 +174,29 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run
 `bundle exec rake` to run the tests. You can also run `bin/console` for an
 interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To
-release a new version, update the version number in `version.rb`, and then run
-`bundle exec rake release`, which will create a git tag for the version, push
-git commits and the created tag, and push the `.gem` file to
-[rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. 
+
+## Release
+
+To release a new version:
+- update the version number in `version.rb`
+- run `bundle exec rake release`
+
+If gem publishing is NOT executed automatically:
+- run `gem push pkg/clerk-sdk-ruby-{version}.gem` to push the `.gem` file to [rubygems.org](https://rubygems.org)
+
+The `bundle exec rake release` command:
+- creates a git tag with the version found in `version.rb`
+- pushes the git tag
+
+## Yank release
+
+We should avoid yanking a releasing but if it's necessary execute `gem yank clerk-sdk-ruby -v {version}`
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at
-https://github.com/clerkinc/clerk-sdk-ruby.
+Bug reports and pull requests are welcome on GitHub at https://github.com/clerkinc/clerk-sdk-ruby.
 
 ## License
 
-The gem is available as open source under the terms of the
-[MIT License](https://opensource.org/licenses/MIT).
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
