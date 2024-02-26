@@ -180,6 +180,8 @@ To install this gem onto your local machine, run `bundle exec rake install`.
 
 To release a new version:
 - update the version number in `version.rb`
+- update `CHANGELOG.md` to include information about the changes
+- merge changes into main
 - run `bundle exec rake release`
 
 If gem publishing is NOT executed automatically:
