@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "sdk"
 
 module Clerk
@@ -7,7 +9,7 @@ module Clerk
     end
 
     def call(env)
-      req = Rack::Request.new(env)
+      Rack::Request.new(env)
       env["clerk"] = Proxy.new(env)
       @app.call(env)
     end
@@ -15,6 +17,7 @@ module Clerk
 
   class Proxy
     attr_reader :session_id, :error
+
     def initialize(env)
       req = Rack::Request.new(env)
       @token = req.cookies[SESSION_COOKIE]
@@ -37,11 +40,12 @@ module Clerk
     end
 
     def user_id
-      @user_id ||= session.dig("user_id")
+      @user_id ||= session["user_id"]
     end
 
     def user
       return nil if session.nil?
+
       @user ||= fetch_user(user_id)
     end
 
@@ -52,6 +56,7 @@ module Clerk
     end
 
     private
+
     def sdk
       @sdk ||= SDK.new
     end
@@ -83,7 +88,7 @@ module Clerk
     end
 
     def cached_fetch(key, &block)
-      if store = Clerk.configuration.middleware_cache_store
+      if (store = Clerk.configuration.middleware_cache_store)
         store.fetch(key, expires_in: cache_ttl, &block)
       else
         yield

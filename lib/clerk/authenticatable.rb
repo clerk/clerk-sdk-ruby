@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "active_support/concern"
 
 module Clerk
@@ -87,11 +89,11 @@ module Clerk
 
     included do
       helper_method :clerk_session, :clerk_reverify_session!,
-        :clerk_verified_session_claims, :clerk_verified_session_token,
-        :clerk_user, :clerk_user_id, :clerk_user_signed_in?, :clerk_sign_in_url,
-        :clerk_sign_up_url, :clerk_user_profile_url,
-        :clerk_organization, :clerk_organization_id, :clerk_organization_role,
-        :clerk_organization_permissions
+                    :clerk_verified_session_claims, :clerk_verified_session_token,
+                    :clerk_user, :clerk_user_id, :clerk_user_signed_in?, :clerk_sign_in_url,
+                    :clerk_sign_up_url, :clerk_user_profile_url,
+                    :clerk_organization, :clerk_organization_id, :clerk_organization_role,
+                    :clerk_organization_permissions
     end
   end
 end

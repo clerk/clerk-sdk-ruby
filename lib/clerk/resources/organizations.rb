@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "forwardable"
 require_relative "plural_resource"
 
@@ -15,8 +17,8 @@ module Clerk
 
       def update_metadata(org_id, private_metadata: {}, public_metadata: {})
         data = {}
-        data["private_metadata"] = private_metadata.to_json if !private_metadata.empty?
-        data["public_metadata"] = public_metadata.to_json if !public_metadata.empty?
+        data["private_metadata"] = private_metadata.to_json unless private_metadata.empty?
+        data["public_metadata"] = public_metadata.to_json unless public_metadata.empty?
 
         @client.request(:patch, "#{@resource.resource_path(org_id)}/metadata", body: data)
       end
@@ -57,13 +59,13 @@ module Clerk
 
       private
 
-      def invitations_path(org_id, invitation_id=nil)
+      def invitations_path(org_id, invitation_id = nil)
         path = "#{@resource.resource_path(org_id)}/invitations"
         path << "/#{invitation_id}" if invitation_id
         path
       end
 
-      def memberships_path(org_id, user_id=nil)
+      def memberships_path(org_id, user_id = nil)
         path = "#{@resource.resource_path(org_id)}/memberships"
         path << "/#{user_id}" if user_id
         path
