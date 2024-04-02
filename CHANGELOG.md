@@ -1,3 +1,6 @@
+## 4.0.0.beta3 - 2024-04-02
+
+- fix: Make publishable_key and secret_key required without making the envs required [https://github.com/clerk/clerk-sdk-ruby/pull/53]
 
 ## 4.0.0.beta2 - 2024-02-26
 
