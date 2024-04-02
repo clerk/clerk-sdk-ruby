@@ -51,7 +51,7 @@ module Clerk
         @api_key = secret_key
       end
 
-      @publishable_key = ENV.fetch("CLERK_PUBLISHABLE_KEY")
+      @publishable_key = ENV["CLERK_PUBLISHABLE_KEY"]
 
       @excluded_routes = []
     end
