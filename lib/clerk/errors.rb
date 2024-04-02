@@ -15,5 +15,8 @@ module Clerk
 
     class Authentication < Base
     end
+
+    class Configuration < StandardError
+    end
   end
 end

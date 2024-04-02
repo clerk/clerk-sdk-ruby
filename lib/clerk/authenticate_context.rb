@@ -47,10 +47,12 @@ module Clerk
         # The following properties are part of the props supported in all the AuthenticateContext
         # objects across all of our SDKs (eg JS, Go)
         def secret_key
+            raise Errors::Configuration, "Clerk secret key is not set" if @config.api_key.to_s.empty?
             @config.api_key.to_s
         end
 
         def publishable_key
+            raise Errors::Configuration, "Clerk publishable key is not set" if @config.publishable_key.to_s.to_s.empty?
             @config.publishable_key.to_s
         end
 
