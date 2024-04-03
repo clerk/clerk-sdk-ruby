@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "clerk"
 require_relative "authenticate_context"
 require_relative "authenticate_request"
@@ -77,7 +79,7 @@ module Clerk
     end
 
     def cached_fetch(key, &block)
-      if store = Clerk.configuration.middleware_cache_store
+      if (store = Clerk.configuration.middleware_cache_store)
         store.fetch(key, expires_in: CACHE_TTL, &block)
       else
         yield
@@ -112,9 +114,7 @@ module Clerk
       env = env
       req = Rack::Request.new(env)
 
-      if @excluded_routes[req.path]
-        return @app.call(env)
-      end
+      return @app.call(env) if @excluded_routes[req.path]
 
       @excluded_routes_wildcards.each do |route|
         return @app.call(env) if req.path.starts_with?(route)
@@ -127,10 +127,10 @@ module Clerk
 
       status, auth_request_headers, body = auth_request.resolve(env)
       return [status, auth_request_headers, body] if status
-      
+
       status, headers, body = @app.call(env)
 
-      if !auth_request_headers.empty?
+      unless auth_request_headers.empty?
         # Remove them to avoid overriding existing cookies set in headers by other middlewares
         auth_request_cookies = auth_request_headers.delete(COOKIE_HEADER)
         # merge non-cookie related headers into response headers
@@ -146,8 +146,8 @@ module Clerk
 
     def set_cookie_headers!(headers, cookie_headers)
       cookie_headers.each do |cookie_header|
-        cookie_key = cookie_header.split(';')[0].split('=')[0]
-        cookie =  Rack::Utils.parse_cookies_header(cookie_header)
+        cookie_key = cookie_header.split(";")[0].split("=")[0]
+        cookie = Rack::Utils.parse_cookies_header(cookie_header)
         cookie_params = convert_http_cookie_to_cookie_setter_params(cookie, cookie_key)
         Rack::Utils.set_cookie_header!(headers, cookie_key, cookie_params)
       end
@@ -160,7 +160,7 @@ module Clerk
       cookie_params[:value] = cookie.delete(cookie_key)
       # fix issue with cookie expiration expected to be Date type
       cookie_params[:expires] = Date.parse(cookie_params[:expires]) if cookie_params[:expires]
-      
+
       cookie_params
     end
   end

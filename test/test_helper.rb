@@ -13,13 +13,13 @@ def json_fixture(file)
 end
 
 def json_ok(file)
-  [200, {"Content-Type" => "application/json"}, json_fixture(file)]
+  [200, { "Content-Type" => "application/json" }, json_fixture(file)]
 end
 
 def json_404
-  [404, {"Content-Type" => "application/json"}, JSON.dump(
-    {"errors" => [
-      {"message" => "not found"}
-    ]}
+  [404, { "Content-Type" => "application/json" }, JSON.dump(
+    { "errors" => [
+      { "message" => "not found" }
+    ] }
   )]
 end

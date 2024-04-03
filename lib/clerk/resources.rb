@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "resources/allowlist_identifiers"
 require_relative "resources/allowlist"
 require_relative "resources/clients"
