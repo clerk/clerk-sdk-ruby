@@ -23,28 +23,33 @@ module Clerk
 
       def test_all_users
         users = mock_sdk.users.all
+
         assert_equal(%w[user user], users.map { |h| h["object"] })
       end
 
       def test_all_users_query_params
         users = mock_sdk.users.all(limit: 1)
+
         assert_equal(%w[user user], users.map { |h| h["object"] })
       end
 
       def test_find_user
         user = mock_sdk.users.find("user_1")
+
         assert_equal "user", user["object"]
         assert_equal "user_1", user["id"]
       end
 
       def test_update_user
         user = mock_sdk.users.update("user_1", { first_name: "Mary" })
+
         assert_equal "Mary", user["first_name"]
         assert_equal "user_1", user["id"]
       end
 
       def test_delete_user
         user = mock_sdk.users.delete("user_1")
+
         assert_equal true, user["deleted"]
         assert_equal "user", user["object"]
         assert_equal "user_1", user["id"]
@@ -58,6 +63,7 @@ module Clerk
 
       def test_oauth_access_token
         response = mock_sdk.users.oauth_access_token("user_1", "hubspot")
+
         assert_equal "xxxx", response["token"]
         assert_equal "hubspot", response["provider"]
         assert_equal %w[oauth contacts], response["scopes"]

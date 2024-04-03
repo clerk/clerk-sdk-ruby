@@ -17,6 +17,7 @@ module Clerk
 
       def test_toggle_allowlist
         resp = mock_sdk.allowlist.update({ restricted_to_allowlist: true })
+
         assert_equal true, resp["restricted_to_allowlist"]
       end
     end

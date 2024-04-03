@@ -21,6 +21,7 @@ module Clerk
       def test_find_phone_number
         phone_number_id = "idn_phone"
         phone_number = mock_sdk.phone_numbers.find(phone_number_id)
+
         assert_equal "phone_number", phone_number["object"]
         assert_equal phone_number_id, phone_number["id"]
         assert_equal "+15555555555", phone_number["phone_number"]
@@ -29,6 +30,7 @@ module Clerk
 
       def test_create_phone_number
         phone_number = mock_sdk.phone_numbers.create(user_id: "user_abcdefg", phone_number: "+15555555555")
+
         assert_equal "phone_number", phone_number["object"]
         assert_equal "+15555555555", phone_number["phone_number"]
         assert_nil phone_number["verification"]
@@ -37,6 +39,7 @@ module Clerk
       def test_update_phone_number
         phone_number_id = "idn_phone"
         phone_number = mock_sdk.phone_numbers.update(phone_number_id, verified: true)
+
         assert_equal "phone_number", phone_number["object"]
         assert_equal phone_number_id, phone_number["id"]
         assert_equal "+15555555555", phone_number["phone_number"]
@@ -46,6 +49,7 @@ module Clerk
       def test_delete_phone_number
         phone_number_id = "idn_phone"
         deleted_object = mock_sdk.phone_numbers.delete(phone_number_id)
+
         assert_equal "phone_number", deleted_object["object"]
         assert_equal phone_number_id, deleted_object["id"]
         assert deleted_object["deleted"]

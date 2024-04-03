@@ -20,23 +20,27 @@ module Clerk
 
       def test_all_sessions
         sess = mock_sdk.sessions.all
+
         assert_equal(["session"], sess.map { |h| h["object"] })
       end
 
       def test_find_session
         sess = mock_sdk.sessions.find("sess_1")
+
         assert_equal "session", sess["object"]
         assert_equal "sess_1", sess["id"]
       end
 
       def test_revoke_session
         sess = mock_sdk.sessions.revoke("sess_1")
+
         assert_equal "session", sess["object"]
         assert_equal "sess_1", sess["id"]
       end
 
       def test_verify_session
         sess = mock_sdk.sessions.verify_token("sess_1", "token_1")
+
         assert_equal "session", sess["object"]
         assert_equal "sess_1", sess["id"]
       end

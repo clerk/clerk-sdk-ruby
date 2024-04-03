@@ -19,17 +19,20 @@ module Clerk
 
       def test_all_clients
         sess = mock_sdk.clients.all
+
         assert_equal(["client"], sess.map { |h| h["object"] })
       end
 
       def test_find_client
         sess = mock_sdk.clients.find("client_1")
+
         assert_equal "client", sess["object"]
         assert_equal "client_1", sess["id"]
       end
 
       def test_verify_client
         sess = mock_sdk.clients.verify_token("token_1")
+
         assert_equal "client", sess["object"]
         assert_equal "client_1", sess["id"]
       end

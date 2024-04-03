@@ -21,6 +21,7 @@ module Clerk
       def test_find_email_address
         email_address_id = "idn_email"
         email_address = mock_sdk.email_addresses.find(email_address_id)
+
         assert_equal "email_address", email_address["object"]
         assert_equal email_address_id, email_address["id"]
         assert_equal "john@doe.com", email_address["email_address"]
@@ -29,6 +30,7 @@ module Clerk
 
       def test_create_email_address
         email_address = mock_sdk.email_addresses.create(user_id: "user_abcdefg", email_address: "")
+
         assert_equal "email_address", email_address["object"]
         assert_equal "john@doe.com", email_address["email_address"]
         assert_nil email_address["verification"]
@@ -37,6 +39,7 @@ module Clerk
       def test_update_email_address
         email_address_id = "idn_email"
         email_address = mock_sdk.email_addresses.update(email_address_id, verified: true)
+
         assert_equal "email_address", email_address["object"]
         assert_equal email_address_id, email_address["id"]
         assert_equal "john@doe.com", email_address["email_address"]
@@ -46,6 +49,7 @@ module Clerk
       def test_delete_email_address
         email_address_id = "idn_email"
         deleted_object = mock_sdk.email_addresses.delete(email_address_id)
+
         assert_equal "email_address", deleted_object["object"]
         assert_equal email_address_id, deleted_object["id"]
         assert deleted_object["deleted"]

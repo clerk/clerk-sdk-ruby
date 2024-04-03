@@ -44,16 +44,16 @@ module Clerk
 
     def initialize
       @base_url = ENV.fetch("CLERK_API_BASE", PRODUCTION_BASE_URL)
-      @api_key = ENV["CLERK_API_KEY"]
+      @api_key = ENV.fetch("CLERK_API_KEY", nil)
 
-      secret_key = ENV["CLERK_SECRET_KEY"]
+      secret_key = ENV.fetch("CLERK_SECRET_KEY", nil)
       @api_key = secret_key if secret_key && !secret_key.empty?
 
-      @publishable_key = ENV["CLERK_PUBLISHABLE_KEY"]
+      @publishable_key = ENV.fetch("CLERK_PUBLISHABLE_KEY", nil)
 
       @excluded_routes = []
     end
   end
 end
 
-require_relative "clerk/railtie" if defined?(::Rails)
+require_relative "clerk/railtie" if defined?(Rails)

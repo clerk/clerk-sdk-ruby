@@ -19,11 +19,13 @@ module Clerk
 
       def test_all_allowlist_identifiers
         allowlist_identifiers = mock_sdk.allowlist_identifiers.all
+
         assert_equal(["allowlist_identifier"], allowlist_identifiers.map { |h| h["object"] })
       end
 
       def test_delete_allowlist_identifier
         user = mock_sdk.allowlist_identifiers.delete("alid_1")
+
         assert_equal true, user["deleted"]
         assert_equal "allowlist_identifier", user["object"]
         assert_equal "alid_1", user["id"]

@@ -9,6 +9,7 @@ module Clerk
 
     def test_sdk_init_without_config
       sdk = ::Clerk::SDK.new
+
       assert sdk
     end
 
@@ -89,15 +90,19 @@ module Clerk
 
       Timecop.freeze(TIME_WHEN_JWT_IS_VALID) do
         sdk.verify_token(json_fixture("jwt_valid"), force_refresh_jwks: true)
+
         assert_equal 1, jwks_endpoint_hits
 
         sdk.verify_token(json_fixture("jwt_valid"))
+
         assert_equal 1, jwks_endpoint_hits
 
         sdk.verify_token(json_fixture("jwt_valid"), force_refresh_jwks: true)
+
         assert_equal 2, jwks_endpoint_hits
 
         sdk.verify_token(json_fixture("jwt_valid"))
+
         assert_equal 2, jwks_endpoint_hits
       end
 
@@ -128,10 +133,12 @@ module Clerk
       sdk = ::Clerk::SDK.new(connection: conn)
       Timecop.freeze(TIME_WHEN_JWT_IS_VALID) do
         claims = sdk.verify_token(json_fixture("jwt_valid"), force_refresh_jwks: true)
+
         assert_equal 2, jwks_endpoint_hits
         assert_equal "foo@bar.com", claims["email"]
 
         sdk.verify_token(json_fixture("jwt_valid"))
+
         assert_equal 2, jwks_endpoint_hits # cached response
       end
     end

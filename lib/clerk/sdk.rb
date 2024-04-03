@@ -43,29 +43,29 @@ module Clerk
     end
 
     def request(method, path, query: [], body: nil, timeout: nil)
-      req_with_body = 
-      response = case method
-                 when :get
-                   @conn.get(path, query) do |req|
-                     req.options.timeout = timeout if timeout
+      req_with_body =
+        response = case method
+                   when :get
+                     @conn.get(path, query) do |req|
+                       req.options.timeout = timeout if timeout
+                     end
+                   when :post
+                     @conn.post(path, body) do |req|
+                       req.body = body.to_json
+                       req.headers[:content_type] = "application/json"
+                       req.options.timeout = timeout if timeout
+                     end
+                   when :patch
+                     @conn.patch(path, body) do |req|
+                       req.body = body.to_json
+                       req.headers[:content_type] = "application/json"
+                       req.options.timeout = timeout if timeout
+                     end
+                   when :delete
+                     @conn.delete(path) do |req|
+                       req.options.timeout = timeout if timeout
+                     end
                    end
-                 when :post
-                   @conn.post(path, body) do |req|
-                     req.body = body.to_json
-                     req.headers[:content_type] = "application/json"
-                     req.options.timeout = timeout if timeout
-                   end
-                 when :patch
-                   @conn.patch(path, body) do |req|
-                     req.body = body.to_json
-                     req.headers[:content_type] = "application/json"
-                     req.options.timeout = timeout if timeout
-                   end
-                 when :delete
-                   @conn.delete(path) do |req|
-                     req.options.timeout = timeout if timeout
-                   end
-                 end
 
       body = if response[CONTENT_TYPE_HEADER] == "application/json"
                JSON.parse(response.body)
@@ -160,17 +160,15 @@ module Clerk
 
     def create_connection(api_key, base_url, logger, ssl_verify)
       base_url ||= Clerk.configuration.base_url
-      base_uri = if !base_url.end_with?("/")
-                   URI("#{base_url}/")
-                 else
+      base_uri = if base_url.end_with?("/")
                    URI(base_url)
+                 else
+                   URI("#{base_url}/")
                  end
 
       api_key ||= Clerk.configuration.api_key
 
-      if Faraday::VERSION.to_i >= 2 && api_key.nil?
-        api_key = -> { raise ArgumentError, "Clerk secret key is not set" }
-      end
+      api_key = -> { raise ArgumentError, "Clerk secret key is not set" } if Faraday::VERSION.to_i >= 2 && api_key.nil?
 
       logger ||= Clerk.configuration.logger
       @conn = Faraday.new(

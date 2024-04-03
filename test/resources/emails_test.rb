@@ -22,6 +22,7 @@ module Clerk
                                         subject: "hi",
                                         body: "hello"
                                       })
+
         assert_equal "email", resp["object"]
       end
     end

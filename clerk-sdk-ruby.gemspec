@@ -27,11 +27,15 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "faraday", ">= 1.4.1", "< 3.0"
-  spec.add_dependency "jwt", '~> 2.5'
   spec.add_dependency "concurrent-ruby", "~> 1.1"
+  spec.add_dependency "faraday", ">= 1.4.1", "< 3.0"
+  spec.add_dependency "jwt", "~> 2.5"
 
   spec.add_development_dependency "byebug", "~> 11.1"
-  spec.add_development_dependency "timecop", "~> 0.9.4"
+  spec.add_development_dependency "minitest", "~> 5.0"
+  spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rubocop", "~> 1.60"
+  spec.add_development_dependency "rubocop-minitest", "~> 0.35"
+  spec.add_development_dependency "rubocop-rake", "~> 0.6"
+  spec.add_development_dependency "timecop", "~> 0.9.4"
 end
