@@ -14,3 +14,11 @@ Style/StringLiterals:
   # If `true`, strings which span multiple lines using `\` for continuation must
   # use the same type of quotes on each line.
   ConsistentQuotesInMultiline: false
+
+Metrics/MethodLength:
+  Enabled: true
+  Max: 25
+
+Metrics/ClassLength:
+  Enabled: true
+  Max: 120

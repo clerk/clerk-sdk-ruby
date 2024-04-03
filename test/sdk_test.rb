@@ -16,8 +16,8 @@ module Clerk
       unparsed_payload  = { a: "b", c: ["d"], d: { e: 3 } }
       json_payload      = '{"a":"b","c":["d"],"d":{"e":3}}'
 
-      conn = Faraday.new do |faraday|
-        faraday.adapter :test do |stub|
+      conn = Faraday.new do |f|
+        f.adapter :test do |stub|
           stub.patch("/users/user_1", json_payload, { "Content-Type" => "application/json" }) do |env|
             parsed = JSON.parse(env.request_body)
             parsed["a"] = "b"
@@ -44,8 +44,8 @@ module Clerk
     end
 
     def test_verify_token
-      conn = Faraday.new do |faraday|
-        faraday.adapter :test do |stub|
+      conn = Faraday.new do |f|
+        f.adapter :test do |stub|
           stub.get("/jwks") { json_ok("jwks") }
         end
       end
@@ -76,8 +76,8 @@ module Clerk
     def test_verify_token_jwks_cache
       jwks_endpoint_hits = 0
 
-      conn = Faraday.new do |faraday|
-        faraday.adapter :test do |stub|
+      conn = Faraday.new do |f|
+        f.adapter :test do |stub|
           stub.get("/jwks") do
             jwks_endpoint_hits += 1
             json_ok("jwks")
@@ -116,8 +116,8 @@ module Clerk
       # (i.e. BAPI was down momentarily) and therefore the received token couldn't
       # be verified, then we're going to try one more time
       jwks_endpoint_hits = 0
-      conn = Faraday.new do |faraday|
-        faraday.adapter :test do |stub|
+      conn = Faraday.new do |f|
+        f.adapter :test do |stub|
           stub.get("/jwks") do
             jwks_endpoint_hits += 1
             jwks_endpoint_hits < 2 ? json_404 : json_ok("jwks")

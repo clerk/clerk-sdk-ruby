@@ -38,40 +38,12 @@ module Clerk
 
     def initialize(api_key: nil, base_url: nil, logger: nil, ssl_verify: true,
                    connection: nil)
-      if connection
-        # Inject a Faraday::Connection for testing or full control over Faraday
-        @conn = connection
-        nil
-      else
-        base_url ||= Clerk.configuration.base_url
-        base_uri = if !base_url.end_with?("/")
-                     URI("#{base_url}/")
-                   else
-                     URI(base_url)
-                   end
-
-        api_key ||= Clerk.configuration.api_key
-
-        if Faraday::VERSION.to_i >= 2 && api_key.nil?
-          api_key = -> { raise ArgumentError, "Clerk secret key is not set" }
-        end
-
-        logger ||= Clerk.configuration.logger
-        @conn = Faraday.new(
-          url: base_uri, headers: DEFAULT_HEADERS, ssl: { verify: ssl_verify }
-        ) do |f|
-          f.request :url_encoded
-          f.request :authorization, "Bearer", api_key
-          if logger
-            f.response :logger, logger do |l|
-              l.filter(/(Authorization: "Bearer) (\w+)/, '\1 [SECRET]')
-            end
-          end
-        end
-      end
+      # Inject a Faraday::Connection for testing or full control over Faraday
+      @conn = connection || create_connection(api_key, base_url, logger, ssl_verify)
     end
 
     def request(method, path, query: [], body: nil, timeout: nil)
+      req_with_body = 
       response = case method
                  when :get
                    @conn.get(path, query) do |req|
@@ -182,6 +154,36 @@ module Clerk
       end
 
       JWT.decode(token, nil, true, algorithms: algorithms, exp_leeway: timeout, jwks: jwk_loader).first
+    end
+
+    private
+
+    def create_connection(api_key, base_url, logger, ssl_verify)
+      base_url ||= Clerk.configuration.base_url
+      base_uri = if !base_url.end_with?("/")
+                   URI("#{base_url}/")
+                 else
+                   URI(base_url)
+                 end
+
+      api_key ||= Clerk.configuration.api_key
+
+      if Faraday::VERSION.to_i >= 2 && api_key.nil?
+        api_key = -> { raise ArgumentError, "Clerk secret key is not set" }
+      end
+
+      logger ||= Clerk.configuration.logger
+      @conn = Faraday.new(
+        url: base_uri, headers: DEFAULT_HEADERS, ssl: { verify: ssl_verify }
+      ) do |f|
+        f.request :url_encoded
+        f.request :authorization, "Bearer", api_key
+        if logger
+          f.response :logger, logger do |l|
+            l.filter(/(Authorization: "Bearer) (\w+)/, '\1 [SECRET]')
+          end
+        end
+      end
     end
   end
 end

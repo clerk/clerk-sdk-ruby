@@ -6,8 +6,8 @@ module Clerk
   module Resources
     class AllowlistTest < Minitest::Test
       def mock_sdk
-        faraday = Faraday.new do |faraday|
-          faraday.adapter :test do |stub|
+        faraday = Faraday.new do |f|
+          f.adapter :test do |stub|
             stub.patch("/beta_features/allowlist") { json_ok("allowlist_toggle") }
           end
         end

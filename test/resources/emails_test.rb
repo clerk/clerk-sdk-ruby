@@ -6,8 +6,8 @@ module Clerk
   module Resources
     class EmailsTest < Minitest::Test
       def mock_sdk
-        faraday = Faraday.new do |faraday|
-          faraday.adapter :test do |stub|
+        faraday = Faraday.new do |f|
+          f.adapter :test do |stub|
             stub.post("/emails") { json_ok("email_created") }
           end
         end

@@ -6,8 +6,8 @@ module Clerk
   module Resources
     class SessionsTest < Minitest::Test
       def mock_sdk
-        faraday = Faraday.new do |faraday|
-          faraday.adapter :test do |stub|
+        faraday = Faraday.new do |f|
+          f.adapter :test do |stub|
             stub.get("/sessions") { json_ok("all_sessions") }
             stub.get("/sessions/sess_1") { json_ok("session_1") }
             stub.post("/sessions/sess_1/revoke") { json_ok("session_1") }

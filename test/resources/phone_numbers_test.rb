@@ -6,8 +6,8 @@ module Clerk
   module Resources
     class PhoneNumbersTest < Minitest::Test
       def mock_sdk
-        faraday = Faraday.new do |faraday|
-          faraday.adapter :test do |stub|
+        faraday = Faraday.new do |f|
+          f.adapter :test do |stub|
             stub.get("/phone_numbers/idn_phone") { json_ok("phone_number_1") }
             stub.post("/phone_numbers") { json_ok("phone_number_1") }
             stub.patch("/phone_numbers/idn_phone") { json_ok("phone_number_1_updated") }

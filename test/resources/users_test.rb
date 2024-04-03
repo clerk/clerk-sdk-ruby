@@ -6,8 +6,8 @@ module Clerk
   module Resources
     class UsersTest < Minitest::Test
       def mock_sdk
-        faraday = Faraday.new do |faraday|
-          faraday.adapter :test do |stub|
+        faraday = Faraday.new do |f|
+          f.adapter :test do |stub|
             stub.get("/users") { json_ok("all_users") }
             stub.get("/users?limit=10") { json_ok("all_users") }
             stub.get("/users/user_1") { json_ok("user_1") }

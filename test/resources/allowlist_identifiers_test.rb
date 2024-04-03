@@ -6,8 +6,8 @@ module Clerk
   module Resources
     class AllowlistIdentifierTest < Minitest::Test
       def mock_sdk
-        faraday = Faraday.new do |faraday|
-          faraday.adapter :test do |stub|
+        faraday = Faraday.new do |f|
+          f.adapter :test do |stub|
             stub.get("/allowlist_identifiers") { json_ok("all_allowlist_identifiers") }
             stub.post("/allowlist_identifiers") { json_ok("allowlist_identifier_1") }
             stub.delete("/allowlist_identifiers/alid_1") { json_ok("allowlist_identifier_1_deleted") }
