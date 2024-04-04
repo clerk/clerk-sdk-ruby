@@ -16,7 +16,7 @@ module Clerk
   end
 
   class Config
-    PRODUCTION_BASE_URL = "https://api.clerk.dev/v1/".freeze
+    PRODUCTION_BASE_URL = "https://api.clerk.dev/v1/"
     attr_accessor :api_key, :base_url, :publishable_key, :logger, :middleware_cache_store
 
     # An array of route paths on which the middleware will not execute.
@@ -44,20 +44,16 @@ module Clerk
 
     def initialize
       @base_url = ENV.fetch("CLERK_API_BASE", PRODUCTION_BASE_URL)
-      @api_key = ENV["CLERK_API_KEY"]
+      @api_key = ENV.fetch("CLERK_API_KEY", nil)
 
-      secret_key = ENV["CLERK_SECRET_KEY"]
-      if secret_key && !secret_key.empty?
-        @api_key = secret_key
-      end
+      secret_key = ENV.fetch("CLERK_SECRET_KEY", nil)
+      @api_key = secret_key if secret_key && !secret_key.empty?
 
-      @publishable_key = ENV["CLERK_PUBLISHABLE_KEY"]
+      @publishable_key = ENV.fetch("CLERK_PUBLISHABLE_KEY", nil)
 
       @excluded_routes = []
     end
   end
 end
 
-if defined?(::Rails)
-  require_relative "clerk/railtie"
-end
+require_relative "clerk/railtie" if defined?(Rails)

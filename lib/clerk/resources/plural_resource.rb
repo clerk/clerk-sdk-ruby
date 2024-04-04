@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Clerk
   module Resources
     class PluralResource

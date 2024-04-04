@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "forwardable"
 require_relative "plural_resource"
 
@@ -17,7 +19,7 @@ module Clerk
 
       def verify_token(id, token)
         @client.request(:post, "#{@resource.resource_path(id)}/verify",
-                        body: {token: token})
+                        body: { token: token })
       end
 
       def_delegators :@resource, :all, :find

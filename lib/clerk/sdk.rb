@@ -25,7 +25,7 @@ module Clerk
     DEFAULT_HEADERS = {
       "User-Agent" => "Clerk/#{Clerk::VERSION}; Faraday/#{Faraday::VERSION}; Ruby/#{RUBY_VERSION}",
       "X-Clerk-SDK" => "ruby/#{Clerk::VERSION}"
-    }
+    }.freeze
 
     # How often (in seconds) should JWKs be refreshed
     JWKS_CACHE_LIFETIME = 3600 # 1 hour
@@ -38,37 +38,8 @@ module Clerk
 
     def initialize(api_key: nil, base_url: nil, logger: nil, ssl_verify: true,
                    connection: nil)
-      if connection
-        # Inject a Faraday::Connection for testing or full control over Faraday
-        @conn = connection
-        return
-      else
-        base_url = base_url || Clerk.configuration.base_url
-        base_uri = if !base_url.end_with?("/")
-                     URI("#{base_url}/")
-                   else
-                     URI(base_url)
-                   end
-
-        api_key ||= Clerk.configuration.api_key
-
-        if Faraday::VERSION.to_i >= 2 && api_key.nil?
-          api_key = -> { raise ArgumentError, "Clerk secret key is not set" }
-        end
-
-        logger = logger || Clerk.configuration.logger
-        @conn = Faraday.new(
-          url: base_uri, headers: DEFAULT_HEADERS, ssl: {verify: ssl_verify}
-        ) do |f|
-          f.request :url_encoded
-          f.request :authorization, "Bearer", api_key
-          if logger
-            f.response :logger, logger do |l|
-              l.filter(/(Authorization: "Bearer) (\w+)/, '\1 [SECRET]')
-            end
-          end
-        end
-      end
+      # Inject a Faraday::Connection for testing or full control over Faraday
+      @conn = connection || create_connection(api_key, base_url, logger, ssl_verify)
     end
 
     def request(method, path, query: [], body: nil, timeout: nil)
@@ -173,14 +144,43 @@ module Clerk
     #
     # A timeout for the request to the JWKs endpoint can be set with the
     # `timeout` argument.
-    def verify_token(token, force_refresh_jwks: false, algorithms: ['RS256'], timeout: 5)
-      jwk_loader = ->(options) do
+    def verify_token(token, force_refresh_jwks: false, algorithms: ["RS256"], timeout: 5)
+      jwk_loader = lambda do |options|
         # JWT.decode requires that the 'keys' key in the Hash is a symbol (as
         # opposed to a string which our SDK returns by default)
-        { keys: SDK.jwks_cache.fetch(self, kid_not_found: (options[:invalidate] || options[:kid_not_found]), force_refresh: force_refresh_jwks) }
+        { keys: SDK.jwks_cache.fetch(self, kid_not_found: options[:invalidate] || options[:kid_not_found],
+                                           force_refresh: force_refresh_jwks) }
       end
 
       JWT.decode(token, nil, true, algorithms: algorithms, exp_leeway: timeout, jwks: jwk_loader).first
+    end
+
+    private
+
+    def create_connection(api_key, base_url, logger, ssl_verify)
+      base_url ||= Clerk.configuration.base_url
+      base_uri = if base_url.end_with?("/")
+                   URI(base_url)
+                 else
+                   URI("#{base_url}/")
+                 end
+
+      api_key ||= Clerk.configuration.api_key
+
+      api_key = -> { raise ArgumentError, "Clerk secret key is not set" } if Faraday::VERSION.to_i >= 2 && api_key.nil?
+
+      logger ||= Clerk.configuration.logger
+      @conn = Faraday.new(
+        url: base_uri, headers: DEFAULT_HEADERS, ssl: { verify: ssl_verify }
+      ) do |f|
+        f.request :url_encoded
+        f.request :authorization, "Bearer", api_key
+        if logger
+          f.response :logger, logger do |l|
+            l.filter(/(Authorization: "Bearer) (\w+)/, '\1 [SECRET]')
+          end
+        end
+      end
     end
   end
 end
