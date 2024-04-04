@@ -50,9 +50,9 @@ module Clerk
     end
 
     def debug
-      (instance_variables - [:@sdk]).map do |ivar|
+      (instance_variables - [:@sdk]).to_h do |ivar|
         [ivar.to_s, instance_variable_get(ivar)]
-      end.to_h
+      end
     end
 
     private

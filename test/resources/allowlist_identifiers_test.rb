@@ -26,7 +26,7 @@ module Clerk
       def test_delete_allowlist_identifier
         user = mock_sdk.allowlist_identifiers.delete("alid_1")
 
-        assert_equal true, user["deleted"]
+        assert user["deleted"]
         assert_equal "allowlist_identifier", user["object"]
         assert_equal "alid_1", user["id"]
       end

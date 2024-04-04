@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = "Client SDK for the Clerk backend API."
   spec.homepage      = "https://github.com/clerkinc/clerk-sdk-ruby"
   spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.5.1")
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/clerkinc/clerk-sdk-ruby"
@@ -30,12 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "concurrent-ruby", "~> 1.1"
   spec.add_dependency "faraday", ">= 1.4.1", "< 3.0"
   spec.add_dependency "jwt", "~> 2.5"
-
-  spec.add_development_dependency "byebug", "~> 11.1"
-  spec.add_development_dependency "minitest", "~> 5.0"
-  spec.add_development_dependency "rake", "~> 13.0"
-  spec.add_development_dependency "rubocop", "~> 1.60"
-  spec.add_development_dependency "rubocop-minitest", "~> 0.35"
-  spec.add_development_dependency "rubocop-rake", "~> 0.6"
-  spec.add_development_dependency "timecop", "~> 0.9.4"
+  spec.metadata["rubygems_mfa_required"] = "true"
 end

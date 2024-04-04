@@ -77,7 +77,7 @@ module Clerk
       # end
 
       # TODO(dimkl): Add multi-domain support for development in primary
-      # if auth_context.development_instance? && !auth_context.is_satellite? && auth_context.clerk_redirect_url
+      # if auth_context.development_instance? && !auth_context.satellite? && auth_context.clerk_redirect_url
       # trigger handshake using auth_context.clerk_redirect_url as base redirect_url + mark it as clerk_synced
       # return handle_handshake_maybe_status(env, reason: AuthErrorReason::PRIMARY_RESPONDS_TO_SYNCING, '', headers);
       # end

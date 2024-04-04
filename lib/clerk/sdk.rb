@@ -43,29 +43,28 @@ module Clerk
     end
 
     def request(method, path, query: [], body: nil, timeout: nil)
-      req_with_body =
-        response = case method
-                   when :get
-                     @conn.get(path, query) do |req|
-                       req.options.timeout = timeout if timeout
-                     end
-                   when :post
-                     @conn.post(path, body) do |req|
-                       req.body = body.to_json
-                       req.headers[:content_type] = "application/json"
-                       req.options.timeout = timeout if timeout
-                     end
-                   when :patch
-                     @conn.patch(path, body) do |req|
-                       req.body = body.to_json
-                       req.headers[:content_type] = "application/json"
-                       req.options.timeout = timeout if timeout
-                     end
-                   when :delete
-                     @conn.delete(path) do |req|
-                       req.options.timeout = timeout if timeout
-                     end
+      response = case method
+                 when :get
+                   @conn.get(path, query) do |req|
+                     req.options.timeout = timeout if timeout
                    end
+                 when :post
+                   @conn.post(path, body) do |req|
+                     req.body = body.to_json
+                     req.headers[:content_type] = "application/json"
+                     req.options.timeout = timeout if timeout
+                   end
+                 when :patch
+                   @conn.patch(path, body) do |req|
+                     req.body = body.to_json
+                     req.headers[:content_type] = "application/json"
+                     req.options.timeout = timeout if timeout
+                   end
+                 when :delete
+                   @conn.delete(path) do |req|
+                     req.options.timeout = timeout if timeout
+                   end
+                 end
 
       body = if response[CONTENT_TYPE_HEADER] == "application/json"
                JSON.parse(response.body)

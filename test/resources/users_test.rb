@@ -13,7 +13,7 @@ module Clerk
             stub.get("/users/user_1") { json_ok("user_1") }
             stub.patch("/users/user_1") { json_ok("user_1_updated") }
             stub.delete("/users/user_1") { json_ok("user_1_deleted") }
-            stub.get("/users/unknown_id") { json_404 }
+            stub.get("/users/unknown_id") { json404 }
             stub.get("/users/user_1/oauth_access_tokens/hubspot") { json_ok("users_oauth_access_token") }
           end
         end
@@ -50,12 +50,12 @@ module Clerk
       def test_delete_user
         user = mock_sdk.users.delete("user_1")
 
-        assert_equal true, user["deleted"]
+        assert user["deleted"]
         assert_equal "user", user["object"]
         assert_equal "user_1", user["id"]
       end
 
-      def test_find_user_404
+      def test_find_user404
         assert_raises Clerk::Errors::Fatal do
           mock_sdk.users.find("unknown_id")
         end

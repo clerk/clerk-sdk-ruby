@@ -5,6 +5,8 @@ require "forwardable"
 require "base64"
 
 module Clerk
+  AuthenticateContextCookies = Struct.new(:session_token_in_cookie, :client_uat, :handshake_token, :dev_browser)
+  AuthenticateContextHeaders = Struct.new(:session_token_in_header, :sec_fetch_dest, :accept, :origin, :host, :port)
   ##
   # This class represents a parameter object used to contain all request and configuration
   # information required by the middleware to resolve the current request state.
@@ -28,22 +30,21 @@ module Clerk
       @clerk_url = URI.parse(request.url)
       @config = config
 
-      @cookies = OpenStruct.new({
-                                  session_token_in_cookie: request.cookies[SESSION_COOKIE],
-                                  client_uat: request.cookies[CLIENT_UAT_COOKIE],
-                                  handshake_token: request.cookies[HANDSHAKE_COOKIE],
-                                  dev_browser: request.cookies[DEV_BROWSER_COOKIE]
-                                })
+      @cookies = AuthenticateContextCookies.new(
+        request.cookies[SESSION_COOKIE],
+        request.cookies[CLIENT_UAT_COOKIE],
+        request.cookies[HANDSHAKE_COOKIE],
+        request.cookies[DEV_BROWSER_COOKIE]
+      )
 
-      @headers = OpenStruct.new({
-                                  session_token_in_header: request.env[AUTHORIZATION_HEADER].to_s.gsub(/bearer/i,
-                                                                                                       "").strip,
-                                  sec_fetch_dest: request.env[SEC_FETCH_DEST_HEADER],
-                                  accept: request.env[ACCEPT_HEADER].to_s,
-                                  origin: request.env[ORIGIN_HEADER].to_s,
-                                  host: request.host,
-                                  port: request.port
-                                })
+      @headers = AuthenticateContextHeaders.new(
+        request.env[AUTHORIZATION_HEADER].to_s.gsub(/bearer/i, "").strip,
+        request.env[SEC_FETCH_DEST_HEADER],
+        request.env[ACCEPT_HEADER].to_s,
+        request.env[ORIGIN_HEADER].to_s,
+        request.host,
+        request.port
+      )
     end
 
     ##
@@ -66,7 +67,7 @@ module Clerk
       ""
     end
 
-    def is_satellite?
+    def satellite?
       # TODO(dimkl): Add multi-domain support
       false
     end
@@ -126,7 +127,7 @@ module Clerk
     end
 
     def eligible_for_multi_domain?
-      is_satellite? && document_request? && !clerk_synced?
+      satellite? && document_request? && !clerk_synced?
     end
 
     def active_client?

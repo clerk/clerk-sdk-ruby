@@ -67,8 +67,8 @@ module Clerk
           sdk.verify_token(valid_jwt, algorithms: ["RS512"])
         end
 
+        malformed_token = json_fixture("jwt_valid")[0..-2]
         assert_raises JWT::VerificationError do
-          malformed_token = json_fixture("jwt_valid")[0..-2]
           sdk.verify_token(malformed_token)
         end
       end
@@ -125,7 +125,7 @@ module Clerk
         f.adapter :test do |stub|
           stub.get("/jwks") do
             jwks_endpoint_hits += 1
-            jwks_endpoint_hits < 2 ? json_404 : json_ok("jwks")
+            jwks_endpoint_hits < 2 ? json404 : json_ok("jwks")
           end
         end
       end

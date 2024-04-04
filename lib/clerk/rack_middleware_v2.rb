@@ -111,7 +111,6 @@ module Clerk
     end
 
     def call(env)
-      env = env
       req = Rack::Request.new(env)
 
       return @app.call(env) if @excluded_routes[req.path]
