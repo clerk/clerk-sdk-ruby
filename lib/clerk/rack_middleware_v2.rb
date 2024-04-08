@@ -176,14 +176,14 @@ module Clerk
         return unknown(interstitial: true)
       end
 
-      # Show interstitial when there is client_uat is incompatible with cookie token
-      has_cookie_token_without_client = (client_uat == "0" || client_uat.to_s.empty?) && cookie_token
-      has_client_without_cookie_token = (client_uat.to_s != "0" && client_uat.to_s != "") && cookie_token.to_s.empty?
-      return unknown(interstitial: true) if has_cookie_token_without_client || has_client_without_cookie_token
-
       if client_uat == "0"
         return signed_out(env)
       end
+
+      # Show interstitial when there is client_uat is incompatible with cookie token
+      has_cookie_token_without_client = client_uat.to_s.empty? && cookie_token
+      has_client_without_cookie_token = client_uat.to_s != "" && cookie_token.to_s.empty?
+      return unknown(interstitial: true) if has_cookie_token_without_client || has_client_without_cookie_token
 
       begin
         token = verify_token(cookie_token)
