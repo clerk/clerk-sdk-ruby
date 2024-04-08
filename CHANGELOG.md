@@ -1,10 +1,13 @@
 ## unreleased
 
+## 3.2.0 - 2024-04-08
+
+- fix: Infinite redirect loop when client_uat=0 and __session exists (#55) [https://github.com/clerk/clerk-sdk-ruby/pull/55]
+
 ## 3.1.0 - 2024-03-19
 
 - fix: Incompatible __client_uat & __session should show interstitial (#51) [https://github.com/clerk/clerk-sdk-ruby/pull/51]
 - fix: Incorrect check that lead to infinite redirect loop introduced by (#51) [https://github.com/clerk/clerk-sdk-ruby/pull/51]
-
 
 ## 3.0.0 - 2024-01-09
 
