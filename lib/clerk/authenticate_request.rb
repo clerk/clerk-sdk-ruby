@@ -105,9 +105,9 @@ module Clerk
 
         return signed_in(env, token, auth_context.session_token_in_cookie)
       rescue JWT::ExpiredSignature
-        handshake(env, reason: TokenVerificationErrorReason::TOKEN_EXPIRED)
+        return handshake(env, reason: TokenVerificationErrorReason::TOKEN_EXPIRED)
       rescue JWT::InvalidIatError
-        handshake(env, reason: TokenVerificationErrorReason::TOKEN_NOT_ACTIVE_YET)
+        return handshake(env, reason: TokenVerificationErrorReason::TOKEN_NOT_ACTIVE_YET)
       end
 
       signed_out
