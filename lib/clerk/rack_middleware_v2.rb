@@ -1,6 +1,7 @@
 require 'clerk'
 require_relative 'authenticate_context'
 require_relative 'authenticate_request'
+require_relative 'proxy'
 
 module Clerk
   class RackMiddlewareV2
