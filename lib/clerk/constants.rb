@@ -39,6 +39,7 @@ module Clerk
   module AuthErrorReason
     CLIENT_UAT_WITHOUT_SESSION_TOKEN = 'client-uat-but-no-session-token'
     DEV_BROWSER_SYNC = 'dev-browser-sync'
+    DEV_BROWSER_MISSING = 'dev-browser-missing'
     PRIMARY_RESPONDS_TO_SYNCING = 'primary-responds-to-syncing'
     SATELLITE_COOKIE_NEEDS_SYNCING = 'satellite-needs-syncing'
     SESSION_TOKEN_AND_UAT_MISSING = 'session-token-and-uat-missing'

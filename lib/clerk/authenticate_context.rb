@@ -86,7 +86,7 @@ module Clerk
         end
 
         def dev_browser
-            @dev_browser ||= retrieve_from_query_string(@clerk_url, DEV_BROWSER_COOKIE) || @cookies.dev_browser.to_s
+            @dev_browser ||= dev_browser_in_url || @cookies.dev_browser.to_s
         end
 
         # The frontend_api returned is without protocol prefix
@@ -158,6 +158,10 @@ module Clerk
 
         def session_token_in_cookie?
             !session_token_in_cookie.to_s.empty?
+        end
+
+        def dev_browser_in_url
+            retrieve_from_query_string(@clerk_url, DEV_BROWSER_COOKIE)
         end
 
         private

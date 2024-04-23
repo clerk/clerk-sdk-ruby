@@ -61,8 +61,12 @@ module Clerk
 
       return resolve_handshake(env) if auth_context.handshake_token?
 
-      if auth_context.development_instance? && auth_context.dev_browser?
+      if auth_context.development_instance? && !!auth_context.dev_browser_in_url
         return handle_handshake_maybe_status(env, reason: AuthErrorReason::DEV_BROWSER_SYNC)
+      end
+
+      if auth_context.development_instance? && !auth_context.dev_browser?
+        return handle_handshake_maybe_status(env, reason: AuthErrorReason::DEV_BROWSER_MISSING)
       end
 
       # TODO(dimkl): Add multi-domain support for production
