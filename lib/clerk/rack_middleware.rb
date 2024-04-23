@@ -1,4 +1,5 @@
 require_relative 'sdk'
+require_relative 'proxy'
 
 module Clerk
   class RackMiddleware
