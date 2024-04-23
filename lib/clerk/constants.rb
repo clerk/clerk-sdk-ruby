@@ -7,7 +7,6 @@ module Clerk
 
     # Handshake
     HANDSHAKE_COOKIE = "__clerk_handshake".freeze
-    HANDSHAKE_HELP_QUERY_PARAM = "__clerk_help".freeze
     HANDSHAKE_COOKIE_DIRECTIVES_KEY = "handshake".freeze
 
     # auth debug response headers

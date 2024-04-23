@@ -142,7 +142,6 @@ module Clerk
       if auth_context.development_instance?
         redirect_url = auth_context.clerk_url.dup
         remove_from_query_string(redirect_url, HANDSHAKE_COOKIE)
-        remove_from_query_string(redirect_url, HANDSHAKE_HELP_QUERY_PARAM)
 
         headers[LOCATION_HEADER] = redirect_url.to_s
       end
