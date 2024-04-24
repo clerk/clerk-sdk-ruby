@@ -1,5 +1,4 @@
 require "forwardable"
-require_relative "plural_resource"
 
 module Clerk
   module Resources
