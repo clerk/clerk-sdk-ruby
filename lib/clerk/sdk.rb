@@ -15,6 +15,7 @@ require_relative "resources/emails"
 require_relative "resources/organizations"
 require_relative "resources/phone_numbers"
 require_relative "resources/sessions"
+require_relative "resources/testing_tokens"
 require_relative "resources/users"
 require_relative "resources/jwks"
 require_relative "errors"
@@ -144,6 +145,10 @@ module Clerk
 
     def sessions
       Resources::Sessions.new(self)
+    end
+
+    def testing_tokens
+      Resources::TestingTokens.new(self)
     end
 
     def users
