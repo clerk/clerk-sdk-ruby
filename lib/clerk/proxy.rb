@@ -96,19 +96,6 @@ module Clerk
     def initialize(session_claims: nil, session_token: nil)
       @session_claims = session_claims
       @session_token = session_token
-      @session = nil
-    end
-
-    def session
-      return nil if @session_claims.nil?
-
-      @session ||= verify_session
-    end
-
-    def verify_session
-      return nil if @session_claims.nil?
-
-      sdk.sessions.verify_token(@session_claims['sid'], @session_token)
     end
 
     def user

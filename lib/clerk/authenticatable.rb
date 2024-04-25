@@ -1,40 +1,22 @@
-require "active_support/concern"
+# frozen_string_literal: true
+
+require 'active_support/concern'
 
 module Clerk
+  # Concern containing Clerk Auth related helper methods
   module Authenticatable
     extend ActiveSupport::Concern
 
     protected
 
-    # Makes a request to the Clerk API to verify the session again and return
-    # the Session object. Subsequent calls to this method will return the cached
-    # Session object.
-    #
-    # NOTE: For better performance, you can instead use `#clerk_verified_session_claims`
-    # which already contains the verified claims as retrieved from the session
-    # token.
-    def clerk_session
-      request.env["clerk"].session
+    # Returns the verified claims as retrieved from the session token.
+    def clerk_session_claims
+      request.env['clerk'].session_claims
     end
 
-    # Makes a request to the Clerk API to verify the session again. Returns the
-    # session object as fetched from the API.
-    #
-    # NOTE: For better performance, you can instead use `#clerk_verified_session_claims`
-    # which already contains the verified claims as retrieved from the session
-    # token.
-    #
-    # See https://clerk.com/docs/reference/backend-api/tag/Sessions#operation/VerifySession
-    def clerk_reverify_session!
-      request.env["clerk"].verify_session
-    end
-
-    def clerk_verified_session_claims
-      request.env["clerk"].session_claims
-    end
-
-    def clerk_verified_session_token
-      request.env["clerk"].session_token
+    # Returns the verified session token.
+    def clerk_session_token
+      request.env['clerk'].session_token
     end
 
     # Makes a request to the Clerk API to fetch the data of the authenticated
@@ -42,11 +24,12 @@ module Clerk
     # Config.middleware_cache_store), subsequent calls will return the cached
     # object.
     def clerk_user
-      request.env["clerk"].user
+      request.env['clerk'].user
     end
 
+    # Returns the verified user_id from the token claims without making a request to Clerk API.
     def clerk_user_id
-      request.env["clerk"].user_id
+      request.env['clerk'].user_id
     end
 
     # Makes a request to the Clerk API to fetch the data of the authenticated
@@ -54,44 +37,43 @@ module Clerk
     # Config.middleware_cache_store), subsequent calls will return the cached
     # object.
     def clerk_organization
-      request.env["clerk"].org
+      request.env['clerk'].org
     end
 
+    # Returns the verified organization_id from the token claims without making a request to Clerk API.
     def clerk_organization_id
-      request.env["clerk"].org_id
+      request.env['clerk'].org_id
     end
 
     def clerk_organization_role
-      request.env["clerk"].org_role
+      request.env['clerk'].org_role
     end
 
     def clerk_organization_permissions
-      request.env["clerk"].org_permissions
+      request.env['clerk'].org_permissions
     end
 
     def clerk_user_signed_in?
-      !!clerk_verified_session_claims
+      !!clerk_session_claims
     end
 
     def clerk_sign_in_url
-      ENV.fetch("CLERK_SIGN_IN_URL")
+      ENV.fetch('CLERK_SIGN_IN_URL')
     end
 
     def clerk_sign_up_url
-      ENV.fetch("CLERK_SIGN_UP_URL")
+      ENV.fetch('CLERK_SIGN_UP_URL')
     end
 
     def clerk_user_profile_url
-      ENV.fetch("CLERK_USER_PROFILE_URL")
+      ENV.fetch('CLERK_USER_PROFILE_URL')
     end
 
     included do
-      helper_method :clerk_session, :clerk_reverify_session!,
-        :clerk_verified_session_claims, :clerk_verified_session_token,
-        :clerk_user, :clerk_user_id, :clerk_user_signed_in?, :clerk_sign_in_url,
-        :clerk_sign_up_url, :clerk_user_profile_url,
-        :clerk_organization, :clerk_organization_id, :clerk_organization_role,
-        :clerk_organization_permissions
+      helper_method :clerk_session_claims, :clerk_user, :clerk_user_id, :clerk_user_signed_in?,
+                    :clerk_sign_in_url, :clerk_sign_up_url, :clerk_user_profile_url,
+                    :clerk_organization, :clerk_organization_id, :clerk_organization_role,
+                    :clerk_organization_permissions
     end
   end
 end
