@@ -16,6 +16,15 @@ Note: this is identical to 4.0.0.beta1, which was yanked because it was not gene
 - chore: re-organize and refactor internal code to extract functionality of rack middleware [https://github.com/clerk/clerk-sdk-ruby/pull/45]
 - changed: `CLERK_PUBLISHABLE_KEY` or `publishable_key` in `Clerk.configure` is **required** [https://github.com/clerk/clerk-sdk-ruby/pull/46]
 
+## 3.2.0 - 2024-04-08
+
+- fix: Infinite redirect loop when client_uat=0 and __session exists (#55) [https://github.com/clerk/clerk-sdk-ruby/pull/55]
+
+## 3.1.0 - 2024-03-19
+
+- fix: Incompatible __client_uat & __session should show interstitial (#51) [https://github.com/clerk/clerk-sdk-ruby/pull/51]
+- fix: Incorrect check that lead to infinite redirect loop introduced by (#51) [https://github.com/clerk/clerk-sdk-ruby/pull/51]
+
 ## 3.0.0 - 2024-01-09
 
 Note: this is identical to 2.12.0, which was yanked because it contained a
