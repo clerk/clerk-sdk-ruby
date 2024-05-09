@@ -103,7 +103,7 @@ module Clerk
         token = verify_token(auth_context.session_token_in_cookie)
         return signed_out unless token
 
-        if token['iat'] < auth_context.client_uat
+        if token['iat'] < auth_context.client_uat.to_i
           return handle_handshake_maybe_status(env, reason: AuthErrorReason::SESSION_TOKEN_OUTDATED)
         end
 
