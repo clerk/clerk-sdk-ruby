@@ -35,7 +35,7 @@ class Clerk::SdkTest < Minitest::Test
     assert_equal "user_1", user["id"]
   end
 
-  def test_no_api_key_raises_on_api_call
+  def test_no_secret_key_raises_on_api_call
     sdk = ::Clerk::SDK.new
     assert_raises ArgumentError do
       sdk.users.find("x")
