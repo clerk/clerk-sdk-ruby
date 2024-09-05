@@ -70,10 +70,12 @@ module Clerk
     end
 
     included do
-      helper_method :clerk_session_claims, :clerk_user, :clerk_user_id, :clerk_user_signed_in?,
-                    :clerk_sign_in_url, :clerk_sign_up_url, :clerk_user_profile_url,
-                    :clerk_organization, :clerk_organization_id, :clerk_organization_role,
-                    :clerk_organization_permissions
+      if respond_to?(:helper_method)
+        helper_method :clerk_session_claims, :clerk_user, :clerk_user_id, :clerk_user_signed_in?,
+                      :clerk_sign_in_url, :clerk_sign_up_url, :clerk_user_profile_url,
+                      :clerk_organization, :clerk_organization_id, :clerk_organization_role,
+                      :clerk_organization_permissions
+      end
     end
   end
 end
