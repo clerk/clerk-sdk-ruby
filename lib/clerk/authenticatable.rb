@@ -78,8 +78,7 @@ module Clerk
     end
 
     def clerk_render_reverification(missing_config={})
-      render status: 403,
-        json: request.env['clerk'].reverification_mismatch_payload
+      render status: 403, json: request.env['clerk'].reverification_mismatch_payload
     end
 
     def clerk_sign_in_url
