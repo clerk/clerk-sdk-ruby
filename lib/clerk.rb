@@ -2,6 +2,7 @@
 
 require_relative "clerk/version"
 require_relative "clerk/sdk"
+require_relative "clerk/constants"
 
 module Clerk
   class << self
