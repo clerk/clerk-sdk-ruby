@@ -57,6 +57,10 @@ module Clerk
       !!clerk_session_claims
     end
 
+    def clerk_session_needs_reverification?(params=StepUp::PRESETS[:strict])
+      request.env['clerk'].needs_reverification?(params)
+    end
+
     def clerk_sign_in_url
       ENV.fetch('CLERK_SIGN_IN_URL')
     end
@@ -70,10 +74,13 @@ module Clerk
     end
 
     included do
-      helper_method :clerk_session_claims, :clerk_user, :clerk_user_id, :clerk_user_signed_in?,
-                    :clerk_sign_in_url, :clerk_sign_up_url, :clerk_user_profile_url,
-                    :clerk_organization, :clerk_organization_id, :clerk_organization_role,
-                    :clerk_organization_permissions
+      helper_method :clerk_session_claims, :clerk_session_token, :clerk_user,
+                    :clerk_user, :clerk_user_id, :clerk_user_signed_in?,
+                    :clerk_sign_in_url, :clerk_sign_up_url,
+                    :clerk_user_profile_url,
+                    :clerk_organization, :clerk_organization_id,
+                    :clerk_organization_role, :clerk_organization_permissions,
+                    :clerk_session_needs_reverification?
     end
   end
 end
