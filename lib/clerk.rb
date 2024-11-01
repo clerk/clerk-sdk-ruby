@@ -17,7 +17,7 @@ module Clerk
 
   class Config
     PRODUCTION_BASE_URL = "https://api.clerk.dev/v1/".freeze
-    attr_accessor :api_key, :base_url, :publishable_key, :logger, :middleware_cache_store
+    attr_accessor :base_url, :publishable_key, :secret_key, :logger, :middleware_cache_store
 
     # An array of route paths on which the middleware will not execute.
     #
@@ -44,11 +44,11 @@ module Clerk
 
     def initialize
       @base_url = ENV.fetch("CLERK_API_BASE", PRODUCTION_BASE_URL)
-      @api_key = ENV["CLERK_API_KEY"]
+      @secret_key = ENV["CLERK_API_KEY"]
 
       secret_key = ENV["CLERK_SECRET_KEY"]
       if secret_key && !secret_key.empty?
-        @api_key = secret_key
+        @secret_key = secret_key
       end
 
       @publishable_key = ENV["CLERK_PUBLISHABLE_KEY"]
