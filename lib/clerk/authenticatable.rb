@@ -73,6 +73,16 @@ module Clerk
       !!clerk_verified_session_claims
     end
 
+    def clerk_session_needs_reverification?(params=StepUp::PRESETS[:strict])
+      !request.env['clerk'].is_user_reverified?(params)
+    end
+
+    def clerk_render_reverification(missing_config=nil)
+      payload = request.env['clerk'].reverification_mismatch_payload(missing_config)
+
+      render status: 403, json: payload
+    end
+
     def clerk_sign_in_url
       ENV.fetch("CLERK_SIGN_IN_URL")
     end
