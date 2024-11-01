@@ -139,6 +139,7 @@ module Clerk
       return false if session_claims.nil?
 
       fva           = session_claims["fva"]
+      fva = [0, -1] #TMP
       level         = params[:level]
       after_minutes = Integer(params[:after_minutes])
 
@@ -156,16 +157,22 @@ module Clerk
       end
     end
 
-    def reverification_mismatch_response(missing_config={})
-      payload = {
+    def reverification_payload(missing_config={})
+      {
         clerk_error: {
           type:     "forbidden",
           reason:   "reverification-mismatch",
           metadata: { reverification: missing_config, }
         }
       }
+    end
 
-      [403, { "Content-Type" => "application/json" }, [payload.to_json]]
+    def reverification_response(missing_config={})
+      [
+        403,
+        { "Content-Type" => "application/json" },
+        [reverification_payload.to_json],
+      ]
     end
 
     private

@@ -61,6 +61,10 @@ module Clerk
       request.env['clerk'].needs_reverification?(params)
     end
 
+    def clerk_render_reverification(missing_config={})
+      render status: 403, json: reverification_payload
+    end
+
     def clerk_sign_in_url
       ENV.fetch('CLERK_SIGN_IN_URL')
     end
@@ -80,7 +84,8 @@ module Clerk
                     :clerk_user_profile_url,
                     :clerk_organization, :clerk_organization_id,
                     :clerk_organization_role, :clerk_organization_permissions,
-                    :clerk_session_needs_reverification?
+                    :clerk_session_needs_reverification?,
+                    :clerk_reverification_mismatch_response
     end
   end
 end
