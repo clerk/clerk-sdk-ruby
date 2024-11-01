@@ -74,7 +74,7 @@ module Clerk
     end
 
     def clerk_session_needs_reverification?(params=StepUp::PRESETS[:strict])
-      request.env['clerk'].needs_reverification?(params)
+      !request.env['clerk'].is_user_reverified?(params)
     end
 
     def clerk_render_reverification(missing_config={})

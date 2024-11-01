@@ -61,7 +61,7 @@ module Clerk
     end
 
     # Returns true if the session needs to perform step up verification
-    def needs_reverification?(params)
+    def is_user_reverified?(params)
       return false if session_claims.nil?
 
       fva           = session_claims["fva"]
@@ -71,14 +71,15 @@ module Clerk
       return false if fva.nil? || after_minutes.nil? || level.nil?
 
       factor1_age, factor2_age = fva
-      factor1_enabled = (factor1_age == -1 ? false : after_minutes > factor1_age)
-      factor2_enabled = (factor2_age == -1 ? false : after_minutes > factor2_age)
+      is_valid_factor1 = (factor1_age != -1 ? after_minutes > factor1_age : false)
+      is_valid_factor2 = (factor2_age != -1 ? after_minutes > factor2_age : false)
 
       case level
-      when :first_factor  then factor1_enabled
-      when :second_factor then factor2_enabled
+      when :first_factor  then is_valid_factor1
+      when :second_factor
+        factor2_age == -1 ? is_valid_factor1 : is_valid_factor2
       when :multi_factor
-        factor2_age == -1 ? factor1_enabled : factor1_enabled && factor2_enabled
+        factor2_age == -1 ? is_valid_factor1 : is_valid_factor1 && is_valid_factor2
       end
     end
 
