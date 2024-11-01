@@ -96,7 +96,7 @@ module Clerk
       [
         403,
         { "Content-Type" => "application/json" },
-        [reverification_mismatch_payload.to_json],
+        [reverification_mismatch_payload(missing_config).to_json],
       ]
     end
 
