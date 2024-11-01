@@ -60,6 +60,51 @@ module Clerk
       @session_claims["org_permissions"]
     end
 
+    # Returns true if the session needs to perform step up verification
+    def is_user_reverified?(params)
+      return false if session_claims.nil?
+
+      fva           = session_claims["fva"]
+      level         = params[:level]
+      after_minutes = Integer(params[:after_minutes])
+
+      # the feature is disabled
+      return true if fva.nil?
+
+      return false if after_minutes.nil? || level.nil?
+
+      factor1_age, factor2_age = fva
+      is_valid_factor1 = factor1_age != -1 && after_minutes > factor1_age
+      is_valid_factor2 = factor2_age != -1 && after_minutes > factor2_age
+
+      case level
+      when :first_factor
+        is_valid_factor1
+      when :second_factor
+        factor2_age == -1 ? is_valid_factor1 : is_valid_factor2
+      when :multi_factor
+        factor2_age == -1 ? is_valid_factor1 : is_valid_factor1 && is_valid_factor2
+      end
+    end
+
+    def reverification_mismatch_payload(missing_config)
+      {
+        clerk_error: {
+          type:     "forbidden",
+          reason:   "reverification-mismatch",
+          metadata: { reverification: missing_config, }
+        }
+      }
+    end
+
+    def reverification_response(missing_config=nil)
+      [
+        403,
+        { "Content-Type" => "application/json" },
+        [reverification_mismatch_payload(missing_config).to_json],
+      ]
+    end
+
     private
 
     def fetch_user(user_id)
