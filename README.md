@@ -56,7 +56,7 @@ Then you can instantiate a `Clerk::SDK` instance and access all
 Here's a quick example:
 
 ```ruby
-clerk = Clerk::SDK.new(api_key: "your_api_key")
+clerk = Clerk::SDK.new(secret_key: "your_clerk_secret_key")
 # List all users
 clerk.users.all
 # Get your first user
@@ -87,9 +87,9 @@ supported configuration settings their environment variable equivalents:
 
 ```ruby
 Clerk.configure do |c|
-  c.api_key = "your_api_key" # if omitted: ENV["CLERK_SECRET_KEY"] - API calls will fail if unset
   c.base_url = "https://..." # if omitted: ENV["CLERK_API_BASE"] - defaults to "https://api.clerk.com/v1/"
   c.publishable_key = "pk_(test|live)_...." # if omitted: ENV["CLERK_PUBLISHABLE_KEY"] - Handshake mechanism (check section below) will fail if unset
+  c.secret_key = "your_clerk_secret_key" # if omitted: ENV["CLERK_SECRET_KEY"] - API calls will fail if unset
   c.logger = Logger.new(STDOUT) # if omitted, no logging
   c.middleware_cache_store = ActiveSupport::Cache::FileStore.new("/tmp/clerk_middleware_cache") # if omitted: no caching
   c.excluded_routes ["/foo", "/bar/*"]
@@ -101,7 +101,7 @@ arguments to the constructor:
 
 ```ruby
 clerk = Clerk::SDK.new(
-    api_key: "X",
+    secret_key: "X",
     base_url: "Y",
     logger: Logger.new()
 )
