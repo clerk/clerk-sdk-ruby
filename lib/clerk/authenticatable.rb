@@ -73,7 +73,7 @@ module Clerk
       !!clerk_verified_session_claims
     end
 
-    def clerk_session_needs_reverification?(params=StepUp::PRESETS[:strict])
+    def clerk_user_needs_reverification?(params=StepUp::PRESETS[:strict])
       !request.env['clerk'].is_user_reverified?(params)
     end
 
