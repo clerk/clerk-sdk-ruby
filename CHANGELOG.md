@@ -1,8 +1,12 @@
 ## unreleased
 
+## 3.3.0.beta1 - 2024-11-04
+
+- feat: Add helpers for Step Up auth / re-verification [https://github.com/clerk/clerk-sdk-ruby/pull/72]
+
 ## 3.2.0 - 2024-04-08
 
-- fix: Infinite redirect loop when client_uat=0 and __session exists (#55) [https://github.com/clerk/clerk-sdk-ruby/pull/55]
+- fix: Infinite redirect loop when client_uat=0 and __session exists [https://github.com/clerk/clerk-sdk-ruby/pull/55]
 
 ## 3.1.0 - 2024-03-19
 
