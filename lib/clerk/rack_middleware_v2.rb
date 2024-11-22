@@ -87,11 +87,11 @@ module Clerk
       end
     end
 
-    def reverification_mismatch_payload(missing_config)
+    def reverification_error_payload(missing_config)
       {
         clerk_error: {
           type:     "forbidden",
-          reason:   "reverification-mismatch",
+          reason:   "reverification-error",
           metadata: { reverification: missing_config, }
         }
       }
@@ -101,7 +101,7 @@ module Clerk
       [
         403,
         { "Content-Type" => "application/json" },
-        [reverification_mismatch_payload(missing_config).to_json],
+        [reverification_error_payload(missing_config).to_json],
       ]
     end
 
