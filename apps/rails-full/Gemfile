@@ -41,13 +41,11 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 path "../.." do
-  gem "clerk"
+  gem "clerk-sdk-ruby", require: "clerk"
 end
 
-# TODO: Direct to GitHub
-path "/Users/tom/Code/ruby/gems/clerk-backend" do
-  gem "clerk-backend" # ">= 0.0.1"
-end
+# TODO: Update when published
+gem "clerk-sdk-ruby-backend", github: "clerk/clerk-sdk-ruby-backend", branch: "main"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
