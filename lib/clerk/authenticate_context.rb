@@ -1,94 +1,65 @@
 # frozen_string_literal: true
 
-require 'ostruct'
-require 'forwardable'
-require 'base64'
+require "ostruct"
+require "forwardable"
 
 module Clerk
-  ##
   # This class represents a parameter object used to contain all request and configuration
   # information required by the middleware to resolve the current request state.
   # link: https://refactoring.guru/introduce-parameter-object
   class AuthenticateContext
     extend Forwardable
 
-    ##
     # Expose the url of the request that this parameter object was created from as a URI object.
     attr_reader :clerk_url
 
-    ##
     # Expose properties that does not require validations or complex logic to retrieve
     # values by delegating them to the cookies or headers variables.
     def_delegators :@cookies, :session_token_in_cookie, :client_uat
     def_delegators :@headers, :session_token_in_header, :sec_fetch_dest
 
-    ##
-    # Creates a new parameter object using Rack::Request and Clerk::Config objects.
+    # Creates a new parameter object using ::Rack::Request and Clerk::Config objects.
     def initialize(request, config)
       @clerk_url = URI.parse(request.url)
       @config = config
 
       @cookies = OpenStruct.new({
-                                  session_token_in_cookie: request.cookies[SESSION_COOKIE],
-                                  client_uat: request.cookies[CLIENT_UAT_COOKIE],
-                                  handshake_token: request.cookies[HANDSHAKE_COOKIE],
-                                  dev_browser: request.cookies[DEV_BROWSER_COOKIE]
-                                })
+        client_uat: request.cookies[CLIENT_UAT_COOKIE],
+        dev_browser: request.cookies[DEV_BROWSER_COOKIE],
+        handshake_token: request.cookies[HANDSHAKE_COOKIE],
+        session_token_in_cookie: request.cookies[SESSION_COOKIE]
+      })
 
       @headers = OpenStruct.new({
-                                  session_token_in_header: request.env[AUTHORIZATION_HEADER].to_s.gsub(/bearer/i,
-                                                                                                       '').strip,
-                                  sec_fetch_dest: request.env[SEC_FETCH_DEST_HEADER],
-                                  accept: request.env[ACCEPT_HEADER].to_s,
-                                  origin: request.env[ORIGIN_HEADER].to_s,
-                                  host: request.host,
-                                  port: request.port
-                                })
+        accept: request.env[ACCEPT_HEADER].to_s,
+        host: request.host,
+        origin: request.env[ORIGIN_HEADER].to_s,
+        port: request.port,
+        sec_fetch_dest: request.env[SEC_FETCH_DEST_HEADER],
+        session_token_in_header: request.env[AUTHORIZATION_HEADER].to_s.gsub(/bearer/i, "").strip
+      })
     end
 
-    ##
     # The following properties are part of the props supported in all the AuthenticateContext
     # objects across all of our SDKs (eg JS, Go)
     def secret_key
-      raise Errors::Configuration, 'Clerk secret key is not set' if @config.api_key.to_s.empty?
+      raise ConfigurationError, "Clerk secret key is not set" if @config.secret_key.to_s.empty?
 
-      @config.api_key.to_s
+      @config.secret_key.to_s
     end
 
     def publishable_key
-      raise Errors::Configuration, 'Clerk publishable key is not set' if @config.publishable_key.to_s.to_s.empty?
+      raise ConfigurationError, "Clerk publishable key is not set" if @config.publishable_key.to_s.to_s.empty?
 
       @config.publishable_key.to_s
     end
 
-    def domain
-      # TODO(dimkl): Add multi-domain support
-      ''
-    end
-
-    def is_satellite?
-      # TODO(dimkl): Add multi-domain support
-      false
-    end
-
-    def proxy_url
-      # TODO(dimkl): Add multi-domain support
-      ''
+    def proxy_url?
+      !proxy_url.empty?
     end
 
     def handshake_token
-      @handshake_token ||= retrieve_from_query_string(@clerk_url,
-                                                      HANDSHAKE_COOKIE) || @cookies.handshake_token.to_s
-    end
-
-    def clerk_synced?
-      # TODO(dimkl): Add multi-domain support
-      false
-    end
-
-    def clerk_redirect_url
-      # TODO(dimkl): Add multi-domain support
-      ''
+      @handshake_token ||= Utils.retrieve_from_query_string(@clerk_url, HANDSHAKE_COOKIE) || @cookies.handshake_token.to_s
     end
 
     def dev_browser
@@ -97,32 +68,32 @@ module Clerk
 
     # The frontend_api returned is without protocol prefix
     def frontend_api
-      return '' unless valid_publishable_key?(publishable_key.to_s)
+      return "" unless Utils.valid_publishable_key?(publishable_key.to_s)
 
-      @frontend_api ||= if !proxy_url.empty?
-                          proxy_url
-                        elsif development_instance? && !domain.empty?
-                          "clerk.#{domain}"
-                        else
-                          # remove $ postfix
-                          decode_publishable_key(publishable_key).chop
-                        end
+      @frontend_api ||= if proxy_url?
+        proxy_url
+      elsif development_instance? && !domain.empty?
+        "clerk.#{domain}"
+      else
+        # remove $ postfix
+        Utils.decode_publishable_key(publishable_key).chop.to_s
+      end
     end
 
     def development_instance?
-      secret_key.start_with?('sk_test_')
+      secret_key.start_with?("sk_test_")
     end
 
     def production_instance?
-      secret_key.start_with?('sk_live_')
+      secret_key.start_with?("sk_live_")
     end
 
     def document_request?
-      @headers.sec_fetch_dest == 'document'
+      @headers.sec_fetch_dest == "document"
     end
 
     def accepts_html?
-      @headers.accept&.start_with?('text/html')
+      @headers.accept&.start_with?("text/html")
     end
 
     def eligible_for_multi_domain?
@@ -139,7 +110,7 @@ module Clerk
       return false if @headers.origin.nil?
 
       # strip scheme
-      origin = @headers.origin.strip.sub(%r{\A(\w+:)?//}, '')
+      origin = @headers.origin.strip.sub(%r{\A(\w+:)?//}, "")
       return false if origin.empty?
 
       # Rack's host and port helpers are reverse-proxy-aware; that
@@ -167,29 +138,31 @@ module Clerk
     end
 
     def dev_browser_in_url
-      retrieve_from_query_string(@clerk_url, DEV_BROWSER_COOKIE)
+      Utils.retrieve_from_query_string(@clerk_url, DEV_BROWSER_COOKIE)
     end
 
-    private
-
-    def valid_publishable_key?(publishable_key)
-      valid_publishable_key_prefix?(publishable_key) && valid_publishable_key_postfix?(publishable_key)
+    def dev_browser_in_url?
+      !!dev_browser_in_url
     end
 
-    def valid_publishable_key_prefix?(publishable_key)
-      publishable_key.start_with?('pk_live_') || publishable_key.start_with?('pk_test_')
+    def domain
+      "" # TODO: Add multi-domain support
     end
 
-    def valid_publishable_key_postfix?(publishable_key)
-      decode_publishable_key(publishable_key).end_with?('$')
+    def is_satellite?
+      false # TODO: Add multi-domain support
     end
 
-    def decode_publishable_key(publishable_key)
-      Base64.decode64(publishable_key.split('_')[2].to_s)
+    def proxy_url
+      "" # TODO: Add multi-domain support
     end
 
-    def retrieve_from_query_string(url, key)
-      Rack::Utils.parse_query(url.query)[key]
+    def clerk_synced?
+      false # TODO: Add multi-domain support
+    end
+
+    def clerk_redirect_url
+      "" # TODO: Add multi-domain support
     end
   end
 end
