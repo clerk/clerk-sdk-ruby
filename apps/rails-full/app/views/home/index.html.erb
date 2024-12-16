@@ -1,0 +1,7 @@
+<h2>
+  <% if @user %>
+    Authenticated User: <%= @user.first_name %> (<%= @user.id %>)
+  <% else %>
+    Not Authenticated
+  <% end %>
+</h2>
