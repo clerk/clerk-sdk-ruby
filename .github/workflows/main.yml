@@ -25,4 +25,4 @@ jobs:
           bundler-cache: true
 
       - name: Unit Tests
-        run: bundle exec rake
+        run: rake spec
