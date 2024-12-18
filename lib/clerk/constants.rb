@@ -21,7 +21,7 @@ module Clerk
 
   # headers used in response - should be lowered case and without http prefix
   LOCATION_HEADER = "Location"
-  SET_COOKIE_HEADER = "Set-Cookie"
+  SET_COOKIE_HEADER = "set-cookie"
 
   # clerk url related headers
   AUTHORIZATION_HEADER = "HTTP_AUTHORIZATION"

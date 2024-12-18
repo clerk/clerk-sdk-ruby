@@ -72,21 +72,32 @@ RSpec.describe Clerk::Rack::Middleware do
       end
 
       context "when auth_request_headers are present" do
-        let(:auth_request_response) { [nil, {"Set-Cookie" => "session=foo", "Content-Type" => "application/json"}, nil] }
-        let(:app_response) { [200, {"Set-Cookie" => "session=bar"}, "OK"] }
+        let(:auth_request_response) { [nil, {Clerk::SET_COOKIE_HEADER => ["session=bar; path=/; expires=Fri, 15 Jan 2024 00:00:00 GMT; httponly; secure"], "Content-Type" => "application/json"}, nil] }
+        let(:app_response) { [200, {Clerk::SET_COOKIE_HEADER => ["session=foo; path=/; expires=Wed, 13 Jan 2024 00:00:00 GMT; httponly; secure"]}, "OK"] }
 
         it "should remove the `set-cookie` header to avoid overriding existing cookies set by other middleware" do
           allow(auth_request_double).to receive(:resolve).and_return(auth_request_response)
           allow(app).to receive(:call).with(env).and_return(app_response)
 
-          expect(subject).to receive(:set_cookie_headers!).with(app_response[1], auth_request_response[1])
-          expect(subject.call(env)).to eq([200, {"Content-Type" => "application/json", "Set-Cookie" => "session=bar"}, "OK"])
+          expect(subject).to receive(:set_cookie_headers!).with(app_response[1], ["session=bar; path=/; expires=Fri, 15 Jan 2024 00:00:00 GMT; httponly; secure"]).and_call_original
+
+          status, headers, body = subject.call(env)
+
+          expect(status).to eq(200)
+          expect(headers).to eq({
+            "Content-Type" => "application/json", 
+            Clerk::SET_COOKIE_HEADER => [
+              "session=foo; path=/; expires=Wed, 13 Jan 2024 00:00:00 GMT; httponly; secure", 
+              "session=bar; path=/; expires=Mon, 15 Jan 2024 00:00:00 GMT; secure; httponly"
+            ]
+          })
+          expect(body).to eq("OK")
         end
       end
 
       context "when auth_request_headers are missing" do
         let(:auth_request_response) { [nil, {}, nil] }
-        let(:app_response) { [200, {"Set-Cookie" => "session=bar"}, "OK"] }
+        let(:app_response) { [200, {Clerk::SET_COOKIE_HEADER => "session=bar; path=/; expires=Wed, 13 Jan 2024 00:00:00 GMT; httponly; secure"}, "OK"] }
 
         it "returns the authenticated headers" do
           allow(auth_request_double).to receive(:resolve).and_return(auth_request_response)
@@ -102,7 +113,7 @@ RSpec.describe Clerk::Rack::Middleware do
     let(:cookies) do
       [
         "session=abc123; Path=/; Expires=Wed, 13 Jan 2024 00:00:00 GMT; HttpOnly; Secure",
-        "client=xyz789; Path=/; Expires=Wed, 13 Jan 2024 00:00:00 GMT; HttpOnly; Secure"
+        "client=xyz789; Path=/; Expires=Fri, 15 Jan 2024 00:00:00 GMT; HttpOnly; Secure"
       ]
     end
 
@@ -119,7 +130,7 @@ RSpec.describe Clerk::Rack::Middleware do
   describe "#convert_http_cookie_to_cookie_setter_params" do
     let(:cookie) { {"session" => "abc123", "Expires" => "Wed, 13 Jan 2024 00:00:00 GMT", "Path" => "/", "HttpOnly" => true, "Secure" => true} }
     let(:cookie_key) { "session" }
-    let(:result) { subject.send(:convert_http_cookie_to_cookie_setter_params, cookie, cookie_key) }
+    let(:result) { subject.send(:convert_http_cookie_to_cookie_setter_params, cookie_key, cookie) }
 
     it "should convert the cookie key to :value" do
       expect(result[:value]).to eq("abc123")

@@ -18,6 +18,9 @@ RSpec.configure do |config|
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
 
+  # Allow for focused tests
+  config.filter_run_when_matching :focus
+
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
