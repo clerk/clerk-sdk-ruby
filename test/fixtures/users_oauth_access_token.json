@@ -1,8 +1,0 @@
-{
-  "token": "xxxx",
-  "provider": "hubspot",
-  "scopes": [
-    "oauth",
-    "contacts"
-  ]
-}
