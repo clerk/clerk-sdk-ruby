@@ -126,7 +126,7 @@ module Clerk
         "Access-Control-Allow-Origin" => "null",
         "Access-Control-Allow-Credentials" => "true"
       }
-      session_token = ""
+      session_token = nil
 
       # Return signed-out outcome if the handshake verification fails
       handshake_payload = verify_token(auth_context.handshake_token)
@@ -152,7 +152,7 @@ module Clerk
         headers[LOCATION_HEADER] = redirect_url.to_s
       end
 
-      return signed_out(reason: AuthErrorReason::SESSION_TOKEN_MISSING, headers: headers) if session_token.empty?
+      return signed_out(reason: AuthErrorReason::SESSION_TOKEN_MISSING, headers: headers) unless session_token
 
       verify_token_with_retry(env, session_token)
     end
