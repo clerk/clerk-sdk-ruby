@@ -6,7 +6,7 @@ require "dotenv"
 require_relative "app"
 require_relative "middleware/disable_paths"
 
-Dotenv.load("../../.env")
+Dotenv.load(".env")
 
 use DisablePaths, paths: ["/favicon.ico"]
 use Clerk::Rack::Middleware
