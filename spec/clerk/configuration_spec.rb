@@ -18,10 +18,10 @@ RSpec.describe Clerk::Configuration do
       end
     end
 
-    it "initializes ClerkBackend with the secret key" do
+    it "initializes ClerkHttpClient with the secret key" do
       with_modified_env(CLERK_SECRET_KEY: valid_sk) do
         described_class.new
-        expect(ClerkBackend::Configuration.default.access_token).to eq(ENV["CLERK_SECRET_KEY"])
+        expect(ClerkHttpClient::Configuration.default.access_token).to eq(ENV["CLERK_SECRET_KEY"])
       end
     end
 
@@ -149,9 +149,9 @@ RSpec.describe Clerk::Configuration do
         .to raise_error(ArgumentError, "secret_key must start with 'sk_'")
     end
 
-    it "updates ClerkBackend configuration" do
+    it "updates ClerkHttpClient configuration" do
       config = described_class.new
-      expect(ClerkBackend::Configuration.default)
+      expect(ClerkHttpClient::Configuration.default)
         .to receive(:access_token=)
         .with(valid_sk)
 
@@ -160,9 +160,9 @@ RSpec.describe Clerk::Configuration do
   end
 
   describe "#debug=" do
-    it "updates debug flag and ClerkBackend configuration" do
+    it "updates debug flag and ClerkHttpClient configuration" do
       config = described_class.new
-      expect(ClerkBackend::Configuration.default)
+      expect(ClerkHttpClient::Configuration.default)
         .to receive(:debugging=)
         .with(true)
 

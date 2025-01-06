@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "clerk-sdk-ruby-backend"
+require "clerk-http-client"
 
 module Clerk
   class Configuration
@@ -22,7 +22,7 @@ module Clerk
         ::ActiveSupport::Cache::MemoryStore.new
       end
 
-      ClerkBackend.configure do |config|
+      ClerkHttpClient.configure do |config|
         unless secret_key.nil? || secret_key.empty?
           config.access_token = @secret_key
         end
@@ -40,7 +40,7 @@ module Clerk
     end
 
     def debug=(value)
-      ClerkBackend::Configuration.default.debugging = value
+      ClerkHttpClient::Configuration.default.debugging = value
       @debug = value
     end
 
@@ -71,7 +71,7 @@ module Clerk
     def secret_key=(sk)
       raise ArgumentError, "secret_key must start with 'sk_'" unless sk.start_with?("sk_")
 
-      ClerkBackend::Configuration.default.access_token = sk
+      ClerkHttpClient::Configuration.default.access_token = sk
       @secret_key = sk
     end
   end

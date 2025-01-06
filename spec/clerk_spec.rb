@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-class Something
-  def initializer(str, &block)
-    puts "initializer #{str}"
-  end
-end
-
 RSpec.describe Clerk do
   it "has a version number" do
     expect(Clerk::VERSION).not_to be nil

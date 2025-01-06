@@ -4,7 +4,7 @@ RSpec.describe Clerk::JWKSCache do
   let(:lifetime) { 3600 } # 1 hour cache lifetime
   let(:cache) { described_class.new(lifetime) }
   let(:sdk) { Clerk::SDK.new }
-  let(:jwks_api) { instance_double("ClerkBackend::JWKSApi") }
+  let(:jwks_api) { instance_double("ClerkHttpClient::JWKSApi") }
   let(:mock_keys) { [double(to_hash: {kid: "key1"}), double(to_hash: {kid: "key2"})] }
   let(:expected_result) { mock_keys.map(&:to_hash) }
 
@@ -57,7 +57,7 @@ RSpec.describe Clerk::JWKSCache do
     end
 
     it "returns nil when API call fails" do
-      allow(jwks_api).to receive(:get).and_raise(ClerkBackend::ApiError)
+      allow(jwks_api).to receive(:get).and_raise(ClerkHttpClient::ApiError)
 
       result = cache.fetch(sdk)
       expect(result).to be_nil

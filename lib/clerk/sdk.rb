@@ -1,10 +1,10 @@
-require "clerk-sdk-ruby-backend"
+require "clerk-http-client"
 require "clerk/jwks_cache"
 require "clerk/version"
 require "jwt"
 
 module Clerk
-  class SDK < ClerkBackend::SDK
+  class SDK < ClerkHttpClient::SDK
     # TODO: Move to constants?
     DEFAULT_HEADERS = {
       "User-Agent": "Clerk/#{Clerk::VERSION}; Faraday/#{Faraday::VERSION}; Ruby/#{RUBY_VERSION}",
@@ -47,7 +47,7 @@ module Clerk
     private
 
     # TODO: Temporary solution until generators are improved
-    BACKEND_CUSTOM_MAPPING = {
+    HTTP_CLIENT_CUSTOM_MAPPING = {
       allowlist: "AllowListBlockList",
       blocklist: "AllowListBlockList",
       email_sms_templates: "EmailSMSTemplates",
@@ -58,17 +58,17 @@ module Clerk
     }
 
     def generate_const_name(method_name)
-      "#{BACKEND_CUSTOM_MAPPING[method_name] || Utils.camel_case(method_name)}Api"
+      "#{HTTP_CLIENT_CUSTOM_MAPPING[method_name] || Utils.camel_case(method_name)}Api"
     end
 
     def respond_to_missing?(method_name, include_private = false)
-      ClerkBackend.const_get(generate_const_name(method_name)).respond_to?(:new)
+      ClerkHttpClient.const_get(generate_const_name(method_name)).respond_to?(:new)
     rescue NameError
       false
     end
 
     def method_missing(method_name, *arguments)
-      ClerkBackend.const_get(generate_const_name(method_name)).new
+      ClerkHttpClient.const_get(generate_const_name(method_name)).new
     rescue NameError
       raise NoMethodError, "undefined method `#{method_name}` for #{self.class.name}"
     end

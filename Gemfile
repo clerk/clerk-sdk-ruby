@@ -5,12 +5,6 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in clerk.gemspec
 gemspec
 
-# TODO: Update when published
-github "clerk/clerk-sdk-ruby-backend" do
-  gem "clerk-sdk-ruby-backend"
-end
-
-
 group :development do
   gem "activesupport", "~> 8.0", require: false
   gem "dotenv", "~> 3.1", require: false

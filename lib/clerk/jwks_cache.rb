@@ -23,7 +23,7 @@ module Clerk
           @last_update = Time.now.to_i
           @jwks = begin
             sdk.jwks.get.keys.map(&:to_hash)
-          rescue Clerk::Error, ClerkBackend::ApiError
+          rescue Clerk::Error, ClerkHttpClient::ApiError
             nil
           end
         end

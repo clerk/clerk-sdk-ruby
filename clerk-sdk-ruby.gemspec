@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["ruby-sdk@clerk.dev"]
 
   spec.summary       = "Clerk SDK for Ruby."
-  spec.description   = "Client SDK for the Clerk backend API."
+  spec.description   = "Client SDK for the Clerk"
   spec.homepage      = "https://github.com/clerkinc/clerk-sdk-ruby"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "faraday", ">= 1.4.1", "< 3.0"
   spec.add_dependency "jwt", '~> 2.5'
+  spec.add_dependency "clerk-http-client", "~> 0.0.1"
   spec.add_dependency "concurrent-ruby", "~> 1.1"
 
   spec.add_development_dependency "byebug", "~> 11.1"

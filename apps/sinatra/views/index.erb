@@ -38,7 +38,7 @@
   </head>
   <body>
     <h1>Sinatra</h1>
-    <h2><%= @user ? "Authenticated User: #{@user.first_name} (#{@user.id}) " : "Not Authenticated" %><h2>
+    <h2><%= clerk.user ? "Authenticated User: #{clerk.user.first_name} (#{clerk.user.id}) " : "Not Authenticated" %><h2>
     <div id="auth-container"></div>
   </body>
 </html>
