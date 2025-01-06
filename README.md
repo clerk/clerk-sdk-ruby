@@ -87,8 +87,7 @@ supported configuration settings their environment variable equivalents:
 
 ```ruby
 Clerk.configure do |c|
-  c.api_key = "your_api_key" # if omitted: ENV["CLERK_SECRET_KEY"] - API calls will fail if unset
-  c.base_url = "https://..." # if omitted: ENV["CLERK_API_BASE"] - defaults to "https://api.clerk.com/v1/"
+  c.secret_key = "sk_(test|live)_...." # if omitted: ENV["CLERK_SECRET_KEY"] - API calls will fail if unset
   c.publishable_key = "pk_(test|live)_...." # if omitted: ENV["CLERK_PUBLISHABLE_KEY"] - Handshake mechanism (check section below) will fail if unset
   c.logger = Logger.new(STDOUT) # if omitted, no logging
   c.middleware_cache_store = ActiveSupport::Cache::FileStore.new("/tmp/clerk_middleware_cache") # if omitted: no caching
@@ -101,9 +100,8 @@ arguments to the constructor:
 
 ```ruby
 clerk = Clerk::SDK.new(
-    api_key: "X",
-    base_url: "Y",
     logger: Logger.new()
+    secret_key: "X",
 )
 ```
 
@@ -126,6 +124,22 @@ of `Clerk::Proxy`. To get the session or the user of the session, you call
 `session` or `user` respectively. In case there is no session, you can retrieve
 the API error with the `error` getter method.
 
+```ruby
+use Clerk::Rack::Middleware
+```
+
+### Reverification middleware
+
+The SDK comes with a revalidation middleware which will automatically revalidate the session when the user navigates to a protected route.
+
+```ruby
+use Clerk::Rack::Reverification,
+  preset: Clerk::StepUp::Preset::LAX,
+  routes: ["/*"]
+```
+
+
+
 ## Rails integration
 
 The SDK will automatically add the [Rack middleware](#rack-middleware) to the
@@ -133,18 +147,55 @@ middleware stack. For easier access to the Clerk session and user, include the
 `Clerk::Authenticatable` concern in your controller:
 
 ```ruby
-require "clerk/authenticatable"
-
 class ApplicationController < ActionController::Base
   include Clerk::Authenticatable
 end
+
+class AdminController < ApplicationController
+  before_action :require_reverification!, only: [:protected]
+
+  def index
+    @user = clerk.user
+  end
+
+  def protected
+    render json: {message: clerk.user? ? "Valid session" : "Not logged in"}
+  end
+end
 ```
 
-This gives your controller and views access to the following methods:
+This gives your controller and views access to the following methods and more:
 
-- `clerk_session`
-- `clerk_user`
-- `clerk_user_signed_in?`
+- `clerk.session`
+- `clerk.user`
+- `clerk.user?`
+
+## Sinatra integration
+
+The SDK enables the use of Extensions to add Clerk support to your Sinatra application.
+
+`Sinatra::Clerk` will automatically add the [Rack middleware](#rack-middleware)to the
+middleware stack and enable easy access to the Clerk session and user helper methods.
+
+```ruby
+class App < Sinatra::Base
+  register Sinatra::Clerk
+
+  get "/" do
+    erb :index, format: :html5
+  end
+
+  get "/admin" do
+    @user = clerk.user
+    erb :index, format: :html5
+  end
+
+  get "/protected" do
+    require_reverification!
+    {message: clerk.user? ? "Valid session" : "Not logged in"}.to_json
+  end
+end
+```
 
 ## Internals
 

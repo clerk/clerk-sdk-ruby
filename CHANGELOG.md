@@ -2,9 +2,8 @@
 
 [BREAKING] This release introduces our new `clerk-http-client` gem, which is a generated directly from the Clerk API OpenAPI specs. This will help to ensure that the SDK is always in sync with the Clerk API.
 
-
-
 - feat: Add support for the `clerk-http-client` gem [https://github.com/clerk/clerk-sdk-ruby/pull/77]
+- feat: Add support for Revalidation [https://github.com/clerk/clerk-sdk-ruby/pull/77]
 - feat: Add support for Rails API mode [https://github.com/clerk/clerk-sdk-ruby/pull/77]
 - feat: Add support for Sinatra [https://github.com/clerk/clerk-sdk-ruby/pull/77]
 - feat: Middleware cache defaults to `Rails.cache` -> `ActiveSupport::Cache::MemoryStore` (if available) -> no caching [https://github.com/clerk/clerk-sdk-ruby/pull/77]
