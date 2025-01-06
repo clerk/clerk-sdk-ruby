@@ -8,8 +8,14 @@
 /tmp/
 
 .byebug_history
-.ruby-version
 *.gem
 
 .idea
 
+# rspec failure tracking
+.rspec_status
+
+# Environment variables
+.env
+.env.*
+!.env.example

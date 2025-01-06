@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Rails Full" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <style>
+      html { font-family: monospace; }
+      @media (prefers-color-scheme: dark) {
+        html {
+          color: #FFE6E6FF;
+          background-color: #201D1E;
+        }
+      }
+    </style>
+    <script
+      async 
+      crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_d29ydGh5LWVsZXBoYW50LTE3LmNsZXJrLmFjY291bnRzLmRldiQ"
+      src="https://worthy-elephant-17.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      type="text/javascript"
+    ></script>
+    <script>
+      window.addEventListener('load', async function () {
+        await Clerk.load()
+        const container = document.getElementById('auth-container')
+        if (Clerk.user) {
+          container.innerHTML = `<div id="user-button"></div>`
+          Clerk.mountUserButton(document.getElementById('user-button'))
+        } else {
+          container.innerHTML = `<div id="sign-in"></div>`
+          Clerk.mountSignIn(document.getElementById('sign-in'))
+        }
+      })
+    </script>
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <h1>Rails (Full Stack)</h1>
+    <%= yield %>
+    <div id="auth-container"></div>
+  </body>
+</html>

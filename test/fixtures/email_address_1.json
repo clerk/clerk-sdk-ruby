@@ -1,7 +1,0 @@
-{
-  "id": "idn_email",
-  "object": "email_address",
-  "email_address": "john@doe.com",
-  "reserved": true,
-  "linked_to": []
-}

@@ -1,3 +1,16 @@
+## 4.0.0.beta4 - 2025-01-06
+
+[BREAKING] This release introduces our new `clerk-http-client` gem, which is a generated directly from the Clerk API OpenAPI specs. This will help to ensure that the SDK is always in sync with the Clerk API.
+
+- feat: Add support for the `clerk-http-client` gem [https://github.com/clerk/clerk-sdk-ruby/pull/77]
+- feat: Add support for Revalidation [https://github.com/clerk/clerk-sdk-ruby/pull/77]
+- feat: Add support for Rails API mode [https://github.com/clerk/clerk-sdk-ruby/pull/77]
+- feat: Add support for Sinatra [https://github.com/clerk/clerk-sdk-ruby/pull/77]
+- feat: Middleware cache defaults to `Rails.cache` -> `ActiveSupport::Cache::MemoryStore` (if available) -> no caching [https://github.com/clerk/clerk-sdk-ruby/pull/77]
+- chore: Refactor Clerk helper methods for Rails and Rack [https://github.com/clerk/clerk-sdk-ruby/pull/77]
+- fix: Update configuration naming of `api_key` to `secret_key` [https://github.com/clerk/clerk-sdk-ruby/pull/77]
+- docs: Add example applications for Rails, Sinatra, and Rack under `apps/` [https://github.com/clerk/clerk-sdk-ruby/pull/77]
+
 ## 4.0.0.beta3 - 2024-04-02
 
 - fix: Make publishable_key and secret_key required without making the envs required [https://github.com/clerk/clerk-sdk-ruby/pull/53]

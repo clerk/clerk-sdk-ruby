@@ -1,94 +1,9 @@
-require 'clerk'
-require_relative 'authenticate_context'
-require_relative 'authenticate_request'
+require "clerk"
+require "clerk/authenticate_context"
+require "clerk/authenticate_request"
 
 module Clerk
   class Proxy
-    attr_reader :session_id, :error
-
-    def initialize(env)
-      req = Rack::Request.new(env)
-      @token = req.cookies[SESSION_COOKIE]
-      @session_id = req.params['_clerk_session_id']
-      @session = nil
-      @user_id = nil
-      @user = nil
-    end
-
-    def session
-      return nil if @token.nil?
-      return @session if @session
-
-      begin
-        @session = fetch_session
-      rescue Errors::Authentication => e
-        @error = e
-      end
-      @session
-    end
-
-    def user_id
-      @user_id ||= session.dig('user_id')
-    end
-
-    def user
-      return nil if session.nil?
-
-      @user ||= fetch_user(user_id)
-    end
-
-    def debug
-      (instance_variables - [:@sdk]).map do |ivar|
-        [ivar.to_s, instance_variable_get(ivar)]
-      end.to_h
-    end
-
-    private
-
-    def sdk
-      @sdk ||= SDK.new
-    end
-
-    def cache_key
-      @cache_key ||= @token.split('.')[1]
-    end
-
-    def fetch_session
-      if session_id
-        cached_fetch("clerk_session:#{session_id}:#{cache_key}") do
-          sdk.sessions.verify_token(session_id, @token)
-        end
-      else
-        cached_fetch("clerk_session:#{cache_key}") do
-          client = sdk.clients.verify_token(@token)
-          @session_id = client['last_active_session_id']
-          client['sessions'].find do |sess|
-            sess['id'] == @session_id
-          end
-        end
-      end
-    end
-
-    def fetch_user(user_id)
-      cached_fetch("clerk_user:#{user_id}") do
-        sdk.users.find(user_id)
-      end
-    end
-
-    def cached_fetch(key, &block)
-      if store = Clerk.configuration.middleware_cache_store
-        store.fetch(key, expires_in: cache_ttl, &block)
-      else
-        yield
-      end
-    end
-
-    def cache_ttl
-      60
-    end
-  end
-
-  class ProxyV2
     CACHE_TTL = 60 # seconds
 
     attr_reader :session_claims, :session_token
@@ -98,58 +13,115 @@ module Clerk
       @session_token = session_token
     end
 
+    def user?
+      !@session_claims.nil?
+    end
+
     def user
-      return nil if user_id.nil?
+      return nil unless user?
 
       @user ||= fetch_user(user_id)
     end
 
     def user_id
+      return nil unless user?
+
+      @session_claims["sub"]
+    end
+
+    def organization?
+      !organization_id.nil?
+    end
+
+    def organization
+      return nil unless organization?
+
+      @org ||= fetch_org(organization_id)
+    end
+
+    def organization_id
+      return nil unless user?
+
+      @session_claims["org_id"]
+    end
+
+    def organization_role
       return nil if @session_claims.nil?
 
-      @session_claims['sub']
+      @session_claims["org_role"]
     end
 
-    def org
-      return nil if org_id.nil?
-
-      @org ||= fetch_org(org_id)
-    end
-
-    def org_id
-      return nil if user_id.nil?
-
-      @session_claims['org_id']
-    end
-
-    def org_role
+    def organization_permissions
       return nil if @session_claims.nil?
 
-      @session_claims['org_role']
+      @session_claims["org_permissions"]
     end
 
-    def org_permissions
-      return nil if @session_claims.nil?
+    # Returns true if the session needs to perform step up verification
+    def user_reverified?(params)
+      return false unless user?
 
-      @session_claims['org_permissions']
+      fva = session_claims["fva"]
+
+      # the feature is disabled
+      return true if fva.nil?
+
+      level = params[:level]
+      after_minutes = params[:after_minutes].to_i
+
+      return false if after_minutes.nil? || level.nil?
+
+      factor1_age, factor2_age = fva
+      is_valid_factor1 = factor1_age != -1 && after_minutes > factor1_age
+      is_valid_factor2 = factor2_age != -1 && after_minutes > factor2_age
+
+      case level
+      when :first_factor
+        is_valid_factor1
+      when :second_factor
+        (factor2_age == -1) ? is_valid_factor1 : is_valid_factor2
+      when :multi_factor
+        (factor2_age == -1) ? is_valid_factor1 : is_valid_factor1 && is_valid_factor2
+      end
+    end
+
+    def user_needs_reverification?(preset = StepUp::Preset::STRICT)
+      !user_reverified?(preset)
+    end
+
+    def user_require_reverification!(preset = StepUp::Preset::STRICT, &block)
+      return unless user_needs_reverification?(preset)
+      yield(preset) if block_given?
+    end
+
+    def user_reverification_rack_response(config = nil)
+      raise ArgumentError, "Missing config, please pass a preset a la `Clerk::StepUp::Preset::*`" if config.nil?
+
+      [
+        403,
+        {"Content-Type" => "application/json"},
+        [StepUp::Reverification.error_payload(config).to_json]
+      ]
     end
 
     private
 
     def fetch_user(user_id)
-      cached_fetch("clerk_user:#{user_id}") do
+      cached_fetch("clerk:user:#{user_id}") do
         sdk.users.find(user_id)
       end
     end
 
     def fetch_org(org_id)
-      cached_fetch("clerk_org:#{org_id}") do
+      cached_fetch("clerk:org:#{org_id}") do
         sdk.organizations.find(org_id)
       end
     end
 
     def cached_fetch(key, &block)
-      if store = Clerk.configuration.middleware_cache_store
+      store = Clerk.configuration.cache_store
+
+      if store
         store.fetch(key, expires_in: CACHE_TTL, &block)
       else
         yield

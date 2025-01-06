@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Find a domain's name servers">
+    <title>Sinatra</title>
+    <style>
+      html { font-family: monospace; }
+      @media (prefers-color-scheme: dark) {
+        html {
+          color: #FFE6E6FF;
+          background-color: #201D1E;
+        }
+      }
+    </style>
+    <script
+      async
+      crossorigin="anonymous"
+      data-clerk-publishable-key="<%= Clerk.configuration.publishable_key %>"
+      src="<%= ENV["CLERK_JS_URL"] %>"
+      type="text/javascript"
+    ></script>
+    <script>
+      window.addEventListener('load', async function () {
+        await Clerk.load()
+        const container = document.getElementById('auth-container')
+
+        if (Clerk.user) {
+          container.innerHTML = `<div id="user-button"></div>`
+          Clerk.mountUserButton(document.getElementById('user-button'))
+        } else {
+          container.innerHTML = `<div id="sign-in"></div>`
+          Clerk.mountSignIn(document.getElementById('sign-in'))
+        }
+      })
+    </script>
+  </head>
+  <body>
+    <h1>Sinatra</h1>
+    <h2><%= clerk.user ? "Authenticated User: #{clerk.user.first_name} (#{clerk.user.id}) " : "Not Authenticated" %><h2>
+    <div id="auth-container"></div>
+  </body>
+</html>
