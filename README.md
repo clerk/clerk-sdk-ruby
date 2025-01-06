@@ -222,10 +222,19 @@ With the handshake, we can resolve the authentication state on the backend and e
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
-`bundle exec rake` to run the tests. You can also run `bin/console` for an
+`bundle exec rake spec` to run the tests. You can also run `bin/console` for an
 interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. 
+
+To run the example applications, run:
+
+```bash
+rake app:rack    
+rake app:rails  
+rake app:rails:api
+rake app:sinatra
+```
 
 ## Release
 
