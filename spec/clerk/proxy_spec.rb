@@ -35,7 +35,7 @@ RSpec.describe Clerk::Proxy do
     let(:user_object) { double("User") }
 
     before do
-      allow(sdk_double).to receive_message_chain(:users, :find).with(user_id).and_return(user_object)
+      allow(sdk_double).to receive_message_chain(:users, :get_user).with(user_id).and_return(user_object)
     end
 
     it "returns nil when not authenticated" do
@@ -80,7 +80,7 @@ RSpec.describe Clerk::Proxy do
     let(:org_object) { double("Organization") }
 
     before do
-      allow(sdk_double).to receive_message_chain(:organizations, :find).with(org_id).and_return(org_object)
+      allow(sdk_double).to receive_message_chain(:organizations, :get_organization).with(org_id).and_return(org_object)
     end
 
     it "returns nil when no organization" do

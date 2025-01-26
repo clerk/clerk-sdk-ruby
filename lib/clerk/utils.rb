@@ -5,12 +5,6 @@ require "base64"
 module Clerk
   module Utils
     class << self
-      def camel_case(str)
-        str = str.to_s
-        return str if str !~ /_/ && str =~ /[A-Z]+.*/
-        str.split("_").map { |s| s.capitalize }.join
-      end
-
       def decode_publishable_key(publishable_key)
         Base64.decode64(publishable_key.split("_")[2].to_s)
       end

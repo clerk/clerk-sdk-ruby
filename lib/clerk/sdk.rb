@@ -43,34 +43,5 @@ module Clerk
 
       JWT.decode(token, nil, true, algorithms: algorithms, exp_leeway: timeout, jwks: jwk_loader).first
     end
-
-    private
-
-    # TODO: Temporary solution until generators are improved
-    HTTP_CLIENT_CUSTOM_MAPPING = {
-      allowlist: "AllowListBlockList",
-      blocklist: "AllowListBlockList",
-      email_sms_templates: "EmailSMSTemplates",
-      oauth_applications: "OAuthApplications",
-      jwt_templates: "JWTTemplates",
-      redirect_urls: "RedirectURLs",
-      saml_connections: "SAMLConnections"
-    }
-
-    def generate_const_name(method_name)
-      "#{HTTP_CLIENT_CUSTOM_MAPPING[method_name] || Utils.camel_case(method_name)}Api"
-    end
-
-    def respond_to_missing?(method_name, include_private = false)
-      ClerkHttpClient.const_get(generate_const_name(method_name)).respond_to?(:new)
-    rescue NameError
-      false
-    end
-
-    def method_missing(method_name, *arguments)
-      ClerkHttpClient.const_get(generate_const_name(method_name)).new
-    rescue NameError
-      raise NoMethodError, "undefined method `#{method_name}` for #{self.class.name}"
-    end
   end
 end
