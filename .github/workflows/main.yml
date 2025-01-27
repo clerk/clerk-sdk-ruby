@@ -20,6 +20,8 @@ jobs:
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_FROZEN: false
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true

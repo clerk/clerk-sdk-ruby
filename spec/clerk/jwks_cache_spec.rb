@@ -10,7 +10,7 @@ RSpec.describe Clerk::JWKSCache do
 
   before do
     allow(sdk).to receive(:jwks).and_return(jwks_api)
-    allow(jwks_api).to receive(:get).and_return(double(keys: mock_keys))
+    allow(jwks_api).to receive(:get_jwks).and_return(double(keys: mock_keys))
   end
 
   describe "#fetch" do
@@ -21,43 +21,43 @@ RSpec.describe Clerk::JWKSCache do
 
     it "returns cached result on subsequent calls within lifetime" do
       first_result = cache.fetch(sdk)
-      expect(jwks_api).to have_received(:get).once
+      expect(jwks_api).to have_received(:get_jwks).once
 
       second_result = cache.fetch(sdk)
       expect(second_result).to eq(first_result)
-      expect(jwks_api).to have_received(:get).once
+      expect(jwks_api).to have_received(:get_jwks).once
     end
 
     it "refreshes cache when force_refresh is true" do
       cache.fetch(sdk)
-      expect(jwks_api).to have_received(:get).once
+      expect(jwks_api).to have_received(:get_jwks).once
 
       cache.fetch(sdk, force_refresh: true)
-      expect(jwks_api).to have_received(:get).twice
+      expect(jwks_api).to have_received(:get_jwks).twice
     end
 
     it "refreshes cache when lifetime has expired" do
       cache.fetch(sdk)
-      expect(jwks_api).to have_received(:get).once
+      expect(jwks_api).to have_received(:get_jwks).once
 
       allow(Time).to receive(:now).and_return(Time.now + lifetime + 1)
 
       cache.fetch(sdk)
-      expect(jwks_api).to have_received(:get).twice
+      expect(jwks_api).to have_received(:get_jwks).twice
     end
 
     it "refreshes cache when kid_not_found is true and last update was over 5 minutes ago" do
       cache.fetch(sdk)
-      expect(jwks_api).to have_received(:get).once
+      expect(jwks_api).to have_received(:get_jwks).once
 
       allow(Time).to receive(:now).and_return(Time.now + 301) # 5 minutes + 1 second
 
       cache.fetch(sdk, kid_not_found: true)
-      expect(jwks_api).to have_received(:get).twice
+      expect(jwks_api).to have_received(:get_jwks).twice
     end
 
     it "returns nil when API call fails" do
-      allow(jwks_api).to receive(:get).and_raise(ClerkHttpClient::ApiError)
+      allow(jwks_api).to receive(:get_jwks).and_raise(ClerkHttpClient::ApiError)
 
       result = cache.fetch(sdk)
       expect(result).to be_nil

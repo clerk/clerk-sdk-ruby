@@ -108,13 +108,13 @@ module Clerk
 
     def fetch_user(user_id)
       cached_fetch("clerk:user:#{user_id}") do
-        sdk.users.find(user_id)
+        sdk.users.get_user(user_id)
       end
     end
 
     def fetch_org(org_id)
       cached_fetch("clerk:org:#{org_id}") do
-        sdk.organizations.find(org_id)
+        sdk.organizations.get_organization(org_id)
       end
     end
 

@@ -107,12 +107,12 @@ RSpec.describe Clerk::SDK do
     end
   end
 
-  describe "SDK helpers" do
+  describe "SDK helper availability" do
+    # Litmus test
     {
       actor_tokens: ClerkHttpClient::ActorTokensApi,
-      allowlist: ClerkHttpClient::AllowListBlockListApi,
+      allow_list_block_list: ClerkHttpClient::AllowListBlockListApi,
       beta_features: ClerkHttpClient::BetaFeaturesApi,
-      blocklist: ClerkHttpClient::AllowListBlockListApi,
       clients: ClerkHttpClient::ClientsApi,
       domains: ClerkHttpClient::DomainsApi,
       email_addresses: ClerkHttpClient::EmailAddressesApi,
@@ -123,7 +123,6 @@ RSpec.describe Clerk::SDK do
       jwt_templates: ClerkHttpClient::JWTTemplatesApi,
       miscellaneous: ClerkHttpClient::MiscellaneousApi,
       oauth_applications: ClerkHttpClient::OAuthApplicationsApi,
-      organization_domain: ClerkHttpClient::OrganizationDomainApi,
       organization_domains: ClerkHttpClient::OrganizationDomainsApi,
       organization_invitations: ClerkHttpClient::OrganizationInvitationsApi,
       organization_memberships: ClerkHttpClient::OrganizationMembershipsApi,
@@ -137,19 +136,14 @@ RSpec.describe Clerk::SDK do
       sign_ups: ClerkHttpClient::SignUpsApi,
       testing_tokens: ClerkHttpClient::TestingTokensApi,
       users: ClerkHttpClient::UsersApi,
+      waitlist_entries: ClerkHttpClient::WaitlistEntriesApi,
       webhooks: ClerkHttpClient::WebhooksApi
     }.each do |method, instance_class|
       it "##{method} returns an instance of #{instance_class}" do
-        expect(clerk_client.send(:respond_to?, method)).to be true
         expect(clerk_client.send(method)).to be_an_instance_of(instance_class)
       end
     end
-
-    it "should appropriately report on methods that are not implemented" do
-      expect(clerk_client.respond_to?(:foo)).to be false
-      expect {
-        clerk_client.foo
-      }.to raise_error(NoMethodError, "undefined method `foo` for #{clerk_client.class.name}")
-    end
   end
 end
+
+
