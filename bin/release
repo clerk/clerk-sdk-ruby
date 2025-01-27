@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -eo pipefail
+IFS=$'\n\t'
+
+# Get the version number from the generated version file
+VERSION=$(ruby -e "require './lib/clerk/version.rb'; puts Clerk::VERSION")
+
+echo "Building and releasing version ${VERSION}"
+
+# Remove any existing gem files
+rm clerk-sdk-ruby-*.gem || true
+
+# Build the gem
+gem build clerk-sdk-ruby.gemspec
+
+# Publish to RubyGems
+gem push "clerk-sdk-ruby-${VERSION}.gem"
+
