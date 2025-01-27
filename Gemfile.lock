@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    clerk-sdk-ruby (4.0.0.beta4)
+    clerk-sdk-ruby (4.0.0.beta6)
       clerk-http-client (= 2.0.0.beta5)
       concurrent-ruby (~> 1.1)
       faraday (>= 1.4.1, < 3.0)
