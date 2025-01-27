@@ -6,7 +6,9 @@ module Clerk
   module Rails
     class Railtie < ::Rails::Railtie
       initializer "clerk.configure_rails_initialization" do |app|
-        app.middleware.use Clerk::Rack::Middleware
+        unless ENV["CLERK_SKIP_RAILTIE"]
+          app.middleware.use Clerk::Rack::Middleware
+        end
       end
     end
   end

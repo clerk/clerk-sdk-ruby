@@ -166,9 +166,18 @@ end
 
 This gives your controller and views access to the following methods and more:
 
+- `clerk.sdk.*`
 - `clerk.session`
 - `clerk.user`
 - `clerk.user?`
+
+### Skipping the Railtie
+
+There are cases where you might not want to use the Railtie, for example, only using the SDK in a Rails application. To accomplish this, you can set the `CLERK_SKIP_RAILTIE` environment variable to `true`.
+
+This will prevent the Railtie from being loaded and the Rack middleware from being added to the middleware stack.
+
+You can still configure the SDK as normal, but you will need to call the SDK using `Clerk::SDK.new` instead of the `clerk.sdk` helper.
 
 ## Sinatra integration
 

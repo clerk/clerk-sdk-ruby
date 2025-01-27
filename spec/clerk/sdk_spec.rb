@@ -145,5 +145,3 @@ RSpec.describe Clerk::SDK do
     end
   end
 end
-
-
