@@ -7,6 +7,9 @@ VERSION=$(ruby -e "require './lib/clerk/version.rb'; puts Clerk::VERSION")
 
 echo "Building and releasing version ${VERSION}"
 
+# Install dependencies
+bundle install
+
 # Remove any existing gem files
 rm clerk-sdk-ruby-*.gem || true
 
