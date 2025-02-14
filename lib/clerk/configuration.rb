@@ -6,6 +6,7 @@ module Clerk
   class Configuration
     attr_reader :cache_store
     attr_reader :debug
+    attr_reader :logger
     attr_reader :excluded_routes
     attr_reader :publishable_key
     attr_reader :secret_key
@@ -73,6 +74,11 @@ module Clerk
 
       ClerkHttpClient::Configuration.default.access_token = sk
       @secret_key = sk
+    end
+
+    def logger=(logger)
+      ClerkHttpClient::Configuration.default.logger = logger
+      @logger = logger
     end
   end
 end
