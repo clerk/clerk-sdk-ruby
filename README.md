@@ -58,18 +58,18 @@ Here's a quick example:
 ```ruby
 clerk = Clerk::SDK.new(api_key: "your_api_key")
 # List all users
-clerk.users.all
+clerk.users.get_user_list
 # Get your first user
-user = clerk.users.all(limit: 1).first
+user = clerk.users.get_user_list(limit: 1).first
 # Extract their primary email address ID
 email_id = user["primary_email_address_id"]
-# Send them a welcome email
-clerk.emails.create(
-    email_address_id: email_id,
-    from_email_name: "welcome",
-    subject: "Welcome to MyApp",
-    body: "Welcome to MyApp, #{user["first_name"]}",
-)
+
+# Create an organization
+p Clerk::SDK.organizations.create_organization({
+  create_organization_request: ClerkHttpClient::CreateOrganizationRequest.new({
+    name: 'example'
+  })
+})
 ```
 
 ## Configuration
@@ -167,9 +167,14 @@ end
 This gives your controller and views access to the following methods and more:
 
 - `clerk.sdk.*`
-- `clerk.session`
-- `clerk.user`
 - `clerk.user?`
+- `clerk.user`: NOTE: This makes an additional request and attempts to cache it.
+- `clerk.user_id`
+- `clerk.organization?`
+- `clerk.organization` NOTE: This makes an additional request and attempts to cache it.
+- `clerk.organization_id`
+- `clerk.organization_role`
+- `clerk.organization_permissions`
 
 ### Skipping the Railtie
 
