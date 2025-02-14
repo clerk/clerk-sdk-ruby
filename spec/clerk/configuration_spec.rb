@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "logger"
 
 RSpec.describe Clerk::Configuration do
   let(:valid_pk) { "pk_test_key" }
@@ -15,6 +16,7 @@ RSpec.describe Clerk::Configuration do
         expect(config.publishable_key).to eq(ENV["CLERK_PUBLISHABLE_KEY"])
         expect(config.secret_key).to eq(ENV["CLERK_SECRET_KEY"])
         expect(config.cache_store).to be_nil
+        expect(config.logger).to be_nil
       end
     end
 
@@ -168,6 +170,19 @@ RSpec.describe Clerk::Configuration do
 
       config.debug = true
       expect(config.debug).to be true
+    end
+  end
+
+  describe "#logger=" do
+    it "updates logger ClerkHttpClient configuration" do
+      config = described_class.new
+      logger = Logger.new($stdout)
+      expect(ClerkHttpClient::Configuration.default)
+        .to receive(:logger=)
+        .with(logger)
+
+      config.logger = logger
+      expect(config.logger).to be_a(Logger)
     end
   end
 
