@@ -5,14 +5,14 @@ require "jwt"
 
 module Clerk
   class SDK < ClerkHttpClient::SDK
-    # TODO: Move to constants?
     DEFAULT_HEADERS = {
       "User-Agent": "Clerk/#{Clerk::VERSION}; Faraday/#{Faraday::VERSION}; Ruby/#{RUBY_VERSION}",
-      "X-Clerk-SDK": "ruby/#{Clerk::VERSION}" # TODO: Add framework identifier
+      "X-Clerk-SDK": "ruby/#{Clerk::VERSION}",
+      "Clerk-API-Version": "2025-04-10",
     }
 
     # How often (in seconds) should JWKs be refreshed
-    JWKS_CACHE_LIFETIME = 3600 # 1 hour / TODO: Move to constants?
+    JWKS_CACHE_LIFETIME = 3600 # 1 hour
 
     @@jwks_cache = JWKSCache.new(JWKS_CACHE_LIFETIME)
 
