@@ -1,3 +1,7 @@
+## 4.1.0 - 2025-04-10
+
+- feat: Add support for org. claims of v2 session tokens [https://github.com/clerk/clerk-sdk-ruby/pull/89]
+
 ## 4.0.0.beta4 - 2025-01-06
 
 [BREAKING] This release introduces our new `clerk-http-client` gem, which is a generated directly from the Clerk API OpenAPI specs. This will help to ensure that the SDK is always in sync with the Clerk API.
