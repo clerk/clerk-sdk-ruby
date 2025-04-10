@@ -41,7 +41,44 @@ module Clerk
         {keys: SDK.jwks_cache.fetch(self, kid_not_found: options[:invalidate] || options[:kid_not_found], force_refresh: force_refresh_jwks)}
       end
 
-      JWT.decode(token, nil, true, algorithms: algorithms, exp_leeway: timeout, jwks: jwk_loader).first
+      claims = JWT.decode(token, nil, true, algorithms: algorithms, exp_leeway: timeout, jwks: jwk_loader).first
+
+      # orgs
+      if claims["v"].nil? || claims["v"] == 1
+        claims["v"] = 1
+      elsif claims["v"] == 2 && claims["o"]
+        claims["org_id"]          = claims["o"].fetch("id", nil)
+        claims["org_slug"]        = claims["o"].fetch("slg", nil)
+        claims["org_role"]        = "org:#{claims["o"].fetch("rol", nil)}"
+
+        org_permissions = compute_org_permissions_from_v2_token(claims)
+        claims["org_permissions"] = org_permissions if org_permissions.any?
+        claims.delete("o")
+        claims.delete("fea")
+      end
+
+      claims
+    end
+
+    private
+
+    def compute_org_permissions_from_v2_token(claims)
+      features    = claims["fea"].split(",")
+      permissions = claims["o"]["per"].split(",")
+      mappings    = claims["o"]["fpm"].split(",")
+      org_permissions = []
+
+      mappings.each_with_index do |mapping, i|
+        scope, feature = features[i].split(":")
+
+        next if !scope.include?("o") # not an orgs-related permission
+
+        mapping.to_i.to_s(2).reverse.each_char.each_with_index do |bit, i|
+          org_permissions << "org:#{feature}:#{permissions[i]}" if bit == "1"
+        end
+      end
+
+      org_permissions
     end
   end
 end
