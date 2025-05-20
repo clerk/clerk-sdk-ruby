@@ -63,9 +63,9 @@ module Clerk
     private
 
     def compute_org_permissions_from_v2_token(claims)
-      features    = claims["fea"].split(",")
-      permissions = claims["o"]["per"].split(",")
-      mappings    = claims["o"]["fpm"].split(",")
+      features    = claims["fea"] ? claims["fea"].split(",") : []
+      permissions = claims["o"]["per"] ? claims["o"]["per"].split(",") : []
+      mappings    = claims["o"]["fpm"] ? claims["o"]["fpm"].split(",") : []
       org_permissions = []
 
       mappings.each_with_index do |mapping, i|
