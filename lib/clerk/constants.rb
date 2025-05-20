@@ -12,9 +12,9 @@ module Clerk
   HANDSHAKE_COOKIE_DIRECTIVES_KEY = "handshake"
 
   # auth debug response headers
-  AUTH_STATUS_HEADER = "X-Clerk-Auth-Status"
-  AUTH_REASON_HEADER = "X-Clerk-Auth-Reason"
-  AUTH_MESSAGE_HEADER = "X-Clerk-Auth-Message"
+  AUTH_STATUS_HEADER = "x-clerk-auth-status"
+  AUTH_REASON_HEADER = "x-clerk-auth-reason"
+  AUTH_MESSAGE_HEADER = "x-clerk-auth-message"
 
   SEC_FETCH_DEST_HEADER = "HTTP_SEC_FETCH_DEST"
 
