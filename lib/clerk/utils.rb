@@ -28,6 +28,10 @@ module Clerk
         [filtered_routes, filtered_wildcard_routes]
       end
 
+      def retrieve_header_from_request(request, key)
+        (request.env[key] || request.env[key.downcase]).to_s
+      end
+
       def retrieve_from_query_string(url, key)
         ::Rack::Utils.parse_query(url.query)[key]
       end

@@ -31,12 +31,12 @@ module Clerk
       })
 
       @headers = OpenStruct.new({
-        accept: request.env[ACCEPT_HEADER].to_s,
+        accept: Utils.retrieve_header_from_request(request, ACCEPT_HEADER),
         host: request.host,
-        origin: request.env[ORIGIN_HEADER].to_s,
+        origin: Utils.retrieve_header_from_request(request, ORIGIN_HEADER),
         port: request.port,
-        sec_fetch_dest: request.env[SEC_FETCH_DEST_HEADER],
-        session_token_in_header: request.env[AUTHORIZATION_HEADER].to_s.gsub(/bearer/i, "").strip
+        sec_fetch_dest: Utils.retrieve_header_from_request(request, SEC_FETCH_DEST_HEADER),
+        session_token_in_header: Utils.retrieve_header_from_request(request, AUTHORIZATION_HEADER).gsub(/bearer/i, "").strip
       })
     end
 
