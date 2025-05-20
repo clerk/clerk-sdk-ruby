@@ -1,6 +1,9 @@
-## 4.1.1 - 2025-05-20
+## 4.2.0 - 2025-05-20
 
-- feat: Add explicit support for lowercased headers
+- feat: Add explicit support for lowercased headers [https://github.com/clerk/clerk-sdk-ruby/pull/93]
+- fix: Ensure resiliency of v2 JWT organization claims [https://github.com/clerk/clerk-sdk-ruby/pull/94]
+- feat: Enable support for older versions of Rack [https://github.com/clerk/clerk-sdk-ruby/pull/95]
+- chore: Update dependencies
 
 ## 4.1.0 - 2025-04-10
 
