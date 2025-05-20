@@ -63,7 +63,7 @@ module Clerk
       def set_cookie_headers!(headers, cookie_headers)
         cookie_headers.each do |cookie_header|
           cookie_key = parse_cookie_key(cookie_header)
-          cookie = ::Rack::Utils.parse_cookies_header(cookie_header)
+          cookie = ::Clerk::Utils.parse_cookies_header(cookie_header)
           cookie_params = convert_http_cookie_to_cookie_setter_params(cookie_key, cookie)
           ::Rack::Utils.set_cookie_header!(headers, cookie_key, cookie_params)
         end
