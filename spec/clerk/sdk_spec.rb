@@ -72,23 +72,23 @@ RSpec.describe Clerk::SDK do
 
   let(:clerk_client) { described_class.new(sk) }
 
-  # describe "#decode_token" do
-  #   it "decodes a valid token without verification" do
-  #     result = clerk_client.decode_token(valid_token)
-  #     expect(result["sub"]).to eq(sub)
-  #   end
+  describe "#decode_token" do
+    it "decodes a valid token without verification" do
+      result = clerk_client.decode_token(valid_token)
+      expect(result["sub"]).to eq(sub)
+    end
 
-  #   it "decodes an expired token without verification" do
-  #     result = clerk_client.decode_token(expired_token)
-  #     expect(result["sub"]).to eq(sub)
-  #   end
+    it "decodes an expired token without verification" do
+      result = clerk_client.decode_token(expired_token)
+      expect(result["sub"]).to eq(sub)
+    end
 
-  #   it "raises error for invalid JWT format" do
-  #     expect {
-  #       clerk_client.decode_token("invalid.token.format")
-  #     }.to raise_error(JWT::DecodeError)
-  #   end
-  # end
+    it "raises error for invalid JWT format" do
+      expect {
+        clerk_client.decode_token("invalid.token.format")
+      }.to raise_error(JWT::DecodeError)
+    end
+  end
 
   describe "#verify_token" do
     before do
@@ -163,41 +163,41 @@ RSpec.describe Clerk::SDK do
     end
   end
 
-  # describe "SDK helper availability" do
-  #   # Litmus test
-  #   {
-  #     actor_tokens: ClerkHttpClient::ActorTokensApi,
-  #     allow_list_block_list: ClerkHttpClient::AllowListBlockListApi,
-  #     beta_features: ClerkHttpClient::BetaFeaturesApi,
-  #     clients: ClerkHttpClient::ClientsApi,
-  #     domains: ClerkHttpClient::DomainsApi,
-  #     email_addresses: ClerkHttpClient::EmailAddressesApi,
-  #     email_sms_templates: ClerkHttpClient::EmailSMSTemplatesApi,
-  #     instance_settings: ClerkHttpClient::InstanceSettingsApi,
-  #     invitations: ClerkHttpClient::InvitationsApi,
-  #     jwks: ClerkHttpClient::JWKSApi,
-  #     jwt_templates: ClerkHttpClient::JWTTemplatesApi,
-  #     miscellaneous: ClerkHttpClient::MiscellaneousApi,
-  #     oauth_applications: ClerkHttpClient::OAuthApplicationsApi,
-  #     organization_domains: ClerkHttpClient::OrganizationDomainsApi,
-  #     organization_invitations: ClerkHttpClient::OrganizationInvitationsApi,
-  #     organization_memberships: ClerkHttpClient::OrganizationMembershipsApi,
-  #     organizations: ClerkHttpClient::OrganizationsApi,
-  #     phone_numbers: ClerkHttpClient::PhoneNumbersApi,
-  #     proxy_checks: ClerkHttpClient::ProxyChecksApi,
-  #     redirect_urls: ClerkHttpClient::RedirectURLsApi,
-  #     saml_connections: ClerkHttpClient::SAMLConnectionsApi,
-  #     sessions: ClerkHttpClient::SessionsApi,
-  #     sign_in_tokens: ClerkHttpClient::SignInTokensApi,
-  #     sign_ups: ClerkHttpClient::SignUpsApi,
-  #     testing_tokens: ClerkHttpClient::TestingTokensApi,
-  #     users: ClerkHttpClient::UsersApi,
-  #     waitlist_entries: ClerkHttpClient::WaitlistEntriesApi,
-  #     webhooks: ClerkHttpClient::WebhooksApi
-  #   }.each do |method, instance_class|
-  #     it "##{method} returns an instance of #{instance_class}" do
-  #       expect(clerk_client.send(method)).to be_an_instance_of(instance_class)
-  #     end
-  #   end
-  # end
+  describe "SDK helper availability" do
+    # Litmus test
+    {
+      actor_tokens: ClerkHttpClient::ActorTokensApi,
+      allow_list_block_list: ClerkHttpClient::AllowListBlockListApi,
+      beta_features: ClerkHttpClient::BetaFeaturesApi,
+      clients: ClerkHttpClient::ClientsApi,
+      domains: ClerkHttpClient::DomainsApi,
+      email_addresses: ClerkHttpClient::EmailAddressesApi,
+      email_sms_templates: ClerkHttpClient::EmailSMSTemplatesApi,
+      instance_settings: ClerkHttpClient::InstanceSettingsApi,
+      invitations: ClerkHttpClient::InvitationsApi,
+      jwks: ClerkHttpClient::JWKSApi,
+      jwt_templates: ClerkHttpClient::JWTTemplatesApi,
+      miscellaneous: ClerkHttpClient::MiscellaneousApi,
+      oauth_applications: ClerkHttpClient::OAuthApplicationsApi,
+      organization_domains: ClerkHttpClient::OrganizationDomainsApi,
+      organization_invitations: ClerkHttpClient::OrganizationInvitationsApi,
+      organization_memberships: ClerkHttpClient::OrganizationMembershipsApi,
+      organizations: ClerkHttpClient::OrganizationsApi,
+      phone_numbers: ClerkHttpClient::PhoneNumbersApi,
+      proxy_checks: ClerkHttpClient::ProxyChecksApi,
+      redirect_urls: ClerkHttpClient::RedirectURLsApi,
+      saml_connections: ClerkHttpClient::SAMLConnectionsApi,
+      sessions: ClerkHttpClient::SessionsApi,
+      sign_in_tokens: ClerkHttpClient::SignInTokensApi,
+      sign_ups: ClerkHttpClient::SignUpsApi,
+      testing_tokens: ClerkHttpClient::TestingTokensApi,
+      users: ClerkHttpClient::UsersApi,
+      waitlist_entries: ClerkHttpClient::WaitlistEntriesApi,
+      webhooks: ClerkHttpClient::WebhooksApi
+    }.each do |method, instance_class|
+      it "##{method} returns an instance of #{instance_class}" do
+        expect(clerk_client.send(method)).to be_an_instance_of(instance_class)
+      end
+    end
+  end
 end
