@@ -5,27 +5,32 @@ require "base64"
 module Clerk
   module Utils
     class << self
+      
       def decode_publishable_key(publishable_key)
         Base64.decode64(publishable_key.split("_")[2].to_s)
       end
-
+      
       def filter_routes(routes)
         filtered_routes = {}
         filtered_wildcard_routes = []
-
+        
         routes.each do |route|
           route = route.strip
-
+          
           if route.end_with?("/*")
             filtered_wildcard_routes << route[0..-2]
           else
             filtered_routes[route] = true
           end
         end
-
+        
         filtered_wildcard_routes.uniq!
-
+        
         [filtered_routes, filtered_wildcard_routes]
+      end
+
+      def retrieve_header_from_request(request, key)
+        (request.env[key] || request.env[key.downcase]).to_s
       end
 
       def retrieve_from_query_string(url, key)

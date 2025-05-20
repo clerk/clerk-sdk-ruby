@@ -1,3 +1,7 @@
+## 4.1.1 - 2025-05-20
+
+- feat: Add explicit support for lowercased headers
+
 ## 4.1.0 - 2025-04-10
 
 - feat: Add support for token v2 org claims [https://github.com/clerk/clerk-sdk-ruby/pull/89]

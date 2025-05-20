@@ -16,7 +16,6 @@ module Clerk
   AUTH_REASON_HEADER = "X-Clerk-Auth-Reason"
   AUTH_MESSAGE_HEADER = "X-Clerk-Auth-Message"
 
-  CONTENT_TYPE_HEADER = "Content-Type"
   SEC_FETCH_DEST_HEADER = "HTTP_SEC_FETCH_DEST"
 
   # headers used in response - should be lowered case and without http prefix

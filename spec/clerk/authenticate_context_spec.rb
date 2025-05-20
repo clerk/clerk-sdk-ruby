@@ -110,6 +110,14 @@ RSpec.describe Clerk::AuthenticateContext do
       end
     end
 
+    context "when origin matches host (lowercase)" do
+      let(:env) { {Clerk::ORIGIN_HEADER.downcase => "https://example.com"} }
+
+      it "returns false" do
+        expect(context.cross_origin_request?).to be false
+      end
+    end
+
     context "when origin differs from host" do
       let(:env) { {Clerk::ORIGIN_HEADER => "https://different.com"} }
 
@@ -138,6 +146,14 @@ RSpec.describe Clerk::AuthenticateContext do
   describe "#accepts_html?" do
     context "when accept header includes text/html" do
       let(:env) { {Clerk::ACCEPT_HEADER => "text/html,application/xhtml+xml"} }
+
+      it "returns true" do
+        expect(context.accepts_html?).to be true
+      end
+    end
+
+    context "when accept header includes text/html (lowercase)" do
+      let(:env) { {Clerk::ACCEPT_HEADER.downcase => "text/html,application/xhtml+xml"} }
 
       it "returns true" do
         expect(context.accepts_html?).to be true
@@ -265,6 +281,14 @@ RSpec.describe Clerk::AuthenticateContext do
       end
     end
 
+    context "when session token is present in headers (lowercase)" do
+      let(:env) { {Clerk::AUTHORIZATION_HEADER.downcase => "Bearer foo"} }
+
+      it "returns true" do
+        expect(context.session_token_in_header?).to be true
+      end
+    end
+
     context "when session token is not present in headers" do
       it "returns false" do
         expect(context.session_token_in_header?).to be false
@@ -275,6 +299,14 @@ RSpec.describe Clerk::AuthenticateContext do
   describe "#document_request?" do
     context "when #{Clerk::SEC_FETCH_DEST_HEADER} is document" do
       let(:env) { {Clerk::SEC_FETCH_DEST_HEADER => "document"} }
+
+      it "returns true" do
+        expect(context.document_request?).to be true
+      end
+    end
+
+    context "when #{Clerk::SEC_FETCH_DEST_HEADER.downcase} is document (lowercase)" do
+      let(:env) { {Clerk::SEC_FETCH_DEST_HEADER.downcase => "document"} }
 
       it "returns true" do
         expect(context.document_request?).to be true
