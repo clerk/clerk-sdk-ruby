@@ -46,6 +46,24 @@ module Clerk
       def valid_publishable_key_prefix?(publishable_key)
         publishable_key.start_with?("pk_live_", "pk_test_")
       end
+
+      # NOTE: This is a copy of Rack::Utils.parse_cookies_header to allow for
+      # compatibility with older versions of Rack.
+      def parse_cookies_header(value)
+        return {} unless value
+
+        value.split(/; */n).each_with_object({}) do |cookie, cookies|
+          next if cookie.empty?
+          key, value = cookie.split('=', 2)
+          cookies[key] = (unescape(value) rescue value) unless cookies.key?(key)
+        end
+      end
+
+      private 
+
+      def unescape(s, encoding = Encoding::UTF_8)
+        URI.decode_www_form_component(s, encoding)
+      end
     end
   end
 end
