@@ -36,7 +36,6 @@ RSpec.describe Clerk::SDK do
       o: {
         id: "org_456",
         rol: "admin",
-        # per: "o:read,o:write",
       }
     })
   end
