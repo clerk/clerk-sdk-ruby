@@ -1,3 +1,7 @@
+## 4.2.1 - 2025-05-21
+
+- fix: Return only lowercase headers (Rack::Lint) [https://github.com/clerk/clerk-sdk-ruby/pull/97]
+
 ## 4.2.0 - 2025-05-20
 
 - feat: Add explicit support for lowercased headers [https://github.com/clerk/clerk-sdk-ruby/pull/93]

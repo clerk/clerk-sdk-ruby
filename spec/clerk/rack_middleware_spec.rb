@@ -72,7 +72,7 @@ RSpec.describe Clerk::Rack::Middleware do
       end
 
       context "when auth_request_headers are present" do
-        let(:auth_request_response) { [nil, {Clerk::SET_COOKIE_HEADER => ["session=bar; path=/; expires=Fri, 15 Jan 2024 00:00:00 GMT; httponly; secure"], "Content-Type" => "application/json"}, nil] }
+        let(:auth_request_response) { [nil, {Clerk::SET_COOKIE_HEADER => ["session=bar; path=/; expires=Fri, 15 Jan 2024 00:00:00 GMT; httponly; secure"], Clerk::CONTENT_TYPE_HEADER => "application/json"}, nil] }
         let(:app_response) { [200, {Clerk::SET_COOKIE_HEADER => ["session=foo; path=/; expires=Wed, 13 Jan 2024 00:00:00 GMT; httponly; secure"]}, "OK"] }
 
         it "should remove the `set-cookie` header to avoid overriding existing cookies set by other middleware" do
@@ -85,7 +85,7 @@ RSpec.describe Clerk::Rack::Middleware do
 
           expect(status).to eq(200)
           expect(headers).to eq({
-            "Content-Type" => "application/json", 
+            Clerk::CONTENT_TYPE_HEADER => "application/json",
             Clerk::SET_COOKIE_HEADER => [
               "session=foo; path=/; expires=Wed, 13 Jan 2024 00:00:00 GMT; httponly; secure", 
               "session=bar; path=/; expires=Mon, 15 Jan 2024 00:00:00 GMT; secure; httponly"
@@ -220,7 +220,7 @@ RSpec.describe Clerk::Rack::Reverification do
     end
 
     context "when reverification is needed" do
-      let(:reverification_response) { [302, {"Location" => "/reverify"}, []] }
+      let(:reverification_response) { [302, {Clerk::LOCATION_HEADER => "/reverify"}, []] }
 
       it "returns reverification response" do
         allow(clerk_instance).to receive(:user_needs_reverification?).and_return(true)

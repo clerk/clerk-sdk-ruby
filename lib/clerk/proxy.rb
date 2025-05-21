@@ -99,7 +99,7 @@ module Clerk
 
       [
         403,
-        {"Content-Type" => "application/json"},
+        {Clerk::CONTENT_TYPE_HEADER => "application/json"},
         [StepUp::Reverification.error_payload(config).to_json]
       ]
     end

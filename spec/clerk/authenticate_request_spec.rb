@@ -584,8 +584,8 @@ RSpec.describe Clerk::AuthenticateRequest do
 
           expect(status).to be_nil
           expect(headers).to eq({
-            "Access-Control-Allow-Credentials" => "true",
-            "Access-Control-Allow-Origin" => "null",
+            Clerk::ACCESS_CONTROL_ALLOW_CREDENTIALS_HEADER => "true",
+            Clerk::ACCESS_CONTROL_ALLOW_ORIGIN_HEADER => "null",
             Clerk::LOCATION_HEADER => "http://localhost:3000/admin?",
             Clerk::SET_COOKIE_HEADER => cookie_directives,
             Clerk::AUTH_REASON_HEADER => Clerk::AuthErrorReason::SESSION_TOKEN_MISSING

@@ -19,7 +19,10 @@ module Clerk
   SEC_FETCH_DEST_HEADER = "HTTP_SEC_FETCH_DEST"
 
   # headers used in response - should be lowered case and without http prefix
-  LOCATION_HEADER = "Location"
+  ACCESS_CONTROL_ALLOW_CREDENTIALS_HEADER = "access-control-allow-credentials"
+  ACCESS_CONTROL_ALLOW_ORIGIN_HEADER = "access-control-allow-origin"
+  CONTENT_TYPE_HEADER = "content-type"
+  LOCATION_HEADER = "location"
   SET_COOKIE_HEADER = "set-cookie"
 
   # clerk url related headers

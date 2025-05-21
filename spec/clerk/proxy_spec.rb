@@ -173,7 +173,7 @@ RSpec.describe Clerk::Proxy do
 
       expect(response).to be_an(Array)
       expect(response[0]).to eq(403)
-      expect(response[1]).to include("Content-Type" => "application/json")
+      expect(response[1]).to include(Clerk::CONTENT_TYPE_HEADER => "application/json")
       expect(response[2]).to be_an(Array)
     end
 
