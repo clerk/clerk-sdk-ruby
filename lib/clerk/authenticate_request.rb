@@ -123,8 +123,8 @@ module Clerk
 
     def resolve_handshake(env)
       headers = {
-        "Access-Control-Allow-Origin" => "null",
-        "Access-Control-Allow-Credentials" => "true"
+        Clerk::ACCESS_CONTROL_ALLOW_ORIGIN_HEADER => "null",
+        Clerk::ACCESS_CONTROL_ALLOW_CREDENTIALS_HEADER => "true"
       }
       session_token = nil
 
