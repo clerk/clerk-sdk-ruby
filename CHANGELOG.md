@@ -1,3 +1,7 @@
+## 4.2.2 - 2025-06-12
+
+- chore: Avoid warnings related to ostruct being removed from Ruby standard library
+
 ## 4.2.1 - 2025-05-21
 
 - fix: Return only lowercase headers (Rack::Lint) [https://github.com/clerk/clerk-sdk-ruby/pull/97]
