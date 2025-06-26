@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "faraday", ">= 1.4.1", "< 3.0"
-  spec.add_dependency "jwt", '~> 2.5'
+  spec.add_dependency "jwt", '~> 3.0'
   spec.add_dependency "clerk-http-client", "~> 2.0"
   spec.add_dependency "concurrent-ruby", "~> 1.1"
 

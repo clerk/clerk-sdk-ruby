@@ -436,11 +436,6 @@ RSpec.describe Clerk::AuthenticateRequest do
       expect(instance.send(:verify_token, "invalid_token")).to be false
     end
 
-    it "should return false if the token has a required dependency error" do
-      expect(sdk).to receive(:verify_token).and_raise(JWT::RequiredDependencyError)
-      expect(instance.send(:verify_token, "invalid_token")).to be false
-    end
-
     it "should re-raise the error if the token is expired" do
       expect(sdk).to receive(:verify_token).and_raise(JWT::ExpiredSignature)
       expect { instance.send(:verify_token, "invalid_token") }.to raise_error(JWT::ExpiredSignature)
