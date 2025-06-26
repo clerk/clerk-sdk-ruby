@@ -223,7 +223,7 @@ module Clerk
         sdk.verify_token(token, **opts)
       rescue JWT::ExpiredSignature, JWT::InvalidIatError => e
         raise e
-      rescue JWT::DecodeError, JWT::RequiredDependencyError => _
+      rescue JWT::DecodeError => _
         false
       end
     end
