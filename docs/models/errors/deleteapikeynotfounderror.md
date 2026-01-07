@@ -1,0 +1,11 @@
+# DeleteApiKeyNotFoundError
+
+404 Not Found
+
+
+## Fields
+
+| Field                                                                                                                     | Type                                                                                                                      | Required                                                                                                                  | Description                                                                                                               |
+| ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `errors`                                                                                                                  | Crystalline::Array<[Models::Operations::DeleteApiKeyNotFoundError](../../models/operations/deleteapikeynotfounderror.md)> | :heavy_check_mark:                                                                                                        | N/A                                                                                                                       |
+| `raw_response`                                                                                                            | [Faraday::Response](https://www.rubydoc.info/gems/faraday/Faraday/Response)                                               | :heavy_minus_sign:                                                                                                        | Raw HTTP response; suitable for custom response parsing                                                                   |

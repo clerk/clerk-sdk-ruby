@@ -1,0 +1,9 @@
+# RevertTemplateRequest
+
+
+## Fields
+
+| Field                                                                                                   | Type                                                                                                    | Required                                                                                                | Description                                                                                             |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `template_type`                                                                                         | [Models::Operations::RevertTemplateTemplateType](../../models/operations/reverttemplatetemplatetype.md) | :heavy_check_mark:                                                                                      | The type of template to revert                                                                          |
+| `slug`                                                                                                  | *::String*                                                                                              | :heavy_check_mark:                                                                                      | The slug of the template to revert                                                                      |

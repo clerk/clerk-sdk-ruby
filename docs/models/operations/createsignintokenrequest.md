@@ -1,0 +1,9 @@
+# CreateSignInTokenRequest
+
+
+## Fields
+
+| Field                                                                                                                 | Type                                                                                                                  | Required                                                                                                              | Description                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `user_id`                                                                                                             | *::String*                                                                                                            | :heavy_check_mark:                                                                                                    | The ID of the user that can use the newly created sign in token                                                       |
+| `expires_in_seconds`                                                                                                  | *Crystalline::Nilable.new(::Integer)*                                                                                 | :heavy_minus_sign:                                                                                                    | Optional parameter to specify the life duration of the sign in token in seconds.<br/>By default, the duration is 30 days. |

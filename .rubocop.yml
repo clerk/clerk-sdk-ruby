@@ -1,0 +1,81 @@
+plugins:
+  - rubocop-minitest
+
+AllCops:
+  Exclude:
+    - Rakefile
+    - bin/**/*
+  TargetRubyVersion: "3.2"
+Metrics:
+  Enabled: false
+Style/IfInsideElse:
+  Enabled: false
+# Temporary until Ruby deals with empty responses correctly
+Style/EmptyElse:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
+Style/ConditionalAssignment:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/NegatedIf:
+  Enabled: false
+Style/SoleNestedConditional:
+  Enabled: false
+Style/AccessorGrouping:
+  Enabled: false
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: start_of_line
+  Enabled: false
+Layout/LineLength:
+  Enabled: false
+Lint/EmptyConditionalBody:
+  Enabled: false
+Lint/MissingSuper:
+  Enabled: false
+Style/CaseLikeIf:
+  Enabled: false
+#To eventually re-enable:
+Layout/EmptyLines:
+  Enabled: false
+Layout/EmptyLinesAroundMethodBody:
+  Enabled: false
+Layout/EmptyLineBetweenDefs:
+  Enabled: false
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+Layout/MultilineBlockLayout:
+  Enabled: false
+Lint/UnusedMethodArgument:
+  Enabled: false
+Layout/TrailingWhitespace:
+  Enabled: false
+Style/IfUnlessModifier:
+  Enabled: false
+Naming/AccessorMethodName:
+  Enabled: false
+Naming/MethodParameterName:
+  Enabled: false
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: false
+Layout/FirstHashElementIndentation:
+  Enabled: false
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+Style/WordArray:
+  Enabled: false
+Style/RedundantReturn: # https://github.com/rubocop/rubocop/issues/12394
+  Enabled: false
+Style/RedundantAssignment:
+  Enabled: false
+Lint/LiteralAsCondition:
+  Enabled: false
+Naming/VariableNumber:
+  Enabled: false
