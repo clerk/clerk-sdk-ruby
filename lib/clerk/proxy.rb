@@ -1,6 +1,8 @@
-require "clerk"
-require "clerk/authenticate_context"
-require "clerk/authenticate_request"
+# frozen_string_literal: true
+
+require 'clerk'
+require 'clerk/authenticate_context'
+require 'clerk/authenticate_request'
 
 module Clerk
   class Proxy
@@ -28,7 +30,7 @@ module Clerk
     def user_id
       return nil unless user?
 
-      @session_claims["sub"]
+      @session_claims['sub']
     end
 
     def organization?
@@ -38,32 +40,32 @@ module Clerk
     def organization
       return nil unless organization?
 
-      @org ||= fetch_org(organization_id)
+      @organization ||= fetch_org(organization_id)
     end
 
     def organization_id
       return nil unless user?
 
-      @session_claims["org_id"]
+      @session_claims['org_id']
     end
 
     def organization_role
       return nil if @session_claims.nil?
 
-      @session_claims["org_role"]
+      @session_claims['org_role']
     end
 
     def organization_permissions
       return nil if @session_claims.nil?
 
-      @session_claims["org_permissions"]
+      @session_claims['org_permissions']
     end
 
     # Returns true if the session needs to perform step up verification
     def user_reverified?(params)
       return false unless user?
 
-      fva = session_claims["fva"]
+      fva = session_claims['fva']
 
       # the feature is disabled
       return true if fva.nil?
@@ -81,9 +83,9 @@ module Clerk
       when :first_factor
         is_valid_factor1
       when :second_factor
-        (factor2_age == -1) ? is_valid_factor1 : is_valid_factor2
+        factor2_age == -1 ? is_valid_factor1 : is_valid_factor2
       when :multi_factor
-        (factor2_age == -1) ? is_valid_factor1 : is_valid_factor1 && is_valid_factor2
+        factor2_age == -1 ? is_valid_factor1 : is_valid_factor1 && is_valid_factor2
       end
     end
 
@@ -97,11 +99,11 @@ module Clerk
     end
 
     def user_reverification_rack_response(config = nil)
-      raise ArgumentError, "Missing config, please pass a preset a la `Clerk::StepUp::Preset::*`" if config.nil?
+      raise ArgumentError, 'Missing config, please pass a preset a la `Clerk::StepUp::Preset::*`' if config.nil?
 
       [
         403,
-        {Clerk::CONTENT_TYPE_HEADER => "application/json"},
+        {Clerk::CONTENT_TYPE_HEADER => 'application/json'},
         [StepUp::Reverification.error_payload(config).to_json]
       ]
     end
@@ -122,13 +124,13 @@ module Clerk
 
     def fetch_user(user_id)
       cached_fetch("clerk:user:#{user_id}") do
-        sdk.users.get_user(user_id)
+        sdk.users.get(user_id: user_id).user
       end
     end
 
     def fetch_org(org_id)
       cached_fetch("clerk:org:#{org_id}") do
-        sdk.organizations.get_organization(org_id)
+        sdk.organizations.get(org_id: org_id).organization
       end
     end
 

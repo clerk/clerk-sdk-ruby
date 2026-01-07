@@ -1,14 +1,16 @@
-require_relative "boot"
+# frozen_string_literal: true
 
-require "rails/all"
+require_relative 'boot'
+
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
 # Load environment variables manually from shared .env file
-require "dotenv/rails"
-Dotenv::Rails.files.unshift(File.expand_path(File.join("..", "..", ".env")))
+require 'dotenv/rails'
+Dotenv::Rails.files.unshift(File.expand_path(File.join('..', '..', '.env')))
 
 module RailsApi
   class Application < Rails::Application

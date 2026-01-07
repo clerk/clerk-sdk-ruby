@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "base64"
+require 'base64'
 
 module Clerk
   module Utils
     class << self
       def decode_publishable_key(publishable_key)
-        Base64.decode64(publishable_key.split("_")[2].to_s)
+        Base64.decode64(publishable_key.split('_')[2].to_s)
       end
 
       def filter_routes(routes)
@@ -16,7 +16,7 @@ module Clerk
         routes.each do |route|
           route = route.strip
 
-          if route.end_with?("/*")
+          if route.end_with?('/*')
             filtered_wildcard_routes << route[0..-2]
           else
             filtered_routes[route] = true
@@ -37,18 +37,18 @@ module Clerk
       end
 
       def valid_publishable_key?(publishable_key)
-        raise ArgumentError, "publishable_key must be a string" unless publishable_key.is_a?(String)
+        raise ArgumentError, 'publishable_key must be a string' unless publishable_key.is_a?(String)
 
         key = publishable_key.to_s
         valid_publishable_key_prefix?(key) && valid_publishable_key_postfix?(key)
       end
 
       def valid_publishable_key_postfix?(publishable_key)
-        decode_publishable_key(publishable_key).end_with?("$")
+        decode_publishable_key(publishable_key).end_with?('$')
       end
 
       def valid_publishable_key_prefix?(publishable_key)
-        publishable_key.start_with?("pk_live_", "pk_test_")
+        publishable_key.start_with?('pk_live_', 'pk_test_')
       end
 
       # NOTE: This is a copy of Rack::Utils.parse_cookies_header to allow for
@@ -59,7 +59,13 @@ module Clerk
         value.split(/; */n).each_with_object({}) do |cookie, cookies|
           next if cookie.empty?
           key, value = cookie.split('=', 2)
-          cookies[key] = (unescape(value) rescue value) unless cookies.key?(key)
+          next if cookies.key?(key)
+
+          cookies[key] = begin
+            unescape(value)
+          rescue StandardError
+            value
+          end
         end
       end
 
