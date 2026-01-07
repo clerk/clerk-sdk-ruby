@@ -13,6 +13,9 @@ targets:
     clerk:
         target: ruby
         source: Clerk-OAS
+        publish:
+            rubygems:
+                token: $rubygems_auth_token
         codeSamples:
             registry:
                 location: registry.speakeasyapi.dev/clerk/clerk/clerk-oas-ruby-code-samples
