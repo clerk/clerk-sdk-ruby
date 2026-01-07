@@ -30,7 +30,7 @@ module Sinatra
 
       app.set(:auth) do |active|
         condition do
-          redirect clerk.sign_in_url if active && !clerk.session
+          redirect ENV["CLERK_SIGN_IN_URL"] if active && !clerk.user?
         end
       end
 

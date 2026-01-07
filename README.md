@@ -90,7 +90,7 @@ Clerk.configure do |c|
   c.secret_key = "sk_(test|live)_...." # if omitted: ENV["CLERK_SECRET_KEY"] - API calls will fail if unset
   c.publishable_key = "pk_(test|live)_...." # if omitted: ENV["CLERK_PUBLISHABLE_KEY"] - Handshake mechanism (check section below) will fail if unset
   c.logger = Logger.new(STDOUT) # if omitted, no logging
-  c.middleware_cache_store = ActiveSupport::Cache::FileStore.new("/tmp/clerk_middleware_cache") # if omitted: no caching
+  c.cache_store = ActiveSupport::Cache::FileStore.new("/tmp/clerk_middleware_cache") # if omitted: no caching
   c.excluded_routes ["/foo", "/bar/*"]
 end
 ```
