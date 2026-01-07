@@ -8,6 +8,8 @@ module Clerk
 
     attr_reader :session_claims, :session_token
 
+    alias_method :session, :session_claims
+
     def initialize(session_claims: nil, session_token: nil)
       @session_claims = session_claims
       @session_token = session_token
@@ -102,6 +104,18 @@ module Clerk
         {Clerk::CONTENT_TYPE_HEADER => "application/json"},
         [StepUp::Reverification.error_payload(config).to_json]
       ]
+    end
+
+    def sign_in_url
+      ENV["CLERK_SIGN_IN_URL"]
+    end
+
+    def sign_out_url
+      ENV["CLERK_SIGN_OUT_URL"]
+    end
+
+    def sign_up_url
+      ENV["CLERK_SIGN_UP_URL"]
     end
 
     private
