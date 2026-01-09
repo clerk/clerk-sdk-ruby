@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "active_support/concern"
+require 'active_support/concern'
 
 module Clerk
   module Authenticatable
@@ -9,7 +9,7 @@ module Clerk
     protected
 
     def clerk
-      request.env["clerk"]
+      request.env['clerk']
     end
 
     def require_reverification!(preset = StepUp::Preset::STRICT, &block)

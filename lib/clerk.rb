@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
-require "clerk/configuration"
-require "clerk/constants"
-require "clerk/error"
-require "clerk/sdk"
-require "clerk/version"
+require 'clerk_sdk_ruby'
+
+require 'clerk/configuration'
+require 'clerk/constants'
+require 'clerk/error'
+require 'clerk/sdk'
 
 if defined?(::Rails)
-  require "clerk/rails"
+  require 'clerk/rails'
 end
 
 module Clerk

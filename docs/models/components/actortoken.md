@@ -1,0 +1,18 @@
+# ActorToken
+
+Success
+
+
+## Fields
+
+| Field                                                                           | Type                                                                            | Required                                                                        | Description                                                                     |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `object`                                                                        | [Models::Components::ActorTokenObject](../../models/shared/actortokenobject.md) | :heavy_check_mark:                                                              | N/A                                                                             |
+| `id`                                                                            | *::String*                                                                      | :heavy_check_mark:                                                              | N/A                                                                             |
+| `status`                                                                        | [Models::Components::ActorTokenStatus](../../models/shared/actortokenstatus.md) | :heavy_check_mark:                                                              | N/A                                                                             |
+| `user_id`                                                                       | *::String*                                                                      | :heavy_check_mark:                                                              | N/A                                                                             |
+| `actor`                                                                         | [Models::Components::ActorTokenActor](../../models/shared/actortokenactor.md)   | :heavy_check_mark:                                                              | N/A                                                                             |
+| `token`                                                                         | *Crystalline::Nilable.new(::String)*                                            | :heavy_minus_sign:                                                              | N/A                                                                             |
+| `url`                                                                           | *Crystalline::Nilable.new(::String)*                                            | :heavy_minus_sign:                                                              | N/A                                                                             |
+| `created_at`                                                                    | *::Integer*                                                                     | :heavy_check_mark:                                                              | Unix timestamp of creation.<br/>                                                |
+| `updated_at`                                                                    | *::Integer*                                                                     | :heavy_check_mark:                                                              | Unix timestamp of last update.<br/>                                             |

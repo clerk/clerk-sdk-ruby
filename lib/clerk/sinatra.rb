@@ -1,11 +1,13 @@
-require "sinatra/base"
-require "clerk/rack"
+# frozen_string_literal: true
+
+require 'sinatra/base'
+require 'clerk/rack'
 
 module Sinatra
   module Clerk
     module Helpers
       def clerk
-        env["clerk"]
+        env['clerk']
       end
 
       def require_reverification!(preset = ::Clerk::StepUp::Preset::STRICT, &block)
@@ -20,7 +22,9 @@ module Sinatra
       end
 
       def clerk_sdk
+        # rubocop:disable Style/ClassVars
         @@sdk ||= ::Clerk::SDK.new
+        # rubocop:enable Style/ClassVars
       end
     end
 
@@ -36,7 +40,7 @@ module Sinatra
 
       app.set(:reverify) do |preset|
         condition do
-          if preset === true
+          if preset == true
             preset = ::Clerk::StepUp::Preset::STRICT
           end
 

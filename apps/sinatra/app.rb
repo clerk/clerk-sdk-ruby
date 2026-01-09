@@ -1,28 +1,30 @@
-require "active_support"
-require "clerk/sinatra"
-require "sinatra/base"
-require "dotenv"
+# frozen_string_literal: true
 
-Dotenv.load(".env")
+require 'active_support'
+require 'clerk/sinatra'
+require 'sinatra/base'
+require 'dotenv'
+
+Dotenv.load('.env')
 
 class App < Sinatra::Base
   register Sinatra::Clerk
 
-  before "/protected*" do
+  before '/protected*' do
     require_reverification!
   end
 
-  get "/" do
+  get '/' do
     erb :index, format: :html5
   end
 
-  get "/admin" do
+  get '/admin' do
     @user = clerk.user
     erb :index, format: :html5
   end
 
-  get "/protected" do
-    {message: clerk.user? ? "Valid session" : "Not logged in"}.to_json
+  get '/protected' do
+    {message: clerk.user? ? 'Valid session' : 'Not logged in'}.to_json
   end
 
   # run! if app_file == $0

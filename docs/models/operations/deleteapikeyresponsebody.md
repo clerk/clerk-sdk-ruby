@@ -1,0 +1,12 @@
+# DeleteApiKeyResponseBody
+
+200 OK
+
+
+## Fields
+
+| Field                                                                                   | Type                                                                                    | Required                                                                                | Description                                                                             | Example                                                                                 |
+| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `id`                                                                                    | *::String*                                                                              | :heavy_check_mark:                                                                      | N/A                                                                                     | ak_3beecc9c60adb5f9b850e91a8ee1e992                                                     |
+| `object`                                                                                | [Models::Operations::DeleteApiKeyObject](../../models/operations/deleteapikeyobject.md) | :heavy_check_mark:                                                                      | N/A                                                                                     |                                                                                         |
+| `deleted`                                                                               | *Crystalline::Boolean.new*                                                              | :heavy_check_mark:                                                                      | N/A                                                                                     |                                                                                         |

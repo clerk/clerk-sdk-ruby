@@ -1,5 +1,7 @@
-require "erb"
-require "clerk"
+# frozen_string_literal: true
+
+require 'erb'
+require 'clerk'
 
 class App
   def call(env)
@@ -10,15 +12,15 @@ class App
     # end
 
     respond_with(200) do
-      user = env["clerk"].user
-      user ? "Authenticated User: #{user.first_name} (#{user.id})" : "Not Authenticated"
+      user = env['clerk'].user
+      user ? "Authenticated User: #{user.first_name} (#{user.id})" : 'Not Authenticated'
     end
   end
 
   private
 
   def respond_with(status, plain_body = nil, &html_body)
-    return [status, {"Content-Type" => "text/plain; charset=utf-8"}, [plain_body]] unless block_given?
+    return [status, {'Content-Type' => 'text/plain; charset=utf-8'}, [plain_body]] unless block_given?
 
     compiled = <<-HTML
       <html>
@@ -36,8 +38,8 @@ class App
           <script
             async 
             crossorigin="anonymous"
-            data-clerk-publishable-key="#{ENV["CLERK_PUBLISHABLE_KEY"]}"
-            src="#{ENV["CLERK_JS_URL"]}"
+            data-clerk-publishable-key="#{ENV['CLERK_PUBLISHABLE_KEY']}"
+            src="#{ENV['CLERK_JS_URL']}"
             type="text/javascript"
           ></script>
           <script>
@@ -62,6 +64,6 @@ class App
       </html>
     HTML
 
-    [status, {"Content-Type" => "text/html; charset=utf-8"}, [compiled]]
+    [status, {'Content-Type' => 'text/html; charset=utf-8'}, [compiled]]
   end
 end

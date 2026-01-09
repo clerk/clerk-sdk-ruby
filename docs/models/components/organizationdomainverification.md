@@ -1,0 +1,13 @@
+# OrganizationDomainVerification
+
+Verification details for the domain
+
+
+## Fields
+
+| Field                                                                                           | Type                                                                                            | Required                                                                                        | Description                                                                                     |
+| ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `status`                                                                                        | [Models::Components::OrganizationDomainStatus](../../models/shared/organizationdomainstatus.md) | :heavy_check_mark:                                                                              | Status of the verification. It can be `unverified` or `verified`                                |
+| `strategy`                                                                                      | *::String*                                                                                      | :heavy_check_mark:                                                                              | Name of the strategy used to verify the domain                                                  |
+| `attempts`                                                                                      | *Crystalline::Nilable.new(::Integer)*                                                           | :heavy_check_mark:                                                                              | How many attempts have been made to verify the domain                                           |
+| `expire_at`                                                                                     | *Crystalline::Nilable.new(::Integer)*                                                           | :heavy_check_mark:                                                                              | Unix timestamp of when the verification will expire                                             |

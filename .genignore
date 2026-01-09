@@ -1,0 +1,19 @@
+# Test Applications
+apps/
+
+# Custom Files
+lib/clerk/authenticatable.rb
+lib/clerk/authenticate_context.rb
+lib/clerk/authenticate_request.rb
+lib/clerk/configuration.rb
+lib/clerk/constants.rb
+lib/clerk/error.rb
+lib/clerk/jwks_cache.rb
+lib/clerk/proxy.rb
+lib/clerk/rack.rb
+lib/clerk/rack_middleware.rb
+lib/clerk/rails.rb
+lib/clerk/railtie.rb
+lib/clerk/sdk.rb
+lib/clerk/sinatra.rb
+lib/clerk/utils.rb

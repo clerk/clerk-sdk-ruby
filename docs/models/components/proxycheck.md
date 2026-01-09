@@ -1,0 +1,17 @@
+# ProxyCheck
+
+Health check information about a domain's proxy configuration validation attempt.
+
+
+## Fields
+
+| Field                                                                           | Type                                                                            | Required                                                                        | Description                                                                     |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `object`                                                                        | [Models::Components::ProxyCheckObject](../../models/shared/proxycheckobject.md) | :heavy_check_mark:                                                              | N/A                                                                             |
+| `id`                                                                            | *::String*                                                                      | :heavy_check_mark:                                                              | N/A                                                                             |
+| `domain_id`                                                                     | *::String*                                                                      | :heavy_check_mark:                                                              | N/A                                                                             |
+| `last_run_at`                                                                   | *Crystalline::Nilable.new(::Integer)*                                           | :heavy_check_mark:                                                              | Unix timestamp of last run.<br/>                                                |
+| `proxy_url`                                                                     | *::String*                                                                      | :heavy_check_mark:                                                              | N/A                                                                             |
+| `successful`                                                                    | *Crystalline::Boolean.new*                                                      | :heavy_check_mark:                                                              | N/A                                                                             |
+| `created_at`                                                                    | *::Integer*                                                                     | :heavy_check_mark:                                                              | Unix timestamp of creation.<br/>                                                |
+| `updated_at`                                                                    | *::Integer*                                                                     | :heavy_check_mark:                                                              | Unix timestamp of last update.<br/>                                             |
