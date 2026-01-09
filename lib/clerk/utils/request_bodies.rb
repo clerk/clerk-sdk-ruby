@@ -44,7 +44,7 @@ module Clerk
 
     
     def self.serialize_content_type(media_type, request)
-      return media_type, ::Crystalline.to_json(request), nil if media_type.match('(application|text)\/.*?\+*json.*')
+      return media_type, ::Crystalline.to_json(request), nil if media_type.match('(application|text)\/([^+]+\+)*json.*')
       return serialize_multipart_form(media_type, request) if media_type.match('multipart\/.*')
       return media_type, serialize_form_data(request), nil if media_type.match('application\/x-www-form-urlencoded.*')
       return media_type, request, nil if request.is_a?(String) || request.is_a?(Array)

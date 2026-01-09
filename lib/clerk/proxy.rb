@@ -8,13 +8,13 @@ module Clerk
   class Proxy
     CACHE_TTL = 60 # seconds
 
-    attr_reader :session_claims, :session_token
-
-    alias_method :session, :session_claims
-
     def initialize(session_claims: nil, session_token: nil)
       @session_claims = session_claims
       @session_token = session_token
+    end
+
+    def session
+      @session_claims
     end
 
     def user?
@@ -109,15 +109,15 @@ module Clerk
     end
 
     def sign_in_url
-      ENV["CLERK_SIGN_IN_URL"]
+      ENV['CLERK_SIGN_IN_URL']
     end
 
     def sign_out_url
-      ENV["CLERK_SIGN_OUT_URL"]
+      ENV['CLERK_SIGN_OUT_URL']
     end
 
     def sign_up_url
-      ENV["CLERK_SIGN_UP_URL"]
+      ENV['CLERK_SIGN_UP_URL']
     end
 
     private

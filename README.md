@@ -48,8 +48,7 @@ More information about the API can be found at https://clerk.com/docs
 The SDK can be installed using [RubyGems](https://rubygems.org/):
 
 ```bash
-gem install specific_install
-gem specific_install  
+gem install clerk-sdk-ruby
 ```
 <!-- End SDK Installation [installation] -->
 
