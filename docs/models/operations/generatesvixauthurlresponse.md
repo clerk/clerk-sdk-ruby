@@ -1,0 +1,11 @@
+# GenerateSvixAuthURLResponse
+
+
+## Fields
+
+| Field                                                                                   | Type                                                                                    | Required                                                                                | Description                                                                             |
+| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `content_type`                                                                          | *::String*                                                                              | :heavy_check_mark:                                                                      | HTTP response content type for this operation                                           |
+| `status_code`                                                                           | *::Integer*                                                                             | :heavy_check_mark:                                                                      | HTTP response status code for this operation                                            |
+| `raw_response`                                                                          | [Faraday::Response](https://www.rubydoc.info/gems/faraday/Faraday/Response)             | :heavy_check_mark:                                                                      | Raw HTTP response; suitable for custom response parsing                                 |
+| `svix_url`                                                                              | [Crystalline::Nilable.new(Models::Components::SvixURL)](../../models/shared/svixurl.md) | :heavy_minus_sign:                                                                      | Response that contains a temporary Svix URL to access management dashboard              |

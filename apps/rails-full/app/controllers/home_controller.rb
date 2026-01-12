@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HomeController < ApplicationController
   before_action :require_reverification!, only: [:protected], preset: Clerk::StepUp::Preset::STRICT
 
@@ -6,6 +8,6 @@ class HomeController < ApplicationController
   end
 
   def protected
-    render json: {message: clerk.user? ? "Valid session" : "Not logged in"}
+    render json: {message: clerk.user? ? 'Valid session' : 'Not logged in'}
   end
 end

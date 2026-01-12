@@ -1,0 +1,13 @@
+# Instance
+
+Success
+
+
+## Fields
+
+| Field                                                                                 | Type                                                                                  | Required                                                                              | Description                                                                           | Example                                                                               |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `object`                                                                              | [Models::Components::InstanceObject](../../models/shared/instanceobject.md)           | :heavy_check_mark:                                                                    | String representing the object's type. Objects of the same type share the same value. |                                                                                       |
+| `id`                                                                                  | *::String*                                                                            | :heavy_check_mark:                                                                    | N/A                                                                                   |                                                                                       |
+| `environment_type`                                                                    | *::String*                                                                            | :heavy_check_mark:                                                                    | N/A                                                                                   | development                                                                           |
+| `allowed_origins`                                                                     | Crystalline::Array<*::String*>                                                        | :heavy_check_mark:                                                                    | N/A                                                                                   | [<br/>"http://localhost:3000",<br/>"https://some-domain"<br/>]                        |

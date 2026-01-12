@@ -1,4 +1,7 @@
-require "concurrent"
+# frozen_string_literal: true
+
+require 'concurrent'
+require 'pp'
 
 module Clerk
   class JWKSCache
@@ -22,8 +25,8 @@ module Clerk
         @lock.with_write_lock do
           @last_update = Time.now.to_i
           @jwks = begin
-            sdk.jwks.get_jwks.keys.map(&:to_hash)
-          rescue Clerk::Error, ClerkHttpClient::ApiError
+            sdk.jwks.get_jwks.jwks.keys.map(&:to_dict)
+          rescue Clerk::Error, Clerk::Models::Errors::APIError => _e
             nil
           end
         end

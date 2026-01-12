@@ -1,0 +1,9 @@
+# UpdateSAMLConnectionRequest
+
+
+## Fields
+
+| Field                                                                                                             | Type                                                                                                              | Required                                                                                                          | Description                                                                                                       |
+| ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `saml_connection_id`                                                                                              | *::String*                                                                                                        | :heavy_check_mark:                                                                                                | The ID of the SAML Connection to update                                                                           |
+| `body`                                                                                                            | [Models::Operations::UpdateSAMLConnectionRequestBody](../../models/operations/updatesamlconnectionrequestbody.md) | :heavy_check_mark:                                                                                                | N/A                                                                                                               |

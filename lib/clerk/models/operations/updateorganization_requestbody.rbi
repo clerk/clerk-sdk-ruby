@@ -1,0 +1,25 @@
+# typed: false
+# frozen_string_literal: true
+
+
+class Clerk::Models::Operations::UpdateOrganizationRequestBody
+  extend ::Crystalline::MetadataFields::ClassMethods
+end
+
+
+class Clerk::Models::Operations::UpdateOrganizationRequestBody
+  def public_metadata(); end
+  def public_metadata=(str_); end
+  def private_metadata(); end
+  def private_metadata=(str_); end
+  def name(); end
+  def name=(str_); end
+  def slug(); end
+  def slug=(str_); end
+  def max_allowed_memberships(); end
+  def max_allowed_memberships=(str_); end
+  def admin_delete_enabled(); end
+  def admin_delete_enabled=(str_); end
+  def created_at(); end
+  def created_at=(str_); end
+end

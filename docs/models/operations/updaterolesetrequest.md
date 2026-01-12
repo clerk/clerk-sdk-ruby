@@ -1,0 +1,9 @@
+# UpdateRoleSetRequest
+
+
+## Fields
+
+| Field                                                                                               | Type                                                                                                | Required                                                                                            | Description                                                                                         |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `role_set_key_or_id`                                                                                | *::String*                                                                                          | :heavy_check_mark:                                                                                  | The key or ID of the role set to update                                                             |
+| `body`                                                                                              | [Models::Operations::UpdateRoleSetRequestBody](../../models/operations/updaterolesetrequestbody.md) | :heavy_check_mark:                                                                                  | N/A                                                                                                 |

@@ -1,0 +1,99 @@
+# typed: false
+# frozen_string_literal: true
+
+
+class Clerk::Models::Components::User
+  extend ::Crystalline::MetadataFields::ClassMethods
+end
+
+
+class Clerk::Models::Components::User
+  def id(); end
+  def id=(str_); end
+  def object(); end
+  def object=(str_); end
+  def has_image(); end
+  def has_image=(str_); end
+  def public_metadata(); end
+  def public_metadata=(str_); end
+  def email_addresses(); end
+  def email_addresses=(str_); end
+  def phone_numbers(); end
+  def phone_numbers=(str_); end
+  def web3_wallets(); end
+  def web3_wallets=(str_); end
+  def passkeys(); end
+  def passkeys=(str_); end
+  def password_enabled(); end
+  def password_enabled=(str_); end
+  def two_factor_enabled(); end
+  def two_factor_enabled=(str_); end
+  def totp_enabled(); end
+  def totp_enabled=(str_); end
+  def backup_code_enabled(); end
+  def backup_code_enabled=(str_); end
+  def external_accounts(); end
+  def external_accounts=(str_); end
+  def saml_accounts(); end
+  def saml_accounts=(str_); end
+  def enterprise_accounts(); end
+  def enterprise_accounts=(str_); end
+  def banned(); end
+  def banned=(str_); end
+  def locked(); end
+  def locked=(str_); end
+  def updated_at(); end
+  def updated_at=(str_); end
+  def created_at(); end
+  def created_at=(str_); end
+  def delete_self_enabled(); end
+  def delete_self_enabled=(str_); end
+  def create_organization_enabled(); end
+  def create_organization_enabled=(str_); end
+  def external_id(); end
+  def external_id=(str_); end
+  def primary_email_address_id(); end
+  def primary_email_address_id=(str_); end
+  def primary_phone_number_id(); end
+  def primary_phone_number_id=(str_); end
+  def primary_web3_wallet_id(); end
+  def primary_web3_wallet_id=(str_); end
+  def username(); end
+  def username=(str_); end
+  def first_name(); end
+  def first_name=(str_); end
+  def last_name(); end
+  def last_name=(str_); end
+  def profile_image_url(); end
+  def profile_image_url=(str_); end
+  def image_url(); end
+  def image_url=(str_); end
+  def unsafe_metadata(); end
+  def unsafe_metadata=(str_); end
+  def mfa_enabled_at(); end
+  def mfa_enabled_at=(str_); end
+  def mfa_disabled_at(); end
+  def mfa_disabled_at=(str_); end
+  def organization_memberships(); end
+  def organization_memberships=(str_); end
+  def last_sign_in_at(); end
+  def last_sign_in_at=(str_); end
+  def lockout_expires_in_seconds(); end
+  def lockout_expires_in_seconds=(str_); end
+  def verification_attempts_remaining(); end
+  def verification_attempts_remaining=(str_); end
+  def last_active_at(); end
+  def last_active_at=(str_); end
+  def legal_accepted_at(); end
+  def legal_accepted_at=(str_); end
+  def locale(); end
+  def locale=(str_); end
+  def private_metadata(); end
+  def private_metadata=(str_); end
+  def password_last_updated_at(); end
+  def password_last_updated_at=(str_); end
+  def create_organizations_limit(); end
+  def create_organizations_limit=(str_); end
+  def bypass_client_trust(); end
+  def bypass_client_trust=(str_); end
+end

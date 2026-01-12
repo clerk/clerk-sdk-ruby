@@ -1,0 +1,9 @@
+# CancelCommerceSubscriptionItemRequest
+
+
+## Fields
+
+| Field                                                                                                              | Type                                                                                                               | Required                                                                                                           | Description                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `subscription_item_id`                                                                                             | *::String*                                                                                                         | :heavy_check_mark:                                                                                                 | The ID of the subscription item to cancel                                                                          |
+| `end_now`                                                                                                          | *Crystalline::Nilable.new(Crystalline::Boolean.new)*                                                               | :heavy_minus_sign:                                                                                                 | Whether to cancel the subscription immediately (true) or at the end of the current billing period (false, default) |

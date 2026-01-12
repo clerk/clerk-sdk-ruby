@@ -1,0 +1,10 @@
+# SignUpVerification
+
+
+## Fields
+
+| Field                                                                                         | Type                                                                                          | Required                                                                                      | Description                                                                                   |
+| --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `next_action`                                                                                 | [Crystalline::Nilable.new(Models::Components::NextAction)](../../models/shared/nextaction.md) | :heavy_minus_sign:                                                                            | N/A                                                                                           |
+| `supported_strategies`                                                                        | Crystalline::Array<*::String*>                                                                | :heavy_minus_sign:                                                                            | N/A                                                                                           |
+| `additional_properties`                                                                       | Crystalline::Hash[Symbol, *::Object*]                                                         | :heavy_minus_sign:                                                                            | N/A                                                                                           |
