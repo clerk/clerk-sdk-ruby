@@ -37,6 +37,8 @@ module Clerk
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # Unix timestamp (in milliseconds) when the subscription was last updated.
         field :updated_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
+        # Unique identifier for the associated price
+        field :price_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('price_id') } }
         # The associated commerce plan.
         field :plan, Crystalline::Nilable.new(Models::Components::SchemasCommerceSubscriptionItemPlan), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('plan'), required: true } }
         # Credit information (only available in PaymentAttempt events).
@@ -65,7 +67,7 @@ module Clerk
         field :ended_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('ended_at') } }
 
         
-        def initialize(object:, id:, instance_id:, status:, plan_id:, plan_period:, payment_source_id:, payer_id:, is_free_trial:, proration_date:, created_at:, updated_at:, plan: nil, credit: nil, payment_source: nil, lifetime_paid: nil, amount: nil, next_invoice: nil, next_payment: nil, payer: nil, period_start: nil, period_end: nil, canceled_at: nil, past_due_at: nil, ended_at: nil)
+        def initialize(object:, id:, instance_id:, status:, plan_id:, plan_period:, payment_source_id:, payer_id:, is_free_trial:, proration_date:, created_at:, updated_at:, price_id: nil, plan: nil, credit: nil, payment_source: nil, lifetime_paid: nil, amount: nil, next_invoice: nil, next_payment: nil, payer: nil, period_start: nil, period_end: nil, canceled_at: nil, past_due_at: nil, ended_at: nil)
           @object = object
           @id = id
           @instance_id = instance_id
@@ -78,6 +80,7 @@ module Clerk
           @proration_date = proration_date
           @created_at = created_at
           @updated_at = updated_at
+          @price_id = price_id
           @plan = plan
           @credit = credit
           @payment_source = payment_source
@@ -108,6 +111,7 @@ module Clerk
           return false unless @proration_date == other.proration_date
           return false unless @created_at == other.created_at
           return false unless @updated_at == other.updated_at
+          return false unless @price_id == other.price_id
           return false unless @plan == other.plan
           return false unless @credit == other.credit
           return false unless @payment_source == other.payment_source

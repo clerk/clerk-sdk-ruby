@@ -33,6 +33,8 @@ module Clerk
         field :credit, Crystalline::Nilable.new(Models::Components::CommerceSubscriptionCreditResponse), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('credit') } }
         # Unique identifier for the associated plan.
         field :plan_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('plan_id'), required: true } }
+        # Unique identifier for the associated price
+        field :price_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('price_id') } }
 
         field :payment_method, Crystalline::Nilable.new(Models::Components::CommercePaymentMethodResponse), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payment_method') } }
 
@@ -59,7 +61,7 @@ module Clerk
         field :next_payment, Crystalline::Nilable.new(Models::Components::CommerceSubscriptionItemNextPayment), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('next_payment') } }
 
         
-        def initialize(object:, id:, instance_id:, status:, plan_period:, payer_id:, is_free_trial:, period_start:, credit: nil, plan_id: nil, payment_method: nil, lifetime_paid: nil, payer: nil, period_end: nil, proration_date: nil, canceled_at: nil, past_due_at: nil, ended_at: nil, created_at: nil, updated_at: nil, plan: nil, next_payment: nil)
+        def initialize(object:, id:, instance_id:, status:, plan_period:, payer_id:, is_free_trial:, period_start:, credit: nil, plan_id: nil, price_id: nil, payment_method: nil, lifetime_paid: nil, payer: nil, period_end: nil, proration_date: nil, canceled_at: nil, past_due_at: nil, ended_at: nil, created_at: nil, updated_at: nil, plan: nil, next_payment: nil)
           @object = object
           @id = id
           @instance_id = instance_id
@@ -70,6 +72,7 @@ module Clerk
           @period_start = period_start
           @credit = credit
           @plan_id = plan_id
+          @price_id = price_id
           @payment_method = payment_method
           @lifetime_paid = lifetime_paid
           @payer = payer
@@ -97,6 +100,7 @@ module Clerk
           return false unless @period_start == other.period_start
           return false unless @credit == other.credit
           return false unless @plan_id == other.plan_id
+          return false unless @price_id == other.price_id
           return false unless @payment_method == other.payment_method
           return false unless @lifetime_paid == other.lifetime_paid
           return false unless @payer == other.payer

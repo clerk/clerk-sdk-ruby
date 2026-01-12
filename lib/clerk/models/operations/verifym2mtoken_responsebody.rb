@@ -23,17 +23,17 @@ module Clerk
         field :revoked, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('revoked'), required: true } }
 
         field :expired, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expired'), required: true } }
-
+        # The timestamp for when the token was created, in milliseconds
         field :created_at, ::Float, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
-
+        # The timestamp for when the token was last updated, in milliseconds
         field :updated_at, ::Float, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
 
         field :scopes, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scopes') } }
 
         field :revocation_reason, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('revocation_reason'), required: true } }
-
+        # The timestamp for when the token will expire, in milliseconds
         field :expiration, Crystalline::Nilable.new(::Float), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expiration'), required: true } }
-
+        # The timestamp for when the token was last used, in milliseconds
         field :last_used_at, Crystalline::Nilable.new(::Float), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_used_at'), required: true } }
 
         field :claims, Crystalline::Nilable.new(::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('claims') } }

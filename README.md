@@ -324,6 +324,16 @@ end
 * [get](docs/sdks/redirecturls/README.md#get) - Retrieve a redirect URL
 * [delete](docs/sdks/redirecturls/README.md#delete) - Delete a redirect URL
 
+### [RoleSets](docs/sdks/rolesets/README.md)
+
+* [list](docs/sdks/rolesets/README.md#list) - Get a list of role sets
+* [create](docs/sdks/rolesets/README.md#create) - Create a role set
+* [get](docs/sdks/rolesets/README.md#get) - Retrieve a role set
+* [update](docs/sdks/rolesets/README.md#update) - Update a role set
+* [replace](docs/sdks/rolesets/README.md#replace) - Replace a role set
+* [add_roles](docs/sdks/rolesets/README.md#add_roles) - Add roles to a role set
+* [replace_role](docs/sdks/rolesets/README.md#replace_role) - Replace a role in a role set
+
 ### [SamlConnections](docs/sdks/samlconnections/README.md)
 
 * [list](docs/sdks/samlconnections/README.md#list) - Get a list of SAML Connections for an instance

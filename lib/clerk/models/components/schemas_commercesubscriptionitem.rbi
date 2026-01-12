@@ -32,6 +32,8 @@ class Clerk::Models::Components::SchemasCommerceSubscriptionItem
   def created_at=(str_); end
   def updated_at(); end
   def updated_at=(str_); end
+  def price_id(); end
+  def price_id=(str_); end
   def plan(); end
   def plan=(str_); end
   def credit(); end

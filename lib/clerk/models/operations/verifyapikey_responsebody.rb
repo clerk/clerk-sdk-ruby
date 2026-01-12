@@ -29,19 +29,19 @@ module Clerk
         field :revoked, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('revoked'), required: true } }
 
         field :expired, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expired'), required: true } }
-
+        # The timestamp for when the API key was created, in milliseconds
         field :created_at, ::Float, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
-
+        # The timestamp for when the API key was last updated, in milliseconds
         field :updated_at, ::Float, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
 
         field :claims, Crystalline::Nilable.new(::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('claims'), required: true } }
 
         field :revocation_reason, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('revocation_reason'), required: true } }
-
+        # The timestamp for when the API key will expire, in milliseconds
         field :expiration, Crystalline::Nilable.new(::Float), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expiration'), required: true } }
 
         field :created_by, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_by'), required: true } }
-
+        # The timestamp for when the API key was last used, in milliseconds
         field :last_used_at, Crystalline::Nilable.new(::Float), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_used_at'), required: true } }
 
         field :description, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('description') } }

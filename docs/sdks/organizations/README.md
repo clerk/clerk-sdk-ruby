@@ -126,7 +126,7 @@ end
 
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
-| Models::Errors::ClerkErrors | 400, 403, 422               | application/json            |
+| Models::Errors::ClerkErrors | 400, 402, 403, 422          | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## get

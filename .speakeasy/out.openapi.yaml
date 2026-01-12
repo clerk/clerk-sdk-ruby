@@ -96,6 +96,13 @@ tags:
     description: Manage custom roles in an organization.
     externalDocs:
       url: https://clerk.com/docs/organizations/manage-member-roles
+  - name: Role Sets
+    description: |-
+      Role sets define collections of roles that can be assigned to organization members.
+      Each organization uses one role set to determine the available roles for its members.
+      Role sets support default roles for new members and creator roles for organization founders.
+    externalDocs:
+      url: https://clerk.com/docs/organizations/manage-member-roles
   - name: Phone Numbers
     description: A user can be associated with one or more phone numbers, which allows them to be contacted via SMS.
     externalDocs:
@@ -4433,6 +4440,8 @@ paths:
           $ref: '#/components/responses/Organization'
         '400':
           $ref: '#/components/responses/ClerkErrors'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
         '403':
           $ref: '#/components/responses/AuthorizationInvalid'
         '422':
@@ -6967,6 +6976,7 @@ paths:
   /platform/applications/{applicationID}/domains/{domainIDOrName}/dns_check: {}
   /platform/applications/{applicationID}/transfers: {}
   /platform/applications/{applicationID}/transfers/{transferID}: {}
+  /platform/application_transfers: {}
   /billing/plans:
     get:
       operationId: GetCommercePlanList
@@ -7409,6 +7419,374 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
+  /role_sets:
+    get:
+      operationId: ListRoleSets
+      x-speakeasy-group: roleSets
+      x-speakeasy-name-override: list
+      summary: Get a list of role sets
+      description: |-
+        Returns a list of role sets for the instance.
+        Results can be paginated using the optional `limit` and `offset` query parameters.
+        The role sets are ordered by descending creation date by default.
+      tags:
+        - Role Sets
+      parameters:
+        - in: query
+          name: query
+          description: |-
+            Returns role sets with ID, name, or key that match the given query.
+            Uses exact match for role set ID and partial match for name and key.
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: order_by
+          description: |-
+            Allows to return role sets in a particular order.
+            At the moment, you can order the returned role sets by their `created_at`, `name`, or `key`.
+            In order to specify the direction, you can use the `+/-` symbols prepended in the property to order by.
+            For example, if you want role sets to be returned in descending order according to their `created_at` property, you can use `-created_at`.
+            If you don't use `+` or `-`, then `+` is implied.
+            Defaults to `-created_at`.
+          required: false
+          schema:
+            type: string
+            default: '-created_at'
+        - $ref: '#/components/parameters/LimitParameter'
+        - $ref: '#/components/parameters/OffsetParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/RoleSets'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      operationId: CreateRoleSet
+      x-speakeasy-group: roleSets
+      x-speakeasy-name-override: create
+      summary: Create a role set
+      description: |-
+        Creates a new role set with the given name and roles.
+        The key must be unique for the instance and start with the 'role_set:' prefix, followed by lowercase alphanumeric characters and underscores only.
+        You must provide at least one role and specify a default role key and creator role key.
+      tags:
+        - Role Sets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the new role set
+                key:
+                  type: string
+                  description: |-
+                    A unique key for the role set. Must start with 'role_set:' and contain only lowercase alphanumeric characters and underscores.
+                    If not provided, a key will be generated from the name.
+                description:
+                  type: string
+                  description: Optional description for the role set
+                  nullable: true
+                default_role_key:
+                  type: string
+                  description: |-
+                    The key of the role to use as the default role for new organization members.
+                    Must be one of the roles in the `roles` array.
+                creator_role_key:
+                  type: string
+                  description: |-
+                    The key of the role to assign to organization creators.
+                    Must be one of the roles in the `roles` array.
+                type:
+                  type: string
+                  enum:
+                    - initial
+                    - custom
+                  description: |-
+                    The type of the role set. "initial" role sets are the default for new organizations.
+                    Only one role set can be "initial" per instance.
+                roles:
+                  type: array
+                  items:
+                    type: string
+                  description: |-
+                    Array of role keys to include in the role set.
+                    Must contain at least one role and no more than 10 roles.
+              additionalProperties: false
+              required:
+                - name
+                - default_role_key
+                - creator_role_key
+                - roles
+      responses:
+        '200':
+          $ref: '#/components/responses/RoleSet'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /role_sets/{role_set_key_or_id}:
+    get:
+      operationId: GetRoleSet
+      x-speakeasy-group: roleSets
+      x-speakeasy-name-override: get
+      summary: Retrieve a role set
+      description: Retrieves an existing role set by its key or ID.
+      tags:
+        - Role Sets
+      parameters:
+        - in: path
+          required: true
+          name: role_set_key_or_id
+          schema:
+            type: string
+          description: The key or ID of the role set
+      responses:
+        '200':
+          $ref: '#/components/responses/RoleSet'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+    patch:
+      operationId: UpdateRoleSet
+      x-speakeasy-group: roleSets
+      x-speakeasy-name-override: update
+      summary: Update a role set
+      description: |-
+        Updates an existing role set.
+        You can update the name, key, description, type, default role, or creator role.
+        All parameters are optional - you can update only the fields you want to change.
+      tags:
+        - Role Sets
+      parameters:
+        - in: path
+          required: true
+          name: role_set_key_or_id
+          schema:
+            type: string
+          description: The key or ID of the role set to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The new name for the role set
+                  nullable: true
+                key:
+                  type: string
+                  description: A unique key for the role set. Must start with 'role_set:' and contain only lowercase alphanumeric characters and underscores.
+                  nullable: true
+                description:
+                  type: string
+                  description: Optional description for the role set
+                  nullable: true
+                type:
+                  type: string
+                  enum:
+                    - initial
+                  description: |-
+                    Set to "initial" to make this the default role set for new organizations.
+                    Only one role set can be "initial" per instance; setting this will change any existing initial role set to "custom".
+                  nullable: true
+                default_role_key:
+                  type: string
+                  description: |-
+                    The key of the role to use as the default role for new organization members.
+                    Must be an existing role in the role set.
+                  nullable: true
+                creator_role_key:
+                  type: string
+                  description: |-
+                    The key of the role to assign to organization creators.
+                    Must be an existing role in the role set.
+                  nullable: true
+      responses:
+        '200':
+          $ref: '#/components/responses/RoleSet'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /role_sets/{role_set_key_or_id}/replace:
+    post:
+      operationId: ReplaceRoleSet
+      x-speakeasy-group: roleSets
+      x-speakeasy-name-override: replace
+      summary: Replace a role set
+      description: |-
+        Replaces a role set with another role set. This is functionally equivalent to deleting
+        the role set but allows for atomic replacement with migration support.
+        Organizations using this role set will be migrated to the destination role set.
+      tags:
+        - Role Sets
+      parameters:
+        - in: path
+          required: true
+          name: role_set_key_or_id
+          schema:
+            type: string
+          description: The key or ID of the role set to replace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dest_role_set_key:
+                  type: string
+                  description: The key of the destination role set
+                reassignment_mappings:
+                  allOf:
+                    - $ref: '#/components/schemas/ReassignmentMappings'
+                  description: |-
+                    Mappings from source role keys to destination role keys.
+                    Required if members have roles that need to be reassigned.
+              required:
+                - dest_role_set_key
+      responses:
+        '200':
+          $ref: '#/components/responses/DeletedObject'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /role_sets/{role_set_key_or_id}/roles:
+    post:
+      operationId: AddRolesToRoleSet
+      x-speakeasy-group: roleSets
+      x-speakeasy-name-override: addRoles
+      summary: Add roles to a role set
+      description: |-
+        Adds one or more roles to an existing role set.
+        You can optionally update the default role or creator role when adding new roles.
+      tags:
+        - Role Sets
+      parameters:
+        - in: path
+          required: true
+          name: role_set_key_or_id
+          schema:
+            type: string
+          description: The key or ID of the role set
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role_keys:
+                  type: array
+                  items:
+                    type: string
+                  description: |-
+                    Array of role keys to add to the role set.
+                    Must contain at least one role and no more than 10 roles.
+                default_role_key:
+                  type: string
+                  description: Optionally update the default role to one of the newly added roles.
+                creator_role_key:
+                  type: string
+                  description: Optionally update the creator role to one of the newly added roles.
+              required:
+                - role_keys
+      responses:
+        '200':
+          $ref: '#/components/responses/RoleSet'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /role_sets/{role_set_key_or_id}/roles/replace:
+    post:
+      operationId: ReplaceRoleInRoleSet
+      x-speakeasy-group: roleSets
+      x-speakeasy-name-override: replaceRole
+      summary: Replace a role in a role set
+      description: |-
+        Replaces a role in a role set with another role. This atomically removes
+        the source role and reassigns any members to the destination role.
+      tags:
+        - Role Sets
+      parameters:
+        - in: path
+          required: true
+          name: role_set_key_or_id
+          schema:
+            type: string
+          description: The key or ID of the role set
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role_key:
+                  type: string
+                  description: The key of the role to remove from the role set
+                to_role_key:
+                  type: string
+                  description: The key of the role to reassign members to
+              required:
+                - role_key
+                - to_role_key
+      responses:
+        '200':
+          $ref: '#/components/responses/RoleSet'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /api_keys:
     post:
       operationId: createApiKey
@@ -7517,6 +7895,7 @@ paths:
                   expiration:
                     type: number
                     nullable: true
+                    description: The timestamp for when the API key will expire, in milliseconds
                     example: 1716883200
                   created_by:
                     type: string
@@ -7526,12 +7905,15 @@ paths:
                   last_used_at:
                     type: number
                     nullable: true
+                    description: The timestamp for when the API key was last used, in milliseconds
                     example: 1716883200
                   created_at:
                     type: number
+                    description: The timestamp for when the API key was created, in milliseconds
                     example: 1716883200
                   updated_at:
                     type: number
+                    description: The timestamp for when the API key was last updated, in milliseconds
                     example: 1716883200
                 required:
                   - object
@@ -7715,6 +8097,7 @@ paths:
                         expiration:
                           type: number
                           nullable: true
+                          description: The timestamp for when the API key will expire, in milliseconds
                           example: 1716883200
                         created_by:
                           type: string
@@ -7724,12 +8107,15 @@ paths:
                         last_used_at:
                           type: number
                           nullable: true
+                          description: The timestamp for when the API key was last used, in milliseconds
                           example: 1716883200
                         created_at:
                           type: number
+                          description: The timestamp for when the API key was created, in milliseconds
                           example: 1716883200
                         updated_at:
                           type: number
+                          description: The timestamp for when the API key was last updated, in milliseconds
                           example: 1716883200
                       required:
                         - object
@@ -7876,6 +8262,7 @@ paths:
                   expiration:
                     type: number
                     nullable: true
+                    description: The timestamp for when the API key will expire, in milliseconds
                     example: 1716883200
                   created_by:
                     type: string
@@ -7885,12 +8272,15 @@ paths:
                   last_used_at:
                     type: number
                     nullable: true
+                    description: The timestamp for when the API key was last used, in milliseconds
                     example: 1716883200
                   created_at:
                     type: number
+                    description: The timestamp for when the API key was created, in milliseconds
                     example: 1716883200
                   updated_at:
                     type: number
+                    description: The timestamp for when the API key was last updated, in milliseconds
                     example: 1716883200
                 required:
                   - object
@@ -8057,6 +8447,7 @@ paths:
                   expiration:
                     type: number
                     nullable: true
+                    description: The timestamp for when the API key will expire, in milliseconds
                     example: 1716883200
                   created_by:
                     type: string
@@ -8066,12 +8457,15 @@ paths:
                   last_used_at:
                     type: number
                     nullable: true
+                    description: The timestamp for when the API key was last used, in milliseconds
                     example: 1716883200
                   created_at:
                     type: number
+                    description: The timestamp for when the API key was created, in milliseconds
                     example: 1716883200
                   updated_at:
                     type: number
+                    description: The timestamp for when the API key was last updated, in milliseconds
                     example: 1716883200
                 required:
                   - object
@@ -8392,6 +8786,7 @@ paths:
                   expiration:
                     type: number
                     nullable: true
+                    description: The timestamp for when the API key will expire, in milliseconds
                     example: 1716883200
                   created_by:
                     type: string
@@ -8401,12 +8796,15 @@ paths:
                   last_used_at:
                     type: number
                     nullable: true
+                    description: The timestamp for when the API key was last used, in milliseconds
                     example: 1716883200
                   created_at:
                     type: number
+                    description: The timestamp for when the API key was created, in milliseconds
                     example: 1716883200
                   updated_at:
                     type: number
+                    description: The timestamp for when the API key was last updated, in milliseconds
                     example: 1716883200
                 required:
                   - object
@@ -8553,6 +8951,7 @@ paths:
                   expiration:
                     type: number
                     nullable: true
+                    description: The timestamp for when the API key will expire, in milliseconds
                     example: 1716883200
                   created_by:
                     type: string
@@ -8562,12 +8961,15 @@ paths:
                   last_used_at:
                     type: number
                     nullable: true
+                    description: The timestamp for when the API key was last used, in milliseconds
                     example: 1716883200
                   created_at:
                     type: number
+                    description: The timestamp for when the API key was created, in milliseconds
                     example: 1716883200
                   updated_at:
                     type: number
+                    description: The timestamp for when the API key was last updated, in milliseconds
                     example: 1716883200
                 required:
                   - object
@@ -8713,16 +9115,20 @@ paths:
                   expiration:
                     type: number
                     nullable: true
+                    description: The timestamp for when the token will expire, in milliseconds
                     example: 1716883200
                   last_used_at:
                     type: number
                     nullable: true
+                    description: The timestamp for when the token was last used, in milliseconds
                     example: 1716883200
                   created_at:
                     type: number
+                    description: The timestamp for when the token was created, in milliseconds
                     example: 1716883200
                   updated_at:
                     type: number
+                    description: The timestamp for when the token was last updated, in milliseconds
                     example: 1716883200
                 required:
                   - object
@@ -8893,16 +9299,20 @@ paths:
                         expiration:
                           type: number
                           nullable: true
+                          description: The timestamp for when the token will expire, in milliseconds
                           example: 1716883200
                         last_used_at:
                           type: number
                           nullable: true
+                          description: The timestamp for when the token was last used, in milliseconds
                           example: 1716883200
                         created_at:
                           type: number
+                          description: The timestamp for when the token was created, in milliseconds
                           example: 1716883200
                         updated_at:
                           type: number
+                          description: The timestamp for when the token was last updated, in milliseconds
                           example: 1716883200
                       required:
                         - object
@@ -9082,16 +9492,20 @@ paths:
                   expiration:
                     type: number
                     nullable: true
+                    description: The timestamp for when the token will expire, in milliseconds
                     example: 1716883200
                   last_used_at:
                     type: number
                     nullable: true
+                    description: The timestamp for when the token was last used, in milliseconds
                     example: 1716883200
                   created_at:
                     type: number
+                    description: The timestamp for when the token was created, in milliseconds
                     example: 1716883200
                   updated_at:
                     type: number
+                    description: The timestamp for when the token was last updated, in milliseconds
                     example: 1716883200
                 required:
                   - object
@@ -9232,16 +9646,20 @@ paths:
                   expiration:
                     type: number
                     nullable: true
+                    description: The timestamp for when the token will expire, in milliseconds
                     example: 1716883200
                   last_used_at:
                     type: number
                     nullable: true
+                    description: The timestamp for when the token was last used, in milliseconds
                     example: 1716883200
                   created_at:
                     type: number
+                    description: The timestamp for when the token was created, in milliseconds
                     example: 1716883200
                   updated_at:
                     type: number
+                    description: The timestamp for when the token was last updated, in milliseconds
                     example: 1716883200
                 required:
                   - object
@@ -11461,6 +11879,9 @@ components:
           type: string
           description: Unique identifier for the associated plan.
           nullable: true
+        price_id:
+          type: string
+          description: Unique identifier for the associated price
         plan:
           allOf:
             - $ref: '#/components/schemas/CommercePlan'
@@ -13553,6 +13974,9 @@ components:
         plan_id:
           type: string
           description: Unique identifier for the associated plan.
+        price_id:
+          type: string
+          description: Unique identifier for the associated price
         plan:
           allOf:
             - $ref: '#/components/schemas/schemas-CommercePlan'
@@ -13871,6 +14295,208 @@ components:
       required:
         - data
         - total_count
+    RoleSetItem:
+      type: object
+      description: A role within a role set
+      properties:
+        object:
+          type: string
+          enum:
+            - role_set_item
+        id:
+          type: string
+          description: The unique identifier of the role
+        name:
+          type: string
+          description: The name of the role
+        key:
+          type: string
+          description: The key of the role (e.g., "org:admin", "org:member")
+        description:
+          type: string
+          nullable: true
+          description: Optional description of the role
+        members_count:
+          type: integer
+          format: int64
+          nullable: true
+          description: The number of members assigned to this role within the role set
+        has_members:
+          type: boolean
+          nullable: true
+          description: Whether this role has any members assigned within the role set
+        created_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of role creation
+        updated_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of last role update
+      additionalProperties: false
+      required:
+        - object
+        - id
+        - name
+        - key
+        - description
+        - created_at
+        - updated_at
+    RoleSetMigration:
+      type: object
+      description: Information about an ongoing role set migration
+      properties:
+        object:
+          type: string
+          enum:
+            - role_set_migration
+        id:
+          type: string
+          description: The unique identifier of the migration
+        organization_id:
+          type: string
+          nullable: true
+          description: The organization ID if the migration is scoped to a specific organization
+        instance_id:
+          type: string
+          description: The instance ID this migration belongs to
+        source_role_set_id:
+          type: string
+          description: The ID of the source role set being migrated from
+        dest_role_set_id:
+          type: string
+          nullable: true
+          description: The ID of the destination role set being migrated to
+        trigger_type:
+          type: string
+          description: What triggered this migration (e.g., "role_set_deletion", "role_removal")
+        status:
+          type: string
+          description: Current status of the migration (e.g., "enqueued", "in_progress", "completed")
+        migrated_members:
+          type: integer
+          description: Number of members that have been migrated so far
+        mappings:
+          type: object
+          nullable: true
+          description: Role key mappings from source to destination roles
+          additionalProperties:
+            type: string
+        started_at:
+          type: integer
+          format: int64
+          nullable: true
+          description: Unix timestamp when the migration started
+        completed_at:
+          type: integer
+          format: int64
+          nullable: true
+          description: Unix timestamp when the migration completed
+        created_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of migration creation
+        updated_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of last migration update
+      additionalProperties: false
+      required:
+        - object
+        - id
+        - instance_id
+        - source_role_set_id
+        - trigger_type
+        - status
+        - migrated_members
+        - created_at
+        - updated_at
+    RoleSet:
+      type: object
+      description: A role set defines a collection of roles that can be assigned to organization members
+      properties:
+        object:
+          type: string
+          enum:
+            - role_set
+        id:
+          type: string
+          description: The unique identifier of the role set
+        name:
+          type: string
+          description: The name of the role set
+        key:
+          type: string
+          description: A unique key for the role set (e.g., "role_set:default")
+        description:
+          type: string
+          nullable: true
+          description: Optional description of the role set
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleSetItem'
+          description: The list of roles in this role set
+        default_role:
+          allOf:
+            - $ref: '#/components/schemas/RoleSetItem'
+          nullable: true
+          description: The default role assigned to new organization members
+        creator_role:
+          allOf:
+            - $ref: '#/components/schemas/RoleSetItem'
+          nullable: true
+          description: The role assigned to the creator of an organization
+        type:
+          type: string
+          description: The type of the role set ("initial" or "custom")
+          enum:
+            - initial
+            - custom
+        role_set_migration:
+          description: Active migration information, only present when status is "enqueued" or "in_progress"
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/RoleSetMigration'
+        created_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of role set creation
+        updated_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of last role set update
+      additionalProperties: false
+      required:
+        - object
+        - id
+        - name
+        - key
+        - description
+        - roles
+        - type
+        - created_at
+        - updated_at
+    RoleSets:
+      type: object
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleSet'
+        total_count:
+          type: integer
+          format: int64
+          description: Total number of role sets
+      required:
+        - data
+        - total_count
+    ReassignmentMappings:
+      type: object
+      description: Mappings from source role keys to destination role keys for role reassignment
+      additionalProperties:
+        type: string
   responses:
     WellKnown.JWKS:
       description: Get the JSON Web Key Set
@@ -14493,6 +15119,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Permission'
+    RoleSets:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RoleSets'
+    RoleSet:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RoleSet'
   parameters:
     Paginated:
       name: paginated

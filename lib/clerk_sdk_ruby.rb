@@ -40,6 +40,7 @@ module Clerk
   autoload :WaitlistEntries, 'clerk/waitlistentries'
   autoload :Billing, 'clerk/billing'
   autoload :OrganizationPermissions, 'clerk/organizationpermissions'
+  autoload :RoleSets, 'clerk/rolesets'
   autoload :APIKeys, 'clerk/api_keys'
   autoload :M2m, 'clerk/m2m'
   autoload :OauthAccessTokens, 'clerk/oauthaccesstokens'

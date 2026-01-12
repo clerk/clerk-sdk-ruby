@@ -28,6 +28,8 @@ class Clerk::Models::Components::CommerceSubscriptionItem
   def credit=(str_); end
   def plan_id(); end
   def plan_id=(str_); end
+  def price_id(); end
+  def price_id=(str_); end
   def payment_method(); end
   def payment_method=(str_); end
   def lifetime_paid(); end
