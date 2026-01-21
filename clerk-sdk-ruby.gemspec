@@ -4,12 +4,18 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 
 Gem::Specification.new do |s|
   s.name        = 'clerk-sdk-ruby'
-  s.version     = '0.0.38'
+  s.version     = '5.0.0-beta'
   s.platform    = Gem::Platform::RUBY
   s.licenses    = ['Apache-2.0']
   s.summary     = ''
+  s.homepage    = 'https://github.com/clerk/clerk-sdk-ruby.git'
   s.description = 'Ruby Client SDK'
   s.authors     = ['Speakeasy']
+  s.metadata    = {
+    'homepage_uri' => 'https://github.com/clerk/clerk-sdk-ruby.git',
+    'documentation_uri' => 'https://github.com/clerk/clerk-sdk-ruby.git',
+    'source_code_uri' => 'https://github.com/clerk/clerk-sdk-ruby.git'
+  }
 
   s.files         = Dir['{lib,test}/**/*']
   s.require_paths = ['lib']
