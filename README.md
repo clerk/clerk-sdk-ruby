@@ -25,89 +25,329 @@ Please see https://clerk.com/docs for more information.
 More information about the API can be found at https://clerk.com/docs
 <!-- End Summary [summary] -->
 
-<!-- Start Table of Contents [toc] -->
 ## Table of Contents
 <!-- $toc-max-depth=2 -->
 * [clerk-sdk-ruby](#clerk-sdk-ruby)
   * [SDK Installation](#sdk-installation)
-  * [SDK Example Usage](#sdk-example-usage)
-  * [Authentication](#authentication)
+  * [Configuration](#configuration)
+  * [Framework Integration](#framework-integration)
+  * [Step-Up Verification](#step-up-verification)
   * [Available Resources and Operations](#available-resources-and-operations)
-  * [Retries](#retries)
   * [Error Handling](#error-handling)
-  * [Server Selection](#server-selection)
 * [Development](#development)
   * [Maturity](#maturity)
   * [Contributions](#contributions)
 
-<!-- End Table of Contents [toc] -->
+<!-- No Table of Contents [toc] -->
 
-<!-- Start SDK Installation [installation] -->
 ## SDK Installation
 
-The SDK can be installed using [RubyGems](https://rubygems.org/):
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'clerk-sdk-ruby', require: "clerk"
+```
+
+And then execute:
+
+```
+$ bundle install
+```
+
+
+## Configuration
+
+### Environment Variables
+
+The SDK automatically reads these environment variables:
+
+| Variable	            | Description                                  |
+------------------------------------------------------------------------
+| CLERK_SECRET_KEY	    | Your Clerk secret key (starts with sk_)      |
+| CLERK_PUBLISHABLE_KEY	| Your Clerk publishable key (starts with pk_) |
+| CLERK_SIGN_IN_URL	URL | to redirect unauthenticated users            |
+| CLERK_SIGN_UP_URL	URL | for new user registration                    |
+| CLERK_SIGN_OUT_URL	  | URL for sign out                             |
+
+### Programmatic Configuration
+
+```ruby
+require 'clerk'
+
+Clerk.configure do |config|
+  # Optional: Override environment variables
+  config.publishable_key = ENV['CLERK_PUBLISHABLE_KEY']
+  config.secret_key = ENV['CLERK_SECRET_KEY']
+  
+  # Enable debug logging
+  config.debug = true
+  config.logger = Logger.new($stdout)
+  
+  # Exclude routes from authentication middleware
+  config.excluded_routes = ['/health', '/public/*']
+  
+  # Custom cache store (defaults to Rails.cache or ActiveSupport::Cache::MemoryStore)
+  config.cache_store = Rails.cache
+end
+```
+
+## Framework Integration
+
+### Rails
+The SDK automatically integrates with Rails via a Railtie. Simply include Clerk::Authenticatable in your controllers:
+
+config/initializers/clerk.rb
+```ruby
+Clerk.configure do |config|
+  # Configuration options here
+end
+```
+
+app/controllers/application_controller.rb
+```ruby
+class ApplicationController < ActionController::Base 
+  include Clerk::Authenticatable
+end
+```
+
+For API-only Rails apps:
+```ruby
+class ApplicationController < ActionController::API
+  include Clerk::Authenticatable
+end
+```
+
+Skip the Railtie (for custom middleware setup):
 
 ```bash
-gem install clerk-sdk-ruby
+export CLERK_SKIP_RAILTIE=true
 ```
-<!-- End SDK Installation [installation] -->
 
-<!-- Start SDK Example Usage [usage] -->
-## SDK Example Usage
+### Sinatra
 
-### Example
+```ruby
+require 'clerk/sinatra'
+require 'sinatra/base'
+
+class App < Sinatra::Base
+  register Sinatra::Clerk
+  
+  get '/' do
+    if clerk.user?
+      "Hello, #{clerk.user.first_name}!"
+    else
+      "Please sign in"
+    end
+  end
+  
+  # Require authentication for specific routes
+  get '/dashboard', auth: true do
+    erb :dashboard
+  end
+  
+  # Require reverification for sensitive routes
+  get '/settings', reverify: true do
+    erb :settings
+  end
+end
+```
+
+### Rack
+config.ru
+
+```ruby
+require 'clerk/rack'
+
+use Clerk::Rack::Middleware
+
+# Optional: Add reverification middleware
+use Clerk::Rack::Reverification,
+    preset: Clerk::StepUp::Preset::STRICT,
+    routes: ['/admin/*', '/settings/*']
+
+run MyApp
+```
+
+## Authentication & Session Management
+
+### Accessing the Clerk Helper
+
+In all frameworks, the clerk helper provides access to authentication state:
+
+
+```ruby
+# Check if user is authenticated
+clerk.user?  # => true/false
+
+# Get current user (makes API call, cached for 60 seconds)
+clerk.user   # => Clerk::Models::User or nil
+
+# Get user ID without API call
+clerk.user_id  # => "user_abc123" or nil
+
+# Get session claims (JWT payload)
+clerk.session  # => Hash with JWT claims
+```
+
+### Session Claims
+The session contains JWT claims including:
+
+```ruby
+clerk.session
+# {
+#   "sub" => "user_abc123",           # User ID
+#   "sid" => "sess_xyz789",           # Session ID
+#   "org_id" => "org_123",            # Organization ID (if applicable)
+#   "org_slug" => "my-org",           # Organization slug
+#   "org_role" => "org:admin",        # Organization role
+#   "org_permissions" => [...],       # Organization permissions
+#   "iat" => 1234567890,              # Issued at
+#   "exp" => 1234571490,              # Expiration
+#   ...
+# }
+```
+
+### Accessing User & Organization Data
+
+```ruby
+# Get full user object (API call, cached)
+user = clerk.user
+
+# Access user properties
+user.id                  # => "user_abc123"
+user.first_name          # => "John"
+user.last_name           # => "Doe"
+user.email_addresses     # => Array of email addresses
+user.primary_email_address_id
+user.phone_numbers
+user.created_at
+user.updated_at
+user.public_metadata
+user.private_metadata
+```
+
+### Organization Information
+
+```ruby
+# Check if user is in an organization context
+clerk.organization?  # => true/false
+
+# Get organization ID
+clerk.organization_id  # => "org_123" or nil
+
+# Get full organization object (API call, cached)
+org = clerk.organization
+
+# Access organization properties
+org.id
+org.name
+org.slug
+org.members_count
+
+# Get user's role in the organization
+clerk.organization_role  # => "org:admin"
+
+# Get user's permissions
+clerk.organization_permissions  # => ["org:billing:manage", "org:users:read"]
+```
+
+
+## Backend API Operations
 
 ```ruby
 require 'clerk_sdk_ruby'
 
-Models = ::Clerk::Models
-s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+# Initialize the SDK
+sdk = Clerk::SDK.new
 
-res = s.email_addresses.get(email_address_id: 'email_address_id_example')
+# Or with explicit credentials
+sdk = Clerk::SDK.new(secret_key: 'sk_test_...')
 
-unless res.email_address.nil?
-  # handle response
+# List users
+response = sdk.users.list(limit: 10, offset: 0)
+response.user_list.each do |user|
+  puts user.email_addresses.first.email_address
 end
-
 ```
-<!-- End SDK Example Usage [usage] -->
 
-<!-- Start Authentication [security] -->
-## Authentication
-
-### Per-Client Security Schemes
-
-This SDK supports the following security scheme globally:
-
-| Name          | Type | Scheme      |
-| ------------- | ---- | ----------- |
-| `bearer_auth` | http | HTTP Bearer |
-
-To authenticate with the API the `bearer_auth` parameter must be set when initializing the SDK client instance. For example:
-```ruby
-require 'clerk_sdk_ruby'
-
-Models = ::Clerk::Models
-s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::GetPublicInterstitialRequest.new(
-  frontend_api_query_parameter1: 'pub_1a2b3c4d',
-)
-
-res = s.miscellaneous.get_public_interstitial(request: req)
-
-if res.status_code == 200
-  # handle response
-end
-
-```
-<!-- End Authentication [security] -->
+<!-- No SDK Installation [installation] -->
+<!-- No SDK Example Usage [usage] -->
+<!-- No Authentication [security] -->
 
 <!-- Start Available Resources and Operations [operations] -->
+
+
+## Step-Up Verification (Reverification)
+
+Reverification requires users to re-authenticate for sensitive operations.
+
+### Presets
+| Preset	                          | Timeout	Level             |
+-----------------------------------------------------------------
+| Clerk::StepUp::Preset::STRICT   	| 10 minutes	Second factor |
+| Clerk::StepUp::Preset::STRICT_MFA	| 10 minutes	Multi-factor  |
+| Clerk::StepUp::Preset::MODERATE	  | 60 minutes	Second factor |
+| Clerk::StepUp::Preset::LAX	      | 24 hours	Second factor   |
+
+
+### Rails Usage
+
+```ruby
+class SettingsController < ApplicationController
+  before_action :require_reverification!, only: [:update_password]
+  
+  def update_password
+    # Only reached if reverification passed
+  end
+  
+  # Or with custom preset
+  def delete_account
+    require_reverification!(Clerk::StepUp::Preset::STRICT_MFA) do |preset|
+      # Custom handling when reverification is needed
+      render json: { error: 'Please re-authenticate' }, status: 403
+    end
+  end
+end
+```
+
+### Sinatra Usage
+
+```ruby
+class App < Sinatra::Base
+  register Sinatra::Clerk
+  
+  before '/admin/*' do
+    require_reverification!(Clerk::StepUp::Preset::STRICT)
+  end
+  
+  # Or using route condition
+  post '/delete-account', reverify: Clerk::StepUp::Preset::STRICT_MFA do
+    # Handle deletion
+  end
+end
+```
+
+### Rack Middleware
+
+```ruby
+use Clerk::Rack::Reverification,
+    preset: Clerk::StepUp::Preset::MODERATE,
+    routes: ['/settings/*', '/billing/*']
+```
+
+### Manual Check
+
+```ruby
+if clerk.user_needs_reverification?(Clerk::StepUp::Preset::STRICT)
+  # User needs to re-authenticate
+end
+
+# Check if user has passed reverification
+if clerk.user_reverified?(level: :second_factor, after_minutes: 10)
+  # User has recently verified
+end
+```
+
 ## Available Resources and Operations
 
 <details open>
@@ -420,60 +660,7 @@ end
 </details>
 <!-- End Available Resources and Operations [operations] -->
 
-<!-- Start Retries [retries] -->
-## Retries
-
-Some of the endpoints in this SDK support retries. If you use the SDK without any configuration, it will fall back to the default retry strategy provided by the API. However, the default retry strategy can be overridden on a per-operation basis, or across the entire SDK.
-
-To change the default retry strategy for a single API call, simply provide a `RetryConfig` object to the call:
-```ruby
-require 'clerk_sdk_ruby'
-
-Models = ::Clerk::Models
-s = ::Clerk::OpenAPIClient.new
-
-req = Models::Operations::GetPublicInterstitialRequest.new(
-  frontend_api_query_parameter1: 'pub_1a2b3c4d',
-)
-
-res = s.miscellaneous.get_public_interstitial(request: req)
-
-if res.status_code == 200
-  # handle response
-end
-
-```
-
-If you'd like to override the default retry strategy for all operations that support retries, you can use the `retry_config` optional parameter when initializing the SDK:
-```ruby
-require 'clerk_sdk_ruby'
-
-Models = ::Clerk::Models
-s = ::Clerk::OpenAPIClient.new(
-      retry_config: Utils::RetryConfig.new(
-        backoff: Utils::BackoffStrategy.new(
-          exponent: 1.1,
-          initial_interval: 1,
-          max_elapsed_time: 100,
-          max_interval: 50
-        ),
-        retry_connection_errors: false,
-        strategy: 'backoff'
-      ),
-    )
-
-req = Models::Operations::GetPublicInterstitialRequest.new(
-  frontend_api_query_parameter1: 'pub_1a2b3c4d',
-)
-
-res = s.miscellaneous.get_public_interstitial(request: req)
-
-if res.status_code == 200
-  # handle response
-end
-
-```
-<!-- End Retries [retries] -->
+<!-- No Retries [retries] -->
 
 <!-- Start Error Handling [errors] -->
 ## Error Handling
@@ -498,61 +685,50 @@ When custom error responses are specified for an operation, the SDK may also thr
 
 ### Example
 
+#### API Errors
+
 ```ruby
-require 'clerk_sdk_ruby'
-
-Models = ::Clerk::Models
-s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
 begin
-    req = Models::Operations::VerifyClientRequest.new(
-      token: 'jwt_token_example',
-    )
-
-    res = s.clients.verify(request: req)
-
-    unless res.client.nil?
-      # handle response
-    end
-rescue Models::Errors::ClerkErrors => e
-  # handle e.container data
-  raise e
-rescue Errors::APIError => e
-  # handle default exception
-  raise e
+  response = sdk.users.get(user_id: 'invalid')
+rescue Clerk::Models::Errors::ClerkErrors => e
+  # Clerk-specific errors (400, 401, 404)
+  puts e.message
+  puts e.raw_response.status
+rescue Clerk::Errors::APIError => e
+  # General API errors
+  puts e.status_code
+  puts e.body
 end
-
 ```
-<!-- End Error Handling [errors] -->
 
-<!-- Start Server Selection [server] -->
-## Server Selection
+#### Authentication Errors 
 
-### Override Server URL Per-Client
-
-The default server can be overridden globally by passing a URL to the `server_url (String)` optional parameter when initializing the SDK client instance. For example:
 ```ruby
-require 'clerk_sdk_ruby'
-
-Models = ::Clerk::Models
-s = ::Clerk::OpenAPIClient.new(
-      server_url: 'https://api.clerk.com/v1',
-    )
-
-req = Models::Operations::GetPublicInterstitialRequest.new(
-  frontend_api_query_parameter1: 'pub_1a2b3c4d',
-)
-
-res = s.miscellaneous.get_public_interstitial(request: req)
-
-if res.status_code == 200
-  # handle response
+rescue Clerk::AuthenticationError => e
+  puts e.status  # HTTP status code
+  puts e.message
+rescue Clerk::ConfigurationError => e
+  # Missing or invalid configuration
+  puts e.message
 end
-
 ```
-<!-- End Server Selection [server] -->
+
+#### JWT Errors
+
+```ruby
+begin
+  claims = sdk.verify_token(token)
+rescue JWT::ExpiredSignature
+  # Token has expired
+rescue JWT::InvalidIatError
+  # Token not yet active
+rescue JWT::DecodeError
+  # Malformed or invalid token
+end
+```
+
+<!-- No Error Handling [errors] -->
+<!-- No Server Selection [server] -->
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->
 
