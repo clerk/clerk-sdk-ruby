@@ -46,6 +46,8 @@ rails:
 rails-api:
 	@cd apps/rails-api && bin/rails server
 
+# Rerun must be installed globally:
+# gem install --system rerun
 rack:
 	rerun --dir lib,apps/rack --pattern '**/*.{rb,ru}' -- bundle exec puma apps/rack/config.ru -p 3000
 
