@@ -29,13 +29,13 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 ruby:
-  version: 0.0.36
+  version: 0.0.37
   additionalDependencies:
     development:
       activesupport: ~> 8.0.0
       dotenv: ~> 3.1
       puma: ~> 6.4.3
-      rack: ~> 3.1
+      rack: ~> 3.1.18
       rackup: ~> 2.2
       rake: ~> 13.0
       rerun: ~> 0.14

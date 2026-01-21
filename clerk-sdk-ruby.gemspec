@@ -4,7 +4,7 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 
 Gem::Specification.new do |s|
   s.name        = 'clerk-sdk-ruby'
-  s.version     = '0.0.36'
+  s.version     = '0.0.37'
   s.platform    = Gem::Platform::RUBY
   s.licenses    = ['Apache-2.0']
   s.summary     = ''
@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('minitest', '>= 5.27.0')
   s.add_development_dependency('minitest-focus', '~> 1.4.1')
   s.add_development_dependency('puma', '~> 6.4.3')
-  s.add_development_dependency('rack', '~> 3.1')
+  s.add_development_dependency('rack', '~> 3.1.18')
   s.add_development_dependency('rackup', '~> 2.2')
   s.add_development_dependency('rake', '~> 13.0')
   s.add_development_dependency('rerun', '~> 0.14')
