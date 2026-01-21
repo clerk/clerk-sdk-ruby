@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # A role set defines a collection of roles that can be assigned to organization members
       class RoleSet
         

@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # List of waitlist entries
       class WaitlistEntries
         

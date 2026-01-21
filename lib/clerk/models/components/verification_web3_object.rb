@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
 
       class VerificationWeb3Object
 

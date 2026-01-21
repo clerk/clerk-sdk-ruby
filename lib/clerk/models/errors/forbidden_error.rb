@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Errors
-    
       # 403 Forbidden
       class ForbiddenError < StandardError
         

@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # The provided password was correct.
       class VerifyPasswordResponseBody
         

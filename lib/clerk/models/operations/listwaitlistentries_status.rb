@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # ListWaitlistEntriesStatus - Filter waitlist entries by their status
       class ListWaitlistEntriesStatus
 

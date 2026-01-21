@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # PaymentType - The payment method type.
       class PaymentType
 

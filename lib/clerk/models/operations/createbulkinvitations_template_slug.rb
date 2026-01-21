@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # CreateBulkInvitationsTemplateSlug - The slug of the email template to use for the invitation email.
       class CreateBulkInvitationsTemplateSlug
 

@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Amount for the next payment.
       class CommerceSubscriptionItemAmount
         

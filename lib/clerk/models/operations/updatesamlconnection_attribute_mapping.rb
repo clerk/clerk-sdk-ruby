@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # Define the attribute name mapping between Identity Provider and Clerk's user properties
       class UpdateSAMLConnectionAttributeMapping
         

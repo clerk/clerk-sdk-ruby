@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # GetCommercePlanListPayerType - Filter plans by payer type
       class GetCommercePlanListPayerType
 

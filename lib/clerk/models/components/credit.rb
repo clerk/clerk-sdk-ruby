@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Credit information (only available in PaymentAttempt events).
       class Credit
         

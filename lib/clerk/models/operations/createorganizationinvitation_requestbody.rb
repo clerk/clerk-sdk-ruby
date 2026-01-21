@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
 
       class CreateOrganizationInvitationRequestBody
         
@@ -30,9 +29,12 @@ module Clerk
         field :redirect_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('redirect_url') } }
         # The number of days the invitation will be valid for. By default, the invitation has a 30 days expire.
         field :expires_in_days, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expires_in_days') } }
+        # Optional flag which denotes whether an email invitation should be sent to the given email address.
+        # Defaults to `true`.
+        field :notify, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('notify') } }
 
         
-        def initialize(email_address:, role:, inviter_user_id: nil, public_metadata: nil, private_metadata: nil, redirect_url: nil, expires_in_days: nil)
+        def initialize(email_address:, role:, inviter_user_id: nil, public_metadata: nil, private_metadata: nil, redirect_url: nil, expires_in_days: nil, notify: true)
           @email_address = email_address
           @role = role
           @inviter_user_id = inviter_user_id
@@ -40,6 +42,7 @@ module Clerk
           @private_metadata = private_metadata
           @redirect_url = redirect_url
           @expires_in_days = expires_in_days
+          @notify = notify
         end
 
         
@@ -52,6 +55,7 @@ module Clerk
           return false unless @private_metadata == other.private_metadata
           return false unless @redirect_url == other.redirect_url
           return false unless @expires_in_days == other.expires_in_days
+          return false unless @notify == other.notify
           true
         end
       end

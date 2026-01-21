@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # The payment source associated with this subscription.
       class PaymentSource
         

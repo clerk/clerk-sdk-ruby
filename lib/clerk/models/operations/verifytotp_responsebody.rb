@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # The provided TOTP or backup code was correct.
       class VerifyTOTPResponseBody
         

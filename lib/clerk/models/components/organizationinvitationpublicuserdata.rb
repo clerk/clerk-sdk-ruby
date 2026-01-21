@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # An organization inviter's public user data
       class OrganizationInvitationPublicUserData
         

@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # Provider1 - The IdP provider of the connection.
       class Provider1
 

@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # Verified - Filter by verification status
       class Verified
 

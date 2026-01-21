@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # MachineScopeDeletedObject - String representing the object's type.
       class MachineScopeDeletedObject
 

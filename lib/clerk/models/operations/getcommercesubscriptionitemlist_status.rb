@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # GetCommerceSubscriptionItemListStatus - Filter subscription items by status
       class GetCommerceSubscriptionItemListStatus
 

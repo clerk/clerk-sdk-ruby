@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # GetTemplateListTemplateType - The type of templates to list (email or SMS)
       class GetTemplateListTemplateType
 

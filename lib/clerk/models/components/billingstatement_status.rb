@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # BillingStatementStatus - The current status of the statement.
       class BillingStatementStatus
 

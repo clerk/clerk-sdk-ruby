@@ -26,6 +26,8 @@ class Clerk::Models::Components::OAuthAccessToken
   def label=(str_); end
   def scopes(); end
   def scopes=(str_); end
+  def id_token(); end
+  def id_token=(str_); end
   def token_secret(); end
   def token_secret=(str_); end
 end

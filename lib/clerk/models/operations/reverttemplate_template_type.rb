@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # RevertTemplateTemplateType - The type of template to revert
       class RevertTemplateTemplateType
 

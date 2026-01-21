@@ -4800,6 +4800,13 @@ paths:
                   nullable: true
                   minimum: 1
                   maximum: 365
+                notify:
+                  type: boolean
+                  description: |-
+                    Optional flag which denotes whether an email invitation should be sent to the given email address.
+                    Defaults to `true`.
+                  nullable: true
+                  default: true
               required:
                 - email_address
                 - role
@@ -4954,6 +4961,13 @@ paths:
                     nullable: true
                     minimum: 1
                     maximum: 365
+                  notify:
+                    type: boolean
+                    description: |-
+                      Optional flag which denotes whether an email invitation should be sent to the given email address.
+                      Defaults to `true`.
+                    nullable: true
+                    default: true
                 required:
                   - email_address
                   - role
@@ -7787,6 +7801,7 @@ paths:
           $ref: '#/components/responses/ResourceNotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /audit_logs: {}
   /api_keys:
     post:
       operationId: createApiKey
@@ -12069,6 +12084,9 @@ components:
             items:
               type: string
             description: The list of scopes that the token is valid for. Only present for OAuth 2.0 tokens.
+          id_token:
+            type: string
+            description: The ID token retrieved from the OIDC provider. Only present for OIDC-compliant OAuth 2.0 providers when available.
           token_secret:
             type: string
             description: The token secret. Only present for OAuth 1.0 tokens.

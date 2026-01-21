@@ -22,4 +22,6 @@ class Clerk::Models::Operations::CreateOrganizationInvitationRequestBody
   def redirect_url=(str_); end
   def expires_in_days(); end
   def expires_in_days=(str_); end
+  def notify(); end
+  def notify=(str_); end
 end

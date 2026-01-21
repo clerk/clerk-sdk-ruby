@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # A list of commerce plans.
       class PaginatedCommercePlanResponse
         

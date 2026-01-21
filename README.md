@@ -270,13 +270,6 @@ response.user_list.each do |user|
 end
 ```
 
-<!-- No SDK Installation [installation] -->
-<!-- No SDK Example Usage [usage] -->
-<!-- No Authentication [security] -->
-
-<!-- Start Available Resources and Operations [operations] -->
-
-
 ## Step-Up Verification (Reverification)
 
 Reverification requires users to re-authenticate for sensitive operations.
@@ -348,6 +341,11 @@ if clerk.user_reverified?(level: :second_factor, after_minutes: 10)
 end
 ```
 
+<!-- No SDK Installation [installation] -->
+<!-- No SDK Example Usage [usage] -->
+<!-- No Authentication [security] -->
+
+<!-- Start Available Resources and Operations [operations] -->
 ## Available Resources and Operations
 
 <details open>

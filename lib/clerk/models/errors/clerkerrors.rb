@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Errors
-    
       # Request was not successful
       class ClerkErrors < StandardError
         

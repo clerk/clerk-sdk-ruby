@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # List of JWT templates
       class JWTTemplate
         

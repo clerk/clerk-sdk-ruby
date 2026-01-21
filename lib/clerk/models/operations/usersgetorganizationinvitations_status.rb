@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # UsersGetOrganizationInvitationsStatus - Filter organization invitations based on their status
       class UsersGetOrganizationInvitationsStatus
 

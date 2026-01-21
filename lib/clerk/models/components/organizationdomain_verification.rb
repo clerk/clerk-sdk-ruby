@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Verification details for the domain
       class OrganizationDomainVerification
         

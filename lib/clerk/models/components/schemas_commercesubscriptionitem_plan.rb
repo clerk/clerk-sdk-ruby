@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # The associated commerce plan.
       class SchemasCommerceSubscriptionItemPlan
         

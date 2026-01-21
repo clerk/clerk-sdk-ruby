@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # UpsertTemplateTemplateType - The type of template to update
       class UpsertTemplateTemplateType
 

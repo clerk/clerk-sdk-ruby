@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Current amount for this subscription.
       class SchemasCommerceSubscriptionItemAmount
         

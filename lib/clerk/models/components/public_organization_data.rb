@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Public organization data associated with this domain
       class PublicOrganizationData
         

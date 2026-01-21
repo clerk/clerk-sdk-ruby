@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # The subscription item associated with this payment attempt.
       class SubscriptionItem
         

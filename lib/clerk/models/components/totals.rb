@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Totals for the statement.
       class Totals
         

@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # MachineSecretKeyObject - String representing the object's type.
       class MachineSecretKeyObject
 

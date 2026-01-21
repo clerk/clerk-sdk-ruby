@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # List of Redirect URLs
       class RedirectURL
         

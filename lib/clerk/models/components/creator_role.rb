@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # The role assigned to the creator of an organization
       class CreatorRole
         

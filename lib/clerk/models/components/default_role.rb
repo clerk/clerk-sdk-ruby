@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # The default role assigned to new organization members
       class DefaultRole
         

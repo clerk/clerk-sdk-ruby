@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Machine scope deleted successfully for a machine
       class MachineScopeDeleted
         

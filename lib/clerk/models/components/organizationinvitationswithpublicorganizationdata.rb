@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # A list of organization invitations with public organization data
       class OrganizationInvitationsWithPublicOrganizationData
         

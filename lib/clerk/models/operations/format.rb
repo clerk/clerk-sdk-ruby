@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # Format - The format of the response.
       class Format
 

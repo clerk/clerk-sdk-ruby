@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # The payee associated with this payment attempt.
       class Payee
         

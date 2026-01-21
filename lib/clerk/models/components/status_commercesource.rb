@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # StatusCommerceSource - Status of the payment source.
       class StatusCommerceSource
 

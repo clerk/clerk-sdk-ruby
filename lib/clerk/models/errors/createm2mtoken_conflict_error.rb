@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Errors
-    
       # 409 Conflict
       class CreateM2MTokenConflictError < StandardError
         

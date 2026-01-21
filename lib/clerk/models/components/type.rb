@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Type - The type of the role set ("initial" or "custom")
       class Type
 

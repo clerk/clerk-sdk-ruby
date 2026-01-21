@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Get the JSON Web Key Set
       class Jwks
         

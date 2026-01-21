@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # An organization invitation with public organization data populated
       class OrganizationInvitationWithPublicOrganizationData
         

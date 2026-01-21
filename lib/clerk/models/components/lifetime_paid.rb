@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Total amount paid over the lifetime of this subscription.
       class LifetimePaid
         

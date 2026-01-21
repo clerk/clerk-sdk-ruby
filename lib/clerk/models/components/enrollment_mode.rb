@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # EnrollmentMode - Mode of enrollment for the domain
       class EnrollmentMode
 

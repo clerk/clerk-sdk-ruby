@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # 200 OK
       class RevokeM2MTokenResponseBody
         

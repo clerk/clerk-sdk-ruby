@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # JWT template claims in JSON format
       class UpdateJWTTemplateClaims
         

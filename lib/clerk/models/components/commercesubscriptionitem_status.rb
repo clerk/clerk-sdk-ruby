@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # CommerceSubscriptionItemStatus - Current status of the subscription item.
       class CommerceSubscriptionItemStatus
 

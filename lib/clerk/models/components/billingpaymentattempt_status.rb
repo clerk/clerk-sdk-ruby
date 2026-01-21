@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # BillingPaymentAttemptStatus - The current status of the payment attempt.
       class BillingPaymentAttemptStatus
 

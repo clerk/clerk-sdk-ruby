@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # ToggleTemplateDeliveryTemplateType - The type of template to toggle delivery for
       class ToggleTemplateDeliveryTemplateType
 

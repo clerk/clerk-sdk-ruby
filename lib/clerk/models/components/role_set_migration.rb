@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Active migration information, only present when status is "enqueued" or "in_progress"
       class RoleSetMigration
         

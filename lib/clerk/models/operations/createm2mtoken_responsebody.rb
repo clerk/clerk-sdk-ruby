@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # 201 Created
       class CreateM2MTokenResponseBody
         

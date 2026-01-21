@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # ListInvitationsStatus - Filter invitations based on their status
       class ListInvitationsStatus
 

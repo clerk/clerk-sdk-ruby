@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # SchemasCommerceSubscriptionItemPlanPeriod - The billing period for this subscription.
       class SchemasCommerceSubscriptionItemPlanPeriod
 

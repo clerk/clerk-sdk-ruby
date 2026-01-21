@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # CommercePaymentMethodResponseStatus - Status of the payment method.
       class CommercePaymentMethodResponseStatus
 

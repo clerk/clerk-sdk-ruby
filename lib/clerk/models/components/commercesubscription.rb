@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # A commerce subscription.
       class CommerceSubscription
         

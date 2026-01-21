@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Health check information about a domain's proxy configuration validation attempt.
       class ProxyCheck
         

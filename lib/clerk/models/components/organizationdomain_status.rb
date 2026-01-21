@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # OrganizationDomainStatus - Status of the verification. It can be `unverified` or `verified`
       class OrganizationDomainStatus
 

@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Response that contains a temporary Svix URL to access management dashboard
       class SvixURL
         

@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # GetCommerceSubscriptionItemListPayerType - Filter subscription items by payer type
       class GetCommerceSubscriptionItemListPayerType
 

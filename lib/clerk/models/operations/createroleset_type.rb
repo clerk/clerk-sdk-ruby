@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # CreateRoleSetType - The type of the role set. "initial" role sets are the default for new organizations.
       # Only one role set can be "initial" per instance.
       class CreateRoleSetType

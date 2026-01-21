@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Success
       class OAuthAccessToken
         
@@ -31,11 +30,13 @@ module Clerk
         field :label, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('label'), required: true } }
         # The list of scopes that the token is valid for. Only present for OAuth 2.0 tokens.
         field :scopes, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scopes') } }
+        # The ID token retrieved from the OIDC provider. Only present for OIDC-compliant OAuth 2.0 providers when available.
+        field :id_token, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id_token') } }
         # The token secret. Only present for OAuth 1.0 tokens.
         field :token_secret, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('token_secret') } }
 
         
-        def initialize(object:, external_account_id:, provider_user_id:, token:, provider:, public_metadata:, expires_at: nil, label: nil, scopes: nil, token_secret: nil)
+        def initialize(object:, external_account_id:, provider_user_id:, token:, provider:, public_metadata:, expires_at: nil, label: nil, scopes: nil, id_token: nil, token_secret: nil)
           @object = object
           @external_account_id = external_account_id
           @provider_user_id = provider_user_id
@@ -45,6 +46,7 @@ module Clerk
           @expires_at = expires_at
           @label = label
           @scopes = scopes
+          @id_token = id_token
           @token_secret = token_secret
         end
 
@@ -60,6 +62,7 @@ module Clerk
           return false unless @expires_at == other.expires_at
           return false unless @label == other.label
           return false unless @scopes == other.scopes
+          return false unless @id_token == other.id_token
           return false unless @token_secret == other.token_secret
           true
         end

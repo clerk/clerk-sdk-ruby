@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Components
-    
       # Information about the next payment.
       class SchemasCommerceSubscriptionItemNextPayment
         

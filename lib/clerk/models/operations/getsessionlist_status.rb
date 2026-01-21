@@ -7,7 +7,6 @@
 module Clerk
   module Models
     module Operations
-    
       # GetSessionListStatus - Filter sessions by the provided status
       class GetSessionListStatus
 
