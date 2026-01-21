@@ -1,37 +1,36 @@
 # frozen_string_literal: true
 
-require_relative "lib/clerk/version"
+$LOAD_PATH.push File.expand_path('lib', __dir__)
 
-Gem::Specification.new do |spec|
-  spec.name          = "clerk-sdk-ruby"
-  spec.version       = Clerk::VERSION
-  spec.authors       = ["Clerk"]
-  spec.email         = ["ruby-sdk@clerk.dev"]
+Gem::Specification.new do |s|
+  s.name        = 'clerk-sdk-ruby'
+  s.version     = '0.0.37'
+  s.platform    = Gem::Platform::RUBY
+  s.licenses    = ['Apache-2.0']
+  s.summary     = ''
+  s.description = 'Ruby Client SDK'
+  s.authors     = ['Speakeasy']
 
-  spec.summary       = "Clerk SDK for Ruby."
-  spec.description   = "Client SDK for the Clerk"
-  spec.homepage      = "https://github.com/clerk/clerk-sdk-ruby"
-  spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 3.2.0")
+  s.files         = Dir['{lib,test}/**/*']
+  s.require_paths = ['lib']
+  s.required_ruby_version = '>= 3.2'
 
-  spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/clerk/clerk-sdk-ruby"
-  spec.metadata["changelog_uri"] = "https://github.com/clerk/clerk-sdk-ruby/blob/main/CHANGELOG.md"
-
-  # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
-  spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{\A(?:test|spec|features)/}) }
-  end
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
-
-  spec.add_dependency "faraday", ">= 1.4.1", "< 3.0"
-  spec.add_dependency "jwt", '~> 3.0'
-  spec.add_dependency "clerk-http-client", "~> 2.0"
-  spec.add_dependency "concurrent-ruby", "~> 1.1"
-
-  spec.add_development_dependency "byebug", "~> 11.1"
-  spec.add_development_dependency "timecop", "~> 0.9.4"
+  s.add_dependency('base64', '>= 0.2.0', '< 1.0')
+  s.add_dependency('concurrent-ruby', '~> 1.3.5')
+  s.add_dependency('faraday')
+  s.add_dependency('faraday-multipart', '~> 1.2.0')
+  s.add_dependency('faraday-retry', '~> 2.4.0')
+  s.add_dependency('jwt', '~> 2.5')
+  s.add_development_dependency('activesupport', '~> 8.0.0')
+  s.add_development_dependency('dotenv', '~> 3.1')
+  s.add_development_dependency('minitest', '>= 5.27.0')
+  s.add_development_dependency('minitest-focus', '~> 1.4.1')
+  s.add_development_dependency('puma', '~> 6.4.3')
+  s.add_development_dependency('rack', '~> 3.1.18')
+  s.add_development_dependency('rackup', '~> 2.2')
+  s.add_development_dependency('rake', '~> 13.0')
+  s.add_development_dependency('rerun', '~> 0.14')
+  s.add_development_dependency('rubocop', '~> 1.73.2')
+  s.add_development_dependency('rubocop-minitest', '~> 0.37.1')
+  s.add_development_dependency('sinatra', '~> 4.1')
 end

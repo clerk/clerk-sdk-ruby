@@ -29,8 +29,8 @@
     <script
       async 
       crossorigin="anonymous"
-      data-clerk-publishable-key="pk_test_d29ydGh5LWVsZXBoYW50LTE3LmNsZXJrLmFjY291bnRzLmRldiQ"
-      src="https://worthy-elephant-17.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      data-clerk-publishable-key="<%= ENV['CLERK_PUBLISHABLE_KEY'] %>"
+      src="<%= ENV['CLERK_JS_URL'] %>"
       type="text/javascript"
     ></script>
     <script>

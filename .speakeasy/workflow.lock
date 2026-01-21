@@ -1,0 +1,42 @@
+speakeasyVersion: 1.692.0
+sources:
+    Clerk-OAS:
+        sourceNamespace: clerk-openapi
+        sourceRevisionDigest: sha256:0b293b4705887ab150918e77e54c1ea643104cd73bc6efd21183393597505faf
+        sourceBlobDigest: sha256:93cae508ba959aac63e75b559c3f68472312b22dfa907c3124a6161343b3b8af
+        tags:
+            - latest
+            - "2025-11-10"
+targets:
+    clerk:
+        source: Clerk-OAS
+        sourceNamespace: clerk-openapi
+        sourceRevisionDigest: sha256:0b293b4705887ab150918e77e54c1ea643104cd73bc6efd21183393597505faf
+        sourceBlobDigest: sha256:93cae508ba959aac63e75b559c3f68472312b22dfa907c3124a6161343b3b8af
+        codeSamplesNamespace: clerk-oas-ruby-code-samples
+        codeSamplesRevisionDigest: sha256:ce793eedc32f5bc87832b3c39765af150003ab4a7789d20ea9d3d11e13fc2fe6
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        Clerk-OAS:
+            inputs:
+                - location: https://raw.githubusercontent.com/clerk/openapi-specs/refs/heads/main/bapi/2025-11-10.yml
+            overlays:
+                - location: https://raw.githubusercontent.com/clerk/openapi-specs/refs/heads/main/.speakeasy/bapi/fixes.yml
+            output: .speakeasy/out.openapi.yaml
+            registry:
+                location: registry.speakeasyapi.dev/clerk/clerk/clerk-openapi
+    targets:
+        clerk:
+            target: ruby
+            source: Clerk-OAS
+            publish:
+                rubygems:
+                    token: $rubygems_auth_token
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/clerk/clerk/clerk-oas-ruby-code-samples
+                labelOverride:
+                    fixedValue: Ruby (SDK)
+                blocking: false

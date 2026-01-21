@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DisablePaths
   def initialize(app, paths: [])
     @app = app
@@ -7,7 +9,7 @@ class DisablePaths
   end
 
   def call(env)
-    return [404, {}, []] if @paths[env["PATH_INFO"]]
+    return [404, {}, []] if @paths[env['PATH_INFO']]
     @app.call(env)
   end
 end

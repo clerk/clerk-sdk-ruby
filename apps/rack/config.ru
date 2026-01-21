@@ -1,17 +1,19 @@
-require "active_support"
-require "rack"
-require "clerk/rack"
-require "dotenv"
+# frozen_string_literal: true
 
-require_relative "app"
-require_relative "middleware/disable_paths"
+require 'active_support'
+require 'rack'
+require 'clerk/rack'
+require 'dotenv'
 
-Dotenv.load(".env")
+require_relative 'app'
+require_relative 'middleware/disable_paths'
 
-use DisablePaths, paths: ["/favicon.ico"]
+Dotenv.load('.env')
+
+use DisablePaths, paths: ['/favicon.ico']
 use Clerk::Rack::Middleware
-use Clerk::Rack::Reverification,
-  preset: Clerk::StepUp::Preset::LAX,
-  routes: ["/*"]
+# use Clerk::Rack::Reverification,
+#     preset: Clerk::StepUp::Preset::LAX,
+#     routes: ['/*']
 
 run App.new

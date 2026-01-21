@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "ostruct"
-require "forwardable"
+require 'ostruct'
+require 'forwardable'
 
 module Clerk
   # This class represents a parameter object used to contain all request and configuration
@@ -36,20 +36,20 @@ module Clerk
         origin: Utils.retrieve_header_from_request(request, ORIGIN_HEADER),
         port: request.port,
         sec_fetch_dest: Utils.retrieve_header_from_request(request, SEC_FETCH_DEST_HEADER),
-        session_token_in_header: Utils.retrieve_header_from_request(request, AUTHORIZATION_HEADER).gsub(/bearer/i, "").strip
+        session_token_in_header: Utils.retrieve_header_from_request(request, AUTHORIZATION_HEADER).gsub(/bearer/i, '').strip
       })
     end
 
     # The following properties are part of the props supported in all the AuthenticateContext
     # objects across all of our SDKs (eg JS, Go)
     def secret_key
-      raise ConfigurationError, "Clerk secret key is not set" if @config.secret_key.to_s.empty?
+      raise ConfigurationError, 'Clerk secret key is not set' if @config.secret_key.to_s.empty?
 
       @config.secret_key.to_s
     end
 
     def publishable_key
-      raise ConfigurationError, "Clerk publishable key is not set" if @config.publishable_key.to_s.to_s.empty?
+      raise ConfigurationError, 'Clerk publishable key is not set' if @config.publishable_key.to_s.to_s.empty?
 
       @config.publishable_key.to_s
     end
@@ -68,7 +68,7 @@ module Clerk
 
     # The frontend_api returned is without protocol prefix
     def frontend_api
-      return "" unless Utils.valid_publishable_key?(publishable_key.to_s)
+      return '' unless Utils.valid_publishable_key?(publishable_key.to_s)
 
       @frontend_api ||= if proxy_url?
         proxy_url
@@ -81,23 +81,23 @@ module Clerk
     end
 
     def development_instance?
-      secret_key.start_with?("sk_test_")
+      secret_key.start_with?('sk_test_')
     end
 
     def production_instance?
-      secret_key.start_with?("sk_live_")
+      secret_key.start_with?('sk_live_')
     end
 
     def document_request?
-      @headers.sec_fetch_dest == "document"
+      @headers.sec_fetch_dest == 'document'
     end
 
     def accepts_html?
-      @headers.accept&.start_with?("text/html")
+      @headers.accept&.start_with?('text/html')
     end
 
     def eligible_for_multi_domain?
-      is_satellite? && document_request? && !clerk_synced?
+      satellite? && document_request? && !clerk_synced?
     end
 
     def active_client?
@@ -110,7 +110,7 @@ module Clerk
       return false if @headers.origin.nil?
 
       # strip scheme
-      origin = @headers.origin.strip.sub(%r{\A(\w+:)?//}, "")
+      origin = @headers.origin.strip.sub(%r{\A(\w+:)?//}, '')
       return false if origin.empty?
 
       # Rack's host and port helpers are reverse-proxy-aware; that
@@ -146,15 +146,15 @@ module Clerk
     end
 
     def domain
-      "" # TODO: Add multi-domain support
+      '' # TODO: Add multi-domain support
     end
 
-    def is_satellite?
+    def satellite?
       false # TODO: Add multi-domain support
     end
 
     def proxy_url
-      "" # TODO: Add multi-domain support
+      '' # TODO: Add multi-domain support
     end
 
     def clerk_synced?
@@ -162,7 +162,7 @@ module Clerk
     end
 
     def clerk_redirect_url
-      "" # TODO: Add multi-domain support
+      '' # TODO: Add multi-domain support
     end
   end
 end

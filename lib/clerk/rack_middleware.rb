@@ -1,8 +1,10 @@
-require "clerk"
-require "clerk/authenticate_context"
-require "clerk/authenticate_request"
-require "clerk/proxy"
-require "clerk/utils"
+# frozen_string_literal: true
+
+require 'clerk'
+require 'clerk/authenticate_context'
+require 'clerk/authenticate_request'
+require 'clerk/proxy'
+require 'clerk/utils'
 
 module Clerk
   module Rack
@@ -15,23 +17,23 @@ module Clerk
       end
 
       def call(env)
-        env["clerk.initialized"] = true
+        env['clerk.initialized'] = true
 
         req = ::Rack::Request.new(env)
 
         if @excluded_routes[req.path]
-          env["clerk.excluded_route"] = true
+          env['clerk.excluded_route'] = true
           return @app.call(env)
         end
 
         @excluded_routes_wildcards.each do |route|
           if req.path.start_with?(route)
-            env["clerk.excluded_route"] = true
+            env['clerk.excluded_route'] = true
             return @app.call(env)
           end
         end
 
-        env["clerk"] = Clerk::Proxy.new
+        env['clerk'] = Clerk::Proxy.new
 
         auth_context = AuthenticateContext.new(req, Clerk.configuration)
         auth_request = AuthenticateRequest.new(auth_context)
@@ -57,7 +59,7 @@ module Clerk
       private
 
       def parse_cookie_key(cookie_header)
-        cookie_header.split(";")[0].split("=")[0]
+        cookie_header.split(';')[0].split('=')[0]
       end
 
       def set_cookie_headers!(headers, cookie_headers)
@@ -76,8 +78,8 @@ module Clerk
         cookie_params[:value] = cookie_params.delete(cookie_key.to_sym)
 
         # Ensure secure and httponly are set to true if present
-        cookie_params[:secure] = cookie_params.has_key?(:secure)
-        cookie_params[:httponly] = cookie_params.has_key?(:httponly)
+        cookie_params[:secure] = cookie_params.key?(:secure)
+        cookie_params[:httponly] = cookie_params.key?(:httponly)
 
         # fix issue with cookie expiration expected to be Date type
         cookie_params[:expires] = Date.parse(cookie_params[:expires]) if cookie_params[:expires]
@@ -87,7 +89,7 @@ module Clerk
     end
 
     class Reverification
-      def initialize(app, routes: ["/*"], preset: Clerk::StepUp::Preset::STRICT)
+      def initialize(app, routes: ['/*'], preset: Clerk::StepUp::Preset::STRICT)
         @app = app
         @preset = preset
 
@@ -95,14 +97,14 @@ module Clerk
       end
 
       def call(env)
-        raise Clerk::ConfigurationError, "`Clerk::Rack::Reverification` must be initialized after `Clerk::Rack::Middleware`" unless env["clerk.initialized"]
-        return @app.call(env) if env["clerk.excluded_route"]
+        raise Clerk::ConfigurationError, '`Clerk::Rack::Reverification` must be initialized after `Clerk::Rack::Middleware`' unless env['clerk.initialized']
+        return @app.call(env) if env['clerk.excluded_route']
 
         req = ::Rack::Request.new(env)
         valid_route = @included_routes[req.path] || @included_routes_wildcards.any? { |route| req.path.start_with?(route) }
 
-        if valid_route && env["clerk"].user_needs_reverification?(@preset)
-          return env["clerk"].user_reverification_rack_response(@preset)
+        if valid_route && env['clerk'].user_needs_reverification?(@preset)
+          return env['clerk'].user_reverification_rack_response(@preset)
         end
 
         @app.call(env)

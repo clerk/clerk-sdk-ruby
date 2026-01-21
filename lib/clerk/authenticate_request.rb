@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "clerk/proxy"
-require "rack/utils"
+require 'clerk/proxy'
+require 'rack/utils'
 
 module Clerk
   # This class represents a service object used to determine the current request state
@@ -105,7 +105,7 @@ module Clerk
         claims = verify_token(auth_context.session_token_in_cookie)
         return signed_out unless claims
 
-        if claims["iat"] < auth_context.client_uat.to_i
+        if claims['iat'] < auth_context.client_uat.to_i
           return handle_handshake_maybe_status(env, reason: AuthErrorReason::SESSION_TOKEN_OUTDATED)
         end
 
@@ -116,15 +116,15 @@ module Clerk
         handshake(env, reason: TokenVerificationErrorReason::TOKEN_NOT_ACTIVE_YET)
       rescue JWT::DecodeError
         signed_out(reason: TokenVerificationErrorReason::TOKEN_INVALID)
-      rescue
+      rescue StandardError
         signed_out
       end
     end
 
     def resolve_handshake(env)
       headers = {
-        Clerk::ACCESS_CONTROL_ALLOW_ORIGIN_HEADER => "null",
-        Clerk::ACCESS_CONTROL_ALLOW_CREDENTIALS_HEADER => "true"
+        Clerk::ACCESS_CONTROL_ALLOW_ORIGIN_HEADER => 'null',
+        Clerk::ACCESS_CONTROL_ALLOW_CREDENTIALS_HEADER => 'true'
       }
       session_token = nil
 
@@ -141,7 +141,7 @@ module Clerk
         headers[SET_COOKIE_HEADER] ||= []
         headers[SET_COOKIE_HEADER] << cookie
 
-        session_token = cookie.split(";")[0].split("=")[1] if cookie.start_with?("#{SESSION_COOKIE}=")
+        session_token = cookie.split(';')[0].split('=')[1] if cookie.start_with?("#{SESSION_COOKIE}=")
       end
 
       # Clear handshake token from query params and set headers to redirect to the initial request url
@@ -183,7 +183,7 @@ module Clerk
 
     # C outcome
     def signed_in(env, claims, token, **headers)
-      env["clerk"] = Proxy.new(session_claims: claims, session_token: token)
+      env['clerk'] = Proxy.new(session_claims: claims, session_token: token)
       [nil, headers, []]
     end
 
@@ -199,7 +199,7 @@ module Clerk
 
       handshake_url = URI.parse("https://#{auth_context.frontend_api}/v1/client/handshake")
       handshake_url_qs = ::Rack::Utils.parse_query(handshake_url.query)
-      handshake_url_qs["redirect_url"] = redirect_url
+      handshake_url_qs['redirect_url'] = redirect_url
 
       if auth_context.development_instance? && auth_context.dev_browser?
         handshake_url_qs[DEV_BROWSER_COOKIE] = auth_context.dev_browser
@@ -223,7 +223,7 @@ module Clerk
         sdk.verify_token(token, **opts)
       rescue JWT::ExpiredSignature, JWT::InvalidIatError => e
         raise e
-      rescue JWT::DecodeError => _
+      rescue JWT::DecodeError => _e
         false
       end
     end

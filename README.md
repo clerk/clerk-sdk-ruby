@@ -1,36 +1,46 @@
-<p align="center">
-  <a href="https://www.clerk.com/?utm_source=github&utm_medium=starter_repos&utm_campaign=sdk_ruby" target="_blank" align="center">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./docs/clerk-logo-dark.png">
-      <img src="./docs/clerk-logo-light.png" height="64">
-    </picture>
-  </a>
-  <br />
-</p>
+# clerk-sdk-ruby
 
-# Clerk Ruby SDK
+Developer-friendly & type-safe Ruby SDK specifically catered to leverage *clerk-sdk-ruby* API.
 
-This SDK allows you to call the [Clerk](https://www.clerk.com/?utm_source=github&utm_medium=starter_repos&utm_campaign=sdk_ruby) Backend API from Ruby code without having to implement the calls yourself.
+[![Built by Speakeasy](https://img.shields.io/badge/Built_by-SPEAKEASY-374151?style=for-the-badge&labelColor=f3f4f6)](https://www.speakeasy.com/?utm_source=clerk-sdk-ruby&utm_campaign=ruby)
+[![License: MIT](https://img.shields.io/badge/LICENSE_//_MIT-3b5bdb?style=for-the-badge&labelColor=eff6ff)](https://opensource.org/licenses/MIT)
 
-[![chat on Discord](https://img.shields.io/discord/856971667393609759.svg?logo=discord)](https://discord.com/invite/b5rXHjAg7A)
-[![documentation](https://img.shields.io/badge/documentation-clerk-green.svg)](https://clerk.com/docs)
-[![twitter](https://img.shields.io/twitter/follow/ClerkDev?style=social)](https://twitter.com/intent/follow?screen_name=ClerkDev)
 
----
+<br /><br />
+> [!IMPORTANT]
+> This SDK is not yet ready for production use. To complete setup please follow the steps outlined in your [workspace](https://app.speakeasy.com/org/clerk/clerk). Delete this section before > publishing to a package manager.
 
-**Clerk is Hiring!**
+<!-- Start Summary [summary] -->
+## Summary
 
-Would you like to work on Open Source software and help maintain this repository? [Apply today!](https://apply.workable.com/clerk-dev/)
+Clerk Backend API: The Clerk REST Backend API, meant to be accessed by backend servers.
 
----
+### Versions
 
-**Note**: You're looking at the main branch, which requires that you use [Auth
-v2](https://clerk.com/docs/upgrade-guides/auth-v2).
+When the API changes in a way that isn't compatible with older versions, a new version is released.
+Each version is identified by its release date, e.g. `2025-04-10`. For more information, please see [Clerk API Versions](https://clerk.com/docs/versioning/available-versions).
 
-If you're looking for the legacy authentication scheme, refer to the
-[`v1`](https://github.com/clerkinc/clerk-sdk-ruby/tree/v1) branch.
+Please see https://clerk.com/docs for more information.
 
-## Installation
+More information about the API can be found at https://clerk.com/docs
+<!-- End Summary [summary] -->
+
+## Table of Contents
+<!-- $toc-max-depth=2 -->
+* [clerk-sdk-ruby](#clerk-sdk-ruby)
+  * [SDK Installation](#sdk-installation)
+  * [Configuration](#configuration)
+  * [Framework Integration](#framework-integration)
+  * [Step-Up Verification](#step-up-verification)
+  * [Available Resources and Operations](#available-resources-and-operations)
+  * [Error Handling](#error-handling)
+* [Development](#development)
+  * [Maturity](#maturity)
+  * [Contributions](#contributions)
+
+<!-- No Table of Contents [toc] -->
+
+## SDK Installation
 
 Add this line to your application's Gemfile:
 
@@ -40,239 +50,697 @@ gem 'clerk-sdk-ruby', require: "clerk"
 
 And then execute:
 
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install clerk-sdk-ruby
-
-## Quick Start
-
-First, you need to get an API key for a Clerk instance. This is done via the
-[Clerk dashboard](https://dashboard.clerk.com/applications).
-
-Then you can instantiate a `Clerk::SDK` instance and access all
-[Backend API](https://clerk.com/docs/reference/backend-api) endpoints.
-Here's a quick example:
-
-```ruby
-clerk = Clerk::SDK.new(api_key: "your_api_key")
-# List all users
-clerk.users.get_user_list
-# Get your first user
-user = clerk.users.get_user_list(limit: 1).first
-# Extract their primary email address ID
-email_id = user["primary_email_address_id"]
-
-# Create an organization
-p Clerk::SDK.organizations.create_organization({
-  create_organization_request: ClerkHttpClient::CreateOrganizationRequest.new({
-    name: 'example'
-  })
-})
 ```
+$ bundle install
+```
+
 
 ## Configuration
 
-The SDK can be configured in three ways: environment variables, configuration
-singleton and constructor arguments. The priority goes like this:
+### Environment Variables
 
-1. Constructor arguments
-2. Configuration object
-3. Environment variables
+The SDK automatically reads these environment variables:
 
-If an argument is not provided, the configuration object is looked up, which
-falls back to the associated environment variable. Here's an example with all
-supported configuration settings their environment variable equivalents:
+| Variable	            | Description                                  |
+------------------------------------------------------------------------
+| CLERK_SECRET_KEY	    | Your Clerk secret key (starts with sk_)      |
+| CLERK_PUBLISHABLE_KEY	| Your Clerk publishable key (starts with pk_) |
+| CLERK_SIGN_IN_URL	URL | to redirect unauthenticated users            |
+| CLERK_SIGN_UP_URL	URL | for new user registration                    |
+| CLERK_SIGN_OUT_URL	  | URL for sign out                             |
+
+### Programmatic Configuration
 
 ```ruby
-Clerk.configure do |c|
-  c.secret_key = "sk_(test|live)_...." # if omitted: ENV["CLERK_SECRET_KEY"] - API calls will fail if unset
-  c.publishable_key = "pk_(test|live)_...." # if omitted: ENV["CLERK_PUBLISHABLE_KEY"] - Handshake mechanism (check section below) will fail if unset
-  c.logger = Logger.new(STDOUT) # if omitted, no logging
-  c.cache_store = ActiveSupport::Cache::FileStore.new("/tmp/clerk_middleware_cache") # if omitted: no caching
-  c.excluded_routes ["/foo", "/bar/*"]
+require 'clerk'
+
+Clerk.configure do |config|
+  # Optional: Override environment variables
+  config.publishable_key = ENV['CLERK_PUBLISHABLE_KEY']
+  config.secret_key = ENV['CLERK_SECRET_KEY']
+  
+  # Enable debug logging
+  config.debug = true
+  config.logger = Logger.new($stdout)
+  
+  # Exclude routes from authentication middleware
+  config.excluded_routes = ['/health', '/public/*']
+  
+  # Custom cache store (defaults to Rails.cache or ActiveSupport::Cache::MemoryStore)
+  config.cache_store = Rails.cache
 end
 ```
 
-You can customize each instance of the `Clerk::SDK` object by passing keyword
-arguments to the constructor:
+## Framework Integration
 
+### Rails
+The SDK automatically integrates with Rails via a Railtie. Simply include Clerk::Authenticatable in your controllers:
+
+config/initializers/clerk.rb
 ```ruby
-clerk = Clerk::SDK.new(
-    logger: Logger.new()
-    secret_key: "X",
-)
+Clerk.configure do |config|
+  # Configuration options here
+end
 ```
 
-For full customization, you can instead pass a `Faraday` object directly, which
-will ignore all the other arguments, if passed:
-
+app/controllers/application_controller.rb
 ```ruby
-faraday = Faraday.new()
-clerk = Clerk::SDK.new(connection: faraday)
-```
-
-Refer to the [Faraday documentation](https://lostisland.github.io/faraday/usage/#customizing-faradayconnection)
-for details.
-
-## Rack middleware
-
-The SDK comes with a Rack middleware which lazily loads the Clerk session and
-user. It inserts a `clerk` key in the Rack environment, which is an instance
-of `Clerk::Proxy`. To get the session or the user of the session, you call
-`session` or `user` respectively. In case there is no session, you can retrieve
-the API error with the `error` getter method.
-
-```ruby
-use Clerk::Rack::Middleware
-```
-
-### Reverification middleware
-
-The SDK comes with a revalidation middleware which will automatically revalidate the session when the user navigates to a protected route.
-
-```ruby
-use Clerk::Rack::Reverification,
-  preset: Clerk::StepUp::Preset::LAX,
-  routes: ["/*"]
-```
-
-
-
-## Rails integration
-
-The SDK will automatically add the [Rack middleware](#rack-middleware) to the
-middleware stack. For easier access to the Clerk session and user, include the
-`Clerk::Authenticatable` concern in your controller:
-
-```ruby
-class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::Base 
   include Clerk::Authenticatable
 end
+```
 
-class AdminController < ApplicationController
-  before_action :require_reverification!, only: [:protected]
+For API-only Rails apps:
+```ruby
+class ApplicationController < ActionController::API
+  include Clerk::Authenticatable
+end
+```
 
-  def index
-    @user = clerk.user
+Skip the Railtie (for custom middleware setup):
+
+```bash
+export CLERK_SKIP_RAILTIE=true
+```
+
+### Sinatra
+
+```ruby
+require 'clerk/sinatra'
+require 'sinatra/base'
+
+class App < Sinatra::Base
+  register Sinatra::Clerk
+  
+  get '/' do
+    if clerk.user?
+      "Hello, #{clerk.user.first_name}!"
+    else
+      "Please sign in"
+    end
   end
-
-  def protected
-    render json: {message: clerk.user? ? "Valid session" : "Not logged in"}
+  
+  # Require authentication for specific routes
+  get '/dashboard', auth: true do
+    erb :dashboard
+  end
+  
+  # Require reverification for sensitive routes
+  get '/settings', reverify: true do
+    erb :settings
   end
 end
 ```
 
-This gives your controller and views access to the following methods and more:
+### Rack
+config.ru
 
-- `clerk.sdk.*`
-- `clerk.user?`
-- `clerk.user`: NOTE: This makes an additional request and attempts to cache it.
-- `clerk.user_id`
-- `clerk.organization?`
-- `clerk.organization` NOTE: This makes an additional request and attempts to cache it.
-- `clerk.organization_id`
-- `clerk.organization_role`
-- `clerk.organization_permissions`
+```ruby
+require 'clerk/rack'
 
-### Skipping the Railtie
+use Clerk::Rack::Middleware
 
-There are cases where you might not want to use the Railtie, for example, only using the SDK in a Rails application. To accomplish this, you can set the `CLERK_SKIP_RAILTIE` environment variable to `true`.
+# Optional: Add reverification middleware
+use Clerk::Rack::Reverification,
+    preset: Clerk::StepUp::Preset::STRICT,
+    routes: ['/admin/*', '/settings/*']
 
-This will prevent the Railtie from being loaded and the Rack middleware from being added to the middleware stack.
+run MyApp
+```
 
-You can still configure the SDK as normal, but you will need to call the SDK using `Clerk::SDK.new` instead of the `clerk.sdk` helper.
+## Authentication & Session Management
 
-## Sinatra integration
+### Accessing the Clerk Helper
 
-The SDK enables the use of Extensions to add Clerk support to your Sinatra application.
+In all frameworks, the clerk helper provides access to authentication state:
 
-`Sinatra::Clerk` will automatically add the [Rack middleware](#rack-middleware)to the
-middleware stack and enable easy access to the Clerk session and user helper methods.
+
+```ruby
+# Check if user is authenticated
+clerk.user?  # => true/false
+
+# Get current user (makes API call, cached for 60 seconds)
+clerk.user   # => Clerk::Models::User or nil
+
+# Get user ID without API call
+clerk.user_id  # => "user_abc123" or nil
+
+# Get session claims (JWT payload)
+clerk.session  # => Hash with JWT claims
+```
+
+### Session Claims
+The session contains JWT claims including:
+
+```ruby
+clerk.session
+# {
+#   "sub" => "user_abc123",           # User ID
+#   "sid" => "sess_xyz789",           # Session ID
+#   "org_id" => "org_123",            # Organization ID (if applicable)
+#   "org_slug" => "my-org",           # Organization slug
+#   "org_role" => "org:admin",        # Organization role
+#   "org_permissions" => [...],       # Organization permissions
+#   "iat" => 1234567890,              # Issued at
+#   "exp" => 1234571490,              # Expiration
+#   ...
+# }
+```
+
+### Accessing User & Organization Data
+
+```ruby
+# Get full user object (API call, cached)
+user = clerk.user
+
+# Access user properties
+user.id                  # => "user_abc123"
+user.first_name          # => "John"
+user.last_name           # => "Doe"
+user.email_addresses     # => Array of email addresses
+user.primary_email_address_id
+user.phone_numbers
+user.created_at
+user.updated_at
+user.public_metadata
+user.private_metadata
+```
+
+### Organization Information
+
+```ruby
+# Check if user is in an organization context
+clerk.organization?  # => true/false
+
+# Get organization ID
+clerk.organization_id  # => "org_123" or nil
+
+# Get full organization object (API call, cached)
+org = clerk.organization
+
+# Access organization properties
+org.id
+org.name
+org.slug
+org.members_count
+
+# Get user's role in the organization
+clerk.organization_role  # => "org:admin"
+
+# Get user's permissions
+clerk.organization_permissions  # => ["org:billing:manage", "org:users:read"]
+```
+
+
+## Backend API Operations
+
+```ruby
+require 'clerk_sdk_ruby'
+
+# Initialize the SDK
+sdk = Clerk::SDK.new
+
+# Or with explicit credentials
+sdk = Clerk::SDK.new(secret_key: 'sk_test_...')
+
+# List users
+response = sdk.users.list(limit: 10, offset: 0)
+response.user_list.each do |user|
+  puts user.email_addresses.first.email_address
+end
+```
+
+## Step-Up Verification (Reverification)
+
+Reverification requires users to re-authenticate for sensitive operations.
+
+### Presets
+| Preset	                          | Timeout	Level             |
+-----------------------------------------------------------------
+| Clerk::StepUp::Preset::STRICT   	| 10 minutes	Second factor |
+| Clerk::StepUp::Preset::STRICT_MFA	| 10 minutes	Multi-factor  |
+| Clerk::StepUp::Preset::MODERATE	  | 60 minutes	Second factor |
+| Clerk::StepUp::Preset::LAX	      | 24 hours	Second factor   |
+
+
+### Rails Usage
+
+```ruby
+class SettingsController < ApplicationController
+  before_action :require_reverification!, only: [:update_password]
+  
+  def update_password
+    # Only reached if reverification passed
+  end
+  
+  # Or with custom preset
+  def delete_account
+    require_reverification!(Clerk::StepUp::Preset::STRICT_MFA) do |preset|
+      # Custom handling when reverification is needed
+      render json: { error: 'Please re-authenticate' }, status: 403
+    end
+  end
+end
+```
+
+### Sinatra Usage
 
 ```ruby
 class App < Sinatra::Base
   register Sinatra::Clerk
-
-  get "/" do
-    erb :index, format: :html5
+  
+  before '/admin/*' do
+    require_reverification!(Clerk::StepUp::Preset::STRICT)
   end
-
-  get "/admin" do
-    @user = clerk.user
-    erb :index, format: :html5
-  end
-
-  get "/protected" do
-    require_reverification!
-    {message: clerk.user? ? "Valid session" : "Not logged in"}.to_json
+  
+  # Or using route condition
+  post '/delete-account', reverify: Clerk::StepUp::Preset::STRICT_MFA do
+    # Handle deletion
   end
 end
 ```
 
-## Internals
+### Rack Middleware
 
-The API client depends on the excellent [Faraday](https://rubygems.org/gems/faraday)
-gem for HTTP requests. You can swap out the original implementation with your
-own customized instance.
-
-The API client sends all requests as `application/x-www-form-urlencoded`. The
-API then responds with JSON which is then converted and returned as a Ruby
-`Hash`, or `Array` of hashes. Errors are also returned as a JSON object, with a
-single key (`errors`) containing an array of error objects.
-
-Read the [API documentation](https://clerk.com/docs/reference/backend-api)
-for details on expected parameters and response formats.
-
-<a name="handshake"></a>
-
-### Handshake
-
-The Client Handshake is a mechanism that is used to resolve a request’s authentication state from “unknown” to definitively signed in or signed out. Clerk’s session management architecture relies on a short-lived session JWT to validate requests, along with a long-lived session that is used to keep the session JWT fresh by interacting with the Frontend API. The long-lived session token is stored in an HttpOnly cookie associated with the Frontend API domain. If a short-lived session JWT is expired on a request to an application’s backend, the SDK doesn’t know if the session has ended, or if a new short-lived JWT needs to be issued. When an SDK gets into this state, it triggers the handshake.
-
-With the handshake, we can resolve the authentication state on the backend and ensure the request is properly handled as signed in or out, instead of being in a potentially “unknown” state. The handshake flow relies on redirects to exchange session information between FAPI and the application, ensuring the resolution of unknown authentication states minimizes performance impact and behaves consistently across different framework and language implementations.
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run
-`bundle exec rake spec` to run the tests. You can also run `bin/console` for an
-interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. 
-
-To run the example applications, run:
-
-```bash
-rake app:rack    
-rake app:rails  
-rake app:rails:api
-rake app:sinatra
+```ruby
+use Clerk::Rack::Reverification,
+    preset: Clerk::StepUp::Preset::MODERATE,
+    routes: ['/settings/*', '/billing/*']
 ```
 
-## Release
+### Manual Check
 
-To release a new version:
-- update the version number in `version.rb`
-- update `CHANGELOG.md` to include information about the changes
-- merge changes into main
-- run `bundle exec rake release`
+```ruby
+if clerk.user_needs_reverification?(Clerk::StepUp::Preset::STRICT)
+  # User needs to re-authenticate
+end
 
-If gem publishing is NOT executed automatically:
-- run `gem push pkg/clerk-sdk-ruby-{version}.gem` to push the `.gem` file to [rubygems.org](https://rubygems.org)
+# Check if user has passed reverification
+if clerk.user_reverified?(level: :second_factor, after_minutes: 10)
+  # User has recently verified
+end
+```
 
-The `bundle exec rake release` command:
-- creates a git tag with the version found in `version.rb`
-- pushes the git tag
+<!-- No SDK Installation [installation] -->
+<!-- No SDK Example Usage [usage] -->
+<!-- No Authentication [security] -->
 
-## Yank release
+<!-- Start Available Resources and Operations [operations] -->
+## Available Resources and Operations
 
-We should avoid yanking a releasing but if it's necessary execute `gem yank clerk-sdk-ruby -v {version}`
+<details open>
+<summary>Available methods</summary>
 
-## Contributing
+### [ActorTokens](docs/sdks/actortokens/README.md)
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/clerkinc/clerk-sdk-ruby.
+* [create](docs/sdks/actortokens/README.md#create) - Create actor token
+* [revoke](docs/sdks/actortokens/README.md#revoke) - Revoke actor token
 
-## License
+### [AllowlistIdentifiers](docs/sdks/allowlistidentifiers/README.md)
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+* [list](docs/sdks/allowlistidentifiers/README.md#list) - List all identifiers on the allow-list
+* [create](docs/sdks/allowlistidentifiers/README.md#create) - Add identifier to the allow-list
+* [delete](docs/sdks/allowlistidentifiers/README.md#delete) - Delete identifier from allow-list
+
+### [APIKeys](docs/sdks/apikeys/README.md)
+
+* [create_api_key](docs/sdks/apikeys/README.md#create_api_key) - Create an API Key
+* [get_api_keys](docs/sdks/apikeys/README.md#get_api_keys) - Get API Keys
+* [get_api_key](docs/sdks/apikeys/README.md#get_api_key) - Get an API Key by ID
+* [update_api_key](docs/sdks/apikeys/README.md#update_api_key) - Update an API Key
+* [delete_api_key](docs/sdks/apikeys/README.md#delete_api_key) - Delete an API Key
+* [get_api_key_secret](docs/sdks/apikeys/README.md#get_api_key_secret) - Get an API Key Secret
+* [revoke_api_key](docs/sdks/apikeys/README.md#revoke_api_key) - Revoke an API Key
+* [verify_api_key](docs/sdks/apikeys/README.md#verify_api_key) - Verify an API Key
+
+### [BetaFeatures](docs/sdks/betafeatures/README.md)
+
+* [update_instance_settings](docs/sdks/betafeatures/README.md#update_instance_settings) - Update instance settings
+* [~~update_production_instance_domain~~](docs/sdks/betafeatures/README.md#update_production_instance_domain) - Update production instance domain :warning: **Deprecated**
+
+### [Billing](docs/sdks/billing/README.md)
+
+* [list_plans](docs/sdks/billing/README.md#list_plans) - List all billing plans
+* [list_subscription_items](docs/sdks/billing/README.md#list_subscription_items) - List all subscription items
+* [cancel_subscription_item](docs/sdks/billing/README.md#cancel_subscription_item) - Cancel a subscription item
+* [extend_subscription_item_free_trial](docs/sdks/billing/README.md#extend_subscription_item_free_trial) - Extend free trial for a subscription item
+* [list_statements](docs/sdks/billing/README.md#list_statements) - List all billing statements
+* [get_statement](docs/sdks/billing/README.md#get_statement) - Retrieve a billing statement
+* [get_statement_payment_attempts](docs/sdks/billing/README.md#get_statement_payment_attempts) - List payment attempts for a billing statement
+
+### [BlocklistIdentifiers](docs/sdks/blocklistidentifiers/README.md)
+
+* [list](docs/sdks/blocklistidentifiers/README.md#list) - List all identifiers on the block-list
+* [create](docs/sdks/blocklistidentifiers/README.md#create) - Add identifier to the block-list
+* [delete](docs/sdks/blocklistidentifiers/README.md#delete) - Delete identifier from block-list
+
+### [Clients](docs/sdks/clients/README.md)
+
+* [~~list~~](docs/sdks/clients/README.md#list) - List all clients :warning: **Deprecated**
+* [verify](docs/sdks/clients/README.md#verify) - Verify a client
+* [get](docs/sdks/clients/README.md#get) - Get a client
+
+### [Domains](docs/sdks/domains/README.md)
+
+* [list](docs/sdks/domains/README.md#list) - List all instance domains
+* [add](docs/sdks/domains/README.md#add) - Add a domain
+* [delete](docs/sdks/domains/README.md#delete) - Delete a satellite domain
+* [update](docs/sdks/domains/README.md#update) - Update a domain
+
+### [EmailAddresses](docs/sdks/emailaddresses/README.md)
+
+* [create](docs/sdks/emailaddresses/README.md#create) - Create an email address
+* [get](docs/sdks/emailaddresses/README.md#get) - Retrieve an email address
+* [delete](docs/sdks/emailaddresses/README.md#delete) - Delete an email address
+* [update](docs/sdks/emailaddresses/README.md#update) - Update an email address
+
+### [~~EmailAndSmsTemplates~~](docs/sdks/emailandsmstemplates/README.md)
+
+* [~~upsert~~](docs/sdks/emailandsmstemplates/README.md#upsert) - Update a template for a given type and slug :warning: **Deprecated**
+
+### [~~EmailSMSTemplates~~](docs/sdks/emailsmstemplates/README.md)
+
+* [~~list~~](docs/sdks/emailsmstemplates/README.md#list) - List all templates :warning: **Deprecated**
+* [~~get~~](docs/sdks/emailsmstemplates/README.md#get) - Retrieve a template :warning: **Deprecated**
+* [~~revert~~](docs/sdks/emailsmstemplates/README.md#revert) - Revert a template :warning: **Deprecated**
+* [~~toggle_template_delivery~~](docs/sdks/emailsmstemplates/README.md#toggle_template_delivery) - Toggle the delivery by Clerk for a template of a given type and slug :warning: **Deprecated**
+
+### [InstanceSettings](docs/sdks/instancesettings/README.md)
+
+* [get](docs/sdks/instancesettings/README.md#get) - Fetch the current instance
+* [update](docs/sdks/instancesettings/README.md#update) - Update instance settings
+* [update_restrictions](docs/sdks/instancesettings/README.md#update_restrictions) - Update instance restrictions
+* [change_domain](docs/sdks/instancesettings/README.md#change_domain) - Update production instance domain
+* [update_organization_settings](docs/sdks/instancesettings/README.md#update_organization_settings) - Update instance organization settings
+
+### [Invitations](docs/sdks/invitations/README.md)
+
+* [create](docs/sdks/invitations/README.md#create) - Create an invitation
+* [list](docs/sdks/invitations/README.md#list) - List all invitations
+* [bulk_create](docs/sdks/invitations/README.md#bulk_create) - Create multiple invitations
+* [revoke](docs/sdks/invitations/README.md#revoke) - Revokes an invitation
+
+### [Jwks](docs/sdks/jwks/README.md)
+
+* [get_jwks](docs/sdks/jwks/README.md#get_jwks) - Retrieve the JSON Web Key Set of the instance
+
+### [JwtTemplates](docs/sdks/jwttemplates/README.md)
+
+* [list](docs/sdks/jwttemplates/README.md#list) - List all templates
+* [create](docs/sdks/jwttemplates/README.md#create) - Create a JWT template
+* [get](docs/sdks/jwttemplates/README.md#get) - Retrieve a template
+* [update](docs/sdks/jwttemplates/README.md#update) - Update a JWT template
+* [delete](docs/sdks/jwttemplates/README.md#delete) - Delete a Template
+
+### [M2m](docs/sdks/m2m/README.md)
+
+* [create_token](docs/sdks/m2m/README.md#create_token) - Create a M2M Token
+* [list_tokens](docs/sdks/m2m/README.md#list_tokens) - Get M2M Tokens
+* [revoke_token](docs/sdks/m2m/README.md#revoke_token) - Revoke a M2M Token
+* [verify_token](docs/sdks/m2m/README.md#verify_token) - Verify a M2M Token
+
+### [Machines](docs/sdks/machines/README.md)
+
+* [list](docs/sdks/machines/README.md#list) - Get a list of machines for an instance
+* [create](docs/sdks/machines/README.md#create) - Create a machine
+* [get](docs/sdks/machines/README.md#get) - Retrieve a machine
+* [update](docs/sdks/machines/README.md#update) - Update a machine
+* [delete](docs/sdks/machines/README.md#delete) - Delete a machine
+* [get_secret_key](docs/sdks/machines/README.md#get_secret_key) - Retrieve a machine secret key
+* [rotate_secret_key](docs/sdks/machines/README.md#rotate_secret_key) - Rotate a machine's secret key
+* [create_scope](docs/sdks/machines/README.md#create_scope) - Create a machine scope
+* [delete_scope](docs/sdks/machines/README.md#delete_scope) - Delete a machine scope
+
+### [Miscellaneous](docs/sdks/miscellaneous/README.md)
+
+* [get_public_interstitial](docs/sdks/miscellaneous/README.md#get_public_interstitial) - Returns the markup for the interstitial page
+
+### [OauthAccessTokens](docs/sdks/oauthaccesstokens/README.md)
+
+* [verify](docs/sdks/oauthaccesstokens/README.md#verify) - Verify an OAuth Access Token
+
+### [OauthApplications](docs/sdks/oauthapplications/README.md)
+
+* [list](docs/sdks/oauthapplications/README.md#list) - Get a list of OAuth applications for an instance
+* [create](docs/sdks/oauthapplications/README.md#create) - Create an OAuth application
+* [get](docs/sdks/oauthapplications/README.md#get) - Retrieve an OAuth application by ID
+* [update](docs/sdks/oauthapplications/README.md#update) - Update an OAuth application
+* [delete](docs/sdks/oauthapplications/README.md#delete) - Delete an OAuth application
+* [rotate_secret](docs/sdks/oauthapplications/README.md#rotate_secret) - Rotate the client secret of the given OAuth application
+
+### [OrganizationDomains](docs/sdks/organizationdomains/README.md)
+
+* [create](docs/sdks/organizationdomains/README.md#create) - Create a new organization domain.
+* [list](docs/sdks/organizationdomains/README.md#list) - Get a list of all domains of an organization.
+* [update](docs/sdks/organizationdomains/README.md#update) - Update an organization domain.
+* [delete](docs/sdks/organizationdomains/README.md#delete) - Remove a domain from an organization.
+* [list_all](docs/sdks/organizationdomains/README.md#list_all) - List all organization domains
+
+### [OrganizationInvitations](docs/sdks/organizationinvitations/README.md)
+
+* [get_all](docs/sdks/organizationinvitations/README.md#get_all) - Get a list of organization invitations for the current instance
+* [create](docs/sdks/organizationinvitations/README.md#create) - Create and send an organization invitation
+* [list](docs/sdks/organizationinvitations/README.md#list) - Get a list of organization invitations
+* [bulk_create](docs/sdks/organizationinvitations/README.md#bulk_create) - Bulk create and send organization invitations
+* [~~list_pending~~](docs/sdks/organizationinvitations/README.md#list_pending) - Get a list of pending organization invitations :warning: **Deprecated**
+* [get](docs/sdks/organizationinvitations/README.md#get) - Retrieve an organization invitation by ID
+* [revoke](docs/sdks/organizationinvitations/README.md#revoke) - Revoke a pending organization invitation
+
+### [OrganizationMemberships](docs/sdks/organizationmemberships/README.md)
+
+* [create](docs/sdks/organizationmemberships/README.md#create) - Create a new organization membership
+* [list](docs/sdks/organizationmemberships/README.md#list) - Get a list of all members of an organization
+* [update](docs/sdks/organizationmemberships/README.md#update) - Update an organization membership
+* [delete](docs/sdks/organizationmemberships/README.md#delete) - Remove a member from an organization
+* [update_metadata](docs/sdks/organizationmemberships/README.md#update_metadata) - Merge and update organization membership metadata
+
+### [OrganizationPermissions](docs/sdks/organizationpermissions/README.md)
+
+* [list](docs/sdks/organizationpermissions/README.md#list) - Get a list of all organization permissions
+* [create](docs/sdks/organizationpermissions/README.md#create) - Create a new organization permission
+* [get](docs/sdks/organizationpermissions/README.md#get) - Get an organization permission
+* [update](docs/sdks/organizationpermissions/README.md#update) - Update an organization permission
+* [delete](docs/sdks/organizationpermissions/README.md#delete) - Delete an organization permission
+
+### [OrganizationRoles](docs/sdks/organizationroles/README.md)
+
+* [list](docs/sdks/organizationroles/README.md#list) - Get a list of organization roles
+* [create](docs/sdks/organizationroles/README.md#create) - Create an organization role
+* [get](docs/sdks/organizationroles/README.md#get) - Retrieve an organization role
+* [update](docs/sdks/organizationroles/README.md#update) - Update an organization role
+* [delete](docs/sdks/organizationroles/README.md#delete) - Delete an organization role
+* [assign_permission](docs/sdks/organizationroles/README.md#assign_permission) - Assign a permission to an organization role
+* [remove_permission](docs/sdks/organizationroles/README.md#remove_permission) - Remove a permission from an organization role
+
+### [Organizations](docs/sdks/organizations/README.md)
+
+* [list](docs/sdks/organizations/README.md#list) - Get a list of organizations for an instance
+* [create](docs/sdks/organizations/README.md#create) - Create an organization
+* [get](docs/sdks/organizations/README.md#get) - Retrieve an organization by ID or slug
+* [update](docs/sdks/organizations/README.md#update) - Update an organization
+* [delete](docs/sdks/organizations/README.md#delete) - Delete an organization
+* [merge_metadata](docs/sdks/organizations/README.md#merge_metadata) - Merge and update metadata for an organization
+* [upload_logo](docs/sdks/organizations/README.md#upload_logo) - Upload a logo for the organization
+* [delete_logo](docs/sdks/organizations/README.md#delete_logo) - Delete the organization's logo.
+* [get_billing_subscription](docs/sdks/organizations/README.md#get_billing_subscription) - Retrieve an organization's billing subscription
+
+### [PhoneNumbers](docs/sdks/phonenumbers/README.md)
+
+* [create](docs/sdks/phonenumbers/README.md#create) - Create a phone number
+* [get](docs/sdks/phonenumbers/README.md#get) - Retrieve a phone number
+* [delete](docs/sdks/phonenumbers/README.md#delete) - Delete a phone number
+* [update](docs/sdks/phonenumbers/README.md#update) - Update a phone number
+
+### [ProxyChecks](docs/sdks/proxychecks/README.md)
+
+* [verify](docs/sdks/proxychecks/README.md#verify) - Verify the proxy configuration for your domain
+
+### [RedirectUrls](docs/sdks/redirecturls/README.md)
+
+* [list](docs/sdks/redirecturls/README.md#list) - List all redirect URLs
+* [create](docs/sdks/redirecturls/README.md#create) - Create a redirect URL
+* [get](docs/sdks/redirecturls/README.md#get) - Retrieve a redirect URL
+* [delete](docs/sdks/redirecturls/README.md#delete) - Delete a redirect URL
+
+### [RoleSets](docs/sdks/rolesets/README.md)
+
+* [list](docs/sdks/rolesets/README.md#list) - Get a list of role sets
+* [create](docs/sdks/rolesets/README.md#create) - Create a role set
+* [get](docs/sdks/rolesets/README.md#get) - Retrieve a role set
+* [update](docs/sdks/rolesets/README.md#update) - Update a role set
+* [replace](docs/sdks/rolesets/README.md#replace) - Replace a role set
+* [add_roles](docs/sdks/rolesets/README.md#add_roles) - Add roles to a role set
+* [replace_role](docs/sdks/rolesets/README.md#replace_role) - Replace a role in a role set
+
+### [SamlConnections](docs/sdks/samlconnections/README.md)
+
+* [list](docs/sdks/samlconnections/README.md#list) - Get a list of SAML Connections for an instance
+* [create](docs/sdks/samlconnections/README.md#create) - Create a SAML Connection
+* [get](docs/sdks/samlconnections/README.md#get) - Retrieve a SAML Connection by ID
+* [update](docs/sdks/samlconnections/README.md#update) - Update a SAML Connection
+* [delete](docs/sdks/samlconnections/README.md#delete) - Delete a SAML Connection
+
+### [Sessions](docs/sdks/sessions/README.md)
+
+* [list](docs/sdks/sessions/README.md#list) - List all sessions
+* [create](docs/sdks/sessions/README.md#create) - Create a new active session
+* [get](docs/sdks/sessions/README.md#get) - Retrieve a session
+* [refresh](docs/sdks/sessions/README.md#refresh) - Refresh a session
+* [revoke](docs/sdks/sessions/README.md#revoke) - Revoke a session
+* [create_token](docs/sdks/sessions/README.md#create_token) - Create a session token
+* [create_token_from_template](docs/sdks/sessions/README.md#create_token_from_template) - Create a session token from a JWT template
+
+### [SignInTokens](docs/sdks/signintokens/README.md)
+
+* [create](docs/sdks/signintokens/README.md#create) - Create sign-in token
+* [revoke](docs/sdks/signintokens/README.md#revoke) - Revoke the given sign-in token
+
+### [SignUps](docs/sdks/signups/README.md)
+
+* [get](docs/sdks/signups/README.md#get) - Retrieve a sign-up by ID
+* [update](docs/sdks/signups/README.md#update) - Update a sign-up
+
+### [~~Templates~~](docs/sdks/templates/README.md)
+
+* [~~preview~~](docs/sdks/templates/README.md#preview) - Preview changes to a template :warning: **Deprecated**
+
+### [TestingTokens](docs/sdks/testingtokens/README.md)
+
+* [create](docs/sdks/testingtokens/README.md#create) - Retrieve a new testing token
+
+### [Users](docs/sdks/users/README.md)
+
+* [list](docs/sdks/users/README.md#list) - List all users
+* [create](docs/sdks/users/README.md#create) - Create a new user
+* [count](docs/sdks/users/README.md#count) - Count users
+* [get](docs/sdks/users/README.md#get) - Retrieve a user
+* [update](docs/sdks/users/README.md#update) - Update a user
+* [delete](docs/sdks/users/README.md#delete) - Delete a user
+* [ban](docs/sdks/users/README.md#ban) - Ban a user
+* [unban](docs/sdks/users/README.md#unban) - Unban a user
+* [bulk_ban](docs/sdks/users/README.md#bulk_ban) - Ban multiple users
+* [bulk_unban](docs/sdks/users/README.md#bulk_unban) - Unban multiple users
+* [lock](docs/sdks/users/README.md#lock) - Lock a user
+* [unlock](docs/sdks/users/README.md#unlock) - Unlock a user
+* [set_profile_image](docs/sdks/users/README.md#set_profile_image) - Set user profile image
+* [delete_profile_image](docs/sdks/users/README.md#delete_profile_image) - Delete user profile image
+* [update_metadata](docs/sdks/users/README.md#update_metadata) - Merge and update a user's metadata
+* [get_billing_subscription](docs/sdks/users/README.md#get_billing_subscription) - Retrieve a user's billing subscription
+* [get_o_auth_access_token](docs/sdks/users/README.md#get_o_auth_access_token) - Retrieve the OAuth access token of a user
+* [get_organization_memberships](docs/sdks/users/README.md#get_organization_memberships) - Retrieve all memberships for a user
+* [get_organization_invitations](docs/sdks/users/README.md#get_organization_invitations) - Retrieve all invitations for a user
+* [verify_password](docs/sdks/users/README.md#verify_password) - Verify the password of a user
+* [verify_totp](docs/sdks/users/README.md#verify_totp) - Verify a TOTP or backup code for a user
+* [disable_mfa](docs/sdks/users/README.md#disable_mfa) - Disable a user's MFA methods
+* [delete_backup_codes](docs/sdks/users/README.md#delete_backup_codes) - Disable all user's Backup codes
+* [delete_passkey](docs/sdks/users/README.md#delete_passkey) - Delete a user passkey
+* [delete_web3_wallet](docs/sdks/users/README.md#delete_web3_wallet) - Delete a user web3 wallet
+* [delete_totp](docs/sdks/users/README.md#delete_totp) - Delete all the user's TOTPs
+* [delete_external_account](docs/sdks/users/README.md#delete_external_account) - Delete External Account
+* [set_password_compromised](docs/sdks/users/README.md#set_password_compromised) - Set a user's password as compromised
+* [unset_password_compromised](docs/sdks/users/README.md#unset_password_compromised) - Unmark a user's password as compromised
+* [get_instance_organization_memberships](docs/sdks/users/README.md#get_instance_organization_memberships) - Get a list of all organization memberships within an instance.
+
+### [WaitlistEntries](docs/sdks/waitlistentries/README.md)
+
+* [list](docs/sdks/waitlistentries/README.md#list) - List all waitlist entries
+* [create](docs/sdks/waitlistentries/README.md#create) - Create a waitlist entry
+* [delete](docs/sdks/waitlistentries/README.md#delete) - Delete a pending waitlist entry
+* [invite](docs/sdks/waitlistentries/README.md#invite) - Invite a waitlist entry
+* [reject](docs/sdks/waitlistentries/README.md#reject) - Reject a waitlist entry
+
+### [Webhooks](docs/sdks/webhooks/README.md)
+
+* [create_svix_app](docs/sdks/webhooks/README.md#create_svix_app) - Create a Svix app
+* [delete_svix_app](docs/sdks/webhooks/README.md#delete_svix_app) - Delete a Svix app
+* [generate_svix_auth_url](docs/sdks/webhooks/README.md#generate_svix_auth_url) - Create a Svix Dashboard URL
+
+</details>
+<!-- End Available Resources and Operations [operations] -->
+
+<!-- No Retries [retries] -->
+
+<!-- Start Error Handling [errors] -->
+## Error Handling
+
+Handling errors in this SDK should largely match your expectations. All operations return a response object or raise an error.
+
+By default an API error will raise a `Errors::APIError`, which has the following properties:
+
+| Property       | Type                                    | Description           |
+|----------------|-----------------------------------------|-----------------------|
+| `message`     | *string*                                 | The error message     |
+| `status_code`  | *int*                                   | The HTTP status code  |
+| `raw_response` | *Faraday::Response*                     | The raw HTTP response |
+| `body`        | *string*                                 | The response content  |
+
+When custom error responses are specified for an operation, the SDK may also throw their associated exception. You can refer to respective *Errors* tables in SDK docs for more details on possible exception types for each operation. For example, the `verify` method throws the following exceptions:
+
+| Error Type                  | Status Code   | Content Type     |
+| --------------------------- | ------------- | ---------------- |
+| Models::Errors::ClerkErrors | 400, 401, 404 | application/json |
+| Errors::APIError            | 4XX, 5XX      | \*/\*            |
+
+### Example
+
+#### API Errors
+
+```ruby
+begin
+  response = sdk.users.get(user_id: 'invalid')
+rescue Clerk::Models::Errors::ClerkErrors => e
+  # Clerk-specific errors (400, 401, 404)
+  puts e.message
+  puts e.raw_response.status
+rescue Clerk::Errors::APIError => e
+  # General API errors
+  puts e.status_code
+  puts e.body
+end
+```
+
+#### Authentication Errors 
+
+```ruby
+rescue Clerk::AuthenticationError => e
+  puts e.status  # HTTP status code
+  puts e.message
+rescue Clerk::ConfigurationError => e
+  # Missing or invalid configuration
+  puts e.message
+end
+```
+
+#### JWT Errors
+
+```ruby
+begin
+  claims = sdk.verify_token(token)
+rescue JWT::ExpiredSignature
+  # Token has expired
+rescue JWT::InvalidIatError
+  # Token not yet active
+rescue JWT::DecodeError
+  # Malformed or invalid token
+end
+```
+
+<!-- No Error Handling [errors] -->
+<!-- No Server Selection [server] -->
+
+<!-- Placeholder for Future Speakeasy SDK Sections -->
+
+# Development
+
+## Maturity
+
+This SDK is in beta, and there may be breaking changes between versions without a major version update. Therefore, we recommend pinning usage
+to a specific package version. This way, you can install the same version each time without breaking changes unless you are intentionally
+looking for the latest version.
+
+## Contributions
+
+While we value open-source contributions to this SDK, this library is generated programmatically. Any manual changes added to internal files will be overwritten on the next generation. 
+We look forward to hearing your feedback. Feel free to open a PR or an issue with a proof of concept and we'll do our best to include it in a future release. 
+
+### SDK Created by [Speakeasy](https://www.speakeasy.com/?utm_source=clerk-sdk-ruby&utm_campaign=ruby)

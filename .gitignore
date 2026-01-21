@@ -1,21 +1,9 @@
-/.bundle/
-/.yardoc
-/_yardoc/
-/coverage/
-/doc/
-/pkg/
-/spec/reports/
-/tmp/
-
-.byebug_history
 *.gem
-
-.idea
-
-# rspec failure tracking
-.rspec_status
-
-# Environment variables
+.rbenv-gemsets
+.DS_Store
+**/.speakeasy/temp/
+**/.speakeasy/logs/
+bin/
+sorbet/
 .env
-.env.*
-!.env.example
+.env.local

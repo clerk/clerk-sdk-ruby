@@ -1,0 +1,11 @@
+# VerifyApiKeyBadRequestError
+
+400 Bad Request
+
+
+## Fields
+
+| Field                                                                                                                         | Type                                                                                                                          | Required                                                                                                                      | Description                                                                                                                   |
+| ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `errors`                                                                                                                      | Crystalline::Array<[Models::Operations::VerifyApiKeyBadRequestError](../../models/operations/verifyapikeybadrequesterror.md)> | :heavy_check_mark:                                                                                                            | N/A                                                                                                                           |
+| `raw_response`                                                                                                                | [Faraday::Response](https://www.rubydoc.info/gems/faraday/Faraday/Response)                                                   | :heavy_minus_sign:                                                                                                            | Raw HTTP response; suitable for custom response parsing                                                                       |
