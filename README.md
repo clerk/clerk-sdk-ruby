@@ -61,13 +61,13 @@ $ bundle install
 
 The SDK automatically reads these environment variables:
 
-| Variable	            | Description                                  |
-------------------------------------------------------------------------
-| CLERK_SECRET_KEY	    | Your Clerk secret key (starts with sk_)      |
-| CLERK_PUBLISHABLE_KEY	| Your Clerk publishable key (starts with pk_) |
-| CLERK_SIGN_IN_URL	URL | to redirect unauthenticated users            |
-| CLERK_SIGN_UP_URL	URL | for new user registration                    |
-| CLERK_SIGN_OUT_URL	  | URL for sign out                             |
+| Variable	             | Description                                   |
+|-----------------------|-----------------------------------------------|
+| CLERK_SECRET_KEY	     | Your Clerk secret key (starts with sk_)       |
+| CLERK_PUBLISHABLE_KEY	| Your Clerk publishable key (starts with pk_)  |
+| CLERK_SIGN_IN_URL	URL | to redirect unauthenticated users             |
+| CLERK_SIGN_UP_URL	URL | for new user registration                     |
+| CLERK_SIGN_OUT_URL	   | URL for sign out                              |
 
 ### Programmatic Configuration
 
