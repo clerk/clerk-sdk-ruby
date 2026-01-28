@@ -4059,7 +4059,7 @@ module Clerk
     
     def set_password_compromised(user_id:, body: nil, retries: nil, timeout_ms: nil)
       # set_password_compromised - Set a user's password as compromised
-      # Sets the given user's password as compromised, which means that they will be prompted to reset their password on their next sign in.
+      # Sets the given user's password as compromised. The user will be prompted to reset their password on their next sign-in.
       request = Models::Operations::SetUserPasswordCompromisedRequest.new(
         user_id: user_id,
         body: body
@@ -4211,8 +4211,8 @@ module Clerk
 
     
     def unset_password_compromised(user_id:, retries: nil, timeout_ms: nil)
-      # unset_password_compromised - Unmark a user's password as compromised
-      # Removes the compromised status from the given user's password. The user will no longer be prompted to reset their password on their next sign in.
+      # unset_password_compromised - Unset a user's password as compromised
+      # Sets the given user's password as no longer compromised. The user will no longer be prompted to reset their password on their next sign-in.
       request = Models::Operations::UnsetUserPasswordCompromisedRequest.new(
         user_id: user_id
       )

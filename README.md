@@ -384,6 +384,7 @@ end
 * [list_subscription_items](docs/sdks/billing/README.md#list_subscription_items) - List all subscription items
 * [cancel_subscription_item](docs/sdks/billing/README.md#cancel_subscription_item) - Cancel a subscription item
 * [extend_subscription_item_free_trial](docs/sdks/billing/README.md#extend_subscription_item_free_trial) - Extend free trial for a subscription item
+* [create_price_transition](docs/sdks/billing/README.md#create_price_transition) - Create a price transition for a subscription item
 * [list_statements](docs/sdks/billing/README.md#list_statements) - List all billing statements
 * [get_statement](docs/sdks/billing/README.md#get_statement) - Retrieve a billing statement
 * [get_statement_payment_attempts](docs/sdks/billing/README.md#get_statement_payment_attempts) - List payment attempts for a billing statement
@@ -432,6 +433,8 @@ end
 * [update_restrictions](docs/sdks/instancesettings/README.md#update_restrictions) - Update instance restrictions
 * [change_domain](docs/sdks/instancesettings/README.md#change_domain) - Update production instance domain
 * [update_organization_settings](docs/sdks/instancesettings/README.md#update_organization_settings) - Update instance organization settings
+* [get_instance_protect](docs/sdks/instancesettings/README.md#get_instance_protect) - Get instance protect settings
+* [update_instance_protect](docs/sdks/instancesettings/README.md#update_instance_protect) - Update instance protect settings
 
 ### [Invitations](docs/sdks/invitations/README.md)
 
@@ -638,7 +641,7 @@ end
 * [delete_totp](docs/sdks/users/README.md#delete_totp) - Delete all the user's TOTPs
 * [delete_external_account](docs/sdks/users/README.md#delete_external_account) - Delete External Account
 * [set_password_compromised](docs/sdks/users/README.md#set_password_compromised) - Set a user's password as compromised
-* [unset_password_compromised](docs/sdks/users/README.md#unset_password_compromised) - Unmark a user's password as compromised
+* [unset_password_compromised](docs/sdks/users/README.md#unset_password_compromised) - Unset a user's password as compromised
 * [get_instance_organization_memberships](docs/sdks/users/README.md#get_instance_organization_memberships) - Get a list of all organization memberships within an instance.
 
 ### [WaitlistEntries](docs/sdks/waitlistentries/README.md)

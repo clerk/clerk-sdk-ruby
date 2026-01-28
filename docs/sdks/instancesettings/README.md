@@ -2,6 +2,8 @@
 
 ## Overview
 
+Modify the settings of your instance.
+
 ### Available Operations
 
 * [get](#get) - Fetch the current instance
@@ -9,6 +11,8 @@
 * [update_restrictions](#update_restrictions) - Update instance restrictions
 * [change_domain](#change_domain) - Update production instance domain
 * [update_organization_settings](#update_organization_settings) - Update instance organization settings
+* [get_instance_protect](#get_instance_protect) - Get instance protect settings
+* [update_instance_protect](#update_instance_protect) - Update instance protect settings
 
 ## get
 
@@ -243,4 +247,79 @@ end
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
 | Models::Errors::ClerkErrors | 400, 402, 404, 422          | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## get_instance_protect
+
+Get instance protect settings
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="GetInstanceProtect" method="get" path="/instance/protect" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
+    )
+
+res = s.instance_settings.get_instance_protect()
+
+unless res.instance_protect.nil?
+  # handle response
+end
+
+```
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::GetInstanceProtectResponse)](../../models/operations/getinstanceprotectresponse.md)**
+
+### Errors
+
+| Error Type       | Status Code      | Content Type     |
+| ---------------- | ---------------- | ---------------- |
+| Errors::APIError | 4XX, 5XX         | \*/\*            |
+
+## update_instance_protect
+
+Update instance protect settings
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="UpdateInstanceProtect" method="patch" path="/instance/protect" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
+    )
+
+req = 
+
+res = s.instance_settings.update_instance_protect(request: req)
+
+unless res.instance_protect.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                                   | Type                                                                                                        | Required                                                                                                    | Description                                                                                                 |
+| ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `request`                                                                                                   | [Models::Operations::UpdateInstanceProtectRequest](../../models/operations/updateinstanceprotectrequest.md) | :heavy_check_mark:                                                                                          | The request object to use for the request.                                                                  |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::UpdateInstanceProtectResponse)](../../models/operations/updateinstanceprotectresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 422                         | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |

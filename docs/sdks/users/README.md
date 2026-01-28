@@ -32,7 +32,7 @@
 * [delete_totp](#delete_totp) - Delete all the user's TOTPs
 * [delete_external_account](#delete_external_account) - Delete External Account
 * [set_password_compromised](#set_password_compromised) - Set a user's password as compromised
-* [unset_password_compromised](#unset_password_compromised) - Unmark a user's password as compromised
+* [unset_password_compromised](#unset_password_compromised) - Unset a user's password as compromised
 * [get_instance_organization_memberships](#get_instance_organization_memberships) - Get a list of all organization memberships within an instance.
 
 ## list
@@ -1256,7 +1256,7 @@ end
 
 ## set_password_compromised
 
-Sets the given user's password as compromised, which means that they will be prompted to reset their password on their next sign in.
+Sets the given user's password as compromised. The user will be prompted to reset their password on their next sign-in.
 
 ### Example Usage
 
@@ -1297,7 +1297,7 @@ end
 
 ## unset_password_compromised
 
-Removes the compromised status from the given user's password. The user will no longer be prompted to reset their password on their next sign in.
+Sets the given user's password as no longer compromised. The user will no longer be prompted to reset their password on their next sign-in.
 
 ### Example Usage
 

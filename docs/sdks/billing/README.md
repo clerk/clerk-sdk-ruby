@@ -8,6 +8,7 @@
 * [list_subscription_items](#list_subscription_items) - List all subscription items
 * [cancel_subscription_item](#cancel_subscription_item) - Cancel a subscription item
 * [extend_subscription_item_free_trial](#extend_subscription_item_free_trial) - Extend free trial for a subscription item
+* [create_price_transition](#create_price_transition) - Create a price transition for a subscription item
 * [list_statements](#list_statements) - List all billing statements
 * [get_statement](#get_statement) - Retrieve a billing statement
 * [get_statement_payment_attempts](#get_statement_payment_attempts) - List payment attempts for a billing statement
@@ -189,6 +190,52 @@ end
 | Models::Errors::ClerkErrors | 400, 401, 403, 404, 422     | application/json            |
 | Models::Errors::ClerkErrors | 500                         | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## create_price_transition
+
+Creates a price transition for the specified subscription item.
+This may create an upcoming subscription item or activate immediately depending on plan and payer rules.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="CreateBillingPriceTransition" method="post" path="/billing/subscription_items/{subscription_item_id}/price_transition" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
+    )
+
+res = s.billing.create_price_transition(subscription_item_id: '<id>', body: Models::Components::PriceTransitionRequest.new(
+  from_price_id: '<id>',
+  to_price_id: '<id>',
+))
+
+unless res.commerce_price_transition_response.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                   | Type                                                                                        | Required                                                                                    | Description                                                                                 |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `subscription_item_id`                                                                      | *::String*                                                                                  | :heavy_check_mark:                                                                          | The ID of the subscription item to transition                                               |
+| `body`                                                                                      | [Models::Components::PriceTransitionRequest](../../models/shared/pricetransitionrequest.md) | :heavy_check_mark:                                                                          | Parameters for the price transition                                                         |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::CreateBillingPriceTransitionResponse)](../../models/operations/createbillingpricetransitionresponse.md)**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| Models::Errors::ClerkErrors  | 400, 401, 403, 404, 409, 422 | application/json             |
+| Models::Errors::ClerkErrors  | 500                          | application/json             |
+| Errors::APIError             | 4XX, 5XX                     | \*/\*                        |
 
 ## list_statements
 
