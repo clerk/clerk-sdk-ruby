@@ -62,11 +62,11 @@ $ bundle install
 The SDK automatically reads these environment variables:
 
 | Variable	            | Description                                  |
-------------------------------------------------------------------------
+------------------------|----------------------------------------------|
 | CLERK_SECRET_KEY	    | Your Clerk secret key (starts with sk_)      |
 | CLERK_PUBLISHABLE_KEY	| Your Clerk publishable key (starts with pk_) |
-| CLERK_SIGN_IN_URL	URL | to redirect unauthenticated users            |
-| CLERK_SIGN_UP_URL	URL | for new user registration                    |
+| CLERK_SIGN_IN_URL     | to redirect unauthenticated users            |
+| CLERK_SIGN_UP_URL     | for new user registration                    |
 | CLERK_SIGN_OUT_URL	  | URL for sign out                             |
 
 ### Programmatic Configuration
@@ -255,7 +255,7 @@ clerk.organization_permissions  # => ["org:billing:manage", "org:users:read"]
 ## Backend API Operations
 
 ```ruby
-require 'clerk_sdk_ruby'
+require 'clerk'
 
 # Initialize the SDK
 sdk = Clerk::SDK.new
@@ -276,7 +276,7 @@ Reverification requires users to re-authenticate for sensitive operations.
 
 ### Presets
 | Preset	                          | Timeout	Level             |
------------------------------------------------------------------
+------------------------------------|---------------------------|
 | Clerk::StepUp::Preset::STRICT   	| 10 minutes	Second factor |
 | Clerk::StepUp::Preset::STRICT_MFA	| 10 minutes	Multi-factor  |
 | Clerk::StepUp::Preset::MODERATE	  | 60 minutes	Second factor |
