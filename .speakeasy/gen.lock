@@ -5,15 +5,15 @@ management:
   docVersion: "2025-11-10"
   speakeasyVersion: 1.700.2
   generationVersion: 2.801.2
-  releaseVersion: 5.0.0-beta.1
-  configChecksum: c2ecee17fa4882722b5e6c76e11c59d3
+  releaseVersion: 5.0.0
+  configChecksum: e3b9ecd496ee7f995f3826bcbbd253ac
   repoURL: https://github.com/clerk/clerk-sdk-ruby.git
   installationURL: https://github.com/clerk/clerk-sdk-ruby
   published: true
 persistentEdits:
-  generation_id: eb15c75a-33c7-42c1-b4f5-da2d137dbd4c
-  pristine_commit_hash: 2794ff096d775aa34053842877295fa123ea81b2
-  pristine_tree_hash: a143b9b78d1b7fc9c63319adba94f0905ce49eea
+  generation_id: 9409cf44-e959-40a9-805b-5876bd84c972
+  pristine_commit_hash: 3805a1e38aa88a0a51b2f1950705bdce6adabc03
+  pristine_tree_hash: e8e2190a95afd5537dcefed07ccfad69f91c9248
 features:
   ruby:
     additionalProperties: 0.1.0
@@ -46,8 +46,8 @@ trackedFiles:
     pristine_git_object: b0ea40558f3ca80dcf7d30b159d34a1e5ab33440
   Gemfile.lock:
     id: 21fb5836b499
-    last_write_checksum: sha1:66bb052d9205589b873a76822935a6946725277e
-    pristine_git_object: f8a288da4ce78881ad69f6c66a4a3a1ac9fced1f
+    last_write_checksum: sha1:9784c8dadc5c29902b2a512bfacebddb0815928a
+    pristine_git_object: ded1ef8ef7f138f5d7e52e79d7443dad7b72fd4b
   Rakefile:
     id: 44b7fa1ba503
     last_write_checksum: sha1:3bb027e7620352086cf7ac562ce0c2a1473763bd
@@ -58,8 +58,8 @@ trackedFiles:
     pristine_git_object: a1725c79d0ea4c296b418b677721e5c151ba9c7d
   clerk-sdk-ruby.gemspec:
     id: 1d24faa8ee4c
-    last_write_checksum: sha1:a9c50496cff4b869a23faaefc826bde94e4b2cde
-    pristine_git_object: 94052744b3c0ee2169361dc2df7ccab0cd499b4a
+    last_write_checksum: sha1:c32ef5b8262229ce5c53110b44deb52369dec103
+    pristine_git_object: 8791d7a93592d0e5cb2c313c211d5c70ea9ea594
   docs/models/components/actortoken.md:
     id: 6f567bd2f98e
     last_write_checksum: sha1:20b5bcc73de9dd30005ace61e79932376c978594
@@ -11194,8 +11194,8 @@ trackedFiles:
     pristine_git_object: a9439db9cbc91b3abef17baf0d438a99a9190cf0
   lib/clerk/sdkconfiguration.rb:
     id: 005b930c709e
-    last_write_checksum: sha1:8473b4d0c42fb785d9e2ead9a9be156d861d785a
-    pristine_git_object: b75f78a3c974c459e751b9d44fa4368357da6966
+    last_write_checksum: sha1:52e93210c525d93cffd5f552a78992ada8d83a4b
+    pristine_git_object: e1e7daeadd36f1c8350dc806e8d52ab2e61bb198
   lib/clerk/sdkconfiguration.rbi:
     id: c7163e8cf2ca
     last_write_checksum: sha1:fea1767a154b4575f107e7dda123f1cc89a1c581
@@ -13364,11 +13364,6 @@ examples:
         "500":
           application/json: {"errors": [{"message": "<value>", "long_message": "<value>", "code": "<value>"}]}
 examplesVersion: 1.0.2
-releaseNotes: |
-  ## Ruby SDK Changes:
-  * `open_api_client.instance_settings.get_instance_protect()`: **Added**
-  * `open_api_client.instance_settings.update_instance_protect()`: **Added**
-  * `open_api_client.billing.create_price_transition()`: **Added**
 generatedFiles:
   - .gitattributes
   - .rubocop.yml
