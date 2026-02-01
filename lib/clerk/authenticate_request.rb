@@ -154,7 +154,7 @@ module Clerk
 
       return signed_out(reason: AuthErrorReason::SESSION_TOKEN_MISSING, headers: headers) unless session_token
 
-      verify_token_with_retry(env, session_token)
+      verify_token_with_retry(env, session_token, headers:)
     end
 
     def handle_handshake_maybe_status(env, **opts)
@@ -230,16 +230,16 @@ module Clerk
 
     # Verify session token and provide a 1-day leeway for development if initial verification
     # fails for development instance due to invalid exp or iat
-    def verify_token_with_retry(env, token)
+    def verify_token_with_retry(env, token, headers: {})
       claims = verify_token(token)
-      signed_in(env, claims, token) if claims
+      signed_in(env, claims, token, **headers) if claims
     rescue JWT::ExpiredSignature, JWT::InvalidIatError => e
       if auth_context.development_instance?
         # TODO: log possible Clock skew detected
 
         # Retry with a generous clock skew allowance (1 day)
         claims = verify_token(token, timeout: 86_400)
-        return signed_in(env, claims, token) if claims
+        return signed_in(env, claims, token, **headers) if claims
       end
 
       # Raise error if handshake resolution fails in production
