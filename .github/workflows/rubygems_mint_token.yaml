@@ -1,0 +1,24 @@
+name: Mint RubyGems Token
+on:
+  workflow_call:
+    outputs:
+      rubygems_token:
+        description: Minted RubyGems API token via OIDC
+        value: ${{ jobs.mint.outputs.rubygems_token }}
+jobs:
+  mint:
+    name: Mint RubyGems token
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Configure RubyGems Credentials
+        id: configure
+        uses: rubygems/configure-rubygems-credentials@main
+        with:
+          trusted-publisher: true
+      - name: Export token for Speakeasy
+        id: output-token
+        run: echo "rubygems_token=$RUBYGEMS_API_KEY" >> "$GITHUB_OUTPUT"
+    outputs:
+      rubygems_token: ${{ steps.output-token.outputs.rubygems_token }}

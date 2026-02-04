@@ -13,11 +13,14 @@ permissions:
       - .speakeasy/gen.lock
   workflow_dispatch: {}
 jobs:
+  mint_rubygems_token:
+    uses: ./.github/workflows/rubygems_mint_token.yaml
   publish:
+    needs: mint_rubygems_token
     uses: speakeasy-api/sdk-generation-action/.github/workflows/sdk-publish.yaml@v15
     with:
       target: clerk
     secrets:
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
-      rubygems_auth_token: ${{ secrets.RUBYGEMS_AUTH_TOKEN }}
+      rubygems_auth_token: ${{ needs.mint_rubygems_token.outputs.rubygems_token }}
       speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
