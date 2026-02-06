@@ -23,13 +23,14 @@ generation:
   schemas:
     allOfMergeStrategy: shallowMerge
   requestBodyFieldName: body
+  versioningStrategy: automatic
   persistentEdits: {}
   tests:
     generateTests: false
     generateNewTests: true
     skipResponseBodyAssertions: false
 ruby:
-  version: 5.0.1
+  version: 5.0.2
   additionalDependencies:
     development:
       activesupport: ~> 8.0.0

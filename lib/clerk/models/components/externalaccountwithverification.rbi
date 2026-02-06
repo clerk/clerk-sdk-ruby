@@ -38,6 +38,8 @@ class Clerk::Models::Components::ExternalAccountWithVerification
   def verification=(str_); end
   def additional_properties(); end
   def additional_properties=(str_); end
+  def email_address_verified(); end
+  def email_address_verified=(str_); end
   def image_url(); end
   def image_url=(str_); end
   def username(); end

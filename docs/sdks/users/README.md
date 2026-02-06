@@ -79,6 +79,8 @@ req = Models::Operations::GetUserListRequest.new(
   last_active_at_since: 1_700_690_400_000,
   created_at_before: 1_730_160_000_000,
   created_at_after: 1_730_160_000_000,
+  last_sign_in_at_before: 1_700_690_400_000,
+  last_sign_in_at_after: 1_700_690_400_000,
 )
 
 res = s.users.list(request: req)
@@ -196,6 +198,8 @@ req = Models::Operations::GetUsersCountRequest.new(
   last_active_at_since: 1_700_690_400_000,
   created_at_before: 1_730_160_000_000,
   created_at_after: 1_730_160_000_000,
+  last_sign_in_at_before: 1_700_690_400_000,
+  last_sign_in_at_after: 1_700_690_400_000,
 )
 
 res = s.users.count(request: req)

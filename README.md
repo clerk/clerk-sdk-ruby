@@ -381,6 +381,8 @@ end
 ### [Billing](docs/sdks/billing/README.md)
 
 * [list_plans](docs/sdks/billing/README.md#list_plans) - List all billing plans
+* [list_prices](docs/sdks/billing/README.md#list_prices) - List all billing prices
+* [create_price](docs/sdks/billing/README.md#create_price) - Create a custom billing price
 * [list_subscription_items](docs/sdks/billing/README.md#list_subscription_items) - List all subscription items
 * [cancel_subscription_item](docs/sdks/billing/README.md#cancel_subscription_item) - Cancel a subscription item
 * [extend_subscription_item_free_trial](docs/sdks/billing/README.md#extend_subscription_item_free_trial) - Extend free trial for a subscription item
@@ -648,6 +650,7 @@ end
 
 * [list](docs/sdks/waitlistentries/README.md#list) - List all waitlist entries
 * [create](docs/sdks/waitlistentries/README.md#create) - Create a waitlist entry
+* [bulk_create](docs/sdks/waitlistentries/README.md#bulk_create) - Create multiple waitlist entries
 * [delete](docs/sdks/waitlistentries/README.md#delete) - Delete a pending waitlist entry
 * [invite](docs/sdks/waitlistentries/README.md#invite) - Invite a waitlist entry
 * [reject](docs/sdks/waitlistentries/README.md#reject) - Reject a waitlist entry

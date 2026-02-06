@@ -46,6 +46,9 @@ module Clerk
         field :verification, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::ExternalAccountWithVerificationOauth, Models::Components::GoogleOneTap)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('verification'), required: true }, 'discriminator': 'object', 'discriminator_mapping': { 'verification_oauth' => Models::Components::ExternalAccountWithVerificationOauth, 'verification_google_one_tap' => Models::Components::GoogleOneTap } }
 
         field :additional_properties, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('additional_properties') } }
+        # Whether the email was verified by the OAuth provider at creation time. null = unknown (pre-migration data or custom OAuth providers), true = provider confirmed email was verified, false = provider confirmed email was NOT verified
+        # 
+        field :email_address_verified, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address_verified') } }
 
         field :image_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('image_url') } }
 
@@ -56,7 +59,7 @@ module Clerk
         field :label, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('label') } }
 
         
-        def initialize(object:, id:, provider:, identification_id:, provider_user_id:, approved_scopes:, email_address:, first_name:, last_name:, public_metadata:, created_at:, updated_at:, avatar_url: nil, verification: nil, additional_properties: nil, image_url: nil, username: nil, phone_number: nil, label: nil)
+        def initialize(object:, id:, provider:, identification_id:, provider_user_id:, approved_scopes:, email_address:, first_name:, last_name:, public_metadata:, created_at:, updated_at:, avatar_url: nil, verification: nil, additional_properties: nil, email_address_verified: nil, image_url: nil, username: nil, phone_number: nil, label: nil)
           @object = object
           @id = id
           @provider = provider
@@ -72,6 +75,7 @@ module Clerk
           @avatar_url = avatar_url
           @verification = verification
           @additional_properties = additional_properties
+          @email_address_verified = email_address_verified
           @image_url = image_url
           @username = username
           @phone_number = phone_number
@@ -96,6 +100,7 @@ module Clerk
           return false unless @avatar_url == other.avatar_url
           return false unless @verification == other.verification
           return false unless @additional_properties == other.additional_properties
+          return false unless @email_address_verified == other.email_address_verified
           return false unless @image_url == other.image_url
           return false unless @username == other.username
           return false unless @phone_number == other.phone_number

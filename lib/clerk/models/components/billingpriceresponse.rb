@@ -8,12 +8,12 @@ module Clerk
   module Models
     module Components
 
-      class CommercePriceResponse
+      class BillingPriceResponse
         
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        field :object, Models::Components::CommercePriceResponseObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::CommercePriceResponseObject, false) } }
+        field :object, Models::Components::BillingPriceResponseObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::BillingPriceResponseObject, false) } }
         # Unique identifier for the price.
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # Unique identifier for the associated plan.

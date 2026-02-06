@@ -15,7 +15,7 @@ module Clerk
 
         field :previous_plan, Models::Components::SchemasCommercePlan, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('previous_plan'), required: true } }
 
-        field :previous_price, Models::Components::CommercePriceResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('previous_price'), required: true } }
+        field :previous_price, Models::Components::BillingPriceResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('previous_price'), required: true } }
         # Unix timestamp (milliseconds) when the new price takes effect.
         field :effective_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('effective_at'), required: true } }
         # When the new price takes effect.

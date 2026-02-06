@@ -7,8 +7,8 @@
 module Clerk
   module Models
     module Components
-      # CommercePriceResponseObject - String representing the object's type. Objects of the same type share the same value.
-      class CommercePriceResponseObject
+      # BillingPriceResponseObject - String representing the object's type. Objects of the same type share the same value.
+      class BillingPriceResponseObject
 
 
         include ::Crystalline::Enum

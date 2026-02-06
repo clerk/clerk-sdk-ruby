@@ -5,6 +5,8 @@
 ### Available Operations
 
 * [list_plans](#list_plans) - List all billing plans
+* [list_prices](#list_prices) - List all billing prices
+* [create_price](#create_price) - Create a custom billing price
 * [list_subscription_items](#list_subscription_items) - List all subscription items
 * [cancel_subscription_item](#cancel_subscription_item) - Cancel a subscription item
 * [extend_subscription_item_free_trial](#extend_subscription_item_free_trial) - Extend free trial for a subscription item
@@ -55,6 +57,98 @@ end
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
 | Models::Errors::ClerkErrors | 400, 401, 422               | application/json            |
+| Models::Errors::ClerkErrors | 500                         | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## list_prices
+
+Returns a list of all prices for the instance. The prices are returned sorted by amount ascending,
+then by creation date descending. This includes both default and custom prices. Pagination is supported.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="GetBillingPriceList" method="get" path="/billing/prices" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
+    )
+
+res = s.billing.list_prices(limit: 10, offset: 0)
+
+unless res.paginated_billing_price_response.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                                                                 | Type                                                                                                                                      | Required                                                                                                                                  | Description                                                                                                                               |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `paginated`                                                                                                                               | *Crystalline::Nilable.new(Crystalline::Boolean.new)*                                                                                      | :heavy_minus_sign:                                                                                                                        | Whether to paginate the results.<br/>If true, the results will be paginated.<br/>If false, the results will not be paginated.             |
+| `limit`                                                                                                                                   | *Crystalline::Nilable.new(::Integer)*                                                                                                     | :heavy_minus_sign:                                                                                                                        | Applies a limit to the number of results returned.<br/>Can be used for paginating the results together with `offset`.                     |
+| `offset`                                                                                                                                  | *Crystalline::Nilable.new(::Integer)*                                                                                                     | :heavy_minus_sign:                                                                                                                        | Skip the first `offset` results when paginating.<br/>Needs to be an integer greater or equal to zero.<br/>To be used in conjunction with `limit`. |
+| `plan_id`                                                                                                                                 | *Crystalline::Nilable.new(::String)*                                                                                                      | :heavy_minus_sign:                                                                                                                        | Filter prices by plan ID                                                                                                                  |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::GetBillingPriceListResponse)](../../models/operations/getbillingpricelistresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 400, 401, 404, 422          | application/json            |
+| Models::Errors::ClerkErrors | 500                         | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## create_price
+
+Creates a custom price for a billing plan. Custom prices allow you to offer different pricing
+to specific customers while maintaining the same plan structure.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="CreateBillingPrice" method="post" path="/billing/prices" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
+    )
+
+req = Models::Components::CreateBillingPriceRequest.new(
+  plan_id: '<id>',
+  amount: 826_545,
+)
+
+res = s.billing.create_price(request: req)
+
+unless res.billing_price_response.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                         | Type                                                                                              | Required                                                                                          | Description                                                                                       |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `request`                                                                                         | [Models::Components::CreateBillingPriceRequest](../../models/shared/createbillingpricerequest.md) | :heavy_check_mark:                                                                                | The request object to use for the request.                                                        |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::CreateBillingPriceResponse)](../../models/operations/createbillingpriceresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 400, 401, 404, 422          | application/json            |
 | Models::Errors::ClerkErrors | 500                         | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
