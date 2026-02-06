@@ -87,6 +87,22 @@ module Clerk
         # Returns users who have been created after the given date (with millisecond precision).
         # Example: use 1730160000000 to retrieve users who have been created after 2024-10-29.
         field :created_at_after, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'created_at_after', 'style': 'form', 'explode': true } }
+        # Returns users whose last sign-in was before the given date (with millisecond precision).
+        # Example: use 1700690400000 to retrieve users whose last sign-in was before 2023-11-23.
+        field :last_sign_in_at_before, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'last_sign_in_at_before', 'style': 'form', 'explode': true } }
+        # Returns users whose last sign-in was after the given date (with millisecond precision).
+        # Example: use 1700690400000 to retrieve users whose last sign-in was after 2023-11-23.
+        field :last_sign_in_at_after, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'last_sign_in_at_after', 'style': 'form', 'explode': true } }
+        # Returns users with external accounts for the specified OAuth provider.
+        # Must be used in combination with the `provider_user_id` parameter.
+        # For example, use `provider=oauth_google&provider_user_id=12345` to retrieve a user with Google provider user ID 12345.
+        field :provider, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'provider', 'style': 'form', 'explode': true } }
+        # Returns users with the specified provider user IDs for a specific provider.
+        # Must be used in combination with the `provider` parameter.
+        # For example, use `provider=oauth_google&provider_user_id=12345` to retrieve a user with Google provider user ID 12345.
+        # Accepts up to 100 provider user IDs.
+        # Any provider user IDs not found are ignored.
+        field :provider_user_id, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'query_param': { 'field_name': 'provider_user_id', 'style': 'form', 'explode': true } }
         # Applies a limit to the number of results returned.
         # Can be used for paginating the results together with `offset`.
         field :limit, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'limit', 'style': 'form', 'explode': true } }
@@ -103,7 +119,7 @@ module Clerk
         field :order_by, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'order_by', 'style': 'form', 'explode': true } }
 
         
-        def initialize(email_address: nil, phone_number: nil, external_id: nil, username: nil, web3_wallet: nil, user_id: nil, organization_id: nil, query: nil, email_address_query: nil, phone_number_query: nil, username_query: nil, name_query: nil, banned: nil, last_active_at_before: nil, last_active_at_after: nil, last_active_at_since: nil, created_at_before: nil, created_at_after: nil, limit: 10, offset: 0, order_by: '-created_at')
+        def initialize(email_address: nil, phone_number: nil, external_id: nil, username: nil, web3_wallet: nil, user_id: nil, organization_id: nil, query: nil, email_address_query: nil, phone_number_query: nil, username_query: nil, name_query: nil, banned: nil, last_active_at_before: nil, last_active_at_after: nil, last_active_at_since: nil, created_at_before: nil, created_at_after: nil, last_sign_in_at_before: nil, last_sign_in_at_after: nil, provider: nil, provider_user_id: nil, limit: 10, offset: 0, order_by: '-created_at')
           @email_address = email_address
           @phone_number = phone_number
           @external_id = external_id
@@ -122,6 +138,10 @@ module Clerk
           @last_active_at_since = last_active_at_since
           @created_at_before = created_at_before
           @created_at_after = created_at_after
+          @last_sign_in_at_before = last_sign_in_at_before
+          @last_sign_in_at_after = last_sign_in_at_after
+          @provider = provider
+          @provider_user_id = provider_user_id
           @limit = limit
           @offset = offset
           @order_by = order_by
@@ -148,6 +168,10 @@ module Clerk
           return false unless @last_active_at_since == other.last_active_at_since
           return false unless @created_at_before == other.created_at_before
           return false unless @created_at_after == other.created_at_after
+          return false unless @last_sign_in_at_before == other.last_sign_in_at_before
+          return false unless @last_sign_in_at_after == other.last_sign_in_at_after
+          return false unless @provider == other.provider
+          return false unless @provider_user_id == other.provider_user_id
           return false unless @limit == other.limit
           return false unless @offset == other.offset
           return false unless @order_by == other.order_by

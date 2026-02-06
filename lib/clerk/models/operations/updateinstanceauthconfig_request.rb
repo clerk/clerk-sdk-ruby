@@ -16,7 +16,7 @@ module Clerk
         # Only alphanumeric values are allowed.
         # Note that this value should contain only the local part of the address (e.g. `foo` for `foo@example.com`).
         field :from_email_address, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('from_email_address') } }
-        # Enable the Progressive Sign Up algorithm. Refer to the [docs](https://clerk.com/docs/upgrade-guides/progressive-sign-up) for more info.
+        # Enable the Progressive Sign Up algorithm. This feature is deprecated, please contact support if you need assistance.
         field :progressive_sign_up, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('progressive_sign_up') } }
         # Toggles test mode for this instance, allowing the use of test email addresses and phone numbers.
         # Defaults to true for development instances.

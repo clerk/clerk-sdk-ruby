@@ -6,6 +6,7 @@
 
 * [list](#list) - List all waitlist entries
 * [create](#create) - Create a waitlist entry
+* [bulk_create](#bulk_create) - Create multiple waitlist entries
 * [delete](#delete) - Delete a pending waitlist entry
 * [invite](#invite) - Invite a waitlist entry
 * [reject](#reject) - Reject a waitlist entry
@@ -88,6 +89,55 @@ end
 ### Response
 
 **[Crystalline::Nilable.new(Models::Operations::CreateWaitlistEntryResponse)](../../models/operations/createwaitlistentryresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 400, 422                    | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## bulk_create
+
+Creates multiple waitlist entries for the provided email addresses.
+You can choose whether to send confirmation emails by setting the `notify` parameter to `true` or `false` for each entry.
+If the `notify` parameter is omitted, it defaults to `true`.
+
+If an email address is already on the waitlist, no new entry will be created and the existing waitlist entry will be returned.
+Duplicate email addresses within the same request are not allowed.
+
+This endpoint is limited to a maximum of 50 entries per API call. If you need to add more entries, please make multiple requests.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="CreateBulkWaitlistEntries" method="post" path="/waitlist_entries/bulk" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
+    )
+
+req = 
+
+res = s.waitlist_entries.bulk_create(request: req)
+
+unless res.waitlist_entry_list.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                             | Type                                                                                                  | Required                                                                                              | Description                                                                                           |
+| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `request`                                                                                             | [Crystalline::Array.new(Models::Operations::CreateBulkWaitlistEntriesRequestBody)](../../models//.md) | :heavy_check_mark:                                                                                    | The request object to use for the request.                                                            |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::CreateBulkWaitlistEntriesResponse)](../../models/operations/createbulkwaitlistentriesresponse.md)**
 
 ### Errors
 

@@ -7,7 +7,7 @@
 module Clerk
   module Models
     module Components
-      # Hello world
+      # A user's membership in an organization
       class OrganizationMembership
         
         include Crystalline::MetadataFields

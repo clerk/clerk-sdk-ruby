@@ -2,12 +2,12 @@
 # frozen_string_literal: true
 
 
-class Clerk::Models::Components::CommercePriceResponse
+class Clerk::Models::Components::BillingPriceResponse
   extend ::Crystalline::MetadataFields::ClassMethods
 end
 
 
-class Clerk::Models::Components::CommercePriceResponse
+class Clerk::Models::Components::BillingPriceResponse
   def object(); end
   def object=(str_); end
   def id(); end
