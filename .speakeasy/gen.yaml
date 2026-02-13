@@ -30,7 +30,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 ruby:
-  version: 5.0.2
+  version: 5.1.0
   additionalDependencies:
     development:
       activesupport: ~> 8.0.0
@@ -50,6 +50,7 @@ ruby:
   defaultErrorName: APIError
   description: Ruby Client SDK
   flattenGlobalSecurity: true
+  forwardCompatibleEnumsByDefault: false
   imports:
     option: openapi
     paths:
@@ -66,3 +67,4 @@ ruby:
   outputModelSuffix: output
   packageName: clerk-sdk-ruby
   typingStrategy: none
+  unionStrategy: left-to-right

@@ -9,10 +9,7 @@ module Clerk
     module Components
       # InstanceObject - String representing the object's type. Objects of the same type share the same value.
       class InstanceObject
-
-
         include ::Crystalline::Enum
-
         enums do
           INSTANCE = new('instance')
         end

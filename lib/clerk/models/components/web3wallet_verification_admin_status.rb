@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class Web3WalletVerificationAdminStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           VERIFIED = new('verified')
         end

@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # Provider1 - The IdP provider of the connection.
       class Provider1
-
-
         include ::Crystalline::Enum
-
         enums do
           SAML_CUSTOM = new('saml_custom')
           SAML_OKTA = new('saml_okta')

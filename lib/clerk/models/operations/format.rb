@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # Format - The format of the response.
       class Format
-
-
         include ::Crystalline::Enum
-
         enums do
           TOKEN = new('token')
           COOKIE = new('cookie')

@@ -15,7 +15,7 @@ module Clerk
 
         field :status, Models::Components::EnterpriseAccountVerificationTicketStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::EnterpriseAccountVerificationTicketStatus, false) } }
 
-        field :strategy, Models::Components::EnterpriseAccountVerificationTicketStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.enum_from_string(Models::Components::EnterpriseAccountVerificationTicketStrategy, false) } }
+        field :strategy, Models::Components::EnterpriseAccountVerificationTicketStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.open_enum_from_string(Models::Components::EnterpriseAccountVerificationTicketStrategy, false) } }
 
         field :object, Crystalline::Nilable.new(Models::Components::EnterpriseAccountVerificationTicketObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::EnterpriseAccountVerificationTicketObject, true) } }
 

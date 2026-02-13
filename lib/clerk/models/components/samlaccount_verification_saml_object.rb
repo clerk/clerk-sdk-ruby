@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class SAMLAccountVerificationSAMLObject
-
-
         include ::Crystalline::Enum
-
         enums do
           VERIFICATION_SAML = new('verification_saml')
         end

@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class VerificationPasskeyObject
-
-
         include ::Crystalline::Enum
-
         enums do
           VERIFICATION_PASSKEY = new('verification_passkey')
         end

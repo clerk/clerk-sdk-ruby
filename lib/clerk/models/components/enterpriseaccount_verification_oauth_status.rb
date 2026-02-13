@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class EnterpriseAccountVerificationOauthStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           UNVERIFIED = new('unverified')
           VERIFIED = new('verified')
@@ -20,6 +17,7 @@ module Clerk
           EXPIRED = new('expired')
           TRANSFERABLE = new('transferable')
         end
+        open!
       end
     end
   end

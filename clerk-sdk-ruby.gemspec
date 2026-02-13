@@ -4,7 +4,7 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 
 Gem::Specification.new do |s|
   s.name        = 'clerk-sdk-ruby'
-  s.version     = '5.0.2'
+  s.version     = '5.1.0'
   s.platform    = Gem::Platform::RUBY
   s.licenses    = ['Apache-2.0']
   s.summary     = ''
@@ -23,10 +23,10 @@ Gem::Specification.new do |s|
 
   s.add_dependency('base64', '>= 0.2.0', '< 1.0')
   s.add_dependency('concurrent-ruby', '~> 1.3.5')
-  s.add_dependency('faraday')
+  s.add_dependency('faraday', '>= 2.14.1')
   s.add_dependency('faraday-multipart', '~> 1.2.0')
   s.add_dependency('faraday-retry', '~> 2.4.0')
-  s.add_dependency('jwt', '~> 2.5')
+  s.add_dependency('jwt', '~> 3.0')
   s.add_development_dependency('activesupport', '~> 8.0.0')
   s.add_development_dependency('dotenv', '~> 3.1')
   s.add_development_dependency('minitest', '>= 5.27.0')

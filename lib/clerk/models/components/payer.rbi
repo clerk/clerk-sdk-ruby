@@ -32,4 +32,6 @@ class Clerk::Models::Components::Payer
   def organization_id=(str_); end
   def organization_name(); end
   def organization_name=(str_); end
+  def credits_balance(); end
+  def credits_balance=(str_); end
 end

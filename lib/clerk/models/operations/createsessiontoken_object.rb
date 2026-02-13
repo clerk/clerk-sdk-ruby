@@ -9,10 +9,7 @@ module Clerk
     module Operations
 
       class CreateSessionTokenObject
-
-
         include ::Crystalline::Enum
-
         enums do
           TOKEN = new('token')
         end

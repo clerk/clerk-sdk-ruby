@@ -67,9 +67,19 @@ module Crystalline
         end
       end
 
+      def open!
+        @open = true
+      end
+
+      def open?
+        @open == true
+      end
+
       def deserialize(val)
         if @mapping.include? val
           @mapping[val]
+        elsif open?
+          new(val)
         else
           raise "Invalid value for enum: #{val}"
         end
@@ -78,6 +88,23 @@ module Crystalline
 
     def serialize
       @val
+    end
+
+    def known?
+      self.class.instance_variable_get(:@mapping)&.value?(self) || false
+    end
+
+    def ==(other)
+      other = other.serialize if other.is_a?(self.class)
+      @val == other
+    end
+
+    def eql?(other)
+      self == other
+    end
+
+    def hash
+      @val.hash
     end
   end
 end

@@ -9,10 +9,7 @@ module Clerk
     module Components
       # EnrollmentMode - Mode of enrollment for the domain
       class EnrollmentMode
-
-
         include ::Crystalline::Enum
-
         enums do
           MANUAL_INVITATION = new('manual_invitation')
           AUTOMATIC_INVITATION = new('automatic_invitation')

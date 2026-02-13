@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # CreateInvitationTemplateSlug - The slug of the email template to use for the invitation email.
       class CreateInvitationTemplateSlug
-
-
         include ::Crystalline::Enum
-
         enums do
           INVITATION = new('invitation')
           WAITLIST_INVITATION = new('waitlist_invitation')

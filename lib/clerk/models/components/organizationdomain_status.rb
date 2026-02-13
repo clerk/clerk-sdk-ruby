@@ -9,10 +9,7 @@ module Clerk
     module Components
       # OrganizationDomainStatus - Status of the verification. It can be `unverified` or `verified`
       class OrganizationDomainStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           UNVERIFIED = new('unverified')
           VERIFIED = new('verified')

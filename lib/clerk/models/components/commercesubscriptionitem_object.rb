@@ -9,10 +9,7 @@ module Clerk
     module Components
       # CommerceSubscriptionItemObject - String representing the object's type. Objects of the same type share the same value.
       class CommerceSubscriptionItemObject
-
-
         include ::Crystalline::Enum
-
         enums do
           COMMERCE_SUBSCRIPTION_ITEM = new('commerce_subscription_item')
         end

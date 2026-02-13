@@ -49,3 +49,13 @@ Based on:
 - [ruby v5.0.2] .
 ### Releases
 - [Ruby Gems v5.0.2] https://rubygems.org/gems/clerk-sdk-ruby/versions/5.0.2 - .
+
+## 2026-02-13 16:20:07
+### Changes
+Based on:
+- OpenAPI Doc  
+- Speakeasy CLI 1.715.0 (2.822.1) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [ruby v5.1.0] .
+### Releases
+- [Ruby Gems v5.1.0] https://rubygems.org/gems/clerk-sdk-ruby/versions/5.1.0 - .

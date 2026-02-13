@@ -9,15 +9,13 @@ module Clerk
     module Components
 
       class PhoneNumberVerificationOtpStrategy
-
-
         include ::Crystalline::Enum
-
         enums do
           PHONE_CODE = new('phone_code')
           EMAIL_CODE = new('email_code')
           RESET_PASSWORD_EMAIL_CODE = new('reset_password_email_code')
         end
+        open!
       end
     end
   end

@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # GetCommerceSubscriptionItemListStatus - Filter subscription items by status
       class GetCommerceSubscriptionItemListStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           ACTIVE = new('active')
           ENDED = new('ended')

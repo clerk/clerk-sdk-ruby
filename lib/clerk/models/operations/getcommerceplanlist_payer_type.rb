@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # GetCommercePlanListPayerType - Filter plans by payer type
       class GetCommercePlanListPayerType
-
-
         include ::Crystalline::Enum
-
         enums do
           USER = new('user')
           ORG = new('org')

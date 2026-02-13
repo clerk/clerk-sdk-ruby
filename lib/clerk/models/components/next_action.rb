@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class NextAction
-
-
         include ::Crystalline::Enum
-
         enums do
           NEEDS_PREPARE = new('needs_prepare')
           NEEDS_ATTEMPT = new('needs_attempt')

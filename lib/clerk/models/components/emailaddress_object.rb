@@ -10,13 +10,11 @@ module Clerk
       # EmailAddressObject - String representing the object's type. Objects of the same type share the same value.
       # 
       class EmailAddressObject
-
-
         include ::Crystalline::Enum
-
         enums do
           EMAIL_ADDRESS = new('email_address')
         end
+        open!
       end
     end
   end

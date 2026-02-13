@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class EmailAddressVerificationAdminObject
-
-
         include ::Crystalline::Enum
-
         enums do
           VERIFICATION_ADMIN = new('verification_admin')
         end

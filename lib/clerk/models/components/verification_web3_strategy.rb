@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class VerificationWeb3Strategy
-
-
         include ::Crystalline::Enum
-
         enums do
           WEB3_METAMASK_SIGNATURE = new('web3_metamask_signature')
           WEB3_BASE_SIGNATURE = new('web3_base_signature')

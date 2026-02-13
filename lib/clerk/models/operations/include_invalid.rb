@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # IncludeInvalid
       class IncludeInvalid
-
-
         include ::Crystalline::Enum
-
         enums do
           TRUE = new('true')
           FALSE = new('false')

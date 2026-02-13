@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class VerificationEmailLinkStrategy
-
-
         include ::Crystalline::Enum
-
         enums do
           EMAIL_LINK = new('email_link')
         end

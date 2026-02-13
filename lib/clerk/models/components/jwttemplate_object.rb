@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class JWTTemplateObject
-
-
         include ::Crystalline::Enum
-
         enums do
           JWT_TEMPLATE = new('jwt_template')
         end

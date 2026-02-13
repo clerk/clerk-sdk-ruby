@@ -9,13 +9,11 @@ module Clerk
     module Components
 
       class SAMLAccountVerificationTicketStrategy
-
-
         include ::Crystalline::Enum
-
         enums do
           TICKET = new('ticket')
         end
+        open!
       end
     end
   end

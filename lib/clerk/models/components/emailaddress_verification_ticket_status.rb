@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class EmailAddressVerificationTicketStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           UNVERIFIED = new('unverified')
           VERIFIED = new('verified')

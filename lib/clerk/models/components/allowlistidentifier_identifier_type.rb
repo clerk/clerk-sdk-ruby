@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class AllowlistIdentifierIdentifierType
-
-
         include ::Crystalline::Enum
-
         enums do
           EMAIL_ADDRESS = new('email_address')
           PHONE_NUMBER = new('phone_number')

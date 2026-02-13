@@ -10,10 +10,7 @@ module Clerk
       # UpdateRoleSetType - Set to "initial" to make this the default role set for new organizations.
       # Only one role set can be "initial" per instance; setting this will change any existing initial role set to "custom".
       class UpdateRoleSetType
-
-
         include ::Crystalline::Enum
-
         enums do
           INITIAL = new('initial')
         end

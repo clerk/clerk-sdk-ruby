@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class PermissionObject
-
-
         include ::Crystalline::Enum
-
         enums do
           PERMISSION = new('permission')
         end

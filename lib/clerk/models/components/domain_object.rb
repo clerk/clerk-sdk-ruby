@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class DomainObject
-
-
         include ::Crystalline::Enum
-
         enums do
           DOMAIN = new('domain')
         end

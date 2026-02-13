@@ -9,10 +9,7 @@ module Clerk
     module Components
       # CommerceSubscriptionItemStatus - Current status of the subscription item.
       class CommerceSubscriptionItemStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           ACTIVE = new('active')
           CANCELED = new('canceled')

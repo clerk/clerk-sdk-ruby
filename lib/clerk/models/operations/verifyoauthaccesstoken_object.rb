@@ -9,10 +9,7 @@ module Clerk
     module Operations
 
       class VerifyOAuthAccessTokenObject
-
-
         include ::Crystalline::Enum
-
         enums do
           CLERK_IDP_OAUTH_ACCESS_TOKEN = new('clerk_idp_oauth_access_token')
         end

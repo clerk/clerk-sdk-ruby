@@ -14,7 +14,7 @@ module Clerk
 
         # String representing the object's type. Objects of the same type share the same value.
         # 
-        field :object, Models::Components::EmailAddressObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::EmailAddressObject, false) } }
+        field :object, Models::Components::EmailAddressObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.open_enum_from_string(Models::Components::EmailAddressObject, false) } }
 
         field :email_address, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address'), required: true } }
 

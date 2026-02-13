@@ -112,17 +112,21 @@ module Crystalline
               union_types = Crystalline::Utils.get_union_types(field_type)
               union_types = union_types.sort_by { |klass| Crystalline.non_nilable_attr_count(klass) }
 
-              union_types.each do |union_type|
-                begin
-                  to_build[key] = Crystalline.unmarshal_json(value, union_type)
-                rescue TypeError
-                  next
-                rescue NoMethodError
-                  next
-                rescue KeyError
-                  next
+              if Crystalline.union_strategy == :populated_fields
+                to_build[key] = Crystalline.unmarshal_union_populated_fields(value, union_types)
+              else
+                union_types.each do |union_type|
+                  begin
+                    to_build[key] = Crystalline.unmarshal_json(value, union_type)
+                  rescue TypeError
+                    next
+                  rescue NoMethodError
+                    next
+                  rescue KeyError
+                    next
+                  end
+                  break
                 end
-                break
               end
             end
           elsif field_type.instance_of?(Class) && field_type.include?(::Crystalline::MetadataFields)
@@ -182,10 +186,10 @@ module Crystalline
         next if f.nil? && !required
         result[key] = nil if f.nil? && required
 
-        if f.is_a? Array
+        if f.is_a? ::Array
           result[key] = f.map { |o| marshal_single(o) }
-        elsif f.is_a? Hash
-          result[key] = f.map { |k, v| [k, marshal_single(v)] }
+        elsif f.is_a? ::Hash
+          result[key] = f.transform_values { |v| marshal_single(v) }
         else
           result[key] = marshal_single(f)
         end

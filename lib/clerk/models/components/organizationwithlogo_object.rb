@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class OrganizationWithLogoObject
-
-
         include ::Crystalline::Enum
-
         enums do
           ORGANIZATION = new('organization')
         end

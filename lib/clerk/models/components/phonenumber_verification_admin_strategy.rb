@@ -9,13 +9,11 @@ module Clerk
     module Components
 
       class PhoneNumberVerificationAdminStrategy
-
-
         include ::Crystalline::Enum
-
         enums do
           ADMIN = new('admin')
         end
+        open!
       end
     end
   end

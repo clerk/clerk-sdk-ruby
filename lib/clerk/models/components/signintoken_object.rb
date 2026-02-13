@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class SignInTokenObject
-
-
         include ::Crystalline::Enum
-
         enums do
           SIGN_IN_TOKEN = new('sign_in_token')
         end

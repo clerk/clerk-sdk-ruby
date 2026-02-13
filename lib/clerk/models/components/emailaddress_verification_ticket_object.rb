@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class EmailAddressVerificationTicketObject
-
-
         include ::Crystalline::Enum
-
         enums do
           VERIFICATION_TICKET = new('verification_ticket')
         end

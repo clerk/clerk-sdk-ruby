@@ -10,10 +10,7 @@ module Clerk
       # OrganizationMembershipObject - String representing the object's type. Objects of the same type share the same value.
       # 
       class OrganizationMembershipObject
-
-
         include ::Crystalline::Enum
-
         enums do
           ORGANIZATION_MEMBERSHIP = new('organization_membership')
         end

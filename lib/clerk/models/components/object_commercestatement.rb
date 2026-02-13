@@ -9,10 +9,7 @@ module Clerk
     module Components
       # ObjectCommerceStatement - String representing the object's type. Objects of the same type share the same value.
       class ObjectCommerceStatement
-
-
         include ::Crystalline::Enum
-
         enums do
           COMMERCE_STATEMENT = new('commerce_statement')
         end

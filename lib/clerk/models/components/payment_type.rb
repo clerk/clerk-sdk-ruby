@@ -9,10 +9,7 @@ module Clerk
     module Components
       # PaymentType - The payment method type.
       class PaymentType
-
-
         include ::Crystalline::Enum
-
         enums do
           CARD = new('card')
           LINK = new('link')

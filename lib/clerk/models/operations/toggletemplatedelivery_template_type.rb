@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # ToggleTemplateDeliveryTemplateType - The type of template to toggle delivery for
       class ToggleTemplateDeliveryTemplateType
-
-
         include ::Crystalline::Enum
-
         enums do
           EMAIL = new('email')
           SMS = new('sms')

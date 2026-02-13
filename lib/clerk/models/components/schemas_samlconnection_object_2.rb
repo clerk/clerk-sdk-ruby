@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class SchemasSAMLConnectionObject2
-
-
         include ::Crystalline::Enum
-
         enums do
           SAML_CONNECTION = new('saml_connection')
         end

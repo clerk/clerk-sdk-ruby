@@ -9,10 +9,7 @@ module Clerk
     module Components
       # BillingPriceResponseObject - String representing the object's type. Objects of the same type share the same value.
       class BillingPriceResponseObject
-
-
         include ::Crystalline::Enum
-
         enums do
           COMMERCE_PRICE = new('commerce_price')
         end

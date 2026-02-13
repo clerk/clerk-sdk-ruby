@@ -31,9 +31,11 @@ module Clerk
         field :max_allowed_memberships, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('max_allowed_memberships') } }
         # A custom date/time denoting _when_ the organization was created, specified in RFC3339 format (e.g. `2012-10-20T07:15:20.902Z`).
         field :created_at, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at') } }
+        # The key of the [role set](https://clerk.com/docs/guides/organizations/control-access/role-sets) to assign to this organization.
+        field :role_set_key, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('role_set_key') } }
 
         
-        def initialize(name:, created_by: nil, private_metadata: nil, public_metadata: nil, slug: nil, max_allowed_memberships: nil, created_at: nil)
+        def initialize(name:, created_by: nil, private_metadata: nil, public_metadata: nil, slug: nil, max_allowed_memberships: nil, created_at: nil, role_set_key: nil)
           @name = name
           @created_by = created_by
           @private_metadata = private_metadata
@@ -41,6 +43,7 @@ module Clerk
           @slug = slug
           @max_allowed_memberships = max_allowed_memberships
           @created_at = created_at
+          @role_set_key = role_set_key
         end
 
         
@@ -53,6 +56,7 @@ module Clerk
           return false unless @slug == other.slug
           return false unless @max_allowed_memberships == other.max_allowed_memberships
           return false unless @created_at == other.created_at
+          return false unless @role_set_key == other.role_set_key
           true
         end
       end

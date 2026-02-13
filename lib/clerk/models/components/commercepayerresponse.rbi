@@ -16,6 +16,8 @@ class Clerk::Models::Components::CommercePayerResponse
   def instance_id=(str_); end
   def image_url(); end
   def image_url=(str_); end
+  def credits_balance(); end
+  def credits_balance=(str_); end
   def created_at(); end
   def created_at=(str_); end
   def updated_at(); end

@@ -9,10 +9,7 @@ module Clerk
     module Components
       # MachineSecretKeyObject - String representing the object's type.
       class MachineSecretKeyObject
-
-
         include ::Crystalline::Enum
-
         enums do
           MACHINE_SECRET_KEY = new('machine_secret_key')
         end

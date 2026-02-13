@@ -10,10 +10,7 @@ module Clerk
       # EnterpriseAccountObject - String representing the object's type. Objects of the same type share the same value.
       # 
       class EnterpriseAccountObject
-
-
         include ::Crystalline::Enum
-
         enums do
           ENTERPRISE_ACCOUNT = new('enterprise_account')
         end

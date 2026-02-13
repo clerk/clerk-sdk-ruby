@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class ActorTokenObject
-
-
         include ::Crystalline::Enum
-
         enums do
           ACTOR_TOKEN = new('actor_token')
         end

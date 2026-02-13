@@ -20,6 +20,8 @@ module Clerk
         field :instance_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('instance_id'), required: true } }
         # URL of the payer's image/avatar.
         field :image_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('image_url') } }
+
+        field :credits_balance, Crystalline::Nilable.new(Models::Components::CommerceMoneyResponse), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('credits_balance') } }
         # Unix timestamp (in milliseconds) when the payer was created.
         field :created_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at') } }
         # Unix timestamp (in milliseconds) when the payer was last updated.
@@ -38,11 +40,12 @@ module Clerk
         field :organization_name, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('organization_name') } }
 
         
-        def initialize(object:, id:, instance_id:, image_url: nil, created_at: nil, updated_at: nil, user_id: nil, first_name: nil, last_name: nil, email: nil, organization_id: nil, organization_name: nil)
+        def initialize(object:, id:, instance_id:, image_url: nil, credits_balance: nil, created_at: nil, updated_at: nil, user_id: nil, first_name: nil, last_name: nil, email: nil, organization_id: nil, organization_name: nil)
           @object = object
           @id = id
           @instance_id = instance_id
           @image_url = image_url
+          @credits_balance = credits_balance
           @created_at = created_at
           @updated_at = updated_at
           @user_id = user_id
@@ -60,6 +63,7 @@ module Clerk
           return false unless @id == other.id
           return false unless @instance_id == other.instance_id
           return false unless @image_url == other.image_url
+          return false unless @credits_balance == other.credits_balance
           return false unless @created_at == other.created_at
           return false unless @updated_at == other.updated_at
           return false unless @user_id == other.user_id

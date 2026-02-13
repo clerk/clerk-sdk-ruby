@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # UpsertTemplateTemplateType - The type of template to update
       class UpsertTemplateTemplateType
-
-
         include ::Crystalline::Enum
-
         enums do
           EMAIL = new('email')
           SMS = new('sms')

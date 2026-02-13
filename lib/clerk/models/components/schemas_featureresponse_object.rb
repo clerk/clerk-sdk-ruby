@@ -9,10 +9,7 @@ module Clerk
     module Components
       # SchemasFeatureResponseObject - String representing the object's type. Objects of the same type share the same value.
       class SchemasFeatureResponseObject
-
-
         include ::Crystalline::Enum
-
         enums do
           FEATURE = new('feature')
         end

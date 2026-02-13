@@ -9,10 +9,7 @@ module Clerk
     module Components
       # Type - The type of the role set ("initial" or "custom")
       class Type
-
-
         include ::Crystalline::Enum
-
         enums do
           INITIAL = new('initial')
           CUSTOM = new('custom')

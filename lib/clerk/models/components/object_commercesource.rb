@@ -9,10 +9,7 @@ module Clerk
     module Components
       # ObjectCommerceSource - String representing the object's type. Objects of the same type share the same value.
       class ObjectCommerceSource
-
-
         include ::Crystalline::Enum
-
         enums do
           COMMERCE_SOURCE = new('commerce_source')
         end

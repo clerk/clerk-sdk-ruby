@@ -9,13 +9,11 @@ module Clerk
     module Components
 
       class Web3WalletVerificationAdminStrategy
-
-
         include ::Crystalline::Enum
-
         enums do
           ADMIN = new('admin')
         end
+        open!
       end
     end
   end

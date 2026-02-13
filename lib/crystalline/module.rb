@@ -4,6 +4,11 @@
 # frozen_string_literal: true
 
 module Crystalline
+  @union_strategy = :left_to_right
+
+  class << self
+    attr_accessor :union_strategy
+  end
 
   def self.to_dict(complex)
     if complex.is_a? Array
@@ -35,15 +40,10 @@ module Crystalline
       union_types = Crystalline::Utils.get_union_types(type)
       union_types = union_types.sort_by { |klass| Crystalline.non_nilable_attr_count(klass) }
 
-      union_types.each do |union_type|
-        unmarshalled_val = Crystalline.unmarshal_json(data, union_type)
-        return unmarshalled_val
-      rescue TypeError
-        next
-      rescue NoMethodError
-        next
-      rescue KeyError
-        next
+      if Crystalline.union_strategy == :populated_fields
+        Crystalline.unmarshal_union_populated_fields(data, union_types)
+      else
+        Crystalline.unmarshal_union_left_to_right(data, union_types)
       end
     elsif Crystalline::Utils.arr? type
       data.map { |v| Crystalline.unmarshal_json(v, Crystalline::Utils.arr_of(type)) }
@@ -53,7 +53,7 @@ module Crystalline
       nil
     elsif Crystalline::Utils.boolean? type
       Crystalline::Utils.to_boolean(data)
-    elsif type.is_a?(Class) && type < T::Enum
+    elsif type.is_a?(Class) && type.respond_to?(:enums) && type.respond_to?(:deserialize)
       type.deserialize(data)
     else
       data
@@ -74,6 +74,86 @@ module Crystalline
     end
   end
 
+  def self.unmarshal_union_left_to_right(data, union_types)
+    union_types.each do |union_type|
+      return Crystalline.unmarshal_json(data, union_type)
+    rescue TypeError
+      next
+    rescue NoMethodError
+      next
+    rescue KeyError
+      next
+    end
+    nil
+  end
+
+  def self.unmarshal_union_populated_fields(data, union_types)
+    best_value = nil
+    best_matched = -1
+    best_inexact = 0
+    best_unmatched = 0
+
+    union_types.each do |union_type|
+      value = Crystalline.unmarshal_json(data, union_type)
+      matched, inexact, unmatched = count_matched_fields(value, data)
+
+      if best_value.nil? ||
+         matched > best_matched ||
+         (matched == best_matched && inexact < best_inexact) ||
+         (matched == best_matched && inexact == best_inexact && unmatched < best_unmatched)
+        best_value = value
+        best_matched = matched
+        best_inexact = inexact
+        best_unmatched = unmatched
+      end
+    rescue TypeError
+      next
+    rescue NoMethodError
+      next
+    rescue KeyError
+      next
+    end
+    best_value
+  end
+
+  def self.count_matched_fields(value, raw_data)
+    matched = 0
+    inexact = 0
+    unmatched = 0
+
+    if value.class.include?(::Crystalline::MetadataFields)
+      value.fields.each do |field|
+        format_metadata = field.metadata.fetch(:format_json, {})
+        lookup = format_metadata.fetch(:letter_case, nil)&.call
+        field_val = value.send(field.name)
+
+        if raw_data.is_a?(::Hash) && lookup && raw_data.key?(lookup)
+          if field_val.class.include?(::Crystalline::MetadataFields) && raw_data[lookup].is_a?(::Hash)
+            nested_matched, nested_inexact, nested_unmatched = count_matched_fields(field_val, raw_data[lookup])
+            matched += nested_matched
+            inexact += nested_inexact
+            unmatched += nested_unmatched
+          else
+            matched += 1
+            if field_val.respond_to?(:known?) && !field_val.known?
+              inexact += 1
+            end
+          end
+        elsif !::Crystalline::Utils.nilable?(field.type)
+          unmatched += 1
+        end
+      end
+    elsif value.is_a?(::Array)
+      matched = value.length
+    elsif value.is_a?(::Hash)
+      matched = value.length
+    else
+      matched = 1
+    end
+
+    [matched, inexact, unmatched]
+  end
+
   def self.non_nilable_attr_count(klass)
     # somewhat sane sort ordering for Union deserialization.
     # All Crystalline objects return the number of non-nilable fields
@@ -87,8 +167,6 @@ module Crystalline
     else
       if klass == String
         return 0
-      elsif klass.is_a?(T::Types::TypedArray) || klass.is_a?(T::Types::TypedHash)
-        return 1
       end
       return 2
     end

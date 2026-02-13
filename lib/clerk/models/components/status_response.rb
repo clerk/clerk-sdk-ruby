@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class StatusResponse
-
-
         include ::Crystalline::Enum
-
         enums do
           REVOKED = new('revoked')
         end

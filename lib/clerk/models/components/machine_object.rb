@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class MachineObject
-
-
         include ::Crystalline::Enum
-
         enums do
           MACHINE = new('machine')
         end

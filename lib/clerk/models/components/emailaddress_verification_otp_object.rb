@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class EmailAddressVerificationOtpObject
-
-
         include ::Crystalline::Enum
-
         enums do
           VERIFICATION_OTP = new('verification_otp')
         end

@@ -10,10 +10,7 @@ module Clerk
       # SAMLAccountObject - String representing the object's type. Objects of the same type share the same value.
       # 
       class SAMLAccountObject
-
-
         include ::Crystalline::Enum
-
         enums do
           SAML_ACCOUNT = new('saml_account')
         end

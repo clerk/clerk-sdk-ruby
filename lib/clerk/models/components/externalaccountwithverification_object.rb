@@ -9,10 +9,7 @@ module Clerk
     module Components
       # ExternalAccountWithVerificationObject - String representing the object's type. Objects of the same type share the same value.
       class ExternalAccountWithVerificationObject
-
-
         include ::Crystalline::Enum
-
         enums do
           EXTERNAL_ACCOUNT = new('external_account')
           FACEBOOK_ACCOUNT = new('facebook_account')
