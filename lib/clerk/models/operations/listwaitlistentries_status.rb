@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # ListWaitlistEntriesStatus - Filter waitlist entries by their status
       class ListWaitlistEntriesStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           PENDING = new('pending')
           INVITED = new('invited')

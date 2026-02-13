@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class SignInTokenStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           PENDING = new('pending')
           ACCEPTED = new('accepted')

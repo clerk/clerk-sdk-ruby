@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # GetTemplateListTemplateType - The type of templates to list (email or SMS)
       class GetTemplateListTemplateType
-
-
         include ::Crystalline::Enum
-
         enums do
           EMAIL = new('email')
           SMS = new('sms')

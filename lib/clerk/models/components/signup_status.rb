@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class SignUpStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           MISSING_REQUIREMENTS = new('missing_requirements')
           COMPLETE = new('complete')

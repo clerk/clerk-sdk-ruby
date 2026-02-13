@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # GetSessionListStatus - Filter sessions by the provided status
       class GetSessionListStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           ABANDONED = new('abandoned')
           ACTIVE = new('active')

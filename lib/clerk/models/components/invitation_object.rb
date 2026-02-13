@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class InvitationObject
-
-
         include ::Crystalline::Enum
-
         enums do
           INVITATION = new('invitation')
         end

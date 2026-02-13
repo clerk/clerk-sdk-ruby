@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class RedirectURLObject
-
-
         include ::Crystalline::Enum
-
         enums do
           REDIRECT_URL = new('redirect_url')
         end

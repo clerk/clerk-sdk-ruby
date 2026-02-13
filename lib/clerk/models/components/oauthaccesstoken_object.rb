@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class OAuthAccessTokenObject
-
-
         include ::Crystalline::Enum
-
         enums do
           OAUTH_ACCESS_TOKEN = new('oauth_access_token')
         end

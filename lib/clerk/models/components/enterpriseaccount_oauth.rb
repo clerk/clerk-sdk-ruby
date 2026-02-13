@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::EnterpriseAccountVerificationOauthStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::EnterpriseAccountVerificationOauthStatus, false) } }
+        field :status, Models::Components::EnterpriseAccountVerificationOauthStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.open_enum_from_string(Models::Components::EnterpriseAccountVerificationOauthStatus, false) } }
 
         field :strategy, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true } }
 

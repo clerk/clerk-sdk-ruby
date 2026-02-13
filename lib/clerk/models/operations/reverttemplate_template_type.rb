@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # RevertTemplateTemplateType - The type of template to revert
       class RevertTemplateTemplateType
-
-
         include ::Crystalline::Enum
-
         enums do
           EMAIL = new('email')
           SMS = new('sms')

@@ -22,4 +22,6 @@ class Clerk::Models::Operations::UpdateOrganizationRequestBody
   def admin_delete_enabled=(str_); end
   def created_at(); end
   def created_at=(str_); end
+  def role_set_key(); end
+  def role_set_key=(str_); end
 end

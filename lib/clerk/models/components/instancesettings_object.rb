@@ -9,10 +9,7 @@ module Clerk
     module Components
       # InstanceSettingsObject - String representing the object's type. Objects of the same type share the same value.
       class InstanceSettingsObject
-
-
         include ::Crystalline::Enum
-
         enums do
           INSTANCE_SETTINGS = new('instance_settings')
         end

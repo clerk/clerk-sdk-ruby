@@ -9,10 +9,7 @@ module Clerk
     module Components
       # BillingPaymentAttemptStatus - The current status of the payment attempt.
       class BillingPaymentAttemptStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           PENDING = new('pending')
           PAID = new('paid')

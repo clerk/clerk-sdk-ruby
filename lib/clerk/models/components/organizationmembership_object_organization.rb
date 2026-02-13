@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class OrganizationMembershipObjectOrganization
-
-
         include ::Crystalline::Enum
-
         enums do
           ORGANIZATION = new('organization')
         end

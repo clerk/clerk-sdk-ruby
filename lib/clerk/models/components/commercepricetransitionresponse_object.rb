@@ -9,10 +9,7 @@ module Clerk
     module Components
       # CommercePriceTransitionResponseObject - String representing the object's type. Objects of the same type share the same value.
       class CommercePriceTransitionResponseObject
-
-
         include ::Crystalline::Enum
-
         enums do
           COMMERCE_PRICE_TRANSITION = new('commerce_price_transition')
         end

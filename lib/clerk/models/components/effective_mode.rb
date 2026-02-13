@@ -9,10 +9,7 @@ module Clerk
     module Components
       # EffectiveMode - When the new price takes effect.
       class EffectiveMode
-
-
         include ::Crystalline::Enum
-
         enums do
           IMMEDIATE = new('immediate')
           END_OF_PERIOD = new('end_of_period')

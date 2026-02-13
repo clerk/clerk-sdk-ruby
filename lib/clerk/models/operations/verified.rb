@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # Verified - Filter by verification status
       class Verified
-
-
         include ::Crystalline::Enum
-
         enums do
           TRUE = new('true')
           FALSE = new('false')

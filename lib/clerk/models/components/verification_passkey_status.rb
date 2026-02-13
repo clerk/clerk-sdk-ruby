@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class VerificationPasskeyStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           VERIFIED = new('verified')
         end

@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class VerificationWeb3Object
-
-
         include ::Crystalline::Enum
-
         enums do
           VERIFICATION_WEB3 = new('verification_web3')
         end

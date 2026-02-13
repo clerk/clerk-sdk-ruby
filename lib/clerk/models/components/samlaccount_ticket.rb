@@ -15,7 +15,7 @@ module Clerk
 
         field :status, Models::Components::SAMLAccountVerificationTicketStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::SAMLAccountVerificationTicketStatus, false) } }
 
-        field :strategy, Models::Components::SAMLAccountVerificationTicketStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.enum_from_string(Models::Components::SAMLAccountVerificationTicketStrategy, false) } }
+        field :strategy, Models::Components::SAMLAccountVerificationTicketStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.open_enum_from_string(Models::Components::SAMLAccountVerificationTicketStrategy, false) } }
 
         field :object, Crystalline::Nilable.new(Models::Components::SAMLAccountVerificationTicketObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::SAMLAccountVerificationTicketObject, true) } }
 

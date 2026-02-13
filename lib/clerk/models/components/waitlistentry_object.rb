@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class WaitlistEntryObject
-
-
         include ::Crystalline::Enum
-
         enums do
           WAITLIST_ENTRY = new('waitlist_entry')
         end

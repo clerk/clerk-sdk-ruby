@@ -74,7 +74,7 @@ module Clerk
             end
             path = path.sub("{#{param_metadata.fetch(:field_name, f.name)}}", pp_vals.join(','))
           else
-            path = path.sub("{#{param_metadata.fetch(:field_name, f.name)}}", param.to_s)
+            path = path.sub("{#{param_metadata.fetch(:field_name, f.name)}}", val_to_string(param))
           end
         end
       end

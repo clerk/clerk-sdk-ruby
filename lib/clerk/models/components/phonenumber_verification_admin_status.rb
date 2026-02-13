@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class PhoneNumberVerificationAdminStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           VERIFIED = new('verified')
         end

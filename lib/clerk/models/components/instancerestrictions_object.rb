@@ -9,10 +9,7 @@ module Clerk
     module Components
       # InstanceRestrictionsObject - String representing the object's type. Objects of the same type share the same value.
       class InstanceRestrictionsObject
-
-
         include ::Crystalline::Enum
-
         enums do
           INSTANCE_RESTRICTIONS = new('instance_restrictions')
         end

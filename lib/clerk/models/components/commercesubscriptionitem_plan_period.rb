@@ -9,10 +9,7 @@ module Clerk
     module Components
       # CommerceSubscriptionItemPlanPeriod - The billing period for this subscription item.
       class CommerceSubscriptionItemPlanPeriod
-
-
         include ::Crystalline::Enum
-
         enums do
           MONTH = new('month')
           ANNUAL = new('annual')

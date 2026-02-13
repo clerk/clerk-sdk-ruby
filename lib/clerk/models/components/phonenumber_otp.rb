@@ -15,7 +15,7 @@ module Clerk
 
         field :status, Models::Components::PhoneNumberVerificationOtpStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::PhoneNumberVerificationOtpStatus, false) } }
 
-        field :strategy, Models::Components::PhoneNumberVerificationOtpStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.enum_from_string(Models::Components::PhoneNumberVerificationOtpStrategy, false) } }
+        field :strategy, Models::Components::PhoneNumberVerificationOtpStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.open_enum_from_string(Models::Components::PhoneNumberVerificationOtpStrategy, false) } }
 
         field :object, Crystalline::Nilable.new(Models::Components::PhoneNumberVerificationOtpObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::PhoneNumberVerificationOtpObject, true) } }
 

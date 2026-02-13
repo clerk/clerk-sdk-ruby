@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class VerificationGoogleOneTapObject
-
-
         include ::Crystalline::Enum
-
         enums do
           VERIFICATION_GOOGLE_ONE_TAP = new('verification_google_one_tap')
         end

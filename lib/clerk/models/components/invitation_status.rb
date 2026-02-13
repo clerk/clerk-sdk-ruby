@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class InvitationStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           PENDING = new('pending')
           ACCEPTED = new('accepted')

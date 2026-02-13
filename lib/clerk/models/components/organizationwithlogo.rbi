@@ -44,4 +44,6 @@ class Clerk::Models::Components::OrganizationWithLogo
   def last_active_at=(str_); end
   def logo_url(); end
   def logo_url=(str_); end
+  def role_set_key(); end
+  def role_set_key=(str_); end
 end

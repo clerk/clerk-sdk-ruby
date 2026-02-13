@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class InstanceProtectObject
-
-
         include ::Crystalline::Enum
-
         enums do
           INSTANCE_PROTECT = new('instance_protect')
         end

@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class SignUpObject
-
-
         include ::Crystalline::Enum
-
         enums do
           SIGN_UP_ATTEMPT = new('sign_up_attempt')
         end

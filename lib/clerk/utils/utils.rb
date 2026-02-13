@@ -97,6 +97,15 @@ module Clerk
     end
 
     
+    def self.open_enum_from_string(enum_type, optional)
+      Kernel.lambda do |s|
+        return nil if optional && s.nil?
+
+        return enum_type.deserialize(s)
+      end
+    end
+
+    
     def self.field_name(name)
       proc { name }
     end

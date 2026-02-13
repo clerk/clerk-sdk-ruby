@@ -9,10 +9,7 @@ module Clerk
     module Components
       # CookiesObject - String representing the object's type. Objects of the same type share the same value.
       class CookiesObject
-
-
         include ::Crystalline::Enum
-
         enums do
           COOKIES = new('cookies')
         end

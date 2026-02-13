@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class VerificationFromOauthObject
-
-
         include ::Crystalline::Enum
-
         enums do
           VERIFICATION_FROM_OAUTH = new('verification_from_oauth')
         end

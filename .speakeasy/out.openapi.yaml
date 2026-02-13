@@ -4542,6 +4542,10 @@ paths:
                   type: string
                   description: A custom date/time denoting _when_ the organization was created, specified in RFC3339 format (e.g. `2012-10-20T07:15:20.902Z`).
                   nullable: true
+                role_set_key:
+                  type: string
+                  description: The key of the [role set](https://clerk.com/docs/guides/organizations/control-access/role-sets) to assign to this organization.
+                  nullable: true
               required:
                 - name
       responses:
@@ -4646,6 +4650,10 @@ paths:
                 created_at:
                   type: string
                   description: A custom date/time denoting _when_ the organization was created, specified in RFC3339 format (e.g. `2012-10-20T07:15:20.902Z`).
+                  nullable: true
+                role_set_key:
+                  type: string
+                  description: The key of the [role set](https://clerk.com/docs/guides/organizations/control-access/role-sets) to assign to this organization.
                   nullable: true
       responses:
         '200':
@@ -6828,6 +6836,10 @@ paths:
                 force_authn:
                   type: boolean
                   description: Enable or deactivate ForceAuthn
+                consent_verified_domains_deletion:
+                  type: boolean
+                  description: When enabling the connection, controls behavior when verified domains used for enrollment modes like automatic invitation or automatic suggestion already exist for the same domain. If true, those verified domains are removed and the connection is enabled. If false or omitted, the request fails when any such verified domain exists.
+                  nullable: true
       responses:
         '200':
           $ref: '#/components/responses/SAMLConnection'
@@ -11478,6 +11490,11 @@ components:
           format: int64
           description: |
             Unix timestamp of last activity.
+        role_set_key:
+          type: string
+          description: |
+            The key of the [role set](https://clerk.com/docs/guides/organizations/control-access/role-sets) assigned to this organization.
+          nullable: true
       required:
         - object
         - id
@@ -12113,6 +12130,9 @@ components:
         image_url:
           type: string
           description: URL of the payer's image/avatar.
+        credits_balance:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+          description: Current credits balance for the payer.
         created_at:
           type: integer
           format: int64
@@ -14324,6 +14344,9 @@ components:
         image_url:
           type: string
           description: URL of the payer's image/avatar.
+        credits_balance:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+          description: Current credits balance for the payer.
         created_at:
           type: integer
           format: int64

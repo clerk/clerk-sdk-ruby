@@ -9,10 +9,7 @@ module Clerk
     module Components
       # OrganizationSettingsObject - String representing the object's type. Objects of the same type share the same value.
       class OrganizationSettingsObject
-
-
         include ::Crystalline::Enum
-
         enums do
           ORGANIZATION_SETTINGS = new('organization_settings')
         end

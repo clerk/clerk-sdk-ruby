@@ -9,10 +9,7 @@ module Clerk
     module Operations
 
       class EnrollmentMode
-
-
         include ::Crystalline::Enum
-
         enums do
           MANUAL_INVITATION = new('manual_invitation')
           AUTOMATIC_INVITATION = new('automatic_invitation')

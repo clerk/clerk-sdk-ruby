@@ -9,10 +9,7 @@ module Clerk
     module Components
       # MachineScopeDeletedObject - String representing the object's type.
       class MachineScopeDeletedObject
-
-
         include ::Crystalline::Enum
-
         enums do
           MACHINE_SCOPE = new('machine_scope')
         end

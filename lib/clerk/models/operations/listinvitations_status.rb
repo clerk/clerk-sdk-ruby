@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # ListInvitationsStatus - Filter invitations based on their status
       class ListInvitationsStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           PENDING = new('pending')
           ACCEPTED = new('accepted')

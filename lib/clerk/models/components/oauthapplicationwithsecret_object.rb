@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class OAuthApplicationWithSecretObject
-
-
         include ::Crystalline::Enum
-
         enums do
           OAUTH_APPLICATION = new('oauth_application')
         end

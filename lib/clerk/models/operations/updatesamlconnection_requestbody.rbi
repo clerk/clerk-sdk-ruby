@@ -40,4 +40,6 @@ class Clerk::Models::Operations::UpdateSAMLConnectionRequestBody
   def allow_idp_initiated=(str_); end
   def disable_additional_identifications(); end
   def disable_additional_identifications=(str_); end
+  def consent_verified_domains_deletion(); end
+  def consent_verified_domains_deletion=(str_); end
 end

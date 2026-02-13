@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class Nonce
-
-
         include ::Crystalline::Enum
-
         enums do
           NONCE = new('nonce')
         end

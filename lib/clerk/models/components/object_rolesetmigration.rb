@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class ObjectRoleSetMigration
-
-
         include ::Crystalline::Enum
-
         enums do
           ROLE_SET_MIGRATION = new('role_set_migration')
         end

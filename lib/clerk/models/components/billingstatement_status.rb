@@ -9,10 +9,7 @@ module Clerk
     module Components
       # BillingStatementStatus - The current status of the statement.
       class BillingStatementStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           OPEN = new('open')
           CLOSED = new('closed')

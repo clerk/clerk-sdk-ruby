@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class ProxyCheckObject
-
-
         include ::Crystalline::Enum
-
         enums do
           PROXY_CHECK = new('proxy_check')
         end

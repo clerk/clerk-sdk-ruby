@@ -9,10 +9,7 @@ module Clerk
     module Components
       # PreviousSubscriptionItemStatus - The status of the previous subscription item after transition.
       class PreviousSubscriptionItemStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           CANCELED = new('canceled')
           ENDED = new('ended')

@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class SessionStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           ACTIVE = new('active')
           REVOKED = new('revoked')

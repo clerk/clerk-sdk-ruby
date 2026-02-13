@@ -9,10 +9,7 @@ module Clerk
     module Components
       # StatusCommerceSource - Status of the payment source.
       class StatusCommerceSource
-
-
         include ::Crystalline::Enum
-
         enums do
           ACTIVE = new('active')
           DISCONNECTED = new('disconnected')

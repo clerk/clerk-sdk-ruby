@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class RoleSetObject
-
-
         include ::Crystalline::Enum
-
         enums do
           ROLE_SET = new('role_set')
         end

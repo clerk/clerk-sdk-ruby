@@ -9,10 +9,7 @@ module Clerk
     module Components
       # CommercePaymentMethodResponseStatus - Status of the payment method.
       class CommercePaymentMethodResponseStatus
-
-
         include ::Crystalline::Enum
-
         enums do
           ACTIVE = new('active')
           DISCONNECTED = new('disconnected')

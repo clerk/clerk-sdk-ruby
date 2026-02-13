@@ -10,10 +10,7 @@ module Clerk
       # TemplateObject - String representing the object's type. Objects of the same type share the same value.
       # 
       class TemplateObject
-
-
         include ::Crystalline::Enum
-
         enums do
           TEMPLATE = new('template')
         end

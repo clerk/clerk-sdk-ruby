@@ -9,10 +9,7 @@ module Clerk
     module Components
 
       class TestingTokenObject
-
-
         include ::Crystalline::Enum
-
         enums do
           TESTING_TOKEN = new('testing_token')
         end

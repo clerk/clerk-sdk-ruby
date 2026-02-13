@@ -9,10 +9,7 @@ module Clerk
     module Operations
 
       class CodeType
-
-
         include ::Crystalline::Enum
-
         enums do
           TOTP = new('totp')
           BACKUP_CODE = new('backup_code')

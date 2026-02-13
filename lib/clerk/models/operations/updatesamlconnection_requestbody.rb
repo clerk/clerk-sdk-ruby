@@ -46,9 +46,11 @@ module Clerk
         field :allow_idp_initiated, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allow_idp_initiated') } }
         # Enable or deactivate additional identifications
         field :disable_additional_identifications, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('disable_additional_identifications') } }
+        # When enabling the connection, controls behavior when verified domains used for enrollment modes like automatic invitation or automatic suggestion already exist for the same domain. If true, those verified domains are removed and the connection is enabled. If false or omitted, the request fails when any such verified domain exists.
+        field :consent_verified_domains_deletion, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('consent_verified_domains_deletion') } }
 
         
-        def initialize(force_authn: nil, name: nil, domain: nil, domains: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, attribute_mapping: nil, active: nil, sync_user_attributes: nil, allow_subdomains: nil, allow_idp_initiated: nil, disable_additional_identifications: nil)
+        def initialize(force_authn: nil, name: nil, domain: nil, domains: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, attribute_mapping: nil, active: nil, sync_user_attributes: nil, allow_subdomains: nil, allow_idp_initiated: nil, disable_additional_identifications: nil, consent_verified_domains_deletion: nil)
           @force_authn = force_authn
           @name = name
           @domain = domain
@@ -65,6 +67,7 @@ module Clerk
           @allow_subdomains = allow_subdomains
           @allow_idp_initiated = allow_idp_initiated
           @disable_additional_identifications = disable_additional_identifications
+          @consent_verified_domains_deletion = consent_verified_domains_deletion
         end
 
         
@@ -86,6 +89,7 @@ module Clerk
           return false unless @allow_subdomains == other.allow_subdomains
           return false unless @allow_idp_initiated == other.allow_idp_initiated
           return false unless @disable_additional_identifications == other.disable_additional_identifications
+          return false unless @consent_verified_domains_deletion == other.consent_verified_domains_deletion
           true
         end
       end

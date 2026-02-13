@@ -10,10 +10,7 @@ module Clerk
       # TotalCountObject - String representing the object's type. Objects of the same type share the same value.
       # 
       class TotalCountObject
-
-
         include ::Crystalline::Enum
-
         enums do
           TOTAL_COUNT = new('total_count')
         end

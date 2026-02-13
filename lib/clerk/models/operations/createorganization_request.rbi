@@ -22,4 +22,6 @@ class Clerk::Models::Operations::CreateOrganizationRequest
   def max_allowed_memberships=(str_); end
   def created_at(); end
   def created_at=(str_); end
+  def role_set_key(); end
+  def role_set_key=(str_); end
 end

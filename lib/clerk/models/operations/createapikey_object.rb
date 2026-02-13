@@ -9,10 +9,7 @@ module Clerk
     module Operations
 
       class CreateApiKeyObject
-
-
         include ::Crystalline::Enum
-
         enums do
           API_KEY = new('api_key')
         end

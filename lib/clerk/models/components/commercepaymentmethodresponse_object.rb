@@ -9,10 +9,7 @@ module Clerk
     module Components
       # CommercePaymentMethodResponseObject - String representing the object's type. Objects of the same type share the same value.
       class CommercePaymentMethodResponseObject
-
-
         include ::Crystalline::Enum
-
         enums do
           COMMERCE_PAYMENT_METHOD = new('commerce_payment_method')
         end

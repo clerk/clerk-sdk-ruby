@@ -10,10 +10,7 @@ module Clerk
       # PasskeyObject - String representing the object's type. Objects of the same type share the same value.
       # 
       class PasskeyObject
-
-
         include ::Crystalline::Enum
-
         enums do
           PASSKEY = new('passkey')
         end

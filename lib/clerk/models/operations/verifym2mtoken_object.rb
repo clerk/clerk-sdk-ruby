@@ -9,10 +9,7 @@ module Clerk
     module Operations
 
       class VerifyM2MTokenObject
-
-
         include ::Crystalline::Enum
-
         enums do
           MACHINE_TO_MACHINE_TOKEN = new('machine_to_machine_token')
         end

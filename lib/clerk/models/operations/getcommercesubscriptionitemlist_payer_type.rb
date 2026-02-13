@@ -9,10 +9,7 @@ module Clerk
     module Operations
       # GetCommerceSubscriptionItemListPayerType - Filter subscription items by payer type
       class GetCommerceSubscriptionItemListPayerType
-
-
         include ::Crystalline::Enum
-
         enums do
           USER = new('user')
           ORG = new('org')
