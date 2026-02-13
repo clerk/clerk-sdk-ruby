@@ -42,7 +42,7 @@ ruby:
       sinatra: ~> 4.1
     runtime:
       concurrent-ruby: ~> 1.3.5
-      jwt: ~> 2.5
+      jwt: ~> 3.0
   author: Speakeasy
   baseErrorName: ClerkError
   clientServerStatusCodesAsErrors: true
