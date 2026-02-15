@@ -34,7 +34,9 @@ module Crystalline
     if Crystalline::Utils.nilable? type
       type = Crystalline::Utils.nilable_of type
     end
-    if type.instance_of?(Class) && type.include?(::Crystalline::MetadataFields)
+    if type.is_a?(Crystalline::DiscriminatedUnion)
+      type.parse(data)
+    elsif type.instance_of?(Class) && type.include?(::Crystalline::MetadataFields)
       type.from_dict(data)
     elsif Crystalline::Utils.union? type
       union_types = Crystalline::Utils.get_union_types(type)
@@ -121,7 +123,9 @@ module Crystalline
     inexact = 0
     unmatched = 0
 
-    if value.class.include?(::Crystalline::MetadataFields)
+    if value.is_a?(Crystalline::Unknown)
+      return [0, 0, 0]
+    elsif value.class.include?(::Crystalline::MetadataFields)
       value.fields.each do |field|
         format_metadata = field.metadata.fetch(:format_json, {})
         lookup = format_metadata.fetch(:letter_case, nil)&.call
