@@ -40,6 +40,58 @@ module Crystalline
   class Boolean
   end
 
+  # Wraps an unrecognized payload from an open discriminated union.
+  # Produced when the discriminator value is missing, unknown, or schema validation fails.
+  class Unknown
+    attr_reader :raw
+
+    def initialize(raw:)
+      @raw = raw
+    end
+
+    def unknown?
+      true
+    end
+  end
+
+  # Forward-compatible discriminated union parser.
+  # Known discriminator values are deserialized to their mapped types.
+  # Unknown or invalid payloads are captured as Crystalline::Unknown.
+  class DiscriminatedUnion
+    attr_reader :discriminator, :variants
+
+    def initialize(discriminator, variants)
+      @discriminator = discriminator
+      @variants = variants
+    end
+
+    def parse(payload)
+      unless payload.is_a?(::Hash)
+        return Unknown.new(raw: payload)
+      end
+
+      disc_value = payload[@discriminator]
+      unless disc_value.is_a?(::String)
+        return Unknown.new(raw: payload)
+      end
+
+      variant_type = @variants[disc_value]
+      unless variant_type
+        return Unknown.new(raw: payload)
+      end
+
+      begin
+        Crystalline.unmarshal_json(payload, variant_type)
+      rescue StandardError
+        Unknown.new(raw: payload)
+      end
+    end
+  end
+
+  def self.unknown?(value)
+    value.is_a?(Unknown)
+  end
+
   module Enum
     def self.included(base)
       base.extend(ClassMethods)

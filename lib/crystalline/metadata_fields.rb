@@ -84,7 +84,9 @@ module Crystalline
           # If field is nilable, and the value is not in the dict, just move to the next field
           next if value.nil?
 
-          if Crystalline::Utils.arr? field_type
+          if field_type.is_a?(Crystalline::DiscriminatedUnion)
+            to_build[key] = field_type.parse(value)
+          elsif Crystalline::Utils.arr? field_type
             inner_type = Crystalline::Utils.arr_of(field_type)
             unmarshalled_array = value.map { |f| unmarshal_single(inner_type, f, format_metadata) }
             to_build[key] = unmarshalled_array

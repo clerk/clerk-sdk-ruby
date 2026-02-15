@@ -25,6 +25,8 @@ module Clerk
         # Note: An empty string or whitespace-only value is not allowed and will result in a validation error.
         # 
         field :query, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'query', 'style': 'form', 'explode': true } }
+        # Filter by exact domain names. Accepts multiple values (e.g. domains=example.com&domains=test.org).
+        field :domains, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'query_param': { 'field_name': 'domains', 'style': 'form', 'explode': true } }
         # Allows to return organization domains in a particular order.
         # At the moment, you can order the returned domains by their `name` or `created_at`.
         # In order to specify the direction, you can use the `+/-` symbols prepended to the property to order by.
@@ -42,11 +44,12 @@ module Clerk
         field :limit, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'limit', 'style': 'form', 'explode': true } }
 
         
-        def initialize(organization_id: nil, verified: nil, enrollment_mode: nil, query: nil, order_by: '-created_at', offset: 0, limit: 10)
+        def initialize(organization_id: nil, verified: nil, enrollment_mode: nil, query: nil, domains: nil, order_by: '-created_at', offset: 0, limit: 10)
           @organization_id = organization_id
           @verified = verified
           @enrollment_mode = enrollment_mode
           @query = query
+          @domains = domains
           @order_by = order_by
           @offset = offset
           @limit = limit
@@ -59,6 +62,7 @@ module Clerk
           return false unless @verified == other.verified
           return false unless @enrollment_mode == other.enrollment_mode
           return false unless @query == other.query
+          return false unless @domains == other.domains
           return false unless @order_by == other.order_by
           return false unless @offset == other.offset
           return false unless @limit == other.limit
