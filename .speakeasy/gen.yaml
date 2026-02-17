@@ -30,7 +30,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 ruby:
-  version: 5.1.0
+  version: 5.1.1
   additionalDependencies:
     development:
       activesupport: ~> 8.0.0
@@ -51,6 +51,7 @@ ruby:
   description: Ruby Client SDK
   flattenGlobalSecurity: true
   forwardCompatibleEnumsByDefault: false
+  forwardCompatibleUnionsByDefault: "false"
   imports:
     option: openapi
     paths:

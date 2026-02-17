@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: fd90517c-269f-472b-924b-9e891a9dd646
 management:
-  docChecksum: c736a1782289765f36dbb033e5ed4f8e
+  docChecksum: ac82564a155beb0fa83bb818fd7e0564
   docVersion: "2025-11-10"
-  speakeasyVersion: 1.715.0
-  generationVersion: 2.822.1
-  releaseVersion: 5.1.0
-  configChecksum: ec66aefc26f74855b6f2355df10744f8
+  speakeasyVersion: 1.719.0
+  generationVersion: 2.824.1
+  releaseVersion: 5.1.1
+  configChecksum: 4a15839282db7a8d6fd6305ffa08f5ac
   repoURL: https://github.com/clerk/clerk-sdk-ruby.git
   installationURL: https://github.com/clerk/clerk-sdk-ruby
   published: true
 persistentEdits:
-  generation_id: f5b2a336-cdb2-4846-8a07-dd753ac7ff3e
-  pristine_commit_hash: d357f571c221a12263fb0cff998903eaa5f68538
-  pristine_tree_hash: e2502551644110d12a94a26e89dbccf422414bc1
+  generation_id: 31305649-4089-42e7-aadc-fed65551270c
+  pristine_commit_hash: e144ffa8e69105af7d90ec0205cdc72bf84ce8de
+  pristine_tree_hash: 60bfd82db61b27ec49204b012036e47a40407e78
 features:
   ruby:
     additionalProperties: 0.1.0
@@ -31,7 +31,7 @@ features:
     openEnums: 0.1.0
     responseFormat: 0.1.0
     retries: 0.1.1
-    unions: 0.1.3
+    unions: 0.1.4
 trackedFiles:
   .gitattributes:
     id: 24139dae6567
@@ -47,8 +47,8 @@ trackedFiles:
     pristine_git_object: b0ea40558f3ca80dcf7d30b159d34a1e5ab33440
   Gemfile.lock:
     id: 21fb5836b499
-    last_write_checksum: sha1:5db0df607ef0c3a5d1bf8cd221e7e4bda537e1a6
-    pristine_git_object: fa9aeecf8dbf3c15760cb5063267a1c5e3a8fabe
+    last_write_checksum: sha1:16c34452ec9ec13f9c5b70902fef9ffb03860ecd
+    pristine_git_object: 67dcca5d12471fc2ef3e612d4d1cce1c04e34439
   Rakefile:
     id: 44b7fa1ba503
     last_write_checksum: sha1:3bb027e7620352086cf7ac562ce0c2a1473763bd
@@ -59,8 +59,8 @@ trackedFiles:
     pristine_git_object: a1725c79d0ea4c296b418b677721e5c151ba9c7d
   clerk-sdk-ruby.gemspec:
     id: 1d24faa8ee4c
-    last_write_checksum: sha1:04d5b7a3f480ee1dc28cff8b06cbf73ed7f0042c
-    pristine_git_object: d7b8c9d6db21f1d018ed43f839a437ac4a6c771a
+    last_write_checksum: sha1:4fbe3b965973afd85ea95a390f36cb6f5dc3205e
+    pristine_git_object: f71418d4b0ff285b74bcc9980fec7bd765116cd9
   docs/models/components/actortoken.md:
     id: 6f567bd2f98e
     last_write_checksum: sha1:20b5bcc73de9dd30005ace61e79932376c978594
@@ -2723,8 +2723,8 @@ trackedFiles:
     pristine_git_object: 23f2a668301f3ee0cba244c4b250f6e4c8574e63
   docs/models/operations/listallorganizationdomainsrequest.md:
     id: 0885565ceca9
-    last_write_checksum: sha1:51ed485655106bf187d91e36fdbac0a4ae79e55f
-    pristine_git_object: 505e12b51933ff249f9ba8654a54e5dcc48504c0
+    last_write_checksum: sha1:3fda537eaf3e9c2746feccd33550c69de9ac3ac4
+    pristine_git_object: d81988e42804bbea3fd75b8d7b40d6a504f32ea8
   docs/models/operations/listallorganizationdomainsresponse.md:
     id: 78add0347365
     last_write_checksum: sha1:e2f7503d55f64317e812ea8bec580f88a73aeacf
@@ -9271,12 +9271,12 @@ trackedFiles:
     pristine_git_object: 7a1a0718900b2131ac9636bdd2aec1198c51a0b8
   lib/clerk/models/operations/listallorganizationdomains_request.rb:
     id: 397164df0446
-    last_write_checksum: sha1:9f40e7817dce51c86deda6a2fc0717ca3417b79e
-    pristine_git_object: df14fe3a38af52e367d57019d77dadc91a506475
+    last_write_checksum: sha1:27a0324fc5ff61b7214159e8e9202c6e0c1b1559
+    pristine_git_object: 0a87f6061b846c017ac6d29d1e1d102d15c4e657
   lib/clerk/models/operations/listallorganizationdomains_request.rbi:
     id: f24c988f903c
-    last_write_checksum: sha1:404fe2ca411c296d8c455ab0e4b0a7f33705173a
-    pristine_git_object: 76520fe773a949489517bec91609d925b7a2d473
+    last_write_checksum: sha1:f45395d50cc3284ffac2e69bf640ad4b16197280
+    pristine_git_object: b9e71c5863f3d2f411519538380c68f95d4c07de
   lib/clerk/models/operations/listallorganizationdomains_response.rb:
     id: 9252419f03b7
     last_write_checksum: sha1:45231e51539d5a0a51a2b834b691a72ccdf2026d
@@ -11279,8 +11279,8 @@ trackedFiles:
     pristine_git_object: a9439db9cbc91b3abef17baf0d438a99a9190cf0
   lib/clerk/sdkconfiguration.rb:
     id: 005b930c709e
-    last_write_checksum: sha1:d1976657ca5e11bd7747a36cf53ffd0226cf8f5a
-    pristine_git_object: d2d2f74e040811cc1fb4865b1ee20278622a3f76
+    last_write_checksum: sha1:c68d417cca4584cb7dfa6e5529f3cb51bb1f9a60
+    pristine_git_object: 81b491fbef105addb1cc9ff52635637becf30eef
   lib/clerk/sdkconfiguration.rbi:
     id: c7163e8cf2ca
     last_write_checksum: sha1:fea1767a154b4575f107e7dda123f1cc89a1c581
@@ -11363,16 +11363,16 @@ trackedFiles:
     pristine_git_object: 1d178b5834695e5a5bf2331c9efeda49d709c938
   lib/crystalline/metadata_fields.rb:
     id: b632003fb3ad
-    last_write_checksum: sha1:0dcee3bb47671e0f0733751155313cf7a0db989b
-    pristine_git_object: 4f3d820ab9eba9431c5dc1998dc86d60b014744b
+    last_write_checksum: sha1:5eb824004a9bccf32442eef7ddbd877eb9d60b43
+    pristine_git_object: 3ed540696213cdd066cfde41cff922e882e03296
   lib/crystalline/module.rb:
     id: f20714527078
-    last_write_checksum: sha1:e9934eb73815978fc70bf917b1a18bf4dab00e33
-    pristine_git_object: f661e61d2877a72912ec6ba7d1a74b8532f6a2b6
+    last_write_checksum: sha1:7425045e6f137e23e58dac7bd8c296073f31fa33
+    pristine_git_object: 830dc02764b42f565b7c384d555521239695a5ca
   lib/crystalline/types.rb:
     id: 99bd085a257e
-    last_write_checksum: sha1:687f991e31e7438d84731254cd810662757f41bd
-    pristine_git_object: 8956b1b2132cbde7dfc7d6d188811a2d7071f297
+    last_write_checksum: sha1:5771bd3d9e0471a77184079a7455aec60d2462b2
+    pristine_git_object: 589726f24dc4ff9fab0dd97d09c1737ad3cef6fb
   lib/crystalline/utils.rb:
     id: 16176de8524e
     last_write_checksum: sha1:b32469851da6f9f729e484ade6a23b38639a652a
@@ -13488,7 +13488,7 @@ examples:
         "500":
           application/json: {"errors": []}
 examplesVersion: 1.0.2
-releaseNotes: "## Ruby SDK Changes:\n* `open_api_client.users.list()`:  `response.[].organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.create()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.get()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.update()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.ban()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.unban()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.bulk_ban()`:  `response.[].organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.bulk_unban()`:  `response.[].organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.lock()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.unlock()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.set_profile_image()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.delete_profile_image()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.update_metadata()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.get_billing_subscription()`:  `response.subscription_items[].payer.credits_balance` **Added**\n* `open_api_client.users.get_organization_memberships()`:  `response.data[].organization.role_set_key` **Added**\n* `open_api_client.users.set_password_compromised()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.unset_password_compromised()`:  `response.organization_memberships[].organization.role_set_key` **Added**\n* `open_api_client.users.get_instance_organization_memberships()`:  `response.data[].organization.role_set_key` **Added**\n* `open_api_client.organizations.list()`:  `response.data[].role_set_key` **Added**\n* `open_api_client.organizations.create()`: \n  *  `request.role_set_key` **Added**\n  *  `response.role_set_key` **Added**\n* `open_api_client.organizations.get()`:  `response.role_set_key` **Added**\n* `open_api_client.organizations.update()`: \n  *  `request.body.role_set_key` **Added**\n  *  `response.role_set_key` **Added**\n* `open_api_client.organizations.merge_metadata()`:  `response.role_set_key` **Added**\n* `open_api_client.organizations.upload_logo()`:  `response.role_set_key` **Added**\n* `open_api_client.organizations.delete_logo()`:  `response.role_set_key` **Added**\n* `open_api_client.organizations.get_billing_subscription()`:  `response.subscription_items[].payer.credits_balance` **Added**\n* `open_api_client.organization_memberships.create()`:  `response.organization.role_set_key` **Added**\n* `open_api_client.organization_memberships.list()`:  `response.data[].organization.role_set_key` **Added**\n* `open_api_client.organization_memberships.update()`:  `response.organization.role_set_key` **Added**\n* `open_api_client.organization_memberships.delete()`:  `response.organization.role_set_key` **Added**\n* `open_api_client.organization_memberships.update_metadata()`:  `response.organization.role_set_key` **Added**\n* `open_api_client.saml_connections.update()`: \n  *  `request.body.consent_verified_domains_deletion` **Added**\n* `open_api_client.billing.list_subscription_items()`:  `response.data[].payer.credits_balance` **Added**\n* `open_api_client.billing.cancel_subscription_item()`:  `response.payer.credits_balance` **Added**\n* `open_api_client.billing.extend_subscription_item_free_trial()`:  `response.payer.credits_balance` **Added**\n* `open_api_client.billing.create_price_transition()`:  `response.subscription_item.payer.credits_balance` **Added**\n* `open_api_client.billing.list_statements()`:  `response.data[].payer.credits_balance` **Added**\n* `open_api_client.billing.get_statement()`:  `response.payer.credits_balance` **Added**\n* `open_api_client.billing.get_statement_payment_attempts()`:  `response.data[].payer.credits_balance` **Added**\n"
+releaseNotes: "## Ruby SDK Changes:\n* `open_api_client.organization_domains.list_all()`: \n  *  `request.domains` **Added**\n"
 generatedFiles:
   - .gitattributes
   - .rubocop.yml
