@@ -16,6 +16,8 @@ class Clerk::Models::Operations::ListAllOrganizationDomainsRequest
   def enrollment_mode=(str_); end
   def query(); end
   def query=(str_); end
+  def domains(); end
+  def domains=(str_); end
   def order_by(); end
   def order_by=(str_); end
   def offset(); end

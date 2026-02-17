@@ -6051,6 +6051,16 @@ paths:
           schema:
             type: string
         - in: query
+          name: domains
+          description: Filter by exact domain names. Accepts multiple values (e.g. domains=example.com&domains=test.org).
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
           name: order_by
           description: |
             Allows to return organization domains in a particular order.
@@ -7154,6 +7164,8 @@ paths:
   /platform/applications/{applicationID}/usage: {}
   /platform/applications/{applicationID}/subscription: {}
   /platform/applications/{applicationID}/rotate_secret_keys: {}
+  /platform/applications/{applicationID}/logo: {}
+  /platform/applications/{applicationID}/favicon: {}
   /platform/applications/{applicationID}/domain: {}
   /platform/applications/{applicationID}/domains: {}
   /platform/applications/{applicationID}/domains/{domainIDOrName}: {}
@@ -7167,6 +7179,8 @@ paths:
   /platform/applications/{applicationID}/instances/{envOrInsID}/users/{userID}/unban: {}
   /platform/applications/{applicationID}/instances/{instanceID}/config: {}
   /platform/applications/{applicationID}/instances/{instanceID}/config/schema: {}
+  /platform/applications/{applicationID}/instances/{envOrInsID}/jwt_templates: {}
+  /platform/applications/{applicationID}/instances/{envOrInsID}/jwt_templates/{templateID}: {}
   /billing/plans:
     get:
       operationId: GetCommercePlanList
