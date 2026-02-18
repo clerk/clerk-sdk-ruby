@@ -13,8 +13,8 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value. Always `organization_domain`
-        # 
-        field :object, Models::Components::OrganizationDomainObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::OrganizationDomainObject, false) } }
+        #
+        field :object, Models::Components::OrganizationDomainObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::OrganizationDomainObject, false) } }
         # Unique identifier for the organization domain
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # Unique identifier for the organization
@@ -22,7 +22,7 @@ module Clerk
         # Name of the organization domain
         field :name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name'), required: true } }
         # Mode of enrollment for the domain
-        field :enrollment_mode, Models::Components::EnrollmentMode, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enrollment_mode'), required: true, 'decoder': Utils.enum_from_string(Models::Components::EnrollmentMode, false) } }
+        field :enrollment_mode, Models::Components::EnrollmentMode, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enrollment_mode'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::EnrollmentMode, false) } }
         # Total number of pending invitations associated with this domain
         field :total_pending_invitations, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('total_pending_invitations'), required: true } }
         # Total number of pending suggestions associated with this domain

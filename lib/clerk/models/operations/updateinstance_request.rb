@@ -27,8 +27,8 @@ module Clerk
         field :development_origin, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('development_origin') } }
         # Whether the instance should operate in cookieless development mode (i.e. without third-party cookies).
         # Deprecated: Please use `url_based_session_syncing` instead.
-        # 
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :cookieless_dev, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('cookieless_dev') } }
         # Whether the instance should use URL-based session syncing in development mode (i.e. without third-party cookies).
         field :url_based_session_syncing, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('url_based_session_syncing') } }

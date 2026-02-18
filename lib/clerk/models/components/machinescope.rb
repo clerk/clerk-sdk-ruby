@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :object, Models::Components::MachineScopeObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::MachineScopeObject, false) } }
+        field :object, Models::Components::MachineScopeObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::MachineScopeObject, false) } }
         # The ID of the machine that has access to the target machine.
         field :from_machine_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('from_machine_id'), required: true } }
         # The ID of the machine that is being accessed.

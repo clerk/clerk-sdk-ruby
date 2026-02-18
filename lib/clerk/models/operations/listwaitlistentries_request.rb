@@ -27,7 +27,7 @@ module Clerk
         # - `created_at`
         # - `email_address`
         # - `invited_at`
-        # 
+        #
         # Use `+` for ascending or `-` for descending order. Defaults to `-created_at`.
         field :order_by, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'order_by', 'style': 'form', 'explode': true } }
 

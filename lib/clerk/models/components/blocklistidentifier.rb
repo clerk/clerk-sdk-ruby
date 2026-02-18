@@ -13,22 +13,22 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        # 
-        field :object, Crystalline::Nilable.new(Models::Components::BlocklistIdentifierObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::BlocklistIdentifierObject, true) } }
+        #
+        field :object, Crystalline::Nilable.new(Models::Components::BlocklistIdentifierObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::BlocklistIdentifierObject, true) } }
 
         field :id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id') } }
         # An email address, email domain, phone number or web3 wallet.
-        # 
+        #
         field :identifier, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('identifier') } }
 
-        field :identifier_type, Crystalline::Nilable.new(Models::Components::BlocklistIdentifierIdentifierType), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('identifier_type'), 'decoder': Utils.enum_from_string(Models::Components::BlocklistIdentifierIdentifierType, true) } }
+        field :identifier_type, Crystalline::Nilable.new(Models::Components::BlocklistIdentifierIdentifierType), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('identifier_type'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::BlocklistIdentifierIdentifierType, true) } }
 
         field :instance_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('instance_id') } }
         # Unix timestamp of creation
-        # 
+        #
         field :created_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at') } }
         # Unix timestamp of last update.
-        # 
+        #
         field :updated_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at') } }
 
         

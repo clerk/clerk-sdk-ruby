@@ -13,11 +13,11 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::VerificationGoogleOneTapStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::VerificationGoogleOneTapStatus, false) } }
+        field :status, Models::Components::VerificationGoogleOneTapStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationGoogleOneTapStatus, false) } }
 
-        field :strategy, Models::Components::VerificationGoogleOneTapStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.enum_from_string(Models::Components::VerificationGoogleOneTapStrategy, false) } }
+        field :strategy, Models::Components::VerificationGoogleOneTapStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationGoogleOneTapStrategy, false) } }
 
-        field :object, Crystalline::Nilable.new(Models::Components::VerificationGoogleOneTapObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::VerificationGoogleOneTapObject, true) } }
+        field :object, Crystalline::Nilable.new(Models::Components::VerificationGoogleOneTapObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationGoogleOneTapObject, true) } }
 
         field :expire_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expire_at'), required: true } }
 

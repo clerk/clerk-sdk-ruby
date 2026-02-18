@@ -13,11 +13,11 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::VerificationFromOauthStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::VerificationFromOauthStatus, false) } }
+        field :status, Models::Components::VerificationFromOauthStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationFromOauthStatus, false) } }
 
         field :strategy, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true } }
 
-        field :object, Crystalline::Nilable.new(Models::Components::VerificationFromOauthObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::VerificationFromOauthObject, true) } }
+        field :object, Crystalline::Nilable.new(Models::Components::VerificationFromOauthObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationFromOauthObject, true) } }
 
         field :expire_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expire_at'), required: true } }
 

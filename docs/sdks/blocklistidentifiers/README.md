@@ -20,10 +20,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.blocklist_identifiers.list()
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.blocklist_identifiers.list
 
 unless res.blocklist_identifiers.nil?
   # handle response
@@ -54,13 +53,12 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::CreateBlocklistIdentifierRequest.new(
-  identifier: 'example@example.com',
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
+req = Models::Operations::CreateBlocklistIdentifierRequest.new(
+  identifier: 'example@example.com'
+)
 res = s.blocklist_identifiers.create(request: req)
 
 unless res.blocklist_identifier.nil?
@@ -98,9 +96,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.blocklist_identifiers.delete(identifier_id: 'identifier123')
 
 unless res.deleted_object.nil?

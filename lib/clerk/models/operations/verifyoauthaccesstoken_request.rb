@@ -15,8 +15,8 @@ module Clerk
         # The access token to verify.
         field :access_token, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('access_token') } }
         # The access token to verify. This is deprecated, use `access_token` instead.
-        # 
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :secret, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('secret') } }
 
         

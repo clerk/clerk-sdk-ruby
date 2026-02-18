@@ -67,6 +67,8 @@ Style/TrailingCommaInHashLiteral:
   Enabled: false
 Style/TrailingCommaInArrayLiteral:
   Enabled: false
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
 Layout/EmptyLinesAroundClassBody:
   Enabled: false
 Style/WordArray:
@@ -79,3 +81,25 @@ Lint/LiteralAsCondition:
   Enabled: false
 Naming/VariableNumber:
   Enabled: false
+# rubyfmt enforces double quotes on generated code, but customer-authored files
+# (sdk_hooks, tests, etc.) may use single quotes, so we don't enforce this rule.
+Style/StringLiterals:
+  Enabled: false
+Style/BlockDelimiters:
+  Enabled: false
+Style/MultilineTernaryOperator:
+  Enabled: false
+Layout/EmptyLinesAroundExceptionHandlingKeywords:
+  Enabled: false
+Style/EmptyMethod:
+  Enabled: false
+Layout/MultilineOperationIndentation:
+  Enabled: false
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+Layout/SpaceInLambdaLiteral:
+  Enabled: false
+Layout/FirstArgumentIndentation:
+  Enabled: false
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent

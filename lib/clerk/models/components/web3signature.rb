@@ -13,11 +13,11 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::VerificationWeb3Status, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::VerificationWeb3Status, false) } }
+        field :status, Models::Components::VerificationWeb3Status, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationWeb3Status, false) } }
 
-        field :strategy, Models::Components::VerificationWeb3Strategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.enum_from_string(Models::Components::VerificationWeb3Strategy, false) } }
+        field :strategy, Models::Components::VerificationWeb3Strategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationWeb3Strategy, false) } }
 
-        field :object, Crystalline::Nilable.new(Models::Components::VerificationWeb3Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::VerificationWeb3Object, true) } }
+        field :object, Crystalline::Nilable.new(Models::Components::VerificationWeb3Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationWeb3Object, true) } }
 
         field :attempts, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attempts'), required: true } }
 

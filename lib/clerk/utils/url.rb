@@ -24,7 +24,7 @@ module Clerk
         if serialization != ''
           serialized_params = _get_serialized_params(param_metadata, f_name, param)
           serialized_params.each do |k, v|
-            path = path.sub("{#{k}}", v.join(', '))
+            path = path.gsub("{#{k}}", v.join(', '))
           end
         else
           if param.is_a? Array
@@ -32,7 +32,7 @@ module Clerk
             param.each do |pp_val|
               pp_vals.append(pp_val.to_s)
             end
-            path = path.sub("{#{param_metadata.fetch(:field_name, f.name)}}", pp_vals.join(','))
+            path = path.gsub("{#{param_metadata.fetch(:field_name, f.name)}}", pp_vals.join(','))
           elsif param.is_a? Hash
             pp_vals = []
             param.each do |pp_key, pp_val|
@@ -44,7 +44,7 @@ module Clerk
                 pp_vals.append("#{pp_key},#{value}")
               end
             end
-            path = path.sub("{#{param_metadata.fetch(:field_name, f.name)}}", pp_vals.join(','))
+            path = path.gsub("{#{param_metadata.fetch(:field_name, f.name)}}", pp_vals.join(','))
           elsif param.class.include?(::Crystalline::MetadataFields)
             pp_vals = []
             attrs = param.fields.filter { |field| field.name && param.respond_to?(field.name.to_sym) }.map(&:name)
@@ -72,14 +72,20 @@ module Clerk
                 pp_vals.append("#{parm_name},#{param_field_val}")
               end
             end
-            path = path.sub("{#{param_metadata.fetch(:field_name, f.name)}}", pp_vals.join(','))
+            path = path.gsub("{#{param_metadata.fetch(:field_name, f.name)}}", pp_vals.join(','))
           else
-            path = path.sub("{#{param_metadata.fetch(:field_name, f.name)}}", val_to_string(param))
+            path = path.gsub("{#{param_metadata.fetch(:field_name, f.name)}}", _encode_path_param(val_to_string(param)))
           end
         end
       end
 
       server_url.delete_suffix('/') + path
+    end
+
+    # Percent-encode characters that are invalid in URI path segments
+    
+    def self._encode_path_param(value)
+      value.gsub(/[<>{}\[\]|\\^`\s?#%]/) { |c| format('%%%02X', c.ord) }
     end
 
     

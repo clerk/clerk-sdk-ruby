@@ -23,14 +23,13 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.templates.preview(template_type: 'email', slug: 'welcome-email', body: Models::Operations::PreviewTemplateRequestBody.new(
   subject: 'Welcome to our service!',
   body: 'Hi, thank you for joining our service.',
   from_email_name: 'hello',
-  reply_to_email_name: 'support',
+  reply_to_email_name: 'support'
 ))
 
 unless res.object.nil?

@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
         # Status of the verification. It can be `unverified` or `verified`
-        field :status, Models::Components::OrganizationDomainStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::OrganizationDomainStatus, false) } }
+        field :status, Models::Components::OrganizationDomainStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::OrganizationDomainStatus, false) } }
         # Name of the strategy used to verify the domain
         field :strategy, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true } }
         # How many attempts have been made to verify the domain

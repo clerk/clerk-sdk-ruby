@@ -15,7 +15,7 @@ module Clerk
 
         field :data, Crystalline::Array.new(Models::Components::OAuthApplication), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('data'), required: true } }
         # Total number of OAuth applications
-        # 
+        #
         field :total_count, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('total_count'), required: true } }
 
         

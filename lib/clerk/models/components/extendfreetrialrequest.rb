@@ -14,7 +14,7 @@ module Clerk
 
         # RFC3339 timestamp to extend the free trial to.
         # Must be in the future and not more than 365 days from now.
-        field :extend_to, ::DateTime, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('extend_to'), required: true, 'decoder': Utils.datetime_from_iso_format(false) } }
+        field :extend_to, ::DateTime, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('extend_to'), required: true, 'decoder': ::Clerk::Utils.datetime_from_iso_format(false) } }
 
         
         def initialize(extend_to:)

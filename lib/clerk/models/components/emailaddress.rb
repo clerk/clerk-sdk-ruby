@@ -13,8 +13,8 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        # 
-        field :object, Models::Components::EmailAddressObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.open_enum_from_string(Models::Components::EmailAddressObject, false) } }
+        #
+        field :object, Models::Components::EmailAddressObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.open_enum_from_string(Models::Components::EmailAddressObject, false) } }
 
         field :email_address, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address'), required: true } }
 
@@ -22,17 +22,17 @@ module Clerk
 
         field :linked_to, Crystalline::Array.new(Models::Components::IdentificationLink), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('linked_to'), required: true } }
         # Unix timestamp of creation
-        # 
+        #
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # Unix timestamp of creation
-        # 
+        #
         field :updated_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
 
         field :id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id') } }
 
         field :verification, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::EmailAddressOTP, Models::Components::EmailAddressAdmin, Models::Components::FromOAuth, Models::Components::EmailAddressTicket, Models::Components::EmailAddressSAML, Models::Components::EmailLink)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('verification'), required: true }, 'discriminator': 'object', 'discriminator_mapping': { 'verification_otp' => Models::Components::EmailAddressOTP, 'verification_admin' => Models::Components::EmailAddressAdmin, 'verification_from_oauth' => Models::Components::FromOAuth, 'verification_ticket' => Models::Components::EmailAddressTicket, 'verification_saml' => Models::Components::EmailAddressSAML, 'verification_email_link' => Models::Components::EmailLink } }
         # Indicates whether this email address domain matches an active enterprise connection.
-        # 
+        #
         field :matches_sso_connection, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('matches_sso_connection') } }
 
         

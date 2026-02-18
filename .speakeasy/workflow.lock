@@ -1,4 +1,4 @@
-speakeasyVersion: 1.719.0
+speakeasyVersion: 1.722.2
 sources:
     Clerk-OAS:
         sourceNamespace: clerk-openapi
@@ -6,7 +6,7 @@ sources:
         sourceBlobDigest: sha256:a83a287a63de6bc65fceb5b7eed893c94f8b2ef4a3609f08aeb94f9c74be4f54
         tags:
             - latest
-            - speakeasy-sdk-regen-1771030021
+            - speakeasy-sdk-regen-1771453069
             - "2025-11-10"
 targets:
     clerk:
@@ -15,7 +15,7 @@ targets:
         sourceRevisionDigest: sha256:4be3de7a3885a1627d1f47b90a81ad6f1fb0c8ecfe903f8fade2522410915796
         sourceBlobDigest: sha256:a83a287a63de6bc65fceb5b7eed893c94f8b2ef4a3609f08aeb94f9c74be4f54
         codeSamplesNamespace: clerk-oas-ruby-code-samples
-        codeSamplesRevisionDigest: sha256:54442a67e03e7a17447152419cc35c64ef1fcbda4425d891ba933a393cf8393a
+        codeSamplesRevisionDigest: sha256:4d707e149efbdfc98f20a5450e2006129c1adaa1782c72d5f1350b7cd3cd572c
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest

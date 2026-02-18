@@ -19,11 +19,41 @@ module Clerk
       if val.class.respond_to?(:enums)
         val.serialize.to_s
       elsif val.is_a? DateTime
-        val.strftime('%Y-%m-%dT%H:%M:%S.%NZ')
+        val.strftime('%Y-%m-%dT%H:%M:%S.%NZ').sub(/(\.\d*[1-9])0+Z\z/, '\1Z').sub(/\.0+Z\z/, 'Z')
       else
         val.to_s
 
       end
+    end
+
+    MIME_TYPES = {
+      '.json' => 'application/json',
+      '.xml' => 'application/xml',
+      '.pdf' => 'application/pdf',
+      '.zip' => 'application/zip',
+      '.gz' => 'application/gzip',
+      '.csv' => 'text/csv',
+      '.txt' => 'text/plain',
+      '.html' => 'text/html',
+      '.htm' => 'text/html',
+      '.css' => 'text/css',
+      '.js' => 'application/javascript',
+      '.png' => 'image/png',
+      '.jpg' => 'image/jpeg',
+      '.jpeg' => 'image/jpeg',
+      '.gif' => 'image/gif',
+      '.svg' => 'image/svg+xml',
+      '.webp' => 'image/webp',
+      '.mp3' => 'audio/mpeg',
+      '.mp4' => 'video/mp4',
+      '.yaml' => 'application/yaml',
+      '.yml' => 'application/yaml',
+    }.freeze
+
+    
+    def self.mime_type_for_filename(filename)
+      ext = File.extname(filename).downcase
+      MIME_TYPES.fetch(ext, 'application/octet-stream')
     end
 
     
@@ -143,7 +173,7 @@ module Clerk
             # Handle file uploads
             file_part = Faraday::Multipart::FilePart.new(
               StringIO.new(field[1]),
-              'application/octet-stream',
+              mime_type_for_filename(field[0]),
               field[0]
             )
             
@@ -158,7 +188,7 @@ module Clerk
             end
           end
         elsif field.length == 3
-          param_part = Faraday::Multipart::ParamPart.new(field[1].to_json, field[2])
+          param_part = Faraday::Multipart::ParamPart.new(field[1], field[2])
           
           # Handle multiple values for the same field name (arrays)
           if payload.key?(field_name)

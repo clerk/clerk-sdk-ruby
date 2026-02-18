@@ -13,13 +13,13 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::VerificationPasskeyStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::VerificationPasskeyStatus, false) } }
+        field :status, Models::Components::VerificationPasskeyStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationPasskeyStatus, false) } }
 
-        field :strategy, Models::Components::VerificationPasskeyStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.enum_from_string(Models::Components::VerificationPasskeyStrategy, false) } }
+        field :strategy, Models::Components::VerificationPasskeyStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationPasskeyStrategy, false) } }
 
-        field :object, Crystalline::Nilable.new(Models::Components::VerificationPasskeyObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::VerificationPasskeyObject, true) } }
+        field :object, Crystalline::Nilable.new(Models::Components::VerificationPasskeyObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationPasskeyObject, true) } }
 
-        field :nonce, Crystalline::Nilable.new(Models::Components::Nonce), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('nonce'), 'decoder': Utils.enum_from_string(Models::Components::Nonce, true) } }
+        field :nonce, Crystalline::Nilable.new(Models::Components::Nonce), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('nonce'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::Nonce, true) } }
 
         field :attempts, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attempts'), required: true } }
 

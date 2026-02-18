@@ -22,9 +22,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organization_permissions.list(limit: 10, offset: 0)
 
 unless res.permissions.nil?
@@ -65,14 +64,13 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::CreateOrganizationPermissionRequest.new(
   name: '<value>',
-  key: '<key>',
+  key: '<key>'
 )
-
 res = s.organization_permissions.create(request: req)
 
 unless res.permission.nil?
@@ -110,9 +108,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organization_permissions.get(permission_id: '<id>')
 
 unless res.permission.nil?
@@ -151,10 +148,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.organization_permissions.update(permission_id: '<id>', body: Models::Operations::UpdateOrganizationPermissionRequestBody.new())
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.organization_permissions.update(permission_id: '<id>', body: Models::Operations::UpdateOrganizationPermissionRequestBody.new)
 
 unless res.permission.nil?
   # handle response
@@ -193,9 +189,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organization_permissions.delete(permission_id: '<id>')
 
 unless res.deleted_object.nil?

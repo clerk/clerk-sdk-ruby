@@ -17,10 +17,10 @@ module Clerk
         # The domains of your organization. Sign in flows using an email with one of these domains, will use this SAML Connection.
         field :domains, Crystalline::Array.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('domains'), required: true } }
         # The IdP provider of the connection.
-        field :provider, Models::Operations::Provider2, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider'), required: true, 'decoder': Utils.enum_from_string(Models::Operations::Provider2, false) } }
+        field :provider, Models::Operations::Provider2, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::Provider2, false) } }
         # The domain of your organization. Sign in flows using an email with this domain, will use this SAML Connection.
-        # 
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :domain, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('domain') } }
         # Enable or deactivate ForceAuthn
         field :force_authn, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('force_authn') } }

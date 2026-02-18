@@ -18,8 +18,8 @@ module Clerk
         # An array of redirect URIs of the new OAuth application
         field :redirect_uris, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('redirect_uris') } }
         # The callback URL of the new OAuth application
-        # 
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :callback_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('callback_url') } }
         # If true, this client is public and you can use the Proof Key of Code Exchange (PKCE) flow.
         field :public, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public') } }

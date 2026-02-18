@@ -23,7 +23,7 @@ module Clerk
         # The number of days the invitation will be valid for. By default, the invitation expires after 30 days.
         field :expires_in_days, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expires_in_days') } }
         # The slug of the email template to use for the invitation email.
-        field :template_slug, Crystalline::Nilable.new(Models::Operations::CreateBulkInvitationsTemplateSlug), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('template_slug'), 'decoder': Utils.enum_from_string(Models::Operations::CreateBulkInvitationsTemplateSlug, true) } }
+        field :template_slug, Crystalline::Nilable.new(Models::Operations::CreateBulkInvitationsTemplateSlug), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('template_slug'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::CreateBulkInvitationsTemplateSlug, true) } }
         # Optional flag which denotes whether an email invitation should be sent to the given email address.
         # Defaults to true.
         field :notify, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('notify') } }

@@ -24,11 +24,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
-req = Models::Operations::ListSAMLConnectionsRequest.new()
-
+req = Models::Operations::ListSAMLConnectionsRequest.new
 res = s.saml_connections.list(request: req)
 
 unless res.saml_connections.nil?
@@ -66,8 +65,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::CreateSAMLConnectionRequestBody2.new(
   name: 'My SAML Connection',
@@ -85,10 +84,9 @@ req = Models::Operations::CreateSAMLConnectionRequestBody2.new(
     user_id: 'nameid',
     email_address: 'mail',
     first_name: 'givenName',
-    last_name: 'surname',
-  ),
+    last_name: 'surname'
+  )
 )
-
 res = s.saml_connections.create(request: req)
 
 unless res.schemas_saml_connection.nil?
@@ -126,9 +124,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.saml_connections.get(saml_connection_id: 'saml_conn_123')
 
 unless res.schemas_saml_connection.nil?
@@ -166,10 +163,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.saml_connections.update(saml_connection_id: 'saml_conn_123_update', body: Models::Operations::UpdateSAMLConnectionRequestBody.new())
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.saml_connections.update(saml_connection_id: 'saml_conn_123_update', body: Models::Operations::UpdateSAMLConnectionRequestBody.new)
 
 unless res.schemas_saml_connection.nil?
   # handle response
@@ -207,9 +203,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.saml_connections.delete(saml_connection_id: 'saml_conn_123_delete')
 
 unless res.deleted_object.nil?

@@ -28,7 +28,7 @@ module Clerk
         field :key, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('key') } }
         # The type of the role set. "initial" role sets are the default for new organizations.
         # Only one role set can be "initial" per instance.
-        field :type, Crystalline::Nilable.new(Models::Operations::CreateRoleSetType), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('type'), 'decoder': Utils.enum_from_string(Models::Operations::CreateRoleSetType, true) } }
+        field :type, Crystalline::Nilable.new(Models::Operations::CreateRoleSetType), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('type'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::CreateRoleSetType, true) } }
         # Optional description for the role set
         field :description, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('description') } }
 

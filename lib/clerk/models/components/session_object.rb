@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Components
       # SessionObject - String representing the object's type. Objects of the same type share the same value.
-      # 
+      #
       class SessionObject
         include ::Crystalline::Enum
         enums do

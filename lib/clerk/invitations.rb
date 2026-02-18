@@ -52,7 +52,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, true, :request, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -311,7 +311,7 @@ module Clerk
       # invitations as emails by setting the `notify` parameter to `true`. There cannot be an existing invitation for any
       # of the email addresses you provide unless you set `ignore_existing` to `true` for specific email addresses. Please
       # note that there must be no existing user for any of the email addresses you provide, and this rule cannot be bypassed.
-      # 
+      #
       # This endpoint is limited to a maximum of 10 invitations per API call. If you need to send more invitations, please make multiple requests.
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
@@ -321,7 +321,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, true, :request, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)

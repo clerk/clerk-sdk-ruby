@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type.
-        field :object, Models::Components::MachineSecretKeyObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::MachineSecretKeyObject, false) } }
+        field :object, Models::Components::MachineSecretKeyObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::MachineSecretKeyObject, false) } }
         # The secret key for the machine.
         field :secret, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('secret'), required: true } }
 

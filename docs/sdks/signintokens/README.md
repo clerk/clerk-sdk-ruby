@@ -21,13 +21,12 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::CreateSignInTokenRequest.new(
-  user_id: 'user_12345',
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
+req = Models::Operations::CreateSignInTokenRequest.new(
+  user_id: 'user_12345'
+)
 res = s.sign_in_tokens.create(request: req)
 
 unless res.sign_in_token.nil?
@@ -65,9 +64,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.sign_in_tokens.revoke(sign_in_token_id: 'tok_test_1234567890')
 
 unless res.sign_in_token.nil?

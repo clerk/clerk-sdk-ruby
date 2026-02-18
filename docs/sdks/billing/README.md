@@ -28,9 +28,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.billing.list_plans(limit: 10, offset: 0)
 
 unless res.paginated_commerce_plan_response.nil?
@@ -73,9 +72,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.billing.list_prices(limit: 10, offset: 0)
 
 unless res.paginated_billing_price_response.nil?
@@ -118,14 +116,13 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Components::CreateBillingPriceRequest.new(
   plan_id: '<id>',
-  amount: 826_545,
+  amount: 826_545
 )
-
 res = s.billing.create_price(request: req)
 
 unless res.billing_price_response.nil?
@@ -165,11 +162,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
-req = Models::Operations::GetCommerceSubscriptionItemListRequest.new()
-
+req = Models::Operations::GetCommerceSubscriptionItemListRequest.new
 res = s.billing.list_subscription_items(request: req)
 
 unless res.paginated_commerce_subscription_item_response.nil?
@@ -208,9 +204,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.billing.cancel_subscription_item(subscription_item_id: '<id>', end_now: false)
 
 unless res.commerce_subscription_item.nil?
@@ -253,11 +248,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.billing.extend_subscription_item_free_trial(subscription_item_id: '<id>', body: Models::Components::ExtendFreeTrialRequest.new(
-  extend_to: DateTime.iso8601('2026-01-08T00:00:00Z'),
+  extend_to: DateTime.iso8601('2026-01-08T00:00:00Z')
 ))
 
 unless res.schemas_commerce_subscription_item.nil?
@@ -298,12 +292,11 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.billing.create_price_transition(subscription_item_id: '<id>', body: Models::Components::PriceTransitionRequest.new(
   from_price_id: '<id>',
-  to_price_id: '<id>',
+  to_price_id: '<id>'
 ))
 
 unless res.commerce_price_transition_response.nil?
@@ -344,9 +337,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.billing.list_statements(limit: 10, offset: 0)
 
 unless res.paginated_billing_statement_response.nil?
@@ -387,9 +379,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.billing.get_statement(statement_id: '<id>')
 
 unless res.billing_statement.nil?
@@ -429,9 +420,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.billing.get_statement_payment_attempts(statement_id: '<id>', limit: 10, offset: 0)
 
 unless res.paginated_billing_payment_attempt_response.nil?

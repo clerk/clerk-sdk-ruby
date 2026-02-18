@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Components
       # OrganizationDomainObject - String representing the object's type. Objects of the same type share the same value. Always `organization_domain`
-      # 
+      #
       class OrganizationDomainObject
         include ::Crystalline::Enum
         enums do

@@ -42,8 +42,8 @@ module Clerk
     def upsert(template_type:, slug:, body: nil, retries: nil, timeout_ms: nil)
       # upsert - Update a template for a given type and slug
       # Updates the existing template of the given type and slug
-      # 
-      # @deprecated  method: This will be removed in a future release, please migrate away from it as soon as possible.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       request = Models::Operations::UpsertTemplateRequest.new(
         template_type: template_type,
         slug: slug,
@@ -62,7 +62,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)

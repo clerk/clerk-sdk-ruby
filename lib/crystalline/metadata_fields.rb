@@ -37,19 +37,30 @@ module Crystalline
       def unmarshal_single(field_type, value, format_metadata = nil)
         decoder = format_metadata.fetch(:decoder, nil)
 
-        if field_type.instance_of?(Class) && field_type.include?(::Crystalline::MetadataFields)
+        # Delegate complex Crystalline types to unmarshal_json
+        if field_type.is_a?(Crystalline::DiscriminatedUnion) ||
+           Crystalline::Utils.arr?(field_type) ||
+           Crystalline::Utils.hash?(field_type) ||
+           Crystalline::Utils.union?(field_type)
+          return Crystalline.unmarshal_json(value, field_type)
+        elsif field_type.instance_of?(Class) && field_type.include?(::Crystalline::MetadataFields)
           return field_type.from_dict(value)
         elsif field_type.to_s == 'Date'
           return Date.parse(value)
         elsif field_type.to_s == 'DateTime'
           return DateTime.parse(value)
         elsif field_type.to_s == 'Object'
-          # rubocop:disable Lint/SuppressedException
-          begin
-            value = JSON.parse(value)
-          rescue TypeError, JSON::ParserError
+          if value.is_a?(::String)
+            trimmed = value.lstrip
+            if trimmed.start_with?('{') || trimmed.start_with?('[')
+              # rubocop:disable Lint/SuppressedException
+              begin
+                value = JSON.parse(value)
+              rescue TypeError, JSON::ParserError
+              end
+              # rubocop:enable Lint/SuppressedException
+            end
           end
-          # rubocop:enable Lint/SuppressedException
           return value
         elsif field_type.to_s == 'Float'
           return value.to_f
@@ -65,12 +76,27 @@ module Crystalline
       def from_dict(d)
         to_build = {}
 
+        # Collect lookup keys for regular fields so we can identify additional properties later
+        known_keys = {}
+        additional_props_fields = []
         fields.each do |field|
+          format_metadata = field.metadata.fetch(:format_json, {})
+          if format_metadata.fetch(:additional_properties, false)
+            additional_props_fields << field
+          else
+            lookup = format_metadata.fetch(:letter_case, nil).call
+            known_keys[lookup] = true
+          end
+        end
+
+        # Process regular fields
+        (fields - additional_props_fields).each do |field|
           key = field.name
           format_metadata = field.metadata.fetch(:format_json, {})
+          field_type = field.type
+
           lookup = format_metadata.fetch(:letter_case, nil).call
           value = d[lookup]
-          field_type = field.type
           if ::Crystalline::Utils.nilable? field_type
             if value == 'null'
               to_build[key] = nil
@@ -78,7 +104,7 @@ module Crystalline
             end
             field_type = ::Crystalline::Utils.nilable_of(field_type)
           end
-          
+
           # If field is not nilable, and the value is not in the dict, raise a KeyError
           raise KeyError, "key #{lookup} not found in hash" if value.nil? && !::Crystalline::Utils.nilable?(field.type)
           # If field is nilable, and the value is not in the dict, just move to the next field
@@ -137,6 +163,32 @@ module Crystalline
             to_build[key] = unmarshal_single(field_type, value, format_metadata)
           end
         end
+
+        # Process additional properties fields: collect remaining keys from the dict
+        additional_props_fields.each do |field|
+          key = field.name
+          format_metadata = field.metadata.fetch(:format_json, {})
+          field_type = field.type
+
+          remaining = d.reject { |k, _| known_keys.key?(k) }
+          if remaining.empty?
+            next if ::Crystalline::Utils.nilable?(field.type)
+
+            raise KeyError, 'no additional properties found in hash'
+          end
+
+          inner_field_type = field_type
+          inner_field_type = ::Crystalline::Utils.nilable_of(inner_field_type) if ::Crystalline::Utils.nilable?(inner_field_type)
+          if Crystalline::Utils.hash?(inner_field_type)
+            val_type = Crystalline::Utils.hash_of(inner_field_type)
+            # rubocop:disable Style/HashTransformValues
+            to_build[key] = remaining.map { |k, v| [k, unmarshal_single(val_type, v, format_metadata)] }.to_h
+            # rubocop:enable Style/HashTransformValues
+          else
+            to_build[key] = remaining
+          end
+        end
+
         new(**to_build)
       end
     end
@@ -178,6 +230,8 @@ module Crystalline
       fields.sort_by(&:name).each do |field|
         format_json_meta = field.metadata[:format_json]
         required = !format_json_meta.nil? && format_json_meta.include?(:required)
+        is_additional_props = !format_json_meta.nil? && format_json_meta.fetch(:additional_properties, false)
+
         if !format_json_meta.nil? && format_json_meta.include?(:letter_case)
           key = format_json_meta[:letter_case].call(field.name)
         else
@@ -188,7 +242,10 @@ module Crystalline
         next if f.nil? && !required
         result[key] = nil if f.nil? && required
 
-        if f.is_a? ::Array
+        # Flatten additional properties into the parent object
+        if is_additional_props && f.is_a?(::Hash)
+          f.each { |k, v| result[k] = marshal_single(v) }
+        elsif f.is_a? ::Array
           result[key] = f.map { |o| marshal_single(o) }
         elsif f.is_a? ::Hash
           result[key] = f.transform_values { |v| marshal_single(v) }

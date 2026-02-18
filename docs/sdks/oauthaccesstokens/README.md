@@ -18,13 +18,12 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::VerifyOAuthAccessTokenRequest.new(
-  access_token: 'XXXXXXXXXXXXXX',
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
+req = Models::Operations::VerifyOAuthAccessTokenRequest.new(
+  access_token: 'XXXXXXXXXXXXXX'
+)
 res = s.oauth_access_tokens.verify(request: req)
 
 unless res.one_of.nil?

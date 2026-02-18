@@ -26,10 +26,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.instance_settings.get()
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.instance_settings.get
 
 unless res.instance.nil?
   # handle response
@@ -59,8 +58,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::UpdateInstanceRequest.new(
   test_mode: true,
@@ -73,9 +72,8 @@ req = Models::Operations::UpdateInstanceRequest.new(
     'chrome-extension://extension_uiid',
     'capacitor://localhost',
   ],
-  url_based_session_syncing: true,
+  url_based_session_syncing: true
 )
-
 res = s.instance_settings.update(request: req)
 
 if res.status_code == 200
@@ -113,16 +111,15 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::UpdateInstanceRestrictionsRequest.new(
   allowlist: false,
   blocklist: true,
   block_email_subaddresses: true,
-  block_disposable_email_domains: true,
+  block_disposable_email_domains: true
 )
-
 res = s.instance_settings.update_restrictions(request: req)
 
 unless res.instance_restrictions.nil?
@@ -164,13 +161,12 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::ChangeProductionInstanceDomainRequest.new(
-  home_url: 'https://www.newdomain.com',
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
+req = Models::Operations::ChangeProductionInstanceDomainRequest.new(
+  home_url: 'https://www.newdomain.com'
+)
 res = s.instance_settings.change_domain(request: req)
 
 if res.status_code == 200
@@ -208,8 +204,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::UpdateInstanceOrganizationSettingsRequest.new(
   enabled: true,
@@ -221,9 +217,8 @@ req = Models::Operations::UpdateInstanceOrganizationSettingsRequest.new(
     'automatic_suggestion',
   ],
   creator_role_id: 'creator_role',
-  domains_default_role_id: 'member_role',
+  domains_default_role_id: 'member_role'
 )
-
 res = s.instance_settings.update_organization_settings(request: req)
 
 unless res.organization_settings.nil?
@@ -261,10 +256,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.instance_settings.get_instance_protect()
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.instance_settings.get_instance_protect
 
 unless res.instance_protect.nil?
   # handle response
@@ -294,11 +288,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
-req = 
-
+req = nil
 res = s.instance_settings.update_instance_protect(request: req)
 
 unless res.instance_protect.nil?

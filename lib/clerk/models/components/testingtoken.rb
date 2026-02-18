@@ -13,11 +13,11 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :object, Models::Components::TestingTokenObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::TestingTokenObject, false) } }
+        field :object, Models::Components::TestingTokenObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::TestingTokenObject, false) } }
         # The actual token. This value is meant to be passed in the `__clerk_testing_token` query parameter with requests to the Frontend API.
         field :token, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('token'), required: true } }
         # Unix timestamp of the token's expiration time.
-        # 
+        #
         field :expires_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expires_at'), required: true } }
 
         

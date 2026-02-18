@@ -13,21 +13,21 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :object, Models::Components::WaitlistEntryObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::WaitlistEntryObject, false) } }
+        field :object, Models::Components::WaitlistEntryObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::WaitlistEntryObject, false) } }
 
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
 
         field :email_address, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address'), required: true } }
 
-        field :status, Models::Components::WaitlistEntryStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::WaitlistEntryStatus, false) } }
+        field :status, Models::Components::WaitlistEntryStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::WaitlistEntryStatus, false) } }
         # Unix timestamp of creation.
-        # 
+        #
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # Unix timestamp of last update.
-        # 
+        #
         field :updated_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
         # Indicates if the waitlist entry is locked. Locked entries are being processed in a batch action and are unavailable for other actions.
-        # 
+        #
         field :is_locked, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('is_locked') } }
 
         field :invitation, Crystalline::Nilable.new(Models::Components::WaitlistEntryInvitation), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('invitation') } }

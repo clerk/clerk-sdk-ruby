@@ -21,9 +21,8 @@ Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new
 
 req = Models::Operations::GetPublicInterstitialRequest.new(
-  frontend_api_query_parameter1: 'pub_1a2b3c4d',
+  frontend_api_query_parameter1: 'pub_1a2b3c4d'
 )
-
 res = s.miscellaneous.get_public_interstitial(request: req)
 
 if res.status_code == 200

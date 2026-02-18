@@ -21,9 +21,9 @@ module Clerk
         # Search domains by name or organization ID.
         # If the query starts with "org_", it will search by exact organization ID match.
         # Otherwise, it performs a case-insensitive partial match on the domain name.
-        # 
+        #
         # Note: An empty string or whitespace-only value is not allowed and will result in a validation error.
-        # 
+        #
         field :query, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'query', 'style': 'form', 'explode': true } }
         # Filter by exact domain names. Accepts multiple values (e.g. domains=example.com&domains=test.org).
         field :domains, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'query_param': { 'field_name': 'domains', 'style': 'form', 'explode': true } }
@@ -33,7 +33,7 @@ module Clerk
         # For example, if you want domains to be returned in descending order according to their `created_at` property, you can use `-created_at`.
         # If you don't use `+` or `-`, then `+` is implied.
         # Defaults to `-created_at`.
-        # 
+        #
         field :order_by, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'order_by', 'style': 'form', 'explode': true } }
         # Skip the first `offset` results when paginating.
         # Needs to be an integer greater or equal to zero.

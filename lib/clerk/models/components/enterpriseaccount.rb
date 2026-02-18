@@ -15,8 +15,8 @@ module Clerk
 
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # String representing the object's type. Objects of the same type share the same value.
-        # 
-        field :object, Models::Components::EnterpriseAccountObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::EnterpriseAccountObject, false) } }
+        #
+        field :object, Models::Components::EnterpriseAccountObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::EnterpriseAccountObject, false) } }
 
         field :provider, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider'), required: true } }
 
@@ -24,8 +24,8 @@ module Clerk
 
         field :email_address, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address'), required: true } }
         # The authentication protocol used to sign in.
-        # 
-        field :protocol, Crystalline::Nilable.new(Models::Components::Protocol), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('protocol'), 'decoder': Utils.enum_from_string(Models::Components::Protocol, true) } }
+        #
+        field :protocol, Crystalline::Nilable.new(Models::Components::Protocol), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('protocol'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::Protocol, true) } }
 
         field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
 
@@ -41,7 +41,7 @@ module Clerk
 
         field :enterprise_connection, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::EnterpriseConnection1, Models::Components::EnterpriseConnection2)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enterprise_connection') } }
         # Unix timestamp of last authentication.
-        # 
+        #
         field :last_authenticated_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_authenticated_at') } }
 
         

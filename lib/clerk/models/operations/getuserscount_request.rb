@@ -69,8 +69,8 @@ module Clerk
         # Returns users that had session activity since the given date.
         # Example: use 1700690400000 to retrieve users that had session activity from 2023-11-23 until the current day.
         # Deprecated in favor of `last_active_at_after`.
-        # 
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :last_active_at_since, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'last_active_at_since', 'style': 'form', 'explode': true } }
         # Returns users who have been created before the given date (with millisecond precision).
         # Example: use 1730160000000 to retrieve users who have been created before 2024-10-29.

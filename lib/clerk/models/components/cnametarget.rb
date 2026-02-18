@@ -17,7 +17,7 @@ module Clerk
 
         field :value, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('value'), required: true } }
         # Denotes whether this CNAME target is required to be set in order for the domain to be considered deployed.
-        # 
+        #
         field :required, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('required'), required: true } }
 
         

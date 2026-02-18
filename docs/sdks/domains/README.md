@@ -22,10 +22,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.domains.list()
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.domains.list
 
 unless res.domains.nil?
   # handle response
@@ -59,15 +58,14 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::AddDomainRequest.new(
   name: 'example.com',
   is_satellite: true,
-  proxy_url: 'https://proxy.example.com',
+  proxy_url: 'https://proxy.example.com'
 )
-
 res = s.domains.add(request: req)
 
 unless res.domain.nil?
@@ -106,9 +104,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.domains.delete(domain_id: 'domain_12345')
 
 unless res.deleted_object.nil?
@@ -153,10 +150,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.domains.update(domain_id: 'domain_12345', body: Models::Operations::UpdateDomainRequestBody.new())
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.domains.update(domain_id: 'domain_12345', body: Models::Operations::UpdateDomainRequestBody.new)
 
 unless res.domain.nil?
   # handle response

@@ -23,17 +23,16 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::CreateInvitationRequest.new(
   email_address: 'user@example.com',
   public_metadata: {
 
   },
-  redirect_url: 'https://example.com/welcome',
+  redirect_url: 'https://example.com/welcome'
 )
-
 res = s.invitations.create(request: req)
 
 unless res.invitation.nil?
@@ -71,11 +70,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
-req = Models::Operations::ListInvitationsRequest.new()
-
+req = Models::Operations::ListInvitationsRequest.new
 res = s.invitations.list(request: req)
 
 unless res.invitation_list.nil?
@@ -117,11 +115,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
-req = 
-
+req = nil
 res = s.invitations.bulk_create(request: req)
 
 unless res.invitation_list.nil?
@@ -162,9 +159,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.invitations.revoke(invitation_id: 'inv_123')
 
 unless res.invitation_revoked.nil?

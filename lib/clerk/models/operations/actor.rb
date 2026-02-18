@@ -16,7 +16,7 @@ module Clerk
         # The ID of the actor.
         field :sub, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sub'), required: true } }
 
-        field :additional_properties, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('additional_properties') } }
+        field :additional_properties, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('additional_properties'), 'additional_properties': true } }
 
         
         def initialize(sub:, additional_properties: nil)

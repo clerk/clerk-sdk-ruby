@@ -13,11 +13,11 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::SAMLAccountVerificationSAMLStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::SAMLAccountVerificationSAMLStatus, false) } }
+        field :status, Models::Components::SAMLAccountVerificationSAMLStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SAMLAccountVerificationSAMLStatus, false) } }
 
-        field :strategy, Models::Components::SAMLAccountVerificationSAMLStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.enum_from_string(Models::Components::SAMLAccountVerificationSAMLStrategy, false) } }
+        field :strategy, Models::Components::SAMLAccountVerificationSAMLStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SAMLAccountVerificationSAMLStrategy, false) } }
 
-        field :object, Crystalline::Nilable.new(Models::Components::SAMLAccountVerificationSAMLObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::SAMLAccountVerificationSAMLObject, true) } }
+        field :object, Crystalline::Nilable.new(Models::Components::SAMLAccountVerificationSAMLObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SAMLAccountVerificationSAMLObject, true) } }
 
         field :attempts, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attempts'), required: true } }
 

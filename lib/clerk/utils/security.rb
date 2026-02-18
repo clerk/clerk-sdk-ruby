@@ -37,6 +37,16 @@ module Clerk
 
     
     def self._parse_security_option(req, option)
+      # Check if this option uses basic auth (needs the whole object, not individual fields)
+      first_field = option.fields.first
+      if first_field
+        first_meta = first_field.metadata[:security]
+        if first_meta && first_meta[:type] == 'http' && first_meta[:sub_type] == 'basic'
+          _parse_security_scheme(req, first_meta, option)
+          return
+        end
+      end
+
       option.fields.each do |opt_field|
         metadata = opt_field.metadata[:security]
         next if metadata.nil? || !metadata.include?(:scheme)

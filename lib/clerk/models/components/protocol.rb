@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Components
       # Protocol - The authentication protocol used to sign in.
-      # 
+      #
       class Protocol
         include ::Crystalline::Enum
         enums do

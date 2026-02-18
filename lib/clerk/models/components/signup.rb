@@ -13,11 +13,11 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :object, Models::Components::SignUpObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::SignUpObject, false) } }
+        field :object, Models::Components::SignUpObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SignUpObject, false) } }
 
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
 
-        field :status, Models::Components::SignUpStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::SignUpStatus, false) } }
+        field :status, Models::Components::SignUpStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SignUpStatus, false) } }
 
         field :required_fields, Crystalline::Array.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('required_fields'), required: true } }
 
@@ -33,7 +33,7 @@ module Clerk
 
         field :custom_action, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('custom_action'), required: true } }
         # Unix timestamp at which the user abandoned the sign up attempt.
-        # 
+        #
         field :abandon_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('abandon_at'), required: true } }
 
         field :username, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('username'), required: true } }
@@ -58,9 +58,9 @@ module Clerk
 
         field :created_user_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_user_id'), required: true } }
         # Unix timestamp at which the user accepted the legal requirements.
-        # 
+        #
         field :legal_accepted_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('legal_accepted_at'), required: true } }
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :external_account, Crystalline::Nilable.new(Models::Components::SignUpExternalAccount), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('external_account') } }
         # The user locale preference for the sign-up specified as a BCP-47 language tag.
         field :locale, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('locale') } }

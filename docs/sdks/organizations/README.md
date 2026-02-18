@@ -29,8 +29,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::ListOrganizationsRequest.new(
   query: 'false',
@@ -39,9 +39,8 @@ req = Models::Operations::ListOrganizationsRequest.new(
   ],
   organization_id: [
     '-name',
-  ],
+  ]
 )
-
 res = s.organizations.list(request: req)
 
 unless res.organizations.nil?
@@ -88,22 +87,21 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::CreateOrganizationRequest.new(
   name: 'NewOrg',
   created_by: 'user_123',
   private_metadata: {
-    "internal_code": 'ABC123',
+    'internal_code' => 'ABC123',
   },
   public_metadata: {
-    "public_event": 'Annual Summit',
+    'public_event' => 'Annual Summit',
   },
   slug: 'neworg',
-  max_allowed_memberships: 100,
+  max_allowed_memberships: 100
 )
-
 res = s.organizations.create(request: req)
 
 unless res.organization.nil?
@@ -141,9 +139,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organizations.get(organization_id: 'org_123')
 
 unless res.organization.nil?
@@ -183,10 +180,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.organizations.update(organization_id: 'org_123_update', body: Models::Operations::UpdateOrganizationRequestBody.new())
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.organizations.update(organization_id: 'org_123_update', body: Models::Operations::UpdateOrganizationRequestBody.new)
 
 unless res.organization.nil?
   # handle response
@@ -229,9 +225,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organizations.delete(organization_id: 'org_321_delete')
 
 unless res.deleted_object.nil?
@@ -272,10 +267,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.organizations.merge_metadata(organization_id: 'org_12345', body: Models::Operations::MergeOrganizationMetadataRequestBody.new())
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.organizations.merge_metadata(organization_id: 'org_12345', body: Models::Operations::MergeOrganizationMetadataRequestBody.new)
 
 unless res.organization.nil?
   # handle response
@@ -316,15 +310,14 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organizations.upload_logo(organization_id: 'org_12345', body: Models::Operations::UploadOrganizationLogoRequestBody.new(
   uploader_user_id: 'user_67890',
   file: Models::Operations::UploadOrganizationLogoFile.new(
     file_name: 'example.file',
-    content: File.binread("example.file"),
-  ),
+    content: File.binread('example.file')
+  )
 ))
 
 unless res.organization_with_logo.nil?
@@ -363,9 +356,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organizations.delete_logo(organization_id: 'org_12345')
 
 unless res.organization.nil?
@@ -405,9 +397,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organizations.get_billing_subscription(organization_id: '<id>')
 
 unless res.commerce_subscription.nil?

@@ -21,9 +21,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.redirect_urls.list(limit: 10, offset: 0)
 
 unless res.redirect_url_list.nil?
@@ -62,13 +61,12 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::CreateRedirectURLRequest.new(
-  url: 'https://my-app.com/oauth-callback',
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
+req = Models::Operations::CreateRedirectURLRequest.new(
+  url: 'https://my-app.com/oauth-callback'
+)
 res = s.redirect_urls.create(request: req)
 
 unless res.redirect_url.nil?
@@ -106,9 +104,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.redirect_urls.get(id: 'redir_01FG4K9G5NWSQ4ZPT4TQE4Z7G3')
 
 unless res.redirect_url.nil?
@@ -146,9 +143,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.redirect_urls.delete(id: 'redir_01FG4K9G5NWSQ4ZPT4TQE4Z7G3')
 
 unless res.deleted_object.nil?

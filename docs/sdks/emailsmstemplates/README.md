@@ -27,9 +27,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.email_sms_templates.list(template_type: Models::Operations::GetTemplateListTemplateType::EMAIL, limit: 10, offset: 0)
 
 unless res.template_list.nil?
@@ -72,9 +71,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.email_sms_templates.get(template_type: Models::Operations::GetTemplateTemplateType::EMAIL, slug: 'welcome-email')
 
 unless res.template.nil?
@@ -115,9 +113,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.email_sms_templates.revert(template_type: Models::Operations::RevertTemplateTemplateType::EMAIL, slug: 'welcome-email')
 
 unless res.template.nil?
@@ -160,11 +157,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.email_sms_templates.toggle_template_delivery(template_type: Models::Operations::ToggleTemplateDeliveryTemplateType::EMAIL, slug: 'welcome-email', body: Models::Operations::ToggleTemplateDeliveryRequestBody.new(
-  delivered_by_clerk: true,
+  delivered_by_clerk: true
 ))
 
 unless res.template.nil?

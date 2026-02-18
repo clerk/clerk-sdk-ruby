@@ -173,7 +173,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, true, :request, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -311,10 +311,10 @@ module Clerk
       # Creates multiple waitlist entries for the provided email addresses.
       # You can choose whether to send confirmation emails by setting the `notify` parameter to `true` or `false` for each entry.
       # If the `notify` parameter is omitted, it defaults to `true`.
-      # 
+      #
       # If an email address is already on the waitlist, no new entry will be created and the existing waitlist entry will be returned.
       # Duplicate email addresses within the same request are not allowed.
-      # 
+      #
       # This endpoint is limited to a maximum of 50 entries per API call. If you need to add more entries, please make multiple requests.
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
@@ -324,7 +324,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, true, :request, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -618,7 +618,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
