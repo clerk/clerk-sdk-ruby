@@ -22,10 +22,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.organization_domains.create(organization_id: '<id>', body: Models::Operations::CreateOrganizationDomainRequestBody.new())
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.organization_domains.create(organization_id: '<id>', body: Models::Operations::CreateOrganizationDomainRequestBody.new)
 
 unless res.organization_domain.nil?
   # handle response
@@ -63,13 +62,12 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::ListOrganizationDomainsRequest.new(
-  organization_id: '<id>',
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
+req = Models::Operations::ListOrganizationDomainsRequest.new(
+  organization_id: '<id>'
+)
 res = s.organization_domains.list(request: req)
 
 unless res.organization_domains.nil?
@@ -107,10 +105,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.organization_domains.update(organization_id: '<id>', domain_id: '<id>', body: Models::Operations::UpdateOrganizationDomainRequestBody.new())
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.organization_domains.update(organization_id: '<id>', domain_id: '<id>', body: Models::Operations::UpdateOrganizationDomainRequestBody.new)
 
 unless res.organization_domain.nil?
   # handle response
@@ -149,9 +146,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organization_domains.delete(organization_id: '<id>', domain_id: '<id>')
 
 unless res.deleted_object.nil?
@@ -196,11 +192,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
-req = Models::Operations::ListAllOrganizationDomainsRequest.new()
-
+req = Models::Operations::ListAllOrganizationDomainsRequest.new
 res = s.organization_domains.list_all(request: req)
 
 unless res.organization_domains.nil?

@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :object, Models::Components::DomainObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::DomainObject, false) } }
+        field :object, Models::Components::DomainObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::DomainObject, false) } }
 
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
 
@@ -25,7 +25,7 @@ module Clerk
 
         field :development_origin, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('development_origin'), required: true } }
         # Null for satellite domains.
-        # 
+        #
         field :accounts_portal_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('accounts_portal_url') } }
 
         field :proxy_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('proxy_url') } }

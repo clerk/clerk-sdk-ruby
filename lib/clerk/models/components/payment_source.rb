@@ -13,13 +13,13 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        field :object, Models::Components::ObjectCommerceSource, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::ObjectCommerceSource, false) } }
+        field :object, Models::Components::ObjectCommerceSource, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::ObjectCommerceSource, false) } }
         # Unique identifier for the payment source.
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # Unique identifier for the payer.
         field :payer_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payer_id'), required: true } }
         # The payment method type.
-        field :payment_method, Models::Components::PaymentMethod, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payment_method'), required: true, 'decoder': Utils.enum_from_string(Models::Components::PaymentMethod, false) } }
+        field :payment_method, Models::Components::PaymentMethod, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payment_method'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::PaymentMethod, false) } }
         # The payment gateway.
         field :gateway, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('gateway'), required: true } }
         # External ID in the payment gateway.
@@ -27,7 +27,7 @@ module Clerk
         # Last 4 digits of the card (for card payment sources).
         field :last4, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last4'), required: true } }
         # Status of the payment source.
-        field :status, Models::Components::StatusCommerceSource, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::StatusCommerceSource, false) } }
+        field :status, Models::Components::StatusCommerceSource, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::StatusCommerceSource, false) } }
         # Type of wallet (if applicable).
         field :wallet_type, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('wallet_type'), required: true } }
         # Type of card (if applicable).

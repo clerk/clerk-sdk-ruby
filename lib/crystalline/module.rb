@@ -11,9 +11,9 @@ module Crystalline
   end
 
   def self.to_dict(complex)
-    if complex.is_a? Array
+    if complex.is_a? ::Array
       complex.map { |v| Crystalline.to_dict(v) }
-    elsif complex.is_a? Hash
+    elsif complex.is_a? ::Hash
       complex.transform_values { |v| Crystalline.to_dict(v) }
     elsif complex.respond_to?(:class) && complex.class.include?(::Crystalline::MetadataFields)
       complex.to_dict
@@ -66,7 +66,7 @@ module Crystalline
     if val.class.respond_to? :enums
       val.serialize
     elsif val.is_a? DateTime
-      val.strftime('%Y-%m-%dT%H:%M:%S.%NZ')
+      val.strftime('%Y-%m-%dT%H:%M:%S.%NZ').sub(/(\.\d*[1-9])0+Z\z/, '\1Z').sub(/\.0+Z\z/, 'Z')
     elsif val.nil?
       nil
     elsif primitives

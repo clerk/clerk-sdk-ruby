@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :object, Models::Components::RoleSetItemObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::RoleSetItemObject, false) } }
+        field :object, Models::Components::RoleSetItemObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::RoleSetItemObject, false) } }
         # The unique identifier of the role
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # The name of the role

@@ -24,7 +24,7 @@ module Clerk
         # The IP address of the request.
         field :request_originating_ip, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('request_originating_ip') } }
         # The format of the response.
-        field :format, Crystalline::Nilable.new(Models::Operations::Format), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('format'), 'decoder': Utils.enum_from_string(Models::Operations::Format, true) } }
+        field :format, Crystalline::Nilable.new(Models::Operations::Format), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('format'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::Format, true) } }
 
         
         def initialize(expired_token:, refresh_token:, request_origin:, request_headers: nil, request_originating_ip: nil, format: Models::Operations::Format::TOKEN)

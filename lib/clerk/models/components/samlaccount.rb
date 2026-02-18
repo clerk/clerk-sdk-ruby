@@ -15,8 +15,8 @@ module Clerk
 
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # String representing the object's type. Objects of the same type share the same value.
-        # 
-        field :object, Models::Components::SAMLAccountObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::SAMLAccountObject, false) } }
+        #
+        field :object, Models::Components::SAMLAccountObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SAMLAccountObject, false) } }
 
         field :provider, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider'), required: true } }
 
@@ -34,7 +34,7 @@ module Clerk
 
         field :provider_user_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider_user_id') } }
         # Unix timestamp of last authentication.
-        # 
+        #
         field :last_authenticated_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_authenticated_at') } }
 
         field :saml_connection, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::SAMLConnection1, Models::Components::SAMLConnection2)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('saml_connection') } }

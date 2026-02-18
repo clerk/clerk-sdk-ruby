@@ -18,8 +18,8 @@ module Clerk
         # An array of redirect URIs of the new OAuth application
         field :redirect_uris, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('redirect_uris') } }
         # The new callback URL of the OAuth application
-        # 
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :callback_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('callback_url') } }
         # True to enable a consent screen to display in the authentication flow. This cannot be disabled for dynamically registered OAuth Applications.
         field :consent_screen_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('consent_screen_enabled') } }

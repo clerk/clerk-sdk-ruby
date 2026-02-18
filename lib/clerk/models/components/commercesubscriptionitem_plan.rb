@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        field :object, Models::Components::CommerceSubscriptionItemObjectCommercePlan, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::CommerceSubscriptionItemObjectCommercePlan, false) } }
+        field :object, Models::Components::CommerceSubscriptionItemObjectCommercePlan, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::CommerceSubscriptionItemObjectCommercePlan, false) } }
         # Unique identifier for the plan.
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # The name of the plan.
@@ -21,8 +21,8 @@ module Clerk
 
         field :fee, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('fee'), required: true } }
         # The ID of the product this plan belongs to.
-        # 
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :product_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('product_id'), required: true } }
         # Whether this is the default plan.
         field :is_default, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('is_default'), required: true } }

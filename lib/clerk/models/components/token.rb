@@ -13,10 +13,10 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        # 
-        field :object, Models::Components::TokenObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::TokenObject, false) } }
+        #
+        field :object, Models::Components::TokenObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::TokenObject, false) } }
         # String representing the encoded JSON Web Token (JWT) value.
-        # 
+        #
         field :jwt, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('jwt'), required: true } }
 
         

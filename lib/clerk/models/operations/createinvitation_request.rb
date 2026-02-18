@@ -22,7 +22,7 @@ module Clerk
         # This is only required if you have implemented a [custom flow](https://clerk.com/docs/authentication/invitations#custom-flow) and you're not using Clerk Hosted Pages or Clerk Components.
         field :redirect_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('redirect_url') } }
         # The slug of the email template to use for the invitation email.
-        field :template_slug, Crystalline::Nilable.new(Models::Operations::CreateInvitationTemplateSlug), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('template_slug'), 'decoder': Utils.enum_from_string(Models::Operations::CreateInvitationTemplateSlug, true) } }
+        field :template_slug, Crystalline::Nilable.new(Models::Operations::CreateInvitationTemplateSlug), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('template_slug'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::CreateInvitationTemplateSlug, true) } }
         # The number of days the invitation will be valid for. By default, the invitation expires after 30 days.
         field :expires_in_days, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expires_in_days') } }
         # Optional flag which denotes whether an email invitation should be sent to the given email address.

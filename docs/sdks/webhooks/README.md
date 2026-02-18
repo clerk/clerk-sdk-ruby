@@ -20,10 +20,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.webhooks.create_svix_app()
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.webhooks.create_svix_app
 
 unless res.svix_url.nil?
   # handle response
@@ -54,10 +53,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.webhooks.delete_svix_app()
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.webhooks.delete_svix_app
 
 if res.status_code == 200
   # handle response
@@ -88,10 +86,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.webhooks.generate_svix_auth_url()
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.webhooks.generate_svix_auth_url
 
 unless res.svix_url.nil?
   # handle response

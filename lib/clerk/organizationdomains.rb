@@ -60,7 +60,7 @@ module Clerk
       headers['content-type'] = req_content_type
       raise StandardError, 'request body is required' if data.nil? && form.nil?
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -355,7 +355,7 @@ module Clerk
       headers['content-type'] = req_content_type
       raise StandardError, 'request body is required' if data.nil? && form.nil?
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -635,10 +635,10 @@ module Clerk
       # Retrieves a list of all organization domains within the current instance.
       # This endpoint can be used to list all domains across all organizations
       # or filter domains by organization, verification status, enrollment mode, or search query.
-      # 
+      #
       # The response includes pagination information and details about each domain
       # including its verification status, enrollment mode, and associated counts.
-      # 
+      #
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
       url = "#{base_url}/organization_domains"

@@ -13,12 +13,12 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        # 
-        field :object, Models::Components::PasskeyObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::PasskeyObject, false) } }
+        #
+        field :object, Models::Components::PasskeyObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::PasskeyObject, false) } }
 
         field :name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name'), required: true } }
         # Unix timestamp of when the passkey was last used.
-        # 
+        #
         field :last_used_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_used_at'), required: true } }
 
         field :id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id') } }

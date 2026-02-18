@@ -26,9 +26,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.role_sets.list(order_by: '-created_at', limit: 10, offset: 0)
 
 unless res.role_sets.nil?
@@ -71,8 +70,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::CreateRoleSetRequest.new(
   name: '<value>',
@@ -81,9 +80,8 @@ req = Models::Operations::CreateRoleSetRequest.new(
   roles: [
     '<value 1>',
     '<value 2>',
-  ],
+  ]
 )
-
 res = s.role_sets.create(request: req)
 
 unless res.role_set.nil?
@@ -121,9 +119,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.role_sets.get(role_set_key_or_id: '<id>')
 
 unless res.role_set.nil?
@@ -163,10 +160,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.role_sets.update(role_set_key_or_id: '<id>', body: Models::Operations::UpdateRoleSetRequestBody.new())
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.role_sets.update(role_set_key_or_id: '<id>', body: Models::Operations::UpdateRoleSetRequestBody.new)
 
 unless res.role_set.nil?
   # handle response
@@ -206,11 +202,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.role_sets.replace(role_set_key_or_id: '<id>', body: Models::Operations::ReplaceRoleSetRequestBody.new(
-  dest_role_set_key: '<value>',
+  dest_role_set_key: '<value>'
 ))
 
 unless res.deleted_object.nil?
@@ -250,14 +245,13 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.role_sets.add_roles(role_set_key_or_id: '<id>', body: Models::Operations::AddRolesToRoleSetRequestBody.new(
   role_keys: [
     '<value 1>',
     '<value 2>',
-  ],
+  ]
 ))
 
 unless res.role_set.nil?
@@ -297,12 +291,11 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.role_sets.replace_role(role_set_key_or_id: '<id>', body: Models::Operations::ReplaceRoleInRoleSetRequestBody.new(
   role_key: '<value>',
-  to_role_key: '<value>',
+  to_role_key: '<value>'
 ))
 
 unless res.role_set.nil?

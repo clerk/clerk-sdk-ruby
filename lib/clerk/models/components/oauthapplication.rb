@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :object, Models::Components::OAuthApplicationObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::OAuthApplicationObject, false) } }
+        field :object, Models::Components::OAuthApplicationObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::OAuthApplicationObject, false) } }
 
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
 
@@ -35,9 +35,9 @@ module Clerk
 
         field :redirect_uris, Crystalline::Array.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('redirect_uris'), required: true } }
         # Deprecated: Use redirect_uris instead.
-        # 
-        # 
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        #
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :callback_url, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('callback_url'), required: true } }
 
         field :authorize_url, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('authorize_url'), required: true } }
@@ -50,10 +50,10 @@ module Clerk
 
         field :token_introspection_url, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('token_introspection_url'), required: true } }
         # Unix timestamp of creation.
-        # 
+        #
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # Unix timestamp of last update.
-        # 
+        #
         field :updated_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
 
         field :client_uri, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('client_uri'), required: true } }

@@ -13,11 +13,11 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::PhoneNumberVerificationOtpStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::PhoneNumberVerificationOtpStatus, false) } }
+        field :status, Models::Components::PhoneNumberVerificationOtpStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::PhoneNumberVerificationOtpStatus, false) } }
 
-        field :strategy, Models::Components::PhoneNumberVerificationOtpStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.open_enum_from_string(Models::Components::PhoneNumberVerificationOtpStrategy, false) } }
+        field :strategy, Models::Components::PhoneNumberVerificationOtpStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': ::Clerk::Utils.open_enum_from_string(Models::Components::PhoneNumberVerificationOtpStrategy, false) } }
 
-        field :object, Crystalline::Nilable.new(Models::Components::PhoneNumberVerificationOtpObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::PhoneNumberVerificationOtpObject, true) } }
+        field :object, Crystalline::Nilable.new(Models::Components::PhoneNumberVerificationOtpObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::PhoneNumberVerificationOtpObject, true) } }
 
         field :attempts, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attempts'), required: true } }
 

@@ -13,11 +13,11 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::EmailAddressVerificationTicketStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::EmailAddressVerificationTicketStatus, false) } }
+        field :status, Models::Components::EmailAddressVerificationTicketStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::EmailAddressVerificationTicketStatus, false) } }
 
-        field :strategy, Models::Components::EmailAddressVerificationTicketStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.open_enum_from_string(Models::Components::EmailAddressVerificationTicketStrategy, false) } }
+        field :strategy, Models::Components::EmailAddressVerificationTicketStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': ::Clerk::Utils.open_enum_from_string(Models::Components::EmailAddressVerificationTicketStrategy, false) } }
 
-        field :object, Crystalline::Nilable.new(Models::Components::EmailAddressVerificationTicketObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::EmailAddressVerificationTicketObject, true) } }
+        field :object, Crystalline::Nilable.new(Models::Components::EmailAddressVerificationTicketObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::EmailAddressVerificationTicketObject, true) } }
 
         field :attempts, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attempts'), required: true } }
 

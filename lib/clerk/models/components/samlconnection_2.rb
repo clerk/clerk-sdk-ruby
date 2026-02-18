@@ -25,12 +25,12 @@ module Clerk
 
         field :sync_user_attributes, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sync_user_attributes'), required: true } }
         # Unix timestamp of creation.
-        # 
+        #
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # Unix timestamp of last update.
-        # 
+        #
         field :updated_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :domain, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('domain') } }
 
         field :allow_subdomains, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allow_subdomains') } }

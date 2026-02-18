@@ -26,9 +26,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.oauth_applications.list(limit: 10, offset: 0, order_by: '+created_at')
 
 unless res.o_auth_applications.nil?
@@ -71,14 +70,13 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::CreateOAuthApplicationRequest.new(
   name: 'Example App',
-  scopes: 'profile email public_metadata',
+  scopes: 'profile email public_metadata'
 )
-
 res = s.oauth_applications.create(request: req)
 
 unless res.o_auth_application_with_secret.nil?
@@ -116,9 +114,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.oauth_applications.get(oauth_application_id: 'oauth_app_12345')
 
 unless res.o_auth_application.nil?
@@ -156,11 +153,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.oauth_applications.update(oauth_application_id: 'oauth_app_67890', body: Models::Operations::UpdateOAuthApplicationRequestBody.new(
-  scopes: 'profile email public_metadata private_metadata',
+  scopes: 'profile email public_metadata private_metadata'
 ))
 
 unless res.o_auth_application.nil?
@@ -200,9 +196,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.oauth_applications.delete(oauth_application_id: 'oauth_app_09876')
 
 unless res.deleted_object.nil?
@@ -241,9 +236,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.oauth_applications.rotate_secret(oauth_application_id: 'oauth_application_12345')
 
 unless res.o_auth_application_with_secret.nil?

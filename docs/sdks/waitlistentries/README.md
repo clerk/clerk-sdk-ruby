@@ -25,11 +25,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
-req = Models::Operations::ListWaitlistEntriesRequest.new()
-
+req = Models::Operations::ListWaitlistEntriesRequest.new
 res = s.waitlist_entries.list(request: req)
 
 unless res.waitlist_entries.nil?
@@ -67,11 +66,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
-req = 
-
+req = nil
 res = s.waitlist_entries.create(request: req)
 
 unless res.waitlist_entry.nil?
@@ -116,11 +114,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
-req = 
-
+req = nil
 res = s.waitlist_entries.bulk_create(request: req)
 
 unless res.waitlist_entry_list.nil?
@@ -158,9 +155,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.waitlist_entries.delete(waitlist_entry_id: '<id>')
 
 unless res.deleted_object.nil?
@@ -198,9 +194,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.waitlist_entries.invite(waitlist_entry_id: '<id>')
 
 unless res.waitlist_entry.nil?
@@ -239,9 +234,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.waitlist_entries.reject(waitlist_entry_id: '<id>')
 
 unless res.waitlist_entry.nil?

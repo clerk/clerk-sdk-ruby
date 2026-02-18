@@ -13,8 +13,8 @@ module Clerk
         include Crystalline::MetadataFields
 
         # Please use `frontend_api` instead
-        # 
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :frontend_api_query_parameter, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'frontendApi', 'style': 'form', 'explode': true } }
         # The Frontend API key of your instance
         field :frontend_api_query_parameter1, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'frontend_api', 'style': 'form', 'explode': true } }

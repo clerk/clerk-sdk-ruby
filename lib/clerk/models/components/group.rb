@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        field :object, Models::Components::ObjectCommerceStatementGroup, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::ObjectCommerceStatementGroup, false) } }
+        field :object, Models::Components::ObjectCommerceStatementGroup, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::ObjectCommerceStatementGroup, false) } }
         # Unix timestamp (in milliseconds) of the date the group's payment attempts were created
         field :timestamp, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('timestamp'), required: true } }
         # The payment attempts included in the group

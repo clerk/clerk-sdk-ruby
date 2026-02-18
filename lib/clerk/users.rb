@@ -178,11 +178,11 @@ module Clerk
     def create(request:, retries: nil, timeout_ms: nil)
       # create - Create a new user
       # Creates a new user. Your user management settings determine how you should setup your user model.
-      # 
+      #
       # Any email address and phone number created using this method will be marked as verified.
-      # 
+      #
       # Note: If you are performing a migration, check out our guide on [zero downtime migrations](https://clerk.com/docs/deployments/migrate-overview).
-      # 
+      #
       # The following rate limit rules apply to this endpoint: 1000 requests per 10 seconds for production instances and 100 requests per 10 seconds for development instances
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
@@ -193,7 +193,7 @@ module Clerk
       headers['content-type'] = req_content_type
       raise StandardError, 'request body is required' if data.nil? && form.nil?
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -605,14 +605,14 @@ module Clerk
     def update(body:, user_id:, retries: nil, timeout_ms: nil)
       # update - Update a user
       # Update a user's attributes.
-      # 
+      #
       # You can set the user's primary contact identifiers (email address and phone numbers) by updating the `primary_email_address_id` and `primary_phone_number_id` attributes respectively.
       # Both IDs should correspond to verified identifications that belong to the user.
-      # 
+      #
       # You can remove a user's username by setting the username attribute to null or the blank string "".
       # This is a destructive action; the identification will be deleted forever.
       # Usernames can be removed only if they are optional in your instance settings and there's at least one other identifier which can be used for authentication.
-      # 
+      #
       # This endpoint allows changing a user's password. When passing the `password` parameter directly you have two further options.
       # You can ignore the password policy checks for your instance by setting the `skip_password_checks` parameter to `true`.
       # You can also choose to sign the user out of all their active sessions on any device once the password is updated. Just set `sign_out_of_other_sessions` to `true`.
@@ -634,7 +634,7 @@ module Clerk
       headers['content-type'] = req_content_type
       raise StandardError, 'request body is required' if data.nil? && form.nil?
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -1202,7 +1202,7 @@ module Clerk
       headers['content-type'] = req_content_type
       raise StandardError, 'request body is required' if data.nil? && form.nil?
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -1347,7 +1347,7 @@ module Clerk
       headers['content-type'] = req_content_type
       raise StandardError, 'request body is required' if data.nil? && form.nil?
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -1784,7 +1784,7 @@ module Clerk
       headers['content-type'] = req_content_type
       raise StandardError, 'request body is required' if data.nil? && form.nil?
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -2061,12 +2061,12 @@ module Clerk
     def update_metadata(user_id:, body: nil, retries: nil, timeout_ms: nil)
       # update_metadata - Merge and update a user's metadata
       # Update a user's metadata attributes by merging existing values with the provided parameters.
-      # 
+      #
       # This endpoint behaves differently than the *Update a user* endpoint.
       # Metadata values will not be replaced entirely.
       # Instead, a deep merge will be performed.
       # Deep means that any nested JSON objects will be merged as well.
-      # 
+      #
       # You can remove metadata keys at any level by setting their value to `null`.
       request = Models::Operations::UpdateUserMetadataRequest.new(
         user_id: user_id,
@@ -2085,7 +2085,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -2829,7 +2829,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -2985,7 +2985,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -4077,7 +4077,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)

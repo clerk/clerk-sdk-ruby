@@ -13,8 +13,8 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        # 
-        field :object, Models::Components::SessionObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::SessionObject, false) } }
+        #
+        field :object, Models::Components::SessionObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SessionObject, false) } }
 
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
 
@@ -22,20 +22,20 @@ module Clerk
 
         field :client_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('client_id'), required: true } }
 
-        field :status, Models::Components::SessionStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::SessionStatus, false) } }
+        field :status, Models::Components::SessionStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SessionStatus, false) } }
 
         field :last_active_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_active_at'), required: true } }
         # Unix timestamp of expiration.
-        # 
+        #
         field :expire_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expire_at'), required: true } }
         # Unix timestamp of abandonment.
-        # 
+        #
         field :abandon_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('abandon_at'), required: true } }
         # Unix timestamp of last update.
-        # 
+        #
         field :updated_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
         # Unix timestamp of creation.
-        # 
+        #
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
 
         field :actor, Crystalline::Nilable.new(Models::Components::SessionActor), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('actor') } }

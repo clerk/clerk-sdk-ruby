@@ -29,11 +29,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
-req = Models::Operations::ListInstanceOrganizationInvitationsRequest.new()
-
+req = Models::Operations::ListInstanceOrganizationInvitationsRequest.new
 res = s.organization_invitations.get_all(request: req)
 
 unless res.organization_invitations_with_public_organization_data.nil?
@@ -87,20 +86,19 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organization_invitations.create(organization_id: 'org_12345', body: Models::Operations::CreateOrganizationInvitationRequestBody.new(
   email_address: 'user@example.com',
   inviter_user_id: 'user_67890',
   role: 'admin',
   public_metadata: {
-    "key": 'value',
+    'key' => 'value',
   },
   private_metadata: {
-    "private_key": 'secret_value',
+    'private_key' => 'secret_value',
   },
-  redirect_url: 'https://example.com/welcome',
+  redirect_url: 'https://example.com/welcome'
 ))
 
 unless res.organization_invitation.nil?
@@ -144,13 +142,12 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::ListOrganizationInvitationsRequest.new(
-  organization_id: 'org_12345',
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
+req = Models::Operations::ListOrganizationInvitationsRequest.new(
+  organization_id: 'org_12345'
+)
 res = s.organization_invitations.list(request: req)
 
 unless res.organization_invitations.nil?
@@ -203,9 +200,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organization_invitations.bulk_create(organization_id: 'org_12345', body: [
   Models::Operations::CreateOrganizationInvitationBulkRequestBody.new(
     email_address: 'newmember@example.com',
@@ -217,7 +213,7 @@ res = s.organization_invitations.bulk_create(organization_id: 'org_12345', body:
     private_metadata: {
 
     },
-    redirect_url: 'https://example.com/welcome',
+    redirect_url: 'https://example.com/welcome'
   ),
 ])
 
@@ -264,9 +260,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organization_invitations.list_pending(organization_id: 'org_12345', limit: 10, offset: 0)
 
 unless res.organization_invitations.nil?
@@ -306,9 +301,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organization_invitations.get(organization_id: 'org_123456789', invitation_id: 'inv_987654321')
 
 unless res.organization_invitation.nil?
@@ -351,11 +345,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.organization_invitations.revoke(organization_id: 'org_123456', invitation_id: 'inv_123456', body: Models::Operations::RevokeOrganizationInvitationRequestBody.new(
-  requesting_user_id: 'usr_12345',
+  requesting_user_id: 'usr_12345'
 ))
 
 unless res.organization_invitation.nil?

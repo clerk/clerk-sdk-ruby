@@ -19,9 +19,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.sign_ups.get(id: '<id>')
 
 unless res.sign_up.nil?
@@ -59,12 +58,11 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.sign_ups.update(id: 'signup_1234567890abcdef', body: Models::Operations::UpdateSignUpRequestBody.new(
   external_id: 'ext_id_7890abcdef123456',
-  custom_action: false,
+  custom_action: false
 ))
 
 unless res.sign_up.nil?

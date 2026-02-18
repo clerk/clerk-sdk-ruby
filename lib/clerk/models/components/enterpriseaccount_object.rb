@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Components
       # EnterpriseAccountObject - String representing the object's type. Objects of the same type share the same value.
-      # 
+      #
       class EnterpriseAccountObject
         include ::Crystalline::Enum
         enums do

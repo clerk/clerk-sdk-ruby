@@ -1,0 +1,16 @@
+inherit_from: .rubocop.yml
+
+# Re-enable Style/StringLiterals for strict linting (e.g. internal CI).
+# The base .rubocop.yml disables this rule so customers with single-quote
+# conventions aren't broken. Use RUBOCOP_OPTS="--config .rubocop-strict.yml"
+# to opt in to enforcement.
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+  Exclude:
+    - Gemfile
+    - "*.gemspec"
+    - lib/crystalline.rb
+    - lib/crystalline/**/*
+    - lib/**/sdk_hooks/**/*
+    - sorbet/**/*

@@ -197,7 +197,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, true, :request, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -496,7 +496,7 @@ module Clerk
       headers['content-type'] = req_content_type
       raise StandardError, 'request body is required' if data.nil? && form.nil?
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -634,7 +634,7 @@ module Clerk
       # Deletes the given organization.
       # Please note that deleting an organization will also delete all memberships and invitations.
       # This is not reversible.
-      # 
+      #
       # After the organization is deleted, any user's active sessions that contain the deleted
       # organization will be cleared.
       request = Models::Operations::DeleteOrganizationRequest.new(
@@ -799,7 +799,7 @@ module Clerk
       headers['content-type'] = req_content_type
       raise StandardError, 'request body is required' if data.nil? && form.nil?
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -955,7 +955,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :multipart)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)

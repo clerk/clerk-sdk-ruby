@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        field :object, Models::Components::BillingPaymentAttemptObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::BillingPaymentAttemptObject, false) } }
+        field :object, Models::Components::BillingPaymentAttemptObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::BillingPaymentAttemptObject, false) } }
         # Unique identifier for the payment attempt.
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # Unique identifier for the associated payment.
@@ -39,7 +39,7 @@ module Clerk
         # Unique identifier for the associated statement.
         field :statement_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('statement_id'), required: true } }
         # The current status of the payment attempt.
-        field :status, Models::Components::BillingPaymentAttemptStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::BillingPaymentAttemptStatus, false) } }
+        field :status, Models::Components::BillingPaymentAttemptStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::BillingPaymentAttemptStatus, false) } }
         # Unix timestamp (in milliseconds) when the payment attempt was created.
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # Unix timestamp (in milliseconds) when the payment attempt was last updated.

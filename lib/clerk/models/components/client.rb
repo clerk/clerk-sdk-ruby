@@ -13,30 +13,30 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        # 
-        field :object, Models::Components::ClientObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::ClientObject, false) } }
+        #
+        field :object, Models::Components::ClientObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::ClientObject, false) } }
         # String representing the identifier of the session.
-        # 
+        #
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
 
         field :session_ids, Crystalline::Array.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('session_ids'), required: true } }
 
         field :sessions, Crystalline::Array.new(Models::Components::Session), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sessions'), required: true } }
         # Unix timestamp of last update.
-        # 
+        #
         field :updated_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
         # Unix timestamp of creation.
-        # 
+        #
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
 
         field :sign_in_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sign_in_id'), required: true } }
 
         field :sign_up_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sign_up_id'), required: true } }
         # Last active session_id.
-        # 
+        #
         field :last_active_session_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_active_session_id'), required: true } }
         # The authentication strategy that was last used to authenticate the user on this client.
-        # 
+        #
         field :last_authentication_strategy, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_authentication_strategy'), required: true } }
 
         

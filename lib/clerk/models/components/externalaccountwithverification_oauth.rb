@@ -13,13 +13,13 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::ExternalAccountWithVerificationVerificationOauthStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.open_enum_from_string(Models::Components::ExternalAccountWithVerificationVerificationOauthStatus, false) } }
+        field :status, Models::Components::ExternalAccountWithVerificationVerificationOauthStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.open_enum_from_string(Models::Components::ExternalAccountWithVerificationVerificationOauthStatus, false) } }
 
         field :strategy, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true } }
 
         field :expire_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expire_at'), required: true } }
 
-        field :object, Crystalline::Nilable.new(Models::Components::ExternalAccountWithVerificationVerificationOauthObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::ExternalAccountWithVerificationVerificationOauthObject, true) } }
+        field :object, Crystalline::Nilable.new(Models::Components::ExternalAccountWithVerificationVerificationOauthObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::ExternalAccountWithVerificationVerificationOauthObject, true) } }
 
         field :external_verification_redirect_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('external_verification_redirect_url') } }
 

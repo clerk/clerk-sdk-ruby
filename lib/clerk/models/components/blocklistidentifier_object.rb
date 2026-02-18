@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Components
       # BlocklistIdentifierObject - String representing the object's type. Objects of the same type share the same value.
-      # 
+      #
       class BlocklistIdentifierObject
         include ::Crystalline::Enum
         enums do

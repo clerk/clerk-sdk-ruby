@@ -20,16 +20,15 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::CreateActorTokenRequest.new(
   user_id: 'user_1a2b3c',
   actor: Models::Operations::Actor.new(
-    sub: 'user_2OEpKhcCN1Lat9NQ0G6puh7q5Rb',
-  ),
+    sub: 'user_2OEpKhcCN1Lat9NQ0G6puh7q5Rb'
+  )
 )
-
 res = s.actor_tokens.create(request: req)
 
 unless res.actor_token.nil?
@@ -67,9 +66,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.actor_tokens.revoke(actor_token_id: 'act_tok_abcdefghijk')
 
 unless res.actor_token.nil?

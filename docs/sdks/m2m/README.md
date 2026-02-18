@@ -21,11 +21,10 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
-req = Models::Operations::CreateM2MTokenRequest.new()
-
+req = Models::Operations::CreateM2MTokenRequest.new
 res = s.m2m.create_token(request: req)
 
 unless res.object.nil?
@@ -69,13 +68,12 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::GetM2MTokensRequest.new(
-  subject: '<value>',
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
+req = Models::Operations::GetM2MTokensRequest.new(
+  subject: '<value>'
+)
 res = s.m2m.list_tokens(request: req)
 
 unless res.object.nil?
@@ -120,10 +118,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.m2m.revoke_token(m2m_token_id: '<id>', body: Models::Operations::RevokeM2MTokenRequestBody.new())
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.m2m.revoke_token(m2m_token_id: '<id>', body: Models::Operations::RevokeM2MTokenRequestBody.new)
 
 unless res.object.nil?
   # handle response
@@ -167,13 +164,12 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::VerifyM2MTokenRequest.new(
-  token: '<value>',
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
+req = Models::Operations::VerifyM2MTokenRequest.new(
+  token: '<value>'
+)
 res = s.m2m.verify_token(request: req)
 
 unless res.object.nil?

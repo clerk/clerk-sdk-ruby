@@ -19,11 +19,11 @@ module Clerk
         # Unix timestamp (milliseconds) when the new price takes effect.
         field :effective_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('effective_at'), required: true } }
         # When the new price takes effect.
-        field :effective_mode, Models::Components::EffectiveMode, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('effective_mode'), required: true, 'decoder': Utils.enum_from_string(Models::Components::EffectiveMode, false) } }
+        field :effective_mode, Models::Components::EffectiveMode, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('effective_mode'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::EffectiveMode, false) } }
         # Whether an immediate charge was made.
         field :charged_immediately, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('charged_immediately'), required: true } }
         # The status of the previous subscription item after transition.
-        field :previous_subscription_item_status, Models::Components::PreviousSubscriptionItemStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('previous_subscription_item_status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::PreviousSubscriptionItemStatus, false) } }
+        field :previous_subscription_item_status, Models::Components::PreviousSubscriptionItemStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('previous_subscription_item_status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::PreviousSubscriptionItemStatus, false) } }
         # The ID of the previous subscription item.
         field :previous_subscription_item_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('previous_subscription_item_id'), required: true } }
         # Unix timestamp (milliseconds) for the next billing date.

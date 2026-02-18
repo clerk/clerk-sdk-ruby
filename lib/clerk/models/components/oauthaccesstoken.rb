@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :object, Models::Components::OAuthAccessTokenObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::OAuthAccessTokenObject, false) } }
+        field :object, Models::Components::OAuthAccessTokenObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::OAuthAccessTokenObject, false) } }
         # External account ID
         field :external_account_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('external_account_id'), required: true } }
         # The unique ID of the user in the external provider's system

@@ -13,13 +13,13 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        field :object, Models::Components::CommerceSubscriptionObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::CommerceSubscriptionObject, false) } }
+        field :object, Models::Components::CommerceSubscriptionObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::CommerceSubscriptionObject, false) } }
         # Unique identifier for the commerce subscription.
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # The ID of the instance this subscription belongs to.
         field :instance_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('instance_id'), required: true } }
         # The current status of the subscription.
-        field :status, Models::Components::CommerceSubscriptionStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::CommerceSubscriptionStatus, false) } }
+        field :status, Models::Components::CommerceSubscriptionStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::CommerceSubscriptionStatus, false) } }
         # The ID of the payer for this subscription.
         field :payer_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payer_id'), required: true } }
         # Unix timestamp (milliseconds) of creation.

@@ -13,11 +13,11 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::VerificationEmailLinkStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::VerificationEmailLinkStatus, false) } }
+        field :status, Models::Components::VerificationEmailLinkStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationEmailLinkStatus, false) } }
 
-        field :strategy, Models::Components::VerificationEmailLinkStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.enum_from_string(Models::Components::VerificationEmailLinkStrategy, false) } }
+        field :strategy, Models::Components::VerificationEmailLinkStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationEmailLinkStrategy, false) } }
 
-        field :object, Crystalline::Nilable.new(Models::Components::VerificationEmailLinkObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::VerificationEmailLinkObject, true) } }
+        field :object, Crystalline::Nilable.new(Models::Components::VerificationEmailLinkObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::VerificationEmailLinkObject, true) } }
 
         field :attempts, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attempts'), required: true } }
 

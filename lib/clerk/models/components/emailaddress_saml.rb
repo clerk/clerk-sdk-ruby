@@ -13,11 +13,11 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::EmailAddressVerificationSamlStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::EmailAddressVerificationSamlStatus, false) } }
+        field :status, Models::Components::EmailAddressVerificationSamlStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::EmailAddressVerificationSamlStatus, false) } }
 
-        field :strategy, Models::Components::EmailAddressVerificationSamlStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.enum_from_string(Models::Components::EmailAddressVerificationSamlStrategy, false) } }
+        field :strategy, Models::Components::EmailAddressVerificationSamlStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::EmailAddressVerificationSamlStrategy, false) } }
 
-        field :object, Crystalline::Nilable.new(Models::Components::EmailAddressVerificationSamlObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::EmailAddressVerificationSamlObject, true) } }
+        field :object, Crystalline::Nilable.new(Models::Components::EmailAddressVerificationSamlObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::EmailAddressVerificationSamlObject, true) } }
 
         field :attempts, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attempts'), required: true } }
 

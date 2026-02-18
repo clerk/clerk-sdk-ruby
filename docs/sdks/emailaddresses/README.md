@@ -21,16 +21,15 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::CreateEmailAddressRequest.new(
   user_id: 'user_12345',
   email_address: 'example@clerk.com',
   verified: false,
-  primary: true,
+  primary: true
 )
-
 res = s.email_addresses.create(request: req)
 
 unless res.email_address.nil?
@@ -68,9 +67,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.email_addresses.get(email_address_id: 'email_address_id_example')
 
 unless res.email_address.nil?
@@ -108,9 +106,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.email_addresses.delete(email_address_id: 'email_address_id_example')
 
 unless res.deleted_object.nil?
@@ -148,12 +145,11 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.email_addresses.update(email_address_id: 'email_address_id_example', body: Models::Operations::UpdateEmailAddressRequestBody.new(
   verified: false,
-  primary: true,
+  primary: true
 ))
 
 unless res.email_address.nil?

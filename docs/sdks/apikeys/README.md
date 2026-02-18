@@ -27,14 +27,13 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::CreateApiKeyRequest.new(
   name: '<value>',
-  subject: '<value>',
+  subject: '<value>'
 )
-
 res = s.api_keys.create_api_key(request: req)
 
 unless res.object.nil?
@@ -73,13 +72,12 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::GetApiKeysRequest.new(
-  subject: '<value>',
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
+req = Models::Operations::GetApiKeysRequest.new(
+  subject: '<value>'
+)
 res = s.api_keys.get_api_keys(request: req)
 
 unless res.object.nil?
@@ -118,9 +116,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.api_keys.get_api_key(api_key_id: '<id>')
 
 unless res.object.nil?
@@ -159,10 +156,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.api_keys.update_api_key(api_key_id: '<id>', body: Models::Operations::UpdateApiKeyRequestBody.new())
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.api_keys.update_api_key(api_key_id: '<id>', body: Models::Operations::UpdateApiKeyRequestBody.new)
 
 unless res.object.nil?
   # handle response
@@ -201,9 +197,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.api_keys.delete_api_key(api_key_id: '<id>')
 
 unless res.object.nil?
@@ -242,9 +237,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.api_keys.get_api_key_secret(api_key_id: '<id>')
 
 unless res.object.nil?
@@ -283,10 +277,9 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-res = s.api_keys.revoke_api_key(api_key_id: '<id>', body: Models::Operations::RevokeApiKeyRequestBody.new())
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.api_keys.revoke_api_key(api_key_id: '<id>', body: Models::Operations::RevokeApiKeyRequestBody.new)
 
 unless res.object.nil?
   # handle response
@@ -325,13 +318,12 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
-req = Models::Operations::VerifyApiKeyRequest.new(
-  secret: '<value>',
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
+req = Models::Operations::VerifyApiKeyRequest.new(
+  secret: '<value>'
+)
 res = s.api_keys.verify_api_key(request: req)
 
 unless res.object.nil?

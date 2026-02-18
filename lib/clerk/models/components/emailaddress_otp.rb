@@ -13,11 +13,11 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :status, Models::Components::EmailAddressVerificationOtpStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::EmailAddressVerificationOtpStatus, false) } }
+        field :status, Models::Components::EmailAddressVerificationOtpStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::EmailAddressVerificationOtpStatus, false) } }
 
-        field :strategy, Models::Components::EmailAddressVerificationOtpStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': Utils.open_enum_from_string(Models::Components::EmailAddressVerificationOtpStrategy, false) } }
+        field :strategy, Models::Components::EmailAddressVerificationOtpStrategy, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true, 'decoder': ::Clerk::Utils.open_enum_from_string(Models::Components::EmailAddressVerificationOtpStrategy, false) } }
 
-        field :object, Crystalline::Nilable.new(Models::Components::EmailAddressVerificationOtpObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::EmailAddressVerificationOtpObject, true) } }
+        field :object, Crystalline::Nilable.new(Models::Components::EmailAddressVerificationOtpObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::EmailAddressVerificationOtpObject, true) } }
 
         field :attempts, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attempts'), required: true } }
 

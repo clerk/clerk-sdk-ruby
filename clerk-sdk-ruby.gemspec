@@ -4,7 +4,7 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 
 Gem::Specification.new do |s|
   s.name        = 'clerk-sdk-ruby'
-  s.version     = '5.1.1'
+  s.version     = '5.1.2'
   s.platform    = Gem::Platform::RUBY
   s.licenses    = ['Apache-2.0']
   s.summary     = ''
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
     'source_code_uri' => 'https://github.com/clerk/clerk-sdk-ruby.git'
   }
 
-  s.files         = Dir['{lib,test}/**/*']
+  s.files         = Dir['{lib,test}/**/*'].reject { |f| f.start_with?('test/mockserver') }
   s.require_paths = ['lib']
   s.required_ruby_version = '>= 3.2'
 

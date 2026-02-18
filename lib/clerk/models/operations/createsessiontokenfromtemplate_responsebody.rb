@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :object, Crystalline::Nilable.new(Models::Operations::CreateSessionTokenFromTemplateObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Operations::CreateSessionTokenFromTemplateObject, true) } }
+        field :object, Crystalline::Nilable.new(Models::Operations::CreateSessionTokenFromTemplateObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::CreateSessionTokenFromTemplateObject, true) } }
 
         field :jwt, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('jwt') } }
 

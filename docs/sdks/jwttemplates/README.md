@@ -22,9 +22,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.jwt_templates.list(limit: 10, offset: 0)
 
 unless res.jwt_template_list.nil?
@@ -63,19 +62,18 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 
 req = Models::Operations::CreateJWTTemplateRequest.new(
   name: 'Example Template',
-  claims: Models::Operations::CreateJWTTemplateClaims.new(),
+  claims: Models::Operations::CreateJWTTemplateClaims.new,
   lifetime: 3600,
   allowed_clock_skew: 5,
   custom_signing_key: false,
   signing_algorithm: 'RS256',
-  signing_key: 'PRIVATE_KEY_PLACEHOLDER',
+  signing_key: 'PRIVATE_KEY_PLACEHOLDER'
 )
-
 res = s.jwt_templates.create(request: req)
 
 unless res.jwt_template.nil?
@@ -113,9 +111,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.jwt_templates.get(template_id: 'template_123')
 
 unless res.jwt_template.nil?
@@ -153,9 +150,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.jwt_templates.update(template_id: '<id>')
 
 unless res.jwt_template.nil?
@@ -194,9 +190,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.jwt_templates.delete(template_id: '<id>')
 
 unless res.deleted_object.nil?

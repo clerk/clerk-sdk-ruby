@@ -23,9 +23,8 @@ require 'clerk_sdk_ruby'
 
 Models = ::Clerk::Models
 s = ::Clerk::OpenAPIClient.new(
-      bearer_auth: '<YOUR_BEARER_TOKEN_HERE>',
-    )
-
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
 res = s.email_and_sms_templates.upsert(template_type: Models::Operations::UpsertTemplateTemplateType::SMS, slug: 'verification-code', body: Models::Operations::UpsertTemplateRequestBody.new(
   name: 'Verification Code',
   subject: 'Your Verification Code',
@@ -33,7 +32,7 @@ res = s.email_and_sms_templates.upsert(template_type: Models::Operations::Upsert
   body: 'Use this code to verify your email: {{code}}',
   delivered_by_clerk: true,
   from_email_name: 'hello',
-  reply_to_email_name: 'support',
+  reply_to_email_name: 'support'
 ))
 
 unless res.template.nil?

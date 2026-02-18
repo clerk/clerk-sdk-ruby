@@ -15,8 +15,8 @@ module Clerk
 
         field :id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id') } }
         # String representing the object's type. Objects of the same type share the same value.
-        # 
-        field :object, Crystalline::Nilable.new(Models::Components::TemplateObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': Utils.enum_from_string(Models::Components::TemplateObject, true) } }
+        #
+        field :object, Crystalline::Nilable.new(Models::Components::TemplateObject), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::TemplateObject, true) } }
         # whether this is a system (default) or user overridden) template
         field :resource_type, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('resource_type') } }
         # whether this is an email or SMS template
@@ -54,10 +54,10 @@ module Clerk
 
         field :flagged_as_suspicious, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('flagged_as_suspicious') } }
         # Unix timestamp of last update.
-        # 
+        #
         field :updated_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at') } }
         # Unix timestamp of creation.
-        # 
+        #
         field :created_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at') } }
         # The ID of the instance to which the template belongs
         field :instance_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('instance_id') } }

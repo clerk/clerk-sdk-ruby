@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :object, Models::Components::RoleSetObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::RoleSetObject, false) } }
+        field :object, Models::Components::RoleSetObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::RoleSetObject, false) } }
         # The unique identifier of the role set
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # The name of the role set
@@ -23,7 +23,7 @@ module Clerk
         # The list of roles in this role set
         field :roles, Crystalline::Array.new(Models::Components::RoleSetItem), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('roles'), required: true } }
         # The type of the role set ("initial" or "custom")
-        field :type, Models::Components::Type, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('type'), required: true, 'decoder': Utils.enum_from_string(Models::Components::Type, false) } }
+        field :type, Models::Components::Type, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('type'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::Type, false) } }
         # Unix timestamp of role set creation
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # Unix timestamp of last role set update

@@ -30,7 +30,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 ruby:
-  version: 5.1.1
+  version: 5.1.2
   additionalDependencies:
     development:
       activesupport: ~> 8.0.0
@@ -49,6 +49,7 @@ ruby:
   constFieldsAlwaysOptional: false
   defaultErrorName: APIError
   description: Ruby Client SDK
+  enableFormatting: false
   flattenGlobalSecurity: true
   forwardCompatibleEnumsByDefault: false
   forwardCompatibleUnionsByDefault: "false"

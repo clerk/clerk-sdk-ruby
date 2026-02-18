@@ -16,7 +16,7 @@ module Clerk
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
 
         field :name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name'), required: true } }
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :domain, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('domain'), required: true } }
 
         field :active, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('active'), required: true } }
@@ -25,10 +25,10 @@ module Clerk
 
         field :sync_user_attributes, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sync_user_attributes'), required: true } }
         # Unix timestamp of creation.
-        # 
+        #
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # Unix timestamp of last update.
-        # 
+        #
         field :updated_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
 
         field :domains, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('domains') } }

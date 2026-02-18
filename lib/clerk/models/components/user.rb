@@ -15,8 +15,8 @@ module Clerk
 
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # String representing the object's type. Objects of the same type share the same value.
-        # 
-        field :object, Models::Components::UserObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::UserObject, false) } }
+        #
+        field :object, Models::Components::UserObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::UserObject, false) } }
 
         field :has_image, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('has_image'), required: true } }
 
@@ -44,22 +44,22 @@ module Clerk
 
         field :enterprise_accounts, Crystalline::Array.new(Models::Components::EnterpriseAccount), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enterprise_accounts'), required: true } }
         # Flag to denote whether user is banned or not.
-        # 
+        #
         field :banned, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('banned'), required: true } }
         # Flag to denote whether user is currently locked, i.e. restricted from signing in or not.
-        # 
+        #
         field :locked, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('locked'), required: true } }
         # Unix timestamp of last update.
-        # 
+        #
         field :updated_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
         # Unix timestamp of creation.
-        # 
+        #
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # If enabled, user can delete themselves via FAPI.
-        # 
+        #
         field :delete_self_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('delete_self_enabled'), required: true } }
         # If enabled, user can create organizations via FAPI.
-        # 
+        #
         field :create_organization_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('create_organization_enabled'), required: true } }
 
         field :external_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('external_id'), required: true } }
@@ -75,44 +75,44 @@ module Clerk
         field :first_name, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('first_name'), required: true } }
 
         field :last_name, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_name'), required: true } }
-        # @deprecated  true: This will be removed in a future release, please migrate away from it as soon as possible.
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :profile_image_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('profile_image_url') } }
 
         field :image_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('image_url') } }
 
         field :unsafe_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('unsafe_metadata') } }
         # Unix timestamp of when MFA was last enabled for this user. It should be noted that this field is not nullified if MFA is disabled.
-        # 
+        #
         field :mfa_enabled_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('mfa_enabled_at'), required: true } }
         # Unix timestamp of when MFA was last disabled for this user. It should be noted that this field is not nullified if MFA is enabled again.
-        # 
+        #
         field :mfa_disabled_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('mfa_disabled_at'), required: true } }
 
         field :organization_memberships, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::OrganizationMembership)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('organization_memberships') } }
         # Unix timestamp of last sign-in.
-        # 
+        #
         field :last_sign_in_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_sign_in_at'), required: true } }
         # The number of seconds remaining until the lockout period expires for a locked user. A null value for a locked user indicates that lockout never expires.
-        # 
+        #
         field :lockout_expires_in_seconds, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('lockout_expires_in_seconds'), required: true } }
         # The number of verification attempts remaining until the user is locked. Null if account lockout is not enabled. Note: if a user is locked explicitly via the Backend API, they may still have verification attempts remaining.
-        # 
+        #
         field :verification_attempts_remaining, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('verification_attempts_remaining'), required: true } }
         # Unix timestamp of the latest session activity, with day precision.
-        # 
+        #
         field :last_active_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_active_at'), required: true } }
         # Unix timestamp of when the user accepted the legal requirements.
-        # 
+        #
         field :legal_accepted_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('legal_accepted_at'), required: true } }
 
         field :locale, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('locale') } }
 
         field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
         # Unix timestamp of when the user's password was last updated.
-        # 
+        #
         field :password_last_updated_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('password_last_updated_at') } }
         # The maximum number of organizations the user can create. 0 means unlimited.
-        # 
+        #
         field :create_organizations_limit, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('create_organizations_limit') } }
         # When set to `true`, the user will bypass client trust checks during sign-in.
         field :bypass_client_trust, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('bypass_client_trust') } }

@@ -43,8 +43,8 @@ module Clerk
       # list - List all templates
       # Returns a list of all templates.
       # The templates are returned sorted by position.
-      # 
-      # @deprecated  method: This will be removed in a future release, please migrate away from it as soon as possible.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       request = Models::Operations::GetTemplateListRequest.new(
         template_type: template_type,
         paginated: paginated,
@@ -191,8 +191,8 @@ module Clerk
     def get(template_type:, slug:, retries: nil, timeout_ms: nil)
       # get - Retrieve a template
       # Returns the details of a template
-      # 
-      # @deprecated  method: This will be removed in a future release, please migrate away from it as soon as possible.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       request = Models::Operations::GetTemplateRequest.new(
         template_type: template_type,
         slug: slug
@@ -335,8 +335,8 @@ module Clerk
     def revert(template_type:, slug:, retries: nil, timeout_ms: nil)
       # revert - Revert a template
       # Reverts an updated template to its default state
-      # 
-      # @deprecated  method: This will be removed in a future release, please migrate away from it as soon as possible.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       request = Models::Operations::RevertTemplateRequest.new(
         template_type: template_type,
         slug: slug
@@ -481,8 +481,8 @@ module Clerk
       # Toggles the delivery by Clerk for a template of a given type and slug.
       # If disabled, Clerk will not deliver the resulting email or SMS.
       # The app developer will need to listen to the `email.created` or `sms.created` webhooks in order to handle delivery themselves.
-      # 
-      # @deprecated  method: This will be removed in a future release, please migrate away from it as soon as possible.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       request = Models::Operations::ToggleTemplateDeliveryRequest.new(
         template_type: template_type,
         slug: slug,
@@ -501,7 +501,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)

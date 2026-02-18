@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        field :object, Models::Components::ObjectCommerceStatement, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::ObjectCommerceStatement, false) } }
+        field :object, Models::Components::ObjectCommerceStatement, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::ObjectCommerceStatement, false) } }
         # Unique identifier for the billing statement.
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # The ID of the instance this statement belongs to.
@@ -23,7 +23,7 @@ module Clerk
 
         field :payer, Models::Components::CommercePayerResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payer'), required: true } }
         # The current status of the statement.
-        field :status, Models::Components::BillingStatementStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::BillingStatementStatus, false) } }
+        field :status, Models::Components::BillingStatementStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::BillingStatementStatus, false) } }
         # Totals for the statement.
         field :totals, Models::Components::Totals, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('totals'), required: true } }
         # Array of statement groups.

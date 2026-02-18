@@ -13,19 +13,19 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        field :object, Models::Components::CommercePaymentMethodResponseObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::CommercePaymentMethodResponseObject, false) } }
+        field :object, Models::Components::CommercePaymentMethodResponseObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::CommercePaymentMethodResponseObject, false) } }
         # Unique identifier for the payment method.
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # Unique identifier for the payer.
         field :payer_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payer_id'), required: true } }
         # The payment method type.
-        field :payment_type, Models::Components::PaymentType, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payment_type'), required: true, 'decoder': Utils.enum_from_string(Models::Components::PaymentType, false) } }
+        field :payment_type, Models::Components::PaymentType, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payment_type'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::PaymentType, false) } }
         # The payment gateway.
         field :gateway, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('gateway'), required: true } }
         # External ID in the payment gateway.
         field :gateway_external_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('gateway_external_id'), required: true } }
         # Status of the payment method.
-        field :status, Models::Components::CommercePaymentMethodResponseStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': Utils.enum_from_string(Models::Components::CommercePaymentMethodResponseStatus, false) } }
+        field :status, Models::Components::CommercePaymentMethodResponseStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::CommercePaymentMethodResponseStatus, false) } }
         # Whether this is the default payment method for the payer.
         field :is_default, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('is_default') } }
         # External account ID in the payment gateway.

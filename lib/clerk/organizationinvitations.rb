@@ -198,17 +198,17 @@ module Clerk
       # create - Create and send an organization invitation
       # Creates a new organization invitation and sends an email to the provided `email_address` with a link to accept the invitation and join the organization.
       # You can specify the `role` for the invited organization member.
-      # 
+      #
       # New organization invitations get a "pending" status until they are revoked by an organization administrator or accepted by the invitee.
-      # 
+      #
       # The request body supports passing an optional `redirect_url` parameter.
       # When the invited user clicks the link to accept the invitation, they will be redirected to the URL provided.
       # Use this parameter to implement a custom invitation acceptance flow.
-      # 
+      #
       # You can specify the ID of the user that will send the invitation with the `inviter_user_id` parameter.
       # That user must be a member with administrator privileges in the organization.
       # Only "admin" members can create organization invitations.
-      # 
+      #
       # You can optionally provide public and private metadata for the organization invitation.
       # The public metadata are visible by both the Frontend and the Backend whereas the private ones only by the Backend.
       # When the organization invitation is accepted, the metadata will be transferred to the newly created organization membership.
@@ -229,7 +229,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -510,9 +510,9 @@ module Clerk
     def bulk_create(body:, organization_id:, retries: nil, timeout_ms: nil)
       # bulk_create - Bulk create and send organization invitations
       # Creates new organization invitations in bulk and sends out emails to the provided email addresses with a link to accept the invitation and join the organization.
-      # 
+      #
       # This endpoint is limited to a maximum of 10 invitations per API call. If you need to send more invitations, please make multiple requests.
-      # 
+      #
       # You can specify a different `role` for each invited organization member.
       # New organization invitations get a "pending" status until they are revoked by an organization administrator or accepted by the invitee.
       # The request body supports passing an optional `redirect_url` parameter for each invitation.
@@ -543,7 +543,7 @@ module Clerk
       headers['content-type'] = req_content_type
       raise StandardError, 'request body is required' if data.nil? && form.nil?
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)
@@ -684,8 +684,8 @@ module Clerk
       # The organization invitations are ordered by descending creation date.
       # Most recent invitations will be returned first.
       # Any invitations created as a result of an Organization Domain are not included in the results.
-      # 
-      # @deprecated  method: This will be removed in a future release, please migrate away from it as soon as possible.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       request = Models::Operations::ListPendingOrganizationInvitationsRequest.new(
         organization_id: organization_id,
         limit: limit,
@@ -995,7 +995,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)

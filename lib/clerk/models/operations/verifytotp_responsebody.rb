@@ -15,7 +15,7 @@ module Clerk
 
         field :verified, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('verified') } }
 
-        field :code_type, Crystalline::Nilable.new(Models::Operations::CodeType), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('code_type'), 'decoder': Utils.enum_from_string(Models::Operations::CodeType, true) } }
+        field :code_type, Crystalline::Nilable.new(Models::Operations::CodeType), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('code_type'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::CodeType, true) } }
 
         
         def initialize(verified: nil, code_type: nil)

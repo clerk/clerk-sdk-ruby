@@ -44,8 +44,8 @@ module Clerk
       # Returns a list of all clients. The clients are returned sorted by creation date,
       # with the newest clients appearing first.
       # Warning: the endpoint is being deprecated and will be removed in future versions.
-      # 
-      # @deprecated  method: This will be removed in a future release, please migrate away from it as soon as possible.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       request = Models::Operations::GetClientListRequest.new(
         paginated: paginated,
         limit: limit,
@@ -194,7 +194,7 @@ module Clerk
       req_content_type, data, form = Utils.serialize_request_body(request, false, true, :request, :json)
       headers['content-type'] = req_content_type
 
-      if form
+      if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
         body = URI.encode_www_form(data)

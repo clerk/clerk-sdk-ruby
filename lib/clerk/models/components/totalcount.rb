@@ -13,8 +13,8 @@ module Clerk
         include Crystalline::MetadataFields
 
         # String representing the object's type. Objects of the same type share the same value.
-        # 
-        field :object, Models::Components::TotalCountObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': Utils.enum_from_string(Models::Components::TotalCountObject, false) } }
+        #
+        field :object, Models::Components::TotalCountObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::TotalCountObject, false) } }
 
         field :total_count, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('total_count'), required: true } }
 
