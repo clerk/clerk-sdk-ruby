@@ -65,7 +65,7 @@ module Clerk
     def user_reverified?(params)
       return false unless user?
 
-      fva = session_claims['fva']
+      fva = @session_claims['fva']
 
       # the feature is disabled
       return true if fva.nil?
