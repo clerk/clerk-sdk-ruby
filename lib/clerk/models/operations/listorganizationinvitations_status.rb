@@ -14,6 +14,7 @@ module Clerk
           PENDING = new('pending')
           ACCEPTED = new('accepted')
           REVOKED = new('revoked')
+          EXPIRED = new('expired')
         end
       end
     end
