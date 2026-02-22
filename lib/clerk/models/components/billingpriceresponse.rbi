@@ -28,6 +28,8 @@ class Clerk::Models::Components::BillingPriceResponse
   def fee=(str_); end
   def annual_monthly_fee(); end
   def annual_monthly_fee=(str_); end
+  def is_default(); end
+  def is_default=(str_); end
   def created_at(); end
   def created_at=(str_); end
   def description(); end

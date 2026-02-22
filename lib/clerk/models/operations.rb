@@ -500,6 +500,7 @@ module Clerk
       autoload :RevokeM2MTokenObject, 'clerk/models/operations/revokem2mtoken_object.rb'
       autoload :RevokeM2MTokenRequest, 'clerk/models/operations/revokem2mtoken_request.rb'
       autoload :RevokeM2MTokenResponse, 'clerk/models/operations/revokem2mtoken_response.rb'
+      autoload :TokenFormat, 'clerk/models/operations/token_format.rb'
       autoload :UpdateApiKeyBadRequestError, 'clerk/models/operations/updateapikey_badrequest_error.rb'
       autoload :UpdateApiKeyNotFoundError, 'clerk/models/operations/updateapikey_notfound_error.rb'
       autoload :UpdateApiKeyRequestBody, 'clerk/models/operations/updateapikey_requestbody.rb'

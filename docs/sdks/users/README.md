@@ -311,7 +311,7 @@ end
 
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
-| Models::Errors::ClerkErrors | 400, 401, 404, 422          | application/json            |
+| Models::Errors::ClerkErrors | 400, 401, 404, 409, 422     | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## delete

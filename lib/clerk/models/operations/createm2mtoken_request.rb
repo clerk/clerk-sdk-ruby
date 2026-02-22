@@ -13,12 +13,15 @@ module Clerk
         include Crystalline::MetadataFields
 
 
+        field :token_format, Crystalline::Nilable.new(Models::Operations::TokenFormat), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('token_format'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::TokenFormat, true) } }
+
         field :seconds_until_expiration, Crystalline::Nilable.new(::Float), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('seconds_until_expiration') } }
 
         field :claims, Crystalline::Nilable.new(::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('claims') } }
 
         
-        def initialize(seconds_until_expiration: nil, claims: nil)
+        def initialize(token_format: Models::Operations::TokenFormat::OPAQUE, seconds_until_expiration: nil, claims: nil)
+          @token_format = token_format
           @seconds_until_expiration = seconds_until_expiration
           @claims = claims
         end
@@ -26,6 +29,7 @@ module Clerk
         
         def ==(other)
           return false unless other.is_a? self.class
+          return false unless @token_format == other.token_format
           return false unless @seconds_until_expiration == other.seconds_until_expiration
           return false unless @claims == other.claims
           true
