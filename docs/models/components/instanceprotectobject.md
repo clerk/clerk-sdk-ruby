@@ -1,5 +1,13 @@
 # InstanceProtectObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = InstanceProtectObject::INSTANCE_PROTECT
+```
+
 
 ## Values
 

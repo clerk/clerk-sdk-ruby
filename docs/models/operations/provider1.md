@@ -2,6 +2,14 @@
 
 The IdP provider of the connection.
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = Provider1::SAML_CUSTOM
+```
+
 
 ## Values
 

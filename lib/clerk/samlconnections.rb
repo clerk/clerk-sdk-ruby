@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(request:, retries: nil, timeout_ms: nil)
+    def list(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - Get a list of SAML Connections for an instance
       # Returns the list of SAML Connections for an instance.
       # Results can be paginated using the optional `limit` and `offset` query parameters.
@@ -93,6 +95,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -176,7 +181,7 @@ module Clerk
 
 
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create a SAML Connection
       # Create a new SAML Connection.
       url, params = @sdk_configuration.get_server_details
@@ -237,6 +242,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -320,7 +328,7 @@ module Clerk
 
 
     
-    def get(saml_connection_id:, retries: nil, timeout_ms: nil)
+    def get(saml_connection_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve a SAML Connection by ID
       # Fetches the SAML Connection whose ID matches the provided `saml_connection_id` in the path.
       request = Models::Operations::GetSAMLConnectionRequest.new(
@@ -378,6 +386,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -461,7 +472,7 @@ module Clerk
 
 
     
-    def update(body:, saml_connection_id:, retries: nil, timeout_ms: nil)
+    def update(body:, saml_connection_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update a SAML Connection
       # Updates the SAML Connection whose ID matches the provided `id` in the path.
       request = Models::Operations::UpdateSAMLConnectionRequest.new(
@@ -532,6 +543,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -615,7 +629,7 @@ module Clerk
 
 
     
-    def delete(saml_connection_id:, retries: nil, timeout_ms: nil)
+    def delete(saml_connection_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete a SAML Connection
       # Deletes the SAML Connection whose ID matches the provided `id` in the path.
       request = Models::Operations::DeleteSAMLConnectionRequest.new(
@@ -673,6 +687,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -753,5 +770,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

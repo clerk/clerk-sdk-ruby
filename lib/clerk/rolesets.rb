@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(query: nil, order_by: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def list(query: nil, order_by: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - Get a list of role sets
       # Returns a list of role sets for the instance.
       # Results can be paginated using the optional `limit` and `offset` query parameters.
@@ -99,6 +101,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -182,7 +187,7 @@ module Clerk
 
 
     
-    def create(request:, retries: nil, timeout_ms: nil)
+    def create(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create a role set
       # Creates a new role set with the given name and roles.
       # The key must be unique for the instance and start with the 'role_set:' prefix, followed by lowercase alphanumeric characters and underscores only.
@@ -246,6 +251,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -329,7 +337,7 @@ module Clerk
 
 
     
-    def get(role_set_key_or_id:, retries: nil, timeout_ms: nil)
+    def get(role_set_key_or_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve a role set
       # Retrieves an existing role set by its key or ID.
       request = Models::Operations::GetRoleSetRequest.new(
@@ -387,6 +395,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -470,7 +481,7 @@ module Clerk
 
 
     
-    def update(body:, role_set_key_or_id:, retries: nil, timeout_ms: nil)
+    def update(body:, role_set_key_or_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update a role set
       # Updates an existing role set.
       # You can update the name, key, description, type, default role, or creator role.
@@ -543,6 +554,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -626,7 +640,7 @@ module Clerk
 
 
     
-    def replace(body:, role_set_key_or_id:, retries: nil, timeout_ms: nil)
+    def replace(body:, role_set_key_or_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # replace - Replace a role set
       # Replaces a role set with another role set. This is functionally equivalent to deleting
       # the role set but allows for atomic replacement with migration support.
@@ -699,6 +713,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -782,7 +799,7 @@ module Clerk
 
 
     
-    def add_roles(body:, role_set_key_or_id:, retries: nil, timeout_ms: nil)
+    def add_roles(body:, role_set_key_or_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # add_roles - Add roles to a role set
       # Adds one or more roles to an existing role set.
       # You can optionally update the default role or creator role when adding new roles.
@@ -854,6 +871,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -937,7 +957,7 @@ module Clerk
 
 
     
-    def replace_role(body:, role_set_key_or_id:, retries: nil, timeout_ms: nil)
+    def replace_role(body:, role_set_key_or_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # replace_role - Replace a role in a role set
       # Replaces a role in a role set with another role. This atomically removes
       # the source role and reassigns any members to the destination role.
@@ -1009,6 +1029,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1089,5 +1112,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

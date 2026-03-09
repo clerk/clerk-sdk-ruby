@@ -1,5 +1,13 @@
 # SAMLAccountVerificationSAMLStatus
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = SAMLAccountVerificationSAMLStatus::UNVERIFIED
+```
+
 
 ## Values
 

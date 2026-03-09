@@ -1,5 +1,13 @@
 # VerificationGoogleOneTapObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = VerificationGoogleOneTapObject::VERIFICATION_GOOGLE_ONE_TAP
+```
+
 
 ## Values
 

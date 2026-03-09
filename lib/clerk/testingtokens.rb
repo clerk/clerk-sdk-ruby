@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def create(retries: nil, timeout_ms: nil)
+    def create(retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Retrieve a new testing token
       # Retrieve a new testing token.
       url, params = @sdk_configuration.get_server_details
@@ -89,6 +91,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -154,5 +159,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

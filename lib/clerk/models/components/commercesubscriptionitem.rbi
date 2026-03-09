@@ -50,8 +50,14 @@ class Clerk::Models::Components::CommerceSubscriptionItem
   def created_at=(str_); end
   def updated_at(); end
   def updated_at=(str_); end
+  def credits(); end
+  def credits=(str_); end
   def plan(); end
   def plan=(str_); end
   def next_payment(); end
   def next_payment=(str_); end
+  def seats(); end
+  def seats=(str_); end
+  def totals(); end
+  def totals=(str_); end
 end

@@ -1,5 +1,13 @@
 # WaitlistEntryStatusInvitation
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = WaitlistEntryStatusInvitation::PENDING
+```
+
 
 ## Values
 

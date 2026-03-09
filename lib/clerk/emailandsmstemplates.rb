@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def upsert(template_type:, slug:, body: nil, retries: nil, timeout_ms: nil)
+    def upsert(template_type:, slug:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # upsert - Update a template for a given type and slug
       # Updates the existing template of the given type and slug
       #
@@ -112,6 +114,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -192,5 +197,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

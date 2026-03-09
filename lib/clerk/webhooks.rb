@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def create_svix_app(retries: nil, timeout_ms: nil)
+    def create_svix_app(retries: nil, timeout_ms: nil, http_headers: nil)
       # create_svix_app - Create a Svix app
       # Create a Svix app and associate it with the current instance
       url, params = @sdk_configuration.get_server_details
@@ -89,6 +91,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -172,7 +177,7 @@ module Clerk
 
 
     
-    def delete_svix_app(retries: nil, timeout_ms: nil)
+    def delete_svix_app(retries: nil, timeout_ms: nil, http_headers: nil)
       # delete_svix_app - Delete a Svix app
       # Delete a Svix app and disassociate it from the current instance
       url, params = @sdk_configuration.get_server_details
@@ -222,6 +227,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -296,7 +304,7 @@ module Clerk
 
 
     
-    def generate_svix_auth_url(retries: nil, timeout_ms: nil)
+    def generate_svix_auth_url(retries: nil, timeout_ms: nil, http_headers: nil)
       # generate_svix_auth_url - Create a Svix Dashboard URL
       # Generate a new URL for accessing the Svix's management dashboard for that particular instance
       url, params = @sdk_configuration.get_server_details
@@ -346,6 +354,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -426,5 +437,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

@@ -2,6 +2,14 @@
 
 When the new price takes effect.
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = EffectiveMode::IMMEDIATE
+```
+
 
 ## Values
 

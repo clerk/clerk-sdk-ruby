@@ -1,0 +1,9 @@
+# AdjustUserBillingCreditBalanceRequest
+
+
+## Fields
+
+| Field                                                                                               | Type                                                                                                | Required                                                                                            | Description                                                                                         |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `user_id`                                                                                           | *::String*                                                                                          | :heavy_check_mark:                                                                                  | The ID of the user whose credit balance to adjust                                                   |
+| `body`                                                                                              | [Models::Components::AdjustCreditBalanceRequest](../../models/shared/adjustcreditbalancerequest.md) | :heavy_check_mark:                                                                                  | Parameters for the credit balance adjustment                                                        |

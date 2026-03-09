@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(request:, retries: nil, timeout_ms: nil)
+    def list(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - Get a list of organizations for an instance
       # This request returns the list of organizations for an instance.
       # Results can be paginated using the optional `limit` and `offset` query parameters.
@@ -94,6 +96,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -177,7 +182,7 @@ module Clerk
 
 
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create an organization
       # Creates a new organization with the given name for an instance.
       # You can specify an optional slug for the new organization.
@@ -247,6 +252,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -330,7 +338,7 @@ module Clerk
 
 
     
-    def get(organization_id:, include_members_count: nil, include_missing_member_with_elevated_permissions: nil, retries: nil, timeout_ms: nil)
+    def get(organization_id:, include_members_count: nil, include_missing_member_with_elevated_permissions: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve an organization by ID or slug
       # Fetches the organization whose ID or slug matches the provided `id_or_slug` URL query parameter.
       request = Models::Operations::GetOrganizationRequest.new(
@@ -392,6 +400,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -475,7 +486,7 @@ module Clerk
 
 
     
-    def update(body:, organization_id:, retries: nil, timeout_ms: nil)
+    def update(body:, organization_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update an organization
       # Updates an existing organization
       request = Models::Operations::UpdateOrganizationRequest.new(
@@ -546,6 +557,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -602,7 +616,7 @@ module Clerk
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['402', '403', '404', '422'])
+      elsif Utils.match_status_code(http_response.status, ['400', '402', '403', '404', '422'])
         if Utils.match_content_type(content_type, 'application/json')
           http_response = @sdk_configuration.hooks.after_success(
             hook_ctx: SDKHooks::AfterSuccessHookContext.new(
@@ -629,7 +643,7 @@ module Clerk
 
 
     
-    def delete(organization_id:, retries: nil, timeout_ms: nil)
+    def delete(organization_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete an organization
       # Deletes the given organization.
       # Please note that deleting an organization will also delete all memberships and invitations.
@@ -692,6 +706,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -775,7 +792,7 @@ module Clerk
 
 
     
-    def merge_metadata(body:, organization_id:, retries: nil, timeout_ms: nil)
+    def merge_metadata(body:, organization_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # merge_metadata - Merge and update metadata for an organization
       # Update organization metadata attributes by merging existing values with the provided parameters.
       # Metadata values will be updated via a deep merge.
@@ -849,6 +866,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -932,7 +952,7 @@ module Clerk
 
 
     
-    def upload_logo(organization_id:, body: nil, retries: nil, timeout_ms: nil)
+    def upload_logo(organization_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # upload_logo - Upload a logo for the organization
       # Set or replace an organization's logo, by uploading an image file.
       # This endpoint uses the `multipart/form-data` request content type and accepts a file of image type.
@@ -1005,6 +1025,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1088,7 +1111,7 @@ module Clerk
 
 
     
-    def delete_logo(organization_id:, retries: nil, timeout_ms: nil)
+    def delete_logo(organization_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete_logo - Delete the organization's logo.
       # Delete the organization's logo.
       request = Models::Operations::DeleteOrganizationLogoRequest.new(
@@ -1146,6 +1169,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1229,7 +1255,7 @@ module Clerk
 
 
     
-    def get_billing_subscription(organization_id:, retries: nil, timeout_ms: nil)
+    def get_billing_subscription(organization_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_billing_subscription - Retrieve an organization's billing subscription
       # Retrieves the billing subscription for the specified organization.
       # This includes subscription details, active plans, billing information, and payment status.
@@ -1289,6 +1315,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1384,5 +1413,339 @@ module Clerk
 
       end
     end
-  end
+
+
+    
+    def get_billing_credit_balance(organization_id:, retries: nil, timeout_ms: nil, http_headers: nil)
+      # get_billing_credit_balance - Retrieve an organization's credit balance
+      # Retrieves the current credit balance for the specified organization.
+      # Credits can be applied during checkout to reduce the charge or automatically applied to upcoming recurring charges.
+      request = Models::Operations::GetOrganizationBillingCreditBalanceRequest.new(
+        organization_id: organization_id
+      )
+      url, params = @sdk_configuration.get_server_details
+      base_url = Utils.template_url(url, params)
+      url = Utils.generate_url(
+        Models::Operations::GetOrganizationBillingCreditBalanceRequest,
+        base_url,
+        '/organizations/{organization_id}/billing/credits',
+        request
+      )
+      headers = {}
+      
+      headers['Accept'] = 'application/json'
+      headers['user-agent'] = @sdk_configuration.user_agent
+      retries ||= @sdk_configuration.retry_config
+      retries ||= Utils::RetryConfig.new(
+        backoff: Utils::BackoffStrategy.new(
+          exponent: 1.5,
+          initial_interval: 500,
+          max_elapsed_time: 3_600_000,
+          max_interval: 60_000
+        ),
+        retry_connection_errors: true,
+        strategy: 'backoff'
+      )
+      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
+
+      security = @sdk_configuration.security_source&.call
+
+      timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
+      timeout ||= @sdk_configuration.timeout
+      
+
+      connection = @sdk_configuration.client.dup
+      connection.request :retry, retry_options
+
+      hook_ctx = SDKHooks::HookContext.new(
+        config: @sdk_configuration,
+        base_url: base_url,
+        oauth2_scopes: nil,
+        operation_id: 'GetOrganizationBillingCreditBalance',
+        security_source: @sdk_configuration.security_source
+      )
+
+      error = nil
+      http_response = nil
+      
+      
+      begin
+        http_response = connection.get(url) do |req|
+          req.headers.merge!(headers)
+          req.options.timeout = timeout unless timeout.nil?
+          Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
+
+          @sdk_configuration.hooks.before_request(
+            hook_ctx: SDKHooks::BeforeRequestHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            request: req
+          )
+        end
+      rescue StandardError => e
+        error = e
+      ensure
+        if http_response.nil? || Utils.error_status?(http_response.status)
+          http_response = @sdk_configuration.hooks.after_error(
+            error: error,
+            hook_ctx: SDKHooks::AfterErrorHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+        else
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+        end
+        
+        if http_response.nil?
+          raise error if !error.nil?
+          raise 'no response'
+        end
+      end
+      
+      content_type = http_response.headers.fetch('Content-Type', 'application/octet-stream')
+      if Utils.match_status_code(http_response.status, ['200'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Components::CommerceCreditBalanceResponse)
+          response = Models::Operations::GetOrganizationBillingCreditBalanceResponse.new(
+            status_code: http_response.status,
+            content_type: content_type,
+            raw_response: http_response,
+            commerce_credit_balance_response: obj
+          )
+
+          return response
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['400', '401', '403', '404', '422'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj.raw_response = http_response
+          raise obj
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['500'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj.raw_response = http_response
+          raise obj
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['4XX'])
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
+      elsif Utils.match_status_code(http_response.status, ['5XX'])
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
+      else
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown status code received'
+
+      end
+    end
+
+
+    
+    def adjust_billing_credit_balance(body:, organization_id:, retries: nil, timeout_ms: nil, http_headers: nil)
+      # adjust_billing_credit_balance - Adjust an organization's credit balance
+      # Increases or decreases the credit balance for the specified organization.
+      # Each adjustment is recorded as a ledger entry. The idempotency_key parameter
+      # ensures that duplicate requests are safely handled.
+      request = Models::Operations::AdjustOrganizationBillingCreditBalanceRequest.new(
+        organization_id: organization_id,
+        body: body
+      )
+      url, params = @sdk_configuration.get_server_details
+      base_url = Utils.template_url(url, params)
+      url = Utils.generate_url(
+        Models::Operations::AdjustOrganizationBillingCreditBalanceRequest,
+        base_url,
+        '/organizations/{organization_id}/billing/credits',
+        request
+      )
+      headers = {}
+      
+      req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
+      headers['content-type'] = req_content_type
+      raise StandardError, 'request body is required' if data.nil? && form.nil?
+
+      if form && !form.empty?
+        body = Utils.encode_form(form)
+      elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
+        body = URI.encode_www_form(data)
+      else
+        body = data
+      end
+      headers['Accept'] = 'application/json'
+      headers['user-agent'] = @sdk_configuration.user_agent
+      retries ||= @sdk_configuration.retry_config
+      retries ||= Utils::RetryConfig.new(
+        backoff: Utils::BackoffStrategy.new(
+          exponent: 1.5,
+          initial_interval: 500,
+          max_elapsed_time: 3_600_000,
+          max_interval: 60_000
+        ),
+        retry_connection_errors: true,
+        strategy: 'backoff'
+      )
+      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
+
+      security = @sdk_configuration.security_source&.call
+
+      timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
+      timeout ||= @sdk_configuration.timeout
+      
+
+      connection = @sdk_configuration.client.dup
+      connection.request :retry, retry_options
+
+      hook_ctx = SDKHooks::HookContext.new(
+        config: @sdk_configuration,
+        base_url: base_url,
+        oauth2_scopes: nil,
+        operation_id: 'AdjustOrganizationBillingCreditBalance',
+        security_source: @sdk_configuration.security_source
+      )
+
+      error = nil
+      http_response = nil
+      
+      
+      begin
+        http_response = connection.post(url) do |req|
+          req.body = body
+          req.headers.merge!(headers)
+          req.options.timeout = timeout unless timeout.nil?
+          Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
+
+          @sdk_configuration.hooks.before_request(
+            hook_ctx: SDKHooks::BeforeRequestHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            request: req
+          )
+        end
+      rescue StandardError => e
+        error = e
+      ensure
+        if http_response.nil? || Utils.error_status?(http_response.status)
+          http_response = @sdk_configuration.hooks.after_error(
+            error: error,
+            hook_ctx: SDKHooks::AfterErrorHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+        else
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+        end
+        
+        if http_response.nil?
+          raise error if !error.nil?
+          raise 'no response'
+        end
+      end
+      
+      content_type = http_response.headers.fetch('Content-Type', 'application/octet-stream')
+      if Utils.match_status_code(http_response.status, ['200'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Components::CommerceCreditLedgerResponse)
+          response = Models::Operations::AdjustOrganizationBillingCreditBalanceResponse.new(
+            status_code: http_response.status,
+            content_type: content_type,
+            raw_response: http_response,
+            commerce_credit_ledger_response: obj
+          )
+
+          return response
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['400', '401', '403', '404', '409', '422'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj.raw_response = http_response
+          raise obj
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['500'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj.raw_response = http_response
+          raise obj
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['4XX'])
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
+      elsif Utils.match_status_code(http_response.status, ['5XX'])
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
+      else
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown status code received'
+
+      end
+    end
+end
 end

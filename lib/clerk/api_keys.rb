@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def create_api_key(request:, retries: nil, timeout_ms: nil)
+    def create_api_key(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # create_api_key - Create an API Key
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
@@ -100,6 +102,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -198,7 +203,7 @@ module Clerk
 
 
     
-    def get_api_keys(request:, retries: nil, timeout_ms: nil)
+    def get_api_keys(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_api_keys - Get API Keys
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
@@ -249,6 +254,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -347,7 +355,7 @@ module Clerk
 
 
     
-    def get_api_key(api_key_id:, retries: nil, timeout_ms: nil)
+    def get_api_key(api_key_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_api_key - Get an API Key by ID
       request = Models::Operations::GetApiKeyRequest.new(
         api_key_id: api_key_id
@@ -404,6 +412,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -502,7 +513,7 @@ module Clerk
 
 
     
-    def update_api_key(body:, api_key_id:, retries: nil, timeout_ms: nil)
+    def update_api_key(body:, api_key_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update_api_key - Update an API Key
       request = Models::Operations::UpdateApiKeyRequest.new(
         api_key_id: api_key_id,
@@ -572,6 +583,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -670,7 +684,7 @@ module Clerk
 
 
     
-    def delete_api_key(api_key_id:, retries: nil, timeout_ms: nil)
+    def delete_api_key(api_key_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete_api_key - Delete an API Key
       request = Models::Operations::DeleteApiKeyRequest.new(
         api_key_id: api_key_id
@@ -727,6 +741,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -825,7 +842,7 @@ module Clerk
 
 
     
-    def get_api_key_secret(api_key_id:, retries: nil, timeout_ms: nil)
+    def get_api_key_secret(api_key_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_api_key_secret - Get an API Key Secret
       request = Models::Operations::GetApiKeySecretRequest.new(
         api_key_id: api_key_id
@@ -882,6 +899,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -980,7 +1000,7 @@ module Clerk
 
 
     
-    def revoke_api_key(body:, api_key_id:, retries: nil, timeout_ms: nil)
+    def revoke_api_key(body:, api_key_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # revoke_api_key - Revoke an API Key
       request = Models::Operations::RevokeApiKeyRequest.new(
         api_key_id: api_key_id,
@@ -1050,6 +1070,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1148,7 +1171,7 @@ module Clerk
 
 
     
-    def verify_api_key(request:, retries: nil, timeout_ms: nil)
+    def verify_api_key(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # verify_api_key - Verify an API Key
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
@@ -1209,6 +1232,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1304,5 +1330,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

@@ -53,7 +53,7 @@ module Clerk
         # Information about the next payment.
         field :next_payment, Crystalline::Nilable.new(Models::Components::SchemasCommerceSubscriptionItemNextPayment), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('next_payment') } }
         # The payer associated with this subscription.
-        field :payer, Crystalline::Nilable.new(Models::Components::Payer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payer') } }
+        field :payer, Crystalline::Nilable.new(Models::Components::SchemasCommerceSubscriptionItemPayer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payer') } }
         # Unix timestamp (in milliseconds) when the current period started.
         field :period_start, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('period_start') } }
         # Unix timestamp (in milliseconds) when the current period ends.

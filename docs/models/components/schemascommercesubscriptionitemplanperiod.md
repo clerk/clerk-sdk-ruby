@@ -2,6 +2,14 @@
 
 The billing period for this subscription.
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = SchemasCommerceSubscriptionItemPlanPeriod::MONTH
+```
+
 
 ## Values
 

@@ -1,21 +1,20 @@
-speakeasyVersion: 1.722.2
+speakeasyVersion: 1.749.0
 sources:
     Clerk-OAS:
         sourceNamespace: clerk-openapi
-        sourceRevisionDigest: sha256:4be3de7a3885a1627d1f47b90a81ad6f1fb0c8ecfe903f8fade2522410915796
-        sourceBlobDigest: sha256:a83a287a63de6bc65fceb5b7eed893c94f8b2ef4a3609f08aeb94f9c74be4f54
+        sourceRevisionDigest: sha256:cbabfc99a4e173be0cd5c445a7ccf30ad4f2eda77b150d632edd11038dd41d67
+        sourceBlobDigest: sha256:1ec69941bcd75099ef0d9b768ecb8a873f26177affce1392704ec098856510b3
         tags:
             - latest
-            - speakeasy-sdk-regen-1771453069
             - "2025-11-10"
 targets:
     clerk:
         source: Clerk-OAS
         sourceNamespace: clerk-openapi
-        sourceRevisionDigest: sha256:4be3de7a3885a1627d1f47b90a81ad6f1fb0c8ecfe903f8fade2522410915796
-        sourceBlobDigest: sha256:a83a287a63de6bc65fceb5b7eed893c94f8b2ef4a3609f08aeb94f9c74be4f54
+        sourceRevisionDigest: sha256:cbabfc99a4e173be0cd5c445a7ccf30ad4f2eda77b150d632edd11038dd41d67
+        sourceBlobDigest: sha256:1ec69941bcd75099ef0d9b768ecb8a873f26177affce1392704ec098856510b3
         codeSamplesNamespace: clerk-oas-ruby-code-samples
-        codeSamplesRevisionDigest: sha256:4d707e149efbdfc98f20a5450e2006129c1adaa1782c72d5f1350b7cd3cd572c
+        codeSamplesRevisionDigest: sha256:02b644bd03540fed0edc38aa91748d0d9b3d0e554cdb1ebdc116cc28bc627953
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest

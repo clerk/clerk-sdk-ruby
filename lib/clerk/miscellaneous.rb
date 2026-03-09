@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def get_public_interstitial(request:, retries: nil, timeout_ms: nil)
+    def get_public_interstitial(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_public_interstitial - Returns the markup for the interstitial page
       # The Clerk interstitial endpoint serves an html page that loads clerk.js in order to check the user's authentication state.
       # It is used by Clerk SDKs when the user's authentication state cannot be immediately determined.
@@ -89,6 +91,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -145,5 +150,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(query: nil, order_by: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def list(query: nil, order_by: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - Get a list of all organization permissions
       # Retrieves all organization permissions for the given instance.
       request = Models::Operations::ListOrganizationPermissionsRequest.new(
@@ -97,6 +99,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -180,7 +185,7 @@ module Clerk
 
 
     
-    def create(request:, retries: nil, timeout_ms: nil)
+    def create(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create a new organization permission
       # Creates a new organization permission for the given instance.
       url, params = @sdk_configuration.get_server_details
@@ -242,6 +247,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -325,7 +333,7 @@ module Clerk
 
 
     
-    def get(permission_id:, retries: nil, timeout_ms: nil)
+    def get(permission_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Get an organization permission
       # Retrieves the details of an organization permission.
       request = Models::Operations::GetOrganizationPermissionRequest.new(
@@ -383,6 +391,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -466,7 +477,7 @@ module Clerk
 
 
     
-    def update(body:, permission_id:, retries: nil, timeout_ms: nil)
+    def update(body:, permission_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update an organization permission
       # Updates the properties of an existing organization permission.
       # System permissions cannot be updated.
@@ -538,6 +549,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -621,7 +635,7 @@ module Clerk
 
 
     
-    def delete(permission_id:, retries: nil, timeout_ms: nil)
+    def delete(permission_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete an organization permission
       # Deletes an organization permission.
       # System permissions cannot be deleted.
@@ -680,6 +694,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -760,5 +777,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

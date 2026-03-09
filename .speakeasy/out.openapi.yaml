@@ -140,6 +140,8 @@ tags:
     description: Tokens meant for use by end-to-end test suites in requests to the Frontend API, so as to bypass bot detection measures.
     externalDocs:
       url: https://clerk.com/docs/testing/overview#testing-tokens
+  - name: Agent Tasks
+    description: Tasks that allow creating user sessions for agent-based interactions.
   - name: Users
     description: The user object represents a user that has successfully signed up to your application.
     externalDocs:
@@ -370,6 +372,8 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /email_addresses/{email_address_id}:
@@ -466,6 +470,8 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
   /phone_numbers:
     post:
       operationId: CreatePhoneNumber
@@ -626,8 +632,11 @@ paths:
         - Sessions
       summary: List all sessions
       description: |-
-        Returns a list of all sessions.
+        Returns a list of sessions matching the provided criteria.
         The sessions are returned sorted by creation date, with the newest sessions appearing first.
+
+        Note: This endpoint does not return all sessions that have ever existed. Old and inactive sessions are periodically cleaned up and will not be included in the results.
+
         **Deprecation Notice (2024-01-01):** All parameters were initially considered optional, however
         moving forward at least one of `client_id` or `user_id` parameters should be provided.
       parameters:
@@ -2077,6 +2086,8 @@ paths:
           $ref: '#/components/responses/AuthenticationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     delete:
@@ -2405,6 +2416,83 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
         '500':
           $ref: '#/components/responses/ClerkErrors'
+  /users/{user_id}/billing/credits:
+    get:
+      operationId: GetUserBillingCreditBalance
+      x-speakeasy-group: users
+      x-speakeasy-name-override: getBillingCreditBalance
+      summary: Retrieve a user's credit balance
+      description: |-
+        Retrieves the current credit balance for the specified user.
+        Credits can be applied during checkout to reduce the charge or automatically applied to upcoming recurring charges
+      tags:
+        - Users
+        - Billing
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the user whose credit balance to retrieve
+      responses:
+        '200':
+          $ref: '#/components/responses/CommerceCreditBalance'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/ClerkErrors'
+    post:
+      operationId: AdjustUserBillingCreditBalance
+      x-speakeasy-group: users
+      x-speakeasy-name-override: adjustBillingCreditBalance
+      summary: Adjust a user's credit balance
+      description: |-
+        Increases or decreases the credit balance for the specified user.
+        Each adjustment is recorded as a ledger entry. The idempotency_key parameter
+        ensures that duplicate requests are safely handled.
+      tags:
+        - Users
+        - Billing
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the user whose credit balance to adjust
+      requestBody:
+        description: Parameters for the credit balance adjustment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdjustCreditBalanceRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/CommerceCreditLedger'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/ClerkErrors'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/ClerkErrors'
   /users/{user_id}/oauth_access_tokens/{provider}:
     get:
       operationId: GetOAuthAccessToken
@@ -2492,6 +2580,7 @@ paths:
               - pending
               - accepted
               - revoked
+              - expired
       responses:
         '200':
           $ref: '#/components/responses/OrganizationInvitationsWithPublicOrganizationData'
@@ -3127,6 +3216,7 @@ paths:
               - pending
               - accepted
               - revoked
+              - expired
         - in: query
           required: false
           name: query
@@ -3735,6 +3825,46 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/InstanceProtect'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /instance/oauth_application_settings:
+    get:
+      operationId: GetInstanceOAuthApplicationSettings
+      x-speakeasy-group: instanceSettings
+      x-speakeasy-name-override: getOAuthApplicationSettings
+      summary: Get OAuth application settings
+      description: Retrieves the settings for OAuth applications for the instance (dynamic client registration, JWT access tokens, etc.).
+      tags:
+        - Instance Settings
+      responses:
+        '200':
+          $ref: '#/components/responses/InstanceOAuthApplicationSettings'
+    patch:
+      operationId: UpdateInstanceOAuthApplicationSettings
+      x-speakeasy-group: instanceSettings
+      x-speakeasy-name-override: updateOAuthApplicationSettings
+      summary: Update OAuth application settings
+      description: Updates the OAuth application settings for the instance.
+      tags:
+        - Instance Settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                dynamic_oauth_client_registration:
+                  type: boolean
+                  nullable: true
+                  description: Whether dynamic OAuth client registration is enabled for the instance (RFC 7591).
+                oauth_jwt_access_tokens:
+                  type: boolean
+                  nullable: true
+                  description: Whether OAuth JWT access tokens are enabled for the instance (disabled indicates opaque access tokens).
+      responses:
+        '200':
+          $ref: '#/components/responses/InstanceOAuthApplicationSettings'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /instance/change_domain:
@@ -4658,6 +4788,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/Organization'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
         '402':
           $ref: '#/components/responses/ResourceNotFound'
         '403':
@@ -4843,6 +4975,83 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
         '500':
           $ref: '#/components/responses/ClerkErrors'
+  /organizations/{organization_id}/billing/credits:
+    get:
+      operationId: GetOrganizationBillingCreditBalance
+      x-speakeasy-group: organizations
+      x-speakeasy-name-override: getBillingCreditBalance
+      summary: Retrieve an organization's credit balance
+      description: |-
+        Retrieves the current credit balance for the specified organization.
+        Credits can be applied during checkout to reduce the charge or automatically applied to upcoming recurring charges.
+      tags:
+        - Organizations
+        - Billing
+      parameters:
+        - in: path
+          name: organization_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the organization whose credit balance to retrieve
+      responses:
+        '200':
+          $ref: '#/components/responses/CommerceCreditBalance'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/ClerkErrors'
+    post:
+      operationId: AdjustOrganizationBillingCreditBalance
+      x-speakeasy-group: organizations
+      x-speakeasy-name-override: adjustBillingCreditBalance
+      summary: Adjust an organization's credit balance
+      description: |-
+        Increases or decreases the credit balance for the specified organization.
+        Each adjustment is recorded as a ledger entry. The idempotency_key parameter
+        ensures that duplicate requests are safely handled.
+      tags:
+        - Organizations
+        - Billing
+      parameters:
+        - in: path
+          name: organization_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the organization whose credit balance to adjust
+      requestBody:
+        description: Parameters for the credit balance adjustment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdjustCreditBalanceRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/CommerceCreditLedger'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/ClerkErrors'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/ClerkErrors'
   /organizations/{organization_id}/invitations:
     post:
       operationId: CreateOrganizationInvitation
@@ -4932,6 +5141,8 @@ paths:
           $ref: '#/components/responses/OrganizationInvitation'
         '400':
           $ref: '#/components/responses/ClerkErrors'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
         '403':
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
@@ -4969,6 +5180,7 @@ paths:
               - pending
               - accepted
               - revoked
+              - expired
         - in: query
           required: false
           name: email_address
@@ -6885,6 +7097,8 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
+  /enterprise_connections: {}
+  /enterprise_connections/{enterprise_connection_id}: {}
   /testing_tokens:
     post:
       operationId: CreateTestingToken
@@ -6897,6 +7111,104 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/TestingToken'
+  /agents/tasks:
+    post:
+      operationId: CreateAgentTask
+      x-speakeasy-group: agentTasks
+      x-speakeasy-name-override: create
+      summary: Create agent task
+      description: |-
+        Create an agent task on behalf of a user.
+        The response contains a URL that, when visited, creates a session for the user.
+        The agent_id is stable per agent_name within an instance. The task_id is unique per call.
+      tags:
+        - Agent Tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                on_behalf_of:
+                  type: object
+                  description: |-
+                    Identifies the user on whose behalf the agent task is created.
+                    Exactly one of user_id or identifier must be provided.
+                  properties:
+                    user_id:
+                      type: string
+                      description: The ID of the user.
+                    identifier:
+                      type: string
+                      description: A verified identifier (e.g. email address) belonging to the user.
+                permissions:
+                  type: string
+                  description: The permissions granted to the agent task. Must be "*" (all permissions).
+                  enum:
+                    - '*'
+                agent_name:
+                  type: string
+                  description: |-
+                    A name identifying the agent. Used to derive a stable agent_id per instance.
+                    Logged for audit purposes.
+                task_description:
+                  type: string
+                  description: A description of the task being performed. Logged for audit purposes.
+                redirect_url:
+                  type: string
+                  format: uri
+                  description: |-
+                    The URL the user is redirected to after the agent task is accepted.
+                    Must be a valid absolute URL with an `https` scheme in production instances.
+                    In development instances, `http` is also permitted.
+                    The URL's domain must belong to one of the instance's associated domains
+                    (primary or satellite); otherwise the redirect will be rejected when the
+                    task ticket is consumed.
+                session_max_duration_in_seconds:
+                  type: integer
+                  description: |-
+                    The maximum duration that the session which will be created by the generated agent task should last.
+                    By default, the duration of a session created via an agent task lasts 30 minutes.
+                  default: 1800
+              required:
+                - on_behalf_of
+                - permissions
+                - agent_name
+                - task_description
+                - redirect_url
+      responses:
+        '200':
+          $ref: '#/components/responses/AgentTask'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /agents/tasks/{agent_task_id}/revoke:
+    post:
+      operationId: RevokeAgentTask
+      x-speakeasy-group: agentTasks
+      x-speakeasy-name-override: revoke
+      summary: Revoke agent task
+      description: Revokes a pending agent task.
+      tags:
+        - Agent Tasks
+      parameters:
+        - name: agent_task_id
+          in: path
+          description: The ID of the agent task to be revoked.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/AgentTask'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
   /organization_memberships:
     get:
       operationId: InstanceGetOrganizationMemberships
@@ -7155,32 +7467,6 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
   /accountless_applications: {}
   /accountless_applications/complete: {}
-  /platform/users: {}
-  /platform/organizations: {}
-  /platform/applications: {}
-  /platform/organizations/{organizationID}: {}
-  /platform/applications/{applicationID}: {}
-  /platform/applications/{applicationID}/transfer_ownership: {}
-  /platform/applications/{applicationID}/usage: {}
-  /platform/applications/{applicationID}/subscription: {}
-  /platform/applications/{applicationID}/rotate_secret_keys: {}
-  /platform/applications/{applicationID}/logo: {}
-  /platform/applications/{applicationID}/favicon: {}
-  /platform/applications/{applicationID}/domain: {}
-  /platform/applications/{applicationID}/domains: {}
-  /platform/applications/{applicationID}/domains/{domainIDOrName}: {}
-  /platform/applications/{applicationID}/domains/{domainIDOrName}/status: {}
-  /platform/applications/{applicationID}/domains/{domainIDOrName}/dns_check: {}
-  /platform/applications/{applicationID}/transfers: {}
-  /platform/applications/{applicationID}/transfers/{transferID}: {}
-  /platform/application_transfers: {}
-  /platform/applications/{applicationID}/instances/{envOrInsID}/users: {}
-  /platform/applications/{applicationID}/instances/{envOrInsID}/users/{userID}/ban: {}
-  /platform/applications/{applicationID}/instances/{envOrInsID}/users/{userID}/unban: {}
-  /platform/applications/{applicationID}/instances/{instanceID}/config: {}
-  /platform/applications/{applicationID}/instances/{instanceID}/config/schema: {}
-  /platform/applications/{applicationID}/instances/{envOrInsID}/jwt_templates: {}
-  /platform/applications/{applicationID}/instances/{envOrInsID}/jwt_templates/{templateID}: {}
   /billing/plans:
     get:
       operationId: GetCommercePlanList
@@ -8098,6 +8384,8 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /audit_logs: {}
+  /scim_directories: {}
+  /scim_directories/{scim_directory_id}: {}
   /api_keys:
     post:
       operationId: createApiKey
@@ -9369,6 +9657,12 @@ paths:
             schema:
               type: object
               properties:
+                token_format:
+                  type: string
+                  enum:
+                    - opaque
+                    - jwt
+                  default: opaque
                 seconds_until_expiration:
                   type: number
                   nullable: true
@@ -9515,6 +9809,8 @@ paths:
       summary: Get M2M Tokens
       description: |-
         Fetches M2M tokens for a specific machine.
+
+        Only tokens created with the opaque token format are returned by this endpoint. JWT-format M2M tokens are stateless and are not stored.
 
         This endpoint can be authenticated by either a Machine Secret Key or by a Clerk Secret Key.
 
@@ -9732,6 +10028,8 @@ paths:
       summary: Revoke a M2M Token
       description: |-
         Revokes a M2M Token.
+
+        This endpoint only revokes stored opaque-format M2M tokens. JWT-format M2M tokens are stateless and cannot be revoked.
 
         This endpoint can be authenticated by either a Machine Secret Key or by a Clerk Secret Key.
 
@@ -10199,10 +10497,6 @@ components:
       scheme: bearer
       description: Secret key, obtained under "API Keys" in the Clerk Dashboard.
       bearerFormat: sk_<environment>_<secret value>
-    platformToken:
-      type: http
-      scheme: bearer
-      description: Internal auth.
   schemas:
     JWKS:
       type: object
@@ -11883,6 +12177,55 @@ components:
           type: number
           format: float
           description: Percentage of the billing cycle remaining.
+    CommerceProrationCreditDetailResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        amount:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+        cycle_days_remaining:
+          type: integer
+          format: int64
+        cycle_days_total:
+          type: integer
+          format: int64
+        cycle_remaining_percent:
+          type: number
+          format: double
+      required:
+        - amount
+        - cycle_days_remaining
+        - cycle_days_total
+        - cycle_remaining_percent
+    CommercePayerCreditResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        remaining_balance:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+        applied_amount:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+      required:
+        - remaining_balance
+        - applied_amount
+    CommerceCreditsResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        proration:
+          allOf:
+            - $ref: '#/components/schemas/CommerceProrationCreditDetailResponse'
+          nullable: true
+        payer:
+          allOf:
+            - $ref: '#/components/schemas/CommercePayerCreditResponse'
+          nullable: true
+        total:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+      required:
+        - proration
+        - payer
+        - total
     FeatureResponse:
       type: object
       additionalProperties: false
@@ -11916,6 +12259,45 @@ components:
           type: string
           nullable: true
           description: The URL of the feature's avatar image.
+    CommercePlanUnitPriceTier:
+      type: object
+      additionalProperties: false
+      properties:
+        starts_at_block:
+          type: integer
+          format: int64
+          description: Start block (inclusive) for this tier
+        ends_after_block:
+          type: integer
+          format: int64
+          nullable: true
+          description: End block (inclusive) for this tier; null means unlimited
+        fee_per_block:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+          description: Price charged per block in this tier
+      required:
+        - starts_at_block
+        - fee_per_block
+    CommercePlanUnitPrice:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the billable unit (for example, seats)
+        block_size:
+          type: integer
+          format: int64
+          description: Number of units included in each pricing block
+        tiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommercePlanUnitPriceTier'
+          description: Tiered pricing configuration for this unit
+      required:
+        - name
+        - block_size
+        - tiers
     CommercePlan:
       type: object
       additionalProperties: false
@@ -12002,6 +12384,11 @@ components:
           format: int64
           nullable: true
           description: Number of free trial days for this plan.
+        unit_prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommercePlanUnitPrice'
+          description: Per-unit pricing tiers for this plan (for example, seats)
     CommercePaymentMethodResponse:
       type: object
       additionalProperties: false
@@ -12155,6 +12542,80 @@ components:
           type: integer
           format: int64
           description: Unix timestamp (in milliseconds) when the payer was last updated.
+    CommerceSubscriptionItemSeatsResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: integer
+          format: int64
+          nullable: true
+          description: Seat quantity being billed; null means unlimited
+      required:
+        - quantity
+    CommercePerUnitTotalTier:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: integer
+          format: int64
+          nullable: true
+          description: Units billed in this tier; null means unlimited
+        fee_per_block:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+          description: Price charged per block in this tier
+        total:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+          description: Total charge for this tier
+      required:
+        - fee_per_block
+        - total
+    CommercePerUnitTotal:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the billable unit (for example, seats)
+        block_size:
+          type: integer
+          format: int64
+          description: Number of units included in each pricing block
+        tiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommercePerUnitTotalTier'
+          description: Computed totals for each pricing tier
+      required:
+        - name
+        - block_size
+        - tiers
+    CommerceTotalsResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        subtotal:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+        base_fee:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+        tax_total:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+        grand_total:
+          $ref: '#/components/schemas/CommerceMoneyResponse'
+        per_unit_totals:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommercePerUnitTotal'
+        credits:
+          allOf:
+            - $ref: '#/components/schemas/CommerceCreditsResponse'
+          nullable: true
+      required:
+        - subtotal
+        - base_fee
+        - tax_total
+        - grand_total
     CommerceSubscriptionItem:
       type: object
       additionalProperties: false
@@ -12199,6 +12660,11 @@ components:
         credit:
           $ref: '#/components/schemas/CommerceSubscriptionCreditResponse'
           description: Credit information (only available in PaymentAttempt events).
+        credits:
+          allOf:
+            - $ref: '#/components/schemas/CommerceCreditsResponse'
+          nullable: true
+          description: Unified credits breakdown for this subscription item.
         plan_id:
           type: string
           description: Unique identifier for the associated plan.
@@ -12273,6 +12739,16 @@ components:
           type: integer
           format: int64
           description: Unix timestamp (in milliseconds) when the subscription item was last updated.
+        seats:
+          allOf:
+            - $ref: '#/components/schemas/CommerceSubscriptionItemSeatsResponse'
+          nullable: true
+          description: Seat quantity for seat-based billing.
+        totals:
+          allOf:
+            - $ref: '#/components/schemas/CommerceTotalsResponse'
+          nullable: true
+          description: Totals for this subscription item.
     CommerceSubscriptionNextPayment:
       type: object
       additionalProperties: false
@@ -12355,6 +12831,91 @@ components:
         eligible_for_free_trial:
           type: boolean
           description: Whether the payer is eligible for a free trial.
+    CommerceCreditBalanceResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - object
+        - balance
+      properties:
+        object:
+          type: string
+          description: String representing the object's type. Always "commerce_credit_balance".
+        balance:
+          allOf:
+            - $ref: '#/components/schemas/CommerceMoneyResponse'
+          nullable: true
+          description: The current credit balance. Null when the payer has never had credits.
+    AdjustCreditBalanceRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - amount
+        - action
+        - idempotency_key
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The credit amount in cents. Must be greater than zero.
+        action:
+          type: string
+          enum:
+            - increase
+            - decrease
+          description: Whether to increase or decrease the credit balance.
+        currency:
+          type: string
+          description: The currency code (e.g. "USD"). Defaults to USD if not provided.
+        idempotency_key:
+          type: string
+          description: A unique key to ensure the adjustment is applied only once. Repeated requests with the same key return the original ledger entry.
+        note:
+          type: string
+          description: An optional note to attach to the ledger entry.
+    CommerceCreditLedgerResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - object
+        - id
+        - payer_id
+        - amount
+        - currency
+        - source_type
+        - source_id
+        - created_at
+      properties:
+        object:
+          type: string
+          description: String representing the object's type. Always "commerce_credit_ledger".
+        id:
+          type: string
+          description: Unique identifier for the ledger entry.
+        payer_id:
+          type: string
+          description: The ID of the payer whose balance was adjusted.
+        amount:
+          type: integer
+          format: int64
+          description: The signed credit amount. Positive for increases, negative for decreases.
+        currency:
+          type: string
+          description: The currency code of the credit adjustment.
+        source_type:
+          type: string
+          description: The type of source that originated the adjustment (e.g. "grant").
+        source_id:
+          type: string
+          description: The ID of the source that originated the adjustment.
+        note:
+          type: string
+          nullable: true
+          description: An optional note attached to the ledger entry.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the ledger entry was created.
     OAuthAccessToken:
       type: array
       items:
@@ -12869,6 +13430,24 @@ components:
         - object
         - rules_enabled
         - specter_enabled
+    OAuthApplicationSettings:
+      type: object
+      properties:
+        object:
+          type: string
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+            - oauth_application_settings
+        dynamic_oauth_client_registration:
+          type: boolean
+          description: Whether dynamic OAuth client registration is enabled for the instance (RFC 7591).
+        oauth_jwt_access_tokens:
+          type: boolean
+          description: Whether OAuth JWT access tokens are enabled for the instance (disabled indicates opaque access tokens).
+      required:
+        - object
+        - dynamic_oauth_client_registration
+        - oauth_jwt_access_tokens
     OrganizationSettings:
       type: object
       additionalProperties: false
@@ -13884,6 +14463,30 @@ components:
         - object
         - token
         - expires_at
+    AgentTask:
+      type: object
+      additionalProperties: false
+      properties:
+        object:
+          type: string
+          enum:
+            - agent_task
+        agent_id:
+          type: string
+          description: |
+            A stable identifier for the agent, unique per agent_name within an instance.
+        task_id:
+          type: string
+          description: |
+            A unique identifier for this agent task.
+        url:
+          type: string
+          description: |
+            The URL that, when visited, creates a session for the user. Only present in the response to a create request.
+      required:
+        - object
+        - agent_id
+        - task_id
     WaitlistEntry:
       type: object
       additionalProperties: false
@@ -13961,6 +14564,7 @@ components:
         - annual_monthly_amount
         - fee
         - annual_monthly_fee
+        - is_default
         - created_at
       properties:
         object:
@@ -13999,6 +14603,9 @@ components:
           type: string
           nullable: true
           description: The description of the price.
+        is_default:
+          type: boolean
+          description: Whether this price is the default price for its plan.
         created_at:
           type: integer
           format: int64
@@ -14647,6 +15254,11 @@ components:
         amount:
           $ref: '#/components/schemas/CommerceMoneyResponse'
           description: The amount for this payment attempt.
+        totals:
+          allOf:
+            - $ref: '#/components/schemas/CommerceTotalsResponse'
+          nullable: true
+          description: Totals breakdown for this payment attempt.
         payment_method_id:
           type: string
           description: Unique identifier for the payment method.
@@ -14732,6 +15344,7 @@ components:
           required:
             - grand_total
             - subtotal
+            - base_fee
             - tax_total
           properties:
             grand_total:
@@ -14739,7 +15352,10 @@ components:
               description: The grand total amount for the statement.
             subtotal:
               $ref: '#/components/schemas/CommerceMoneyResponse'
-              description: The subtotal amount for the statement.
+              description: The subtotal amount for the statement (base fee + unit price totals).
+            base_fee:
+              $ref: '#/components/schemas/CommerceMoneyResponse'
+              description: The base plan fee before unit pricing.
             tax_total:
               $ref: '#/components/schemas/CommerceMoneyResponse'
               description: The tax total amount for the statement.
@@ -15081,6 +15697,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ClerkErrors'
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ClerkErrors'
     DeletedObject:
       description: Deleted Object
       content:
@@ -15159,6 +15781,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/CommerceSubscription'
+    CommerceCreditBalance:
+      description: A payer's credit balance.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CommerceCreditBalanceResponse'
+    CommerceCreditLedger:
+      description: A credit ledger entry.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CommerceCreditLedgerResponse'
     OAuthAccessToken:
       description: Success
       content:
@@ -15294,6 +15928,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/InstanceProtect'
+    InstanceOAuthApplicationSettings:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OAuthApplicationSettings'
     OrganizationSettings:
       description: Success
       content:
@@ -15407,12 +16047,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/MachineScope'
-    Conflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ClerkErrors'
     MachineScope.Deleted:
       description: Machine scope deleted successfully for a machine
       content:
@@ -15569,6 +16203,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/TestingToken'
+    AgentTask:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AgentTask'
     WaitlistEntries:
       description: List of waitlist entries
       content:

@@ -1,5 +1,16 @@
 # PhoneNumberVerificationOtpStrategy
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = PhoneNumberVerificationOtpStrategy::PHONE_CODE
+
+# Open enum: use .deserialize() to create instances from custom string values
+custom = PhoneNumberVerificationOtpStrategy.deserialize("custom_value")
+```
+
 
 ## Values
 

@@ -2,12 +2,12 @@
 # frozen_string_literal: true
 
 
-class Clerk::Models::Components::Payer
+class Clerk::Models::Components::SchemasCommerceSubscriptionItemPayer
   extend ::Crystalline::MetadataFields::ClassMethods
 end
 
 
-class Clerk::Models::Components::Payer
+class Clerk::Models::Components::SchemasCommerceSubscriptionItemPayer
   def object(); end
   def object=(str_); end
   def id(); end

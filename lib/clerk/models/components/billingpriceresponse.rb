@@ -32,13 +32,15 @@ module Clerk
         field :fee, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('fee'), required: true } }
 
         field :annual_monthly_fee, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_monthly_fee'), required: true } }
+        # Whether this price is the default price for its plan.
+        field :is_default, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('is_default'), required: true } }
         # Unix timestamp (milliseconds) of creation.
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # The description of the price.
         field :description, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('description') } }
 
         
-        def initialize(object:, id:, plan_id:, instance_id:, currency:, currency_symbol:, amount:, annual_monthly_amount:, fee:, annual_monthly_fee:, created_at:, description: nil)
+        def initialize(object:, id:, plan_id:, instance_id:, currency:, currency_symbol:, amount:, annual_monthly_amount:, fee:, annual_monthly_fee:, is_default:, created_at:, description: nil)
           @object = object
           @id = id
           @plan_id = plan_id
@@ -49,6 +51,7 @@ module Clerk
           @annual_monthly_amount = annual_monthly_amount
           @fee = fee
           @annual_monthly_fee = annual_monthly_fee
+          @is_default = is_default
           @created_at = created_at
           @description = description
         end
@@ -66,6 +69,7 @@ module Clerk
           return false unless @annual_monthly_amount == other.annual_monthly_amount
           return false unless @fee == other.fee
           return false unless @annual_monthly_fee == other.annual_monthly_fee
+          return false unless @is_default == other.is_default
           return false unless @created_at == other.created_at
           return false unless @description == other.description
           true

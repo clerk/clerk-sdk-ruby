@@ -44,4 +44,6 @@ class Clerk::Models::Components::CommerceSubscriptionItemPlan
   def features=(str_); end
   def free_trial_days(); end
   def free_trial_days=(str_); end
+  def unit_prices(); end
+  def unit_prices=(str_); end
 end

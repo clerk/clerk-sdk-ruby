@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def create_token(request:, retries: nil, timeout_ms: nil)
+    def create_token(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # create_token - Create a M2M Token
       # Creates a new M2M Token. Must be authenticated via a Machine Secret Key.
       url, params = @sdk_configuration.get_server_details
@@ -101,6 +103,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -199,9 +204,11 @@ module Clerk
 
 
     
-    def list_tokens(request:, retries: nil, timeout_ms: nil)
+    def list_tokens(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # list_tokens - Get M2M Tokens
       # Fetches M2M tokens for a specific machine.
+      #
+      # Only tokens created with the opaque token format are returned by this endpoint. JWT-format M2M tokens are stateless and are not stored.
       #
       # This endpoint can be authenticated by either a Machine Secret Key or by a Clerk Secret Key.
       #
@@ -256,6 +263,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -369,9 +379,11 @@ module Clerk
 
 
     
-    def revoke_token(body:, m2m_token_id:, retries: nil, timeout_ms: nil)
+    def revoke_token(body:, m2m_token_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # revoke_token - Revoke a M2M Token
       # Revokes a M2M Token.
+      #
+      # This endpoint only revokes stored opaque-format M2M tokens. JWT-format M2M tokens are stateless and cannot be revoked.
       #
       # This endpoint can be authenticated by either a Machine Secret Key or by a Clerk Secret Key.
       #
@@ -445,6 +457,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -543,7 +558,7 @@ module Clerk
 
 
     
-    def verify_token(request:, retries: nil, timeout_ms: nil)
+    def verify_token(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # verify_token - Verify a M2M Token
       # Verifies a M2M Token.
       #
@@ -610,6 +625,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -705,5 +723,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

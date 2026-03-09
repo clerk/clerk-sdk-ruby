@@ -1,0 +1,10 @@
+# CommercePlanUnitPriceTier
+
+
+## Fields
+
+| Field                                                                                     | Type                                                                                      | Required                                                                                  | Description                                                                               |
+| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `starts_at_block`                                                                         | *::Integer*                                                                               | :heavy_check_mark:                                                                        | Start block (inclusive) for this tier                                                     |
+| `ends_after_block`                                                                        | *Crystalline::Nilable.new(::Integer)*                                                     | :heavy_minus_sign:                                                                        | End block (inclusive) for this tier; null means unlimited                                 |
+| `fee_per_block`                                                                           | [Models::Components::CommerceMoneyResponse](../../models/shared/commercemoneyresponse.md) | :heavy_check_mark:                                                                        | N/A                                                                                       |

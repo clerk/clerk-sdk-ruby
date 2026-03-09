@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create actor token
       # Create an actor token that can be used to impersonate the given user.
       # The `actor` parameter needs to include at least a "sub" key whose value is the ID of the actor (impersonating) user.
@@ -101,6 +103,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -184,7 +189,7 @@ module Clerk
 
 
     
-    def revoke(actor_token_id:, retries: nil, timeout_ms: nil)
+    def revoke(actor_token_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # revoke - Revoke actor token
       # Revokes a pending actor token.
       request = Models::Operations::RevokeActorTokenRequest.new(
@@ -242,6 +247,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -322,5 +330,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

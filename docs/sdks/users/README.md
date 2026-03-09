@@ -20,6 +20,8 @@
 * [delete_profile_image](#delete_profile_image) - Delete user profile image
 * [update_metadata](#update_metadata) - Merge and update a user's metadata
 * [get_billing_subscription](#get_billing_subscription) - Retrieve a user's billing subscription
+* [get_billing_credit_balance](#get_billing_credit_balance) - Retrieve a user's credit balance
+* [adjust_billing_credit_balance](#adjust_billing_credit_balance) - Adjust a user's credit balance
 * [get_o_auth_access_token](#get_o_auth_access_token) - Retrieve the OAuth access token of a user
 * [get_organization_memberships](#get_organization_memberships) - Retrieve all memberships for a user
 * [get_organization_invitations](#get_organization_invitations) - Retrieve all invitations for a user
@@ -311,7 +313,7 @@ end
 
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
-| Models::Errors::ClerkErrors | 400, 401, 404, 422          | application/json            |
+| Models::Errors::ClerkErrors | 400, 401, 404, 409, 422     | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## delete
@@ -771,6 +773,94 @@ end
 | Models::Errors::ClerkErrors | 400, 401, 403, 404, 422     | application/json            |
 | Models::Errors::ClerkErrors | 500                         | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## get_billing_credit_balance
+
+Retrieves the current credit balance for the specified user.
+Credits can be applied during checkout to reduce the charge or automatically applied to upcoming recurring charges
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="GetUserBillingCreditBalance" method="get" path="/users/{user_id}/billing/credits" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.users.get_billing_credit_balance(user_id: '<id>')
+
+unless res.commerce_credit_balance_response.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                           | Type                                                | Required                                            | Description                                         |
+| --------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------- |
+| `user_id`                                           | *::String*                                          | :heavy_check_mark:                                  | The ID of the user whose credit balance to retrieve |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::GetUserBillingCreditBalanceResponse)](../../models/operations/getuserbillingcreditbalanceresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 400, 401, 403, 404, 422     | application/json            |
+| Models::Errors::ClerkErrors | 500                         | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## adjust_billing_credit_balance
+
+Increases or decreases the credit balance for the specified user.
+Each adjustment is recorded as a ledger entry. The idempotency_key parameter
+ensures that duplicate requests are safely handled.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="AdjustUserBillingCreditBalance" method="post" path="/users/{user_id}/billing/credits" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.users.adjust_billing_credit_balance(user_id: '<id>', body: Models::Components::AdjustCreditBalanceRequest.new(
+  amount: 562_473,
+  action: Models::Components::Action::DECREASE,
+  idempotency_key: '<value>'
+))
+
+unless res.commerce_credit_ledger_response.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                           | Type                                                                                                | Required                                                                                            | Description                                                                                         |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `user_id`                                                                                           | *::String*                                                                                          | :heavy_check_mark:                                                                                  | The ID of the user whose credit balance to adjust                                                   |
+| `body`                                                                                              | [Models::Components::AdjustCreditBalanceRequest](../../models/shared/adjustcreditbalancerequest.md) | :heavy_check_mark:                                                                                  | Parameters for the credit balance adjustment                                                        |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::AdjustUserBillingCreditBalanceResponse)](../../models/operations/adjustuserbillingcreditbalanceresponse.md)**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| Models::Errors::ClerkErrors  | 400, 401, 403, 404, 409, 422 | application/json             |
+| Models::Errors::ClerkErrors  | 500                          | application/json             |
+| Errors::APIError             | 4XX, 5XX                     | \*/\*                        |
 
 ## get_o_auth_access_token
 

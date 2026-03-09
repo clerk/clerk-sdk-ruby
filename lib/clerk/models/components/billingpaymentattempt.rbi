@@ -52,4 +52,6 @@ class Clerk::Models::Components::BillingPaymentAttempt
   def paid_at=(str_); end
   def failed_at(); end
   def failed_at=(str_); end
+  def totals(); end
+  def totals=(str_); end
 end

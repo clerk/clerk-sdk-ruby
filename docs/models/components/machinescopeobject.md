@@ -1,5 +1,13 @@
 # MachineScopeObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = MachineScopeObject::MACHINE_SCOPE
+```
+
 
 ## Values
 

@@ -1,5 +1,13 @@
 # SignUpStatus
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = SignUpStatus::MISSING_REQUIREMENTS
+```
+
 
 ## Values
 

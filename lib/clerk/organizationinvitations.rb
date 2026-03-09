@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def get_all(request:, retries: nil, timeout_ms: nil)
+    def get_all(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_all - Get a list of organization invitations for the current instance
       # This request returns the list of organization invitations for the instance.
       # Results can be paginated using the optional `limit` and `offset` query parameters.
@@ -96,6 +98,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -194,7 +199,7 @@ module Clerk
 
 
     
-    def create(organization_id:, body: nil, retries: nil, timeout_ms: nil)
+    def create(organization_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create and send an organization invitation
       # Creates a new organization invitation and sends an email to the provided `email_address` with a link to accept the invitation and join the organization.
       # You can specify the `role` for the invited organization member.
@@ -279,6 +284,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -335,7 +343,7 @@ module Clerk
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['400', '403', '404', '422'])
+      elsif Utils.match_status_code(http_response.status, ['400', '402', '403', '404', '422'])
         if Utils.match_content_type(content_type, 'application/json')
           http_response = @sdk_configuration.hooks.after_success(
             hook_ctx: SDKHooks::AfterSuccessHookContext.new(
@@ -362,7 +370,7 @@ module Clerk
 
 
     
-    def list(request:, retries: nil, timeout_ms: nil)
+    def list(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - Get a list of organization invitations
       # This request returns the list of organization invitations.
       # Results can be paginated using the optional `limit` and `offset` query parameters.
@@ -424,6 +432,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -507,7 +518,7 @@ module Clerk
 
 
     
-    def bulk_create(body:, organization_id:, retries: nil, timeout_ms: nil)
+    def bulk_create(body:, organization_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # bulk_create - Bulk create and send organization invitations
       # Creates new organization invitations in bulk and sends out emails to the provided email addresses with a link to accept the invitation and join the organization.
       #
@@ -593,6 +604,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -676,7 +690,7 @@ module Clerk
 
 
     
-    def list_pending(organization_id:, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def list_pending(organization_id:, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list_pending - Get a list of pending organization invitations
       # This request returns the list of organization invitations with "pending" status.
       # These are the organization invitations that can still be used to join the organization, but have not been accepted by the invited user yet.
@@ -745,6 +759,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -828,7 +845,7 @@ module Clerk
 
 
     
-    def get(organization_id:, invitation_id:, retries: nil, timeout_ms: nil)
+    def get(organization_id:, invitation_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve an organization invitation by ID
       # Use this request to get an existing organization invitation by ID.
       request = Models::Operations::GetOrganizationInvitationRequest.new(
@@ -887,6 +904,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -970,7 +990,7 @@ module Clerk
 
 
     
-    def revoke(organization_id:, invitation_id:, body: nil, retries: nil, timeout_ms: nil)
+    def revoke(organization_id:, invitation_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # revoke - Revoke a pending organization invitation
       # Use this request to revoke a previously issued organization invitation.
       # Revoking an organization invitation makes it invalid; the invited user will no longer be able to join the organization with the revoked invitation.
@@ -1045,6 +1065,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1125,5 +1148,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

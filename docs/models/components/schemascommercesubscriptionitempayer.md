@@ -1,4 +1,4 @@
-# Payer
+# SchemasCommerceSubscriptionItemPayer
 
 The payer associated with this subscription.
 

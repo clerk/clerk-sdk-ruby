@@ -1,5 +1,13 @@
 # OAuthAccessTokenObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = OAuthAccessTokenObject::OAUTH_ACCESS_TOKEN
+```
+
 
 ## Values
 

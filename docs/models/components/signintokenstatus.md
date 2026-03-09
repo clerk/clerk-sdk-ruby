@@ -1,5 +1,13 @@
 # SignInTokenStatus
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = SignInTokenStatus::PENDING
+```
+
 
 ## Values
 

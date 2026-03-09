@@ -1,0 +1,11 @@
+# CommerceSubscriptionItemTotalsProration
+
+
+## Fields
+
+| Field                                                                                     | Type                                                                                      | Required                                                                                  | Description                                                                               |
+| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `amount`                                                                                  | [Models::Components::CommerceMoneyResponse](../../models/shared/commercemoneyresponse.md) | :heavy_check_mark:                                                                        | N/A                                                                                       |
+| `cycle_days_remaining`                                                                    | *::Integer*                                                                               | :heavy_check_mark:                                                                        | N/A                                                                                       |
+| `cycle_days_total`                                                                        | *::Integer*                                                                               | :heavy_check_mark:                                                                        | N/A                                                                                       |
+| `cycle_remaining_percent`                                                                 | *::Float*                                                                                 | :heavy_check_mark:                                                                        | N/A                                                                                       |

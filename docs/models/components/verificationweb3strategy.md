@@ -1,5 +1,13 @@
 # VerificationWeb3Strategy
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = VerificationWeb3Strategy::WEB3_METAMASK_SIGNATURE
+```
+
 
 ## Values
 

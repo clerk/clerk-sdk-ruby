@@ -1,5 +1,13 @@
 # OAuthApplicationObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = OAuthApplicationObject::OAUTH_APPLICATION
+```
+
 
 ## Values
 

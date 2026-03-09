@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Components
       # Totals for the statement.
-      class Totals
+      class BillingStatementTotals
         
         include Crystalline::MetadataFields
 
@@ -17,12 +17,15 @@ module Clerk
 
         field :subtotal, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('subtotal'), required: true } }
 
+        field :base_fee, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('base_fee'), required: true } }
+
         field :tax_total, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('tax_total'), required: true } }
 
         
-        def initialize(grand_total:, subtotal:, tax_total:)
+        def initialize(grand_total:, subtotal:, base_fee:, tax_total:)
           @grand_total = grand_total
           @subtotal = subtotal
+          @base_fee = base_fee
           @tax_total = tax_total
         end
 
@@ -31,6 +34,7 @@ module Clerk
           return false unless other.is_a? self.class
           return false unless @grand_total == other.grand_total
           return false unless @subtotal == other.subtotal
+          return false unless @base_fee == other.base_fee
           return false unless @tax_total == other.tax_total
           true
         end

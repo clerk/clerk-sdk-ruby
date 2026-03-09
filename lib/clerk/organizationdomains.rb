@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def create(body:, organization_id:, retries: nil, timeout_ms: nil)
+    def create(body:, organization_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create a new organization domain.
       # Creates a new organization domain. By default the domain is verified, but can be optionally set to unverified.
       request = Models::Operations::CreateOrganizationDomainRequest.new(
@@ -110,6 +112,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -193,7 +198,7 @@ module Clerk
 
 
     
-    def list(request:, retries: nil, timeout_ms: nil)
+    def list(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - Get a list of all domains of an organization.
       # Get a list of all domains of an organization.
       url, params = @sdk_configuration.get_server_details
@@ -250,6 +255,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -333,7 +341,7 @@ module Clerk
 
 
     
-    def update(body:, organization_id:, domain_id:, retries: nil, timeout_ms: nil)
+    def update(body:, organization_id:, domain_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update an organization domain.
       # Updates the properties of an existing organization domain.
       request = Models::Operations::UpdateOrganizationDomainRequest.new(
@@ -405,6 +413,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -488,7 +499,7 @@ module Clerk
 
 
     
-    def delete(organization_id:, domain_id:, retries: nil, timeout_ms: nil)
+    def delete(organization_id:, domain_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Remove a domain from an organization.
       # Removes the given domain from the organization.
       request = Models::Operations::DeleteOrganizationDomainRequest.new(
@@ -547,6 +558,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -630,7 +644,7 @@ module Clerk
 
 
     
-    def list_all(request:, retries: nil, timeout_ms: nil)
+    def list_all(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # list_all - List all organization domains
       # Retrieves a list of all organization domains within the current instance.
       # This endpoint can be used to list all domains across all organizations
@@ -688,6 +702,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -768,5 +785,5 @@ module Clerk
 
       end
     end
-  end
+end
 end
