@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(limit: nil, offset: nil, query: nil, order_by: nil, retries: nil, timeout_ms: nil)
+    def list(limit: nil, offset: nil, query: nil, order_by: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - Get a list of machines for an instance
       # This request returns the list of machines for an instance. The machines are
       # ordered by descending creation date (i.e. most recent machines will be
@@ -99,6 +101,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -182,7 +187,7 @@ module Clerk
 
 
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create a machine
       # Creates a new machine.
       url, params = @sdk_configuration.get_server_details
@@ -243,6 +248,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -326,7 +334,7 @@ module Clerk
 
 
     
-    def get(machine_id:, retries: nil, timeout_ms: nil)
+    def get(machine_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve a machine
       # Returns the details of a machine.
       request = Models::Operations::GetMachineRequest.new(
@@ -384,6 +392,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -467,7 +478,7 @@ module Clerk
 
 
     
-    def update(machine_id:, body: nil, retries: nil, timeout_ms: nil)
+    def update(machine_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update a machine
       # Updates an existing machine.
       # Only the provided fields will be updated.
@@ -538,6 +549,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -621,7 +635,7 @@ module Clerk
 
 
     
-    def delete(machine_id:, retries: nil, timeout_ms: nil)
+    def delete(machine_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete a machine
       # Deletes a machine.
       request = Models::Operations::DeleteMachineRequest.new(
@@ -679,6 +693,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -762,7 +779,7 @@ module Clerk
 
 
     
-    def get_secret_key(machine_id:, retries: nil, timeout_ms: nil)
+    def get_secret_key(machine_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_secret_key - Retrieve a machine secret key
       # Returns the secret key for a machine.
       request = Models::Operations::GetMachineSecretKeyRequest.new(
@@ -820,6 +837,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -903,7 +923,7 @@ module Clerk
 
 
     
-    def rotate_secret_key(body:, machine_id:, retries: nil, timeout_ms: nil)
+    def rotate_secret_key(body:, machine_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # rotate_secret_key - Rotate a machine's secret key
       # Rotates the machine's secret key.
       # When the secret key is rotated, make sure to update it in your machine/application.
@@ -976,6 +996,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1059,7 +1082,7 @@ module Clerk
 
 
     
-    def create_scope(machine_id:, body: nil, retries: nil, timeout_ms: nil)
+    def create_scope(machine_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create_scope - Create a machine scope
       # Creates a new machine scope, allowing the specified machine to access another machine.
       # Maximum of 150 scopes per machine.
@@ -1130,6 +1153,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1213,7 +1239,7 @@ module Clerk
 
 
     
-    def delete_scope(machine_id:, other_machine_id:, retries: nil, timeout_ms: nil)
+    def delete_scope(machine_id:, other_machine_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete_scope - Delete a machine scope
       # Deletes a machine scope, removing access from one machine to another.
       request = Models::Operations::DeleteMachineScopeRequest.new(
@@ -1272,6 +1298,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1352,5 +1381,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

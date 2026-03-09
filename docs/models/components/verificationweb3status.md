@@ -1,5 +1,13 @@
 # VerificationWeb3Status
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = VerificationWeb3Status::UNVERIFIED
+```
+
 
 ## Values
 

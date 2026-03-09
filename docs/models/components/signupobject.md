@@ -1,5 +1,13 @@
 # SignUpObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = SignUpObject::SIGN_UP_ATTEMPT
+```
+
 
 ## Values
 

@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Components
       # The payer associated with this subscription.
-      class Payer
+      class SchemasCommerceSubscriptionItemPayer
         
         include Crystalline::MetadataFields
 

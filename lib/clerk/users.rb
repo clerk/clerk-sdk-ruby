@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(request:, retries: nil, timeout_ms: nil)
+    def list(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - List all users
       # Returns a list of all users.
       # The users are returned sorted by creation date, with the newest users appearing first.
@@ -92,6 +94,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -175,7 +180,7 @@ module Clerk
 
 
     
-    def create(request:, retries: nil, timeout_ms: nil)
+    def create(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create a new user
       # Creates a new user. Your user management settings determine how you should setup your user model.
       #
@@ -243,6 +248,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -326,7 +334,7 @@ module Clerk
 
 
     
-    def count(request:, retries: nil, timeout_ms: nil)
+    def count(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # count - Count users
       # Returns a total count of all users that match the given filtering criteria.
       url, params = @sdk_configuration.get_server_details
@@ -378,6 +386,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -461,7 +472,7 @@ module Clerk
 
 
     
-    def get(user_id:, retries: nil, timeout_ms: nil)
+    def get(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve a user
       # Retrieve the details of a user
       request = Models::Operations::GetUserRequest.new(
@@ -519,6 +530,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -602,7 +616,7 @@ module Clerk
 
 
     
-    def update(body:, user_id:, retries: nil, timeout_ms: nil)
+    def update(body:, user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update a user
       # Update a user's attributes.
       #
@@ -684,6 +698,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -740,7 +757,7 @@ module Clerk
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['400', '401', '404', '422'])
+      elsif Utils.match_status_code(http_response.status, ['400', '401', '404', '409', '422'])
         if Utils.match_content_type(content_type, 'application/json')
           http_response = @sdk_configuration.hooks.after_success(
             hook_ctx: SDKHooks::AfterSuccessHookContext.new(
@@ -767,7 +784,7 @@ module Clerk
 
 
     
-    def delete(user_id:, retries: nil, timeout_ms: nil)
+    def delete(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete a user
       # Delete the specified user
       request = Models::Operations::DeleteUserRequest.new(
@@ -825,6 +842,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -908,7 +928,7 @@ module Clerk
 
 
     
-    def ban(user_id:, retries: nil, timeout_ms: nil)
+    def ban(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # ban - Ban a user
       # Marks the given user as banned, which means that all their sessions are revoked and they are not allowed to sign in again.
       request = Models::Operations::BanUserRequest.new(
@@ -966,6 +986,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1049,7 +1072,7 @@ module Clerk
 
 
     
-    def unban(user_id:, retries: nil, timeout_ms: nil)
+    def unban(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # unban - Unban a user
       # Removes the ban mark from the given user.
       request = Models::Operations::UnbanUserRequest.new(
@@ -1107,6 +1130,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1190,7 +1216,7 @@ module Clerk
 
 
     
-    def bulk_ban(request:, retries: nil, timeout_ms: nil)
+    def bulk_ban(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # bulk_ban - Ban multiple users
       # Marks multiple users as banned, which means that all their sessions are revoked and they are not allowed to sign in again.
       url, params = @sdk_configuration.get_server_details
@@ -1252,6 +1278,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1335,7 +1364,7 @@ module Clerk
 
 
     
-    def bulk_unban(request:, retries: nil, timeout_ms: nil)
+    def bulk_unban(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # bulk_unban - Unban multiple users
       # Removes the ban mark from multiple users.
       url, params = @sdk_configuration.get_server_details
@@ -1397,6 +1426,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1480,7 +1512,7 @@ module Clerk
 
 
     
-    def lock(user_id:, retries: nil, timeout_ms: nil)
+    def lock(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # lock - Lock a user
       # Marks the given user as locked, which means they are not allowed to sign in again until the lock expires.
       # Lock duration can be configured in the instance's restrictions settings.
@@ -1539,6 +1571,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1622,7 +1657,7 @@ module Clerk
 
 
     
-    def unlock(user_id:, retries: nil, timeout_ms: nil)
+    def unlock(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # unlock - Unlock a user
       # Removes the lock from the given user.
       request = Models::Operations::UnlockUserRequest.new(
@@ -1680,6 +1715,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1763,7 +1801,7 @@ module Clerk
 
 
     
-    def set_profile_image(body:, user_id:, retries: nil, timeout_ms: nil)
+    def set_profile_image(body:, user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # set_profile_image - Set user profile image
       # Update a user's profile image
       request = Models::Operations::SetUserProfileImageRequest.new(
@@ -1834,6 +1872,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1917,7 +1958,7 @@ module Clerk
 
 
     
-    def delete_profile_image(user_id:, retries: nil, timeout_ms: nil)
+    def delete_profile_image(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete_profile_image - Delete user profile image
       # Delete a user's profile image
       request = Models::Operations::DeleteUserProfileImageRequest.new(
@@ -1975,6 +2016,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -2058,7 +2102,7 @@ module Clerk
 
 
     
-    def update_metadata(user_id:, body: nil, retries: nil, timeout_ms: nil)
+    def update_metadata(user_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # update_metadata - Merge and update a user's metadata
       # Update a user's metadata attributes by merging existing values with the provided parameters.
       #
@@ -2135,6 +2179,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -2218,7 +2265,7 @@ module Clerk
 
 
     
-    def get_billing_subscription(user_id:, retries: nil, timeout_ms: nil)
+    def get_billing_subscription(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_billing_subscription - Retrieve a user's billing subscription
       # Retrieves the billing subscription for the specified user.
       # This includes subscription details, active plans, billing information, and payment status.
@@ -2278,6 +2325,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -2376,7 +2426,341 @@ module Clerk
 
 
     
-    def get_o_auth_access_token(request:, retries: nil, timeout_ms: nil)
+    def get_billing_credit_balance(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
+      # get_billing_credit_balance - Retrieve a user's credit balance
+      # Retrieves the current credit balance for the specified user.
+      # Credits can be applied during checkout to reduce the charge or automatically applied to upcoming recurring charges
+      request = Models::Operations::GetUserBillingCreditBalanceRequest.new(
+        user_id: user_id
+      )
+      url, params = @sdk_configuration.get_server_details
+      base_url = Utils.template_url(url, params)
+      url = Utils.generate_url(
+        Models::Operations::GetUserBillingCreditBalanceRequest,
+        base_url,
+        '/users/{user_id}/billing/credits',
+        request
+      )
+      headers = {}
+      
+      headers['Accept'] = 'application/json'
+      headers['user-agent'] = @sdk_configuration.user_agent
+      retries ||= @sdk_configuration.retry_config
+      retries ||= Utils::RetryConfig.new(
+        backoff: Utils::BackoffStrategy.new(
+          exponent: 1.5,
+          initial_interval: 500,
+          max_elapsed_time: 3_600_000,
+          max_interval: 60_000
+        ),
+        retry_connection_errors: true,
+        strategy: 'backoff'
+      )
+      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
+
+      security = @sdk_configuration.security_source&.call
+
+      timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
+      timeout ||= @sdk_configuration.timeout
+      
+
+      connection = @sdk_configuration.client.dup
+      connection.request :retry, retry_options
+
+      hook_ctx = SDKHooks::HookContext.new(
+        config: @sdk_configuration,
+        base_url: base_url,
+        oauth2_scopes: nil,
+        operation_id: 'GetUserBillingCreditBalance',
+        security_source: @sdk_configuration.security_source
+      )
+
+      error = nil
+      http_response = nil
+      
+      
+      begin
+        http_response = connection.get(url) do |req|
+          req.headers.merge!(headers)
+          req.options.timeout = timeout unless timeout.nil?
+          Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
+
+          @sdk_configuration.hooks.before_request(
+            hook_ctx: SDKHooks::BeforeRequestHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            request: req
+          )
+        end
+      rescue StandardError => e
+        error = e
+      ensure
+        if http_response.nil? || Utils.error_status?(http_response.status)
+          http_response = @sdk_configuration.hooks.after_error(
+            error: error,
+            hook_ctx: SDKHooks::AfterErrorHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+        else
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+        end
+        
+        if http_response.nil?
+          raise error if !error.nil?
+          raise 'no response'
+        end
+      end
+      
+      content_type = http_response.headers.fetch('Content-Type', 'application/octet-stream')
+      if Utils.match_status_code(http_response.status, ['200'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Components::CommerceCreditBalanceResponse)
+          response = Models::Operations::GetUserBillingCreditBalanceResponse.new(
+            status_code: http_response.status,
+            content_type: content_type,
+            raw_response: http_response,
+            commerce_credit_balance_response: obj
+          )
+
+          return response
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['400', '401', '403', '404', '422'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj.raw_response = http_response
+          raise obj
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['500'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj.raw_response = http_response
+          raise obj
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['4XX'])
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
+      elsif Utils.match_status_code(http_response.status, ['5XX'])
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
+      else
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown status code received'
+
+      end
+    end
+
+
+    
+    def adjust_billing_credit_balance(body:, user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
+      # adjust_billing_credit_balance - Adjust a user's credit balance
+      # Increases or decreases the credit balance for the specified user.
+      # Each adjustment is recorded as a ledger entry. The idempotency_key parameter
+      # ensures that duplicate requests are safely handled.
+      request = Models::Operations::AdjustUserBillingCreditBalanceRequest.new(
+        user_id: user_id,
+        body: body
+      )
+      url, params = @sdk_configuration.get_server_details
+      base_url = Utils.template_url(url, params)
+      url = Utils.generate_url(
+        Models::Operations::AdjustUserBillingCreditBalanceRequest,
+        base_url,
+        '/users/{user_id}/billing/credits',
+        request
+      )
+      headers = {}
+      
+      req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
+      headers['content-type'] = req_content_type
+      raise StandardError, 'request body is required' if data.nil? && form.nil?
+
+      if form && !form.empty?
+        body = Utils.encode_form(form)
+      elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
+        body = URI.encode_www_form(data)
+      else
+        body = data
+      end
+      headers['Accept'] = 'application/json'
+      headers['user-agent'] = @sdk_configuration.user_agent
+      retries ||= @sdk_configuration.retry_config
+      retries ||= Utils::RetryConfig.new(
+        backoff: Utils::BackoffStrategy.new(
+          exponent: 1.5,
+          initial_interval: 500,
+          max_elapsed_time: 3_600_000,
+          max_interval: 60_000
+        ),
+        retry_connection_errors: true,
+        strategy: 'backoff'
+      )
+      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
+
+      security = @sdk_configuration.security_source&.call
+
+      timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
+      timeout ||= @sdk_configuration.timeout
+      
+
+      connection = @sdk_configuration.client.dup
+      connection.request :retry, retry_options
+
+      hook_ctx = SDKHooks::HookContext.new(
+        config: @sdk_configuration,
+        base_url: base_url,
+        oauth2_scopes: nil,
+        operation_id: 'AdjustUserBillingCreditBalance',
+        security_source: @sdk_configuration.security_source
+      )
+
+      error = nil
+      http_response = nil
+      
+      
+      begin
+        http_response = connection.post(url) do |req|
+          req.body = body
+          req.headers.merge!(headers)
+          req.options.timeout = timeout unless timeout.nil?
+          Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
+
+          @sdk_configuration.hooks.before_request(
+            hook_ctx: SDKHooks::BeforeRequestHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            request: req
+          )
+        end
+      rescue StandardError => e
+        error = e
+      ensure
+        if http_response.nil? || Utils.error_status?(http_response.status)
+          http_response = @sdk_configuration.hooks.after_error(
+            error: error,
+            hook_ctx: SDKHooks::AfterErrorHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+        else
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+        end
+        
+        if http_response.nil?
+          raise error if !error.nil?
+          raise 'no response'
+        end
+      end
+      
+      content_type = http_response.headers.fetch('Content-Type', 'application/octet-stream')
+      if Utils.match_status_code(http_response.status, ['200'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Components::CommerceCreditLedgerResponse)
+          response = Models::Operations::AdjustUserBillingCreditBalanceResponse.new(
+            status_code: http_response.status,
+            content_type: content_type,
+            raw_response: http_response,
+            commerce_credit_ledger_response: obj
+          )
+
+          return response
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['400', '401', '403', '404', '409', '422'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj.raw_response = http_response
+          raise obj
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['500'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj.raw_response = http_response
+          raise obj
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['4XX'])
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
+      elsif Utils.match_status_code(http_response.status, ['5XX'])
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
+      else
+        raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown status code received'
+
+      end
+    end
+
+
+    
+    def get_o_auth_access_token(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_o_auth_access_token - Retrieve the OAuth access token of a user
       # Fetch the corresponding OAuth access token for a user that has previously authenticated with a particular OAuth provider.
       # For OAuth 2.0, if the access token has expired and we have a corresponding refresh token, the access token will be refreshed transparently the new one will be returned.
@@ -2434,6 +2818,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -2517,7 +2904,7 @@ module Clerk
 
 
     
-    def get_organization_memberships(user_id:, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def get_organization_memberships(user_id:, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_organization_memberships - Retrieve all memberships for a user
       # Retrieve a paginated list of the user's organization memberships
       request = Models::Operations::UsersGetOrganizationMembershipsRequest.new(
@@ -2579,6 +2966,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -2662,7 +3052,7 @@ module Clerk
 
 
     
-    def get_organization_invitations(user_id:, limit: nil, offset: nil, status: nil, retries: nil, timeout_ms: nil)
+    def get_organization_invitations(user_id:, limit: nil, offset: nil, status: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_organization_invitations - Retrieve all invitations for a user
       # Retrieve a paginated list of the user's organization invitations
       request = Models::Operations::UsersGetOrganizationInvitationsRequest.new(
@@ -2725,6 +3115,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -2808,7 +3201,7 @@ module Clerk
 
 
     
-    def verify_password(user_id:, body: nil, retries: nil, timeout_ms: nil)
+    def verify_password(user_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # verify_password - Verify the password of a user
       # Check that the user's password matches the supplied input.
       # Useful for custom auth flows and re-verification.
@@ -2879,6 +3272,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -2962,7 +3358,7 @@ module Clerk
 
 
     
-    def verify_totp(user_id:, body: nil, retries: nil, timeout_ms: nil)
+    def verify_totp(user_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # verify_totp - Verify a TOTP or backup code for a user
       # Verify that the provided TOTP or backup code is valid for the user.
       # Verifying a backup code will result it in being consumed (i.e. it will
@@ -3035,6 +3431,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -3118,7 +3517,7 @@ module Clerk
 
 
     
-    def disable_mfa(user_id:, retries: nil, timeout_ms: nil)
+    def disable_mfa(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # disable_mfa - Disable a user's MFA methods
       # Disable all of a user's MFA methods (e.g. OTP sent via SMS, TOTP on their authenticator app) at once.
       request = Models::Operations::DisableMFARequest.new(
@@ -3176,6 +3575,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -3274,7 +3676,7 @@ module Clerk
 
 
     
-    def delete_backup_codes(user_id:, retries: nil, timeout_ms: nil)
+    def delete_backup_codes(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete_backup_codes - Disable all user's Backup codes
       # Disable all of a user's backup codes.
       request = Models::Operations::DeleteBackupCodeRequest.new(
@@ -3332,6 +3734,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -3430,7 +3835,7 @@ module Clerk
 
 
     
-    def delete_passkey(user_id:, passkey_identification_id:, retries: nil, timeout_ms: nil)
+    def delete_passkey(user_id:, passkey_identification_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete_passkey - Delete a user passkey
       # Delete the passkey identification for a given user and notify them through email.
       request = Models::Operations::UserPasskeyDeleteRequest.new(
@@ -3489,6 +3894,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -3587,7 +3995,7 @@ module Clerk
 
 
     
-    def delete_web3_wallet(user_id:, web3_wallet_identification_id:, retries: nil, timeout_ms: nil)
+    def delete_web3_wallet(user_id:, web3_wallet_identification_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete_web3_wallet - Delete a user web3 wallet
       # Delete the web3 wallet identification for a given user.
       request = Models::Operations::UserWeb3WalletDeleteRequest.new(
@@ -3646,6 +4054,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -3744,7 +4155,7 @@ module Clerk
 
 
     
-    def delete_totp(user_id:, retries: nil, timeout_ms: nil)
+    def delete_totp(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete_totp - Delete all the user's TOTPs
       # Deletes all of the user's TOTPs.
       request = Models::Operations::DeleteTOTPRequest.new(
@@ -3802,6 +4213,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -3900,7 +4314,7 @@ module Clerk
 
 
     
-    def delete_external_account(user_id:, external_account_id:, retries: nil, timeout_ms: nil)
+    def delete_external_account(user_id:, external_account_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete_external_account - Delete External Account
       # Delete an external account by ID.
       request = Models::Operations::DeleteExternalAccountRequest.new(
@@ -3959,6 +4373,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -4057,7 +4474,7 @@ module Clerk
 
 
     
-    def set_password_compromised(user_id:, body: nil, retries: nil, timeout_ms: nil)
+    def set_password_compromised(user_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # set_password_compromised - Set a user's password as compromised
       # Sets the given user's password as compromised. The user will be prompted to reset their password on their next sign-in.
       request = Models::Operations::SetUserPasswordCompromisedRequest.new(
@@ -4127,6 +4544,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -4210,7 +4630,7 @@ module Clerk
 
 
     
-    def unset_password_compromised(user_id:, retries: nil, timeout_ms: nil)
+    def unset_password_compromised(user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # unset_password_compromised - Unset a user's password as compromised
       # Sets the given user's password as no longer compromised. The user will no longer be prompted to reset their password on their next sign-in.
       request = Models::Operations::UnsetUserPasswordCompromisedRequest.new(
@@ -4268,6 +4688,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -4351,7 +4774,7 @@ module Clerk
 
 
     
-    def get_instance_organization_memberships(order_by: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def get_instance_organization_memberships(order_by: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_instance_organization_memberships - Get a list of all organization memberships within an instance.
       # Retrieves all organization user memberships for the given instance.
       request = Models::Operations::InstanceGetOrganizationMembershipsRequest.new(
@@ -4408,6 +4831,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -4503,5 +4929,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

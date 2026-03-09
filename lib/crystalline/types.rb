@@ -14,7 +14,7 @@ module Crystalline
 
   class Hash
     attr_accessor :key_type, :value_type
-    
+
     def initialize(key_type, value_type)
       @key_type = key_type
       @value_type = value_type
@@ -23,7 +23,7 @@ module Crystalline
 
   class Union
     attr_accessor :types
-    
+
     def initialize(*types)
       @types = types
     end
@@ -31,7 +31,7 @@ module Crystalline
 
   class Nilable
     attr_accessor :inner_type
-    
+
     def initialize(inner_type)
       @inner_type = inner_type
     end
@@ -140,6 +140,14 @@ module Crystalline
 
     def serialize
       @val
+    end
+
+    def to_s
+      serialize.to_s
+    end
+
+    def inspect
+      "#<#{self.class} #{serialize.inspect}>"
     end
 
     def known?

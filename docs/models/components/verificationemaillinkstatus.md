@@ -1,5 +1,13 @@
 # VerificationEmailLinkStatus
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = VerificationEmailLinkStatus::UNVERIFIED
+```
+
 
 ## Values
 

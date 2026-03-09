@@ -38,11 +38,16 @@ module Clerk
     end
 
 
+
+
     
-    def list(request:, retries: nil, timeout_ms: nil)
+    def list(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - List all sessions
-      # Returns a list of all sessions.
+      # Returns a list of sessions matching the provided criteria.
       # The sessions are returned sorted by creation date, with the newest sessions appearing first.
+      #
+      # Note: This endpoint does not return all sessions that have ever existed. Old and inactive sessions are periodically cleaned up and will not be included in the results.
+      #
       # **Deprecation Notice (2024-01-01):** All parameters were initially considered optional, however
       # moving forward at least one of `client_id` or `user_id` parameters should be provided.
       url, params = @sdk_configuration.get_server_details
@@ -94,6 +99,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -177,7 +185,7 @@ module Clerk
 
 
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create a new active session
       # Create a new active session for the provided user ID.
       #
@@ -241,6 +249,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -324,7 +335,7 @@ module Clerk
 
 
     
-    def get(session_id:, retries: nil, timeout_ms: nil)
+    def get(session_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve a session
       # Retrieve the details of a session
       request = Models::Operations::GetSessionRequest.new(
@@ -382,6 +393,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -465,7 +479,7 @@ module Clerk
 
 
     
-    def refresh(session_id:, body: nil, retries: nil, timeout_ms: nil)
+    def refresh(session_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # refresh - Refresh a session
       # Refreshes a session by creating a new session token. A 401 is returned when there
       # are validation errors, which signals the SDKs to fall back to the handshake flow.
@@ -536,6 +550,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -619,7 +636,7 @@ module Clerk
 
 
     
-    def revoke(session_id:, retries: nil, timeout_ms: nil)
+    def revoke(session_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # revoke - Revoke a session
       # Sets the status of a session as "revoked", which is an unauthenticated state.
       # In multi-session mode, a revoked session will still be returned along with its client object, however the user will need to sign in again.
@@ -678,6 +695,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -761,7 +781,7 @@ module Clerk
 
 
     
-    def create_token(session_id:, body: nil, retries: nil, timeout_ms: nil)
+    def create_token(session_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create_token - Create a session token
       # Creates a session JSON Web Token (JWT) based on a session.
       request = Models::Operations::CreateSessionTokenRequest.new(
@@ -831,6 +851,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -914,7 +937,7 @@ module Clerk
 
 
     
-    def create_token_from_template(session_id:, template_name:, body: nil, retries: nil, timeout_ms: nil)
+    def create_token_from_template(session_id:, template_name:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create_token_from_template - Create a session token from a JWT template
       # Creates a JSON Web Token (JWT) based on a session and a JWT Template name defined for your instance
       request = Models::Operations::CreateSessionTokenFromTemplateRequest.new(
@@ -985,6 +1008,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1065,5 +1091,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

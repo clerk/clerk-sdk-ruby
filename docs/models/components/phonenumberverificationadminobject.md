@@ -1,5 +1,13 @@
 # PhoneNumberVerificationAdminObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = PhoneNumberVerificationAdminObject::VERIFICATION_ADMIN
+```
+
 
 ## Values
 

@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list_plans(paginated: nil, limit: nil, offset: nil, payer_type: nil, retries: nil, timeout_ms: nil)
+    def list_plans(paginated: nil, limit: nil, offset: nil, payer_type: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list_plans - List all billing plans
       # Returns a list of all billing plans for the instance. The plans are returned sorted by creation date,
       # with the newest plans appearing first. This includes both free and paid plans. Pagination is supported.
@@ -98,6 +100,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -196,7 +201,7 @@ module Clerk
 
 
     
-    def list_prices(paginated: nil, limit: nil, offset: nil, plan_id: nil, retries: nil, timeout_ms: nil)
+    def list_prices(paginated: nil, limit: nil, offset: nil, plan_id: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list_prices - List all billing prices
       # Returns a list of all prices for the instance. The prices are returned sorted by amount ascending,
       # then by creation date descending. This includes both default and custom prices. Pagination is supported.
@@ -255,6 +260,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -353,7 +361,7 @@ module Clerk
 
 
     
-    def create_price(request:, retries: nil, timeout_ms: nil)
+    def create_price(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # create_price - Create a custom billing price
       # Creates a custom price for a billing plan. Custom prices allow you to offer different pricing
       # to specific customers while maintaining the same plan structure.
@@ -416,6 +424,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -514,7 +525,7 @@ module Clerk
 
 
     
-    def list_subscription_items(request:, retries: nil, timeout_ms: nil)
+    def list_subscription_items(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # list_subscription_items - List all subscription items
       # Returns a list of all subscription items for the instance. The subscription items are returned sorted by creation date,
       # with the newest appearing first. This includes subscriptions for both users and organizations. Pagination is supported.
@@ -567,6 +578,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -665,7 +679,7 @@ module Clerk
 
 
     
-    def cancel_subscription_item(subscription_item_id:, end_now: nil, retries: nil, timeout_ms: nil)
+    def cancel_subscription_item(subscription_item_id:, end_now: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # cancel_subscription_item - Cancel a subscription item
       # Cancel a specific subscription item. The subscription item can be canceled immediately or at the end of the current billing period.
       request = Models::Operations::CancelCommerceSubscriptionItemRequest.new(
@@ -726,6 +740,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -824,7 +841,7 @@ module Clerk
 
 
     
-    def extend_subscription_item_free_trial(body:, subscription_item_id:, retries: nil, timeout_ms: nil)
+    def extend_subscription_item_free_trial(body:, subscription_item_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # extend_subscription_item_free_trial - Extend free trial for a subscription item
       # Extends the free trial period for a specific subscription item to the specified timestamp.
       # The subscription item must be currently in a free trial period, and the plan must support free trials.
@@ -898,6 +915,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -996,7 +1016,7 @@ module Clerk
 
 
     
-    def create_price_transition(body:, subscription_item_id:, retries: nil, timeout_ms: nil)
+    def create_price_transition(body:, subscription_item_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # create_price_transition - Create a price transition for a subscription item
       # Creates a price transition for the specified subscription item.
       # This may create an upcoming subscription item or activate immediately depending on plan and payer rules.
@@ -1068,6 +1088,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1166,7 +1189,7 @@ module Clerk
 
 
     
-    def list_statements(paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def list_statements(paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list_statements - List all billing statements
       # Returns a list of all billing statements for the instance. The statements are returned sorted by creation date,
       # with the newest statements appearing first. Pagination is supported.
@@ -1224,6 +1247,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1322,7 +1348,7 @@ module Clerk
 
 
     
-    def get_statement(statement_id:, retries: nil, timeout_ms: nil)
+    def get_statement(statement_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_statement - Retrieve a billing statement
       # Retrieves the details of a billing statement.
       request = Models::Operations::GetBillingStatementRequest.new(
@@ -1380,6 +1406,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1478,7 +1507,7 @@ module Clerk
 
 
     
-    def get_statement_payment_attempts(statement_id:, paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def get_statement_payment_attempts(statement_id:, paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # get_statement_payment_attempts - List payment attempts for a billing statement
       # Returns a list of all payment attempts for a specific billing statement. The payment attempts are returned sorted by creation date,
       # with the newest payment attempts appearing first. Pagination is supported.
@@ -1542,6 +1571,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1637,5 +1669,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

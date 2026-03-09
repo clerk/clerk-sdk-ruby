@@ -1,5 +1,13 @@
 # EmailAddressVerificationSamlStatus
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = EmailAddressVerificationSamlStatus::UNVERIFIED
+```
+
 
 ## Values
 

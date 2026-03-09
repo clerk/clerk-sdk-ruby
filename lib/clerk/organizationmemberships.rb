@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def create(body:, organization_id:, retries: nil, timeout_ms: nil)
+    def create(body:, organization_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create a new organization membership
       # Adds a user as a member to the given organization.
       # Only users in the same instance as the organization can be added as members.
@@ -115,6 +117,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -198,7 +203,7 @@ module Clerk
 
 
     
-    def list(request:, retries: nil, timeout_ms: nil)
+    def list(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - Get a list of all members of an organization
       # Retrieves all user memberships for the given organization
       url, params = @sdk_configuration.get_server_details
@@ -255,6 +260,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -338,7 +346,7 @@ module Clerk
 
 
     
-    def update(body:, organization_id:, user_id:, retries: nil, timeout_ms: nil)
+    def update(body:, organization_id:, user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update an organization membership
       # Updates the properties of an existing organization membership
       request = Models::Operations::UpdateOrganizationMembershipRequest.new(
@@ -410,6 +418,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -493,7 +504,7 @@ module Clerk
 
 
     
-    def delete(organization_id:, user_id:, retries: nil, timeout_ms: nil)
+    def delete(organization_id:, user_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Remove a member from an organization
       # Removes the given membership from the organization
       request = Models::Operations::DeleteOrganizationMembershipRequest.new(
@@ -552,6 +563,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -635,7 +649,7 @@ module Clerk
 
 
     
-    def update_metadata(organization_id:, user_id:, body: nil, retries: nil, timeout_ms: nil)
+    def update_metadata(organization_id:, user_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # update_metadata - Merge and update organization membership metadata
       # Update an organization membership's metadata attributes by merging existing values with the provided parameters.
       # Metadata values will be updated via a deep merge. Deep means that any nested JSON objects will be merged as well.
@@ -708,6 +722,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -788,5 +805,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

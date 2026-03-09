@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def list(paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - List all clients
       # Returns a list of all clients. The clients are returned sorted by creation date,
       # with the newest clients appearing first.
@@ -100,6 +102,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -183,7 +188,7 @@ module Clerk
 
 
     
-    def verify(request: nil, retries: nil, timeout_ms: nil)
+    def verify(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # verify - Verify a client
       # Verifies the client in the provided token
       url, params = @sdk_configuration.get_server_details
@@ -244,6 +249,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -327,7 +335,7 @@ module Clerk
 
 
     
-    def get(client_id:, retries: nil, timeout_ms: nil)
+    def get(client_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Get a client
       # Returns the details of a client.
       request = Models::Operations::GetClientRequest.new(
@@ -385,6 +393,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -465,5 +476,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

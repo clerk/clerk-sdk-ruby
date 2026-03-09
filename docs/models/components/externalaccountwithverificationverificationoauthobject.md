@@ -1,5 +1,13 @@
 # ExternalAccountWithVerificationVerificationOauthObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = ExternalAccountWithVerificationVerificationOauthObject::VERIFICATION_OAUTH
+```
+
 
 ## Values
 

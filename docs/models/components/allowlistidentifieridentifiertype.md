@@ -1,5 +1,13 @@
 # AllowlistIdentifierIdentifierType
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = AllowlistIdentifierIdentifierType::EMAIL_ADDRESS
+```
+
 
 ## Values
 

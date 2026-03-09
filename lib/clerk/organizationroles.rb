@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(query: nil, order_by: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def list(query: nil, order_by: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - Get a list of organization roles
       # This request returns the list of organization roles for the instance.
       # Results can be paginated using the optional `limit` and `offset` query parameters.
@@ -100,6 +102,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -183,7 +188,7 @@ module Clerk
 
 
     
-    def create(request:, retries: nil, timeout_ms: nil)
+    def create(request:, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create an organization role
       # Creates a new organization role with the given name and permissions for an instance.
       # The key must be unique for the instance and start with the 'org:' prefix, followed by lowercase alphanumeric characters and underscores only.
@@ -248,6 +253,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -331,7 +339,7 @@ module Clerk
 
 
     
-    def get(organization_role_id:, retries: nil, timeout_ms: nil)
+    def get(organization_role_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve an organization role
       # Use this request to retrieve an existing organization role by its ID.
       request = Models::Operations::GetOrganizationRoleRequest.new(
@@ -389,6 +397,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -472,7 +483,7 @@ module Clerk
 
 
     
-    def update(body:, organization_role_id:, retries: nil, timeout_ms: nil)
+    def update(body:, organization_role_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update an organization role
       # Updates an existing organization role.
       # You can update the name, key, description, and permissions of the role.
@@ -546,6 +557,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -629,7 +643,7 @@ module Clerk
 
 
     
-    def delete(organization_role_id:, retries: nil, timeout_ms: nil)
+    def delete(organization_role_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete an organization role
       # Deletes the organization role.
       # The role cannot be deleted if it is currently used as the default creator role, domain default role, assigned to any members, or exists in any invitations.
@@ -688,6 +702,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -771,7 +788,7 @@ module Clerk
 
 
     
-    def assign_permission(organization_role_id:, permission_id:, retries: nil, timeout_ms: nil)
+    def assign_permission(organization_role_id:, permission_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # assign_permission - Assign a permission to an organization role
       # Assigns a permission to an organization role
       request = Models::Operations::AssignPermissionToOrganizationRoleRequest.new(
@@ -830,6 +847,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -913,7 +933,7 @@ module Clerk
 
 
     
-    def remove_permission(organization_role_id:, permission_id:, retries: nil, timeout_ms: nil)
+    def remove_permission(organization_role_id:, permission_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # remove_permission - Remove a permission from an organization role
       # Removes a permission from an organization role
       request = Models::Operations::RemovePermissionFromOrganizationRoleRequest.new(
@@ -972,6 +992,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -1052,5 +1075,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

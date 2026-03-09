@@ -2,6 +2,14 @@
 
 Mode of enrollment for the domain
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = EnrollmentMode::MANUAL_INVITATION
+```
+
 
 ## Values
 

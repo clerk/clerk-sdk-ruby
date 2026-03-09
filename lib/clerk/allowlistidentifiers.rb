@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def list(paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - List all identifiers on the allow-list
       # Get a list of all identifiers allowed to sign up to an instance
       request = Models::Operations::ListAllowlistIdentifiersRequest.new(
@@ -96,6 +98,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -179,7 +184,7 @@ module Clerk
 
 
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Add identifier to the allow-list
       # Create an identifier allowed to sign up to an instance
       url, params = @sdk_configuration.get_server_details
@@ -240,6 +245,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -323,7 +331,7 @@ module Clerk
 
 
     
-    def delete(identifier_id:, retries: nil, timeout_ms: nil)
+    def delete(identifier_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete identifier from allow-list
       # Delete an identifier from the instance allow-list
       request = Models::Operations::DeleteAllowlistIdentifierRequest.new(
@@ -381,6 +389,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -461,5 +472,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

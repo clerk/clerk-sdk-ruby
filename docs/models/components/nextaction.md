@@ -1,5 +1,13 @@
 # NextAction
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = NextAction::NEEDS_PREPARE
+```
+
 
 ## Values
 

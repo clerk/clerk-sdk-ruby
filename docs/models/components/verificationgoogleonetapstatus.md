@@ -1,5 +1,13 @@
 # VerificationGoogleOneTapStatus
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = VerificationGoogleOneTapStatus::UNVERIFIED
+```
+
 
 ## Values
 

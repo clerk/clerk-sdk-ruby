@@ -2,6 +2,14 @@
 
 The type of template to update
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = UpsertTemplateTemplateType::EMAIL
+```
+
 
 ## Values
 

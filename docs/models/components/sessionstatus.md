@@ -1,5 +1,13 @@
 # SessionStatus
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = SessionStatus::ACTIVE
+```
+
 
 ## Values
 

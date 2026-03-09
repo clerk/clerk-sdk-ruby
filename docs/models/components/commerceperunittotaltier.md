@@ -1,0 +1,10 @@
+# CommercePerUnitTotalTier
+
+
+## Fields
+
+| Field                                                                                     | Type                                                                                      | Required                                                                                  | Description                                                                               |
+| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `quantity`                                                                                | *Crystalline::Nilable.new(::Integer)*                                                     | :heavy_minus_sign:                                                                        | Units billed in this tier; null means unlimited                                           |
+| `fee_per_block`                                                                           | [Models::Components::CommerceMoneyResponse](../../models/shared/commercemoneyresponse.md) | :heavy_check_mark:                                                                        | N/A                                                                                       |
+| `total`                                                                                   | [Models::Components::CommerceMoneyResponse](../../models/shared/commercemoneyresponse.md) | :heavy_check_mark:                                                                        | N/A                                                                                       |

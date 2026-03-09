@@ -1,5 +1,13 @@
 # UpdateApiKeyObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = UpdateApiKeyObject::API_KEY
+```
+
 
 ## Values
 

@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create sign-in token
       # Creates a new sign-in token and associates it with the given user.
       # By default, sign-in tokens expire in 30 days.
@@ -102,6 +104,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -185,7 +190,7 @@ module Clerk
 
 
     
-    def revoke(sign_in_token_id:, retries: nil, timeout_ms: nil)
+    def revoke(sign_in_token_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # revoke - Revoke the given sign-in token
       # Revokes a pending sign-in token
       request = Models::Operations::RevokeSignInTokenRequest.new(
@@ -243,6 +248,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -323,5 +331,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

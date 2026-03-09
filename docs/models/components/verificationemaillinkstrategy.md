@@ -1,5 +1,13 @@
 # VerificationEmailLinkStrategy
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = VerificationEmailLinkStrategy::EMAIL_LINK
+```
+
 
 ## Values
 

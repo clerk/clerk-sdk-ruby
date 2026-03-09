@@ -1,5 +1,13 @@
 # EmailAddressVerificationAdminObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = EmailAddressVerificationAdminObject::VERIFICATION_ADMIN
+```
+
 
 ## Values
 

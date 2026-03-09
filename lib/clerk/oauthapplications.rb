@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(limit: nil, offset: nil, order_by: nil, name_query: nil, retries: nil, timeout_ms: nil)
+    def list(limit: nil, offset: nil, order_by: nil, name_query: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - Get a list of OAuth applications for an instance
       # This request returns the list of OAuth applications for an instance.
       # Results can be paginated using the optional `limit` and `offset` query parameters.
@@ -100,6 +102,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -183,7 +188,7 @@ module Clerk
 
 
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create an OAuth application
       # Creates a new OAuth application with the given name and callback URL for an instance.
       # The callback URL must be a valid URL.
@@ -246,6 +251,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -329,7 +337,7 @@ module Clerk
 
 
     
-    def get(oauth_application_id:, retries: nil, timeout_ms: nil)
+    def get(oauth_application_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve an OAuth application by ID
       # Fetches the OAuth application whose ID matches the provided `id` in the path.
       request = Models::Operations::GetOAuthApplicationRequest.new(
@@ -387,6 +395,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -470,7 +481,7 @@ module Clerk
 
 
     
-    def update(body:, oauth_application_id:, retries: nil, timeout_ms: nil)
+    def update(body:, oauth_application_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update an OAuth application
       # Updates an existing OAuth application
       request = Models::Operations::UpdateOAuthApplicationRequest.new(
@@ -541,6 +552,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -624,7 +638,7 @@ module Clerk
 
 
     
-    def delete(oauth_application_id:, retries: nil, timeout_ms: nil)
+    def delete(oauth_application_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete an OAuth application
       # Deletes the given OAuth application.
       # This is not reversible.
@@ -683,6 +697,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -766,7 +783,7 @@ module Clerk
 
 
     
-    def rotate_secret(oauth_application_id:, retries: nil, timeout_ms: nil)
+    def rotate_secret(oauth_application_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # rotate_secret - Rotate the client secret of the given OAuth application
       # Rotates the OAuth application's client secret.
       # When the client secret is rotated, make sure to update it in authorized OAuth clients.
@@ -825,6 +842,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -905,5 +925,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

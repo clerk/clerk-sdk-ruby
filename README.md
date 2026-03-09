@@ -356,6 +356,11 @@ end
 * [create](docs/sdks/actortokens/README.md#create) - Create actor token
 * [revoke](docs/sdks/actortokens/README.md#revoke) - Revoke actor token
 
+### [AgentTasks](docs/sdks/agenttasks/README.md)
+
+* [create](docs/sdks/agenttasks/README.md#create) - Create agent task
+* [revoke](docs/sdks/agenttasks/README.md#revoke) - Revoke agent task
+
 ### [AllowlistIdentifiers](docs/sdks/allowlistidentifiers/README.md)
 
 * [list](docs/sdks/allowlistidentifiers/README.md#list) - List all identifiers on the allow-list
@@ -433,6 +438,8 @@ end
 * [get](docs/sdks/instancesettings/README.md#get) - Fetch the current instance
 * [update](docs/sdks/instancesettings/README.md#update) - Update instance settings
 * [update_restrictions](docs/sdks/instancesettings/README.md#update_restrictions) - Update instance restrictions
+* [get_o_auth_application_settings](docs/sdks/instancesettings/README.md#get_o_auth_application_settings) - Get OAuth application settings
+* [update_o_auth_application_settings](docs/sdks/instancesettings/README.md#update_o_auth_application_settings) - Update OAuth application settings
 * [change_domain](docs/sdks/instancesettings/README.md#change_domain) - Update production instance domain
 * [update_organization_settings](docs/sdks/instancesettings/README.md#update_organization_settings) - Update instance organization settings
 * [get_instance_protect](docs/sdks/instancesettings/README.md#get_instance_protect) - Get instance protect settings
@@ -548,6 +555,8 @@ end
 * [upload_logo](docs/sdks/organizations/README.md#upload_logo) - Upload a logo for the organization
 * [delete_logo](docs/sdks/organizations/README.md#delete_logo) - Delete the organization's logo.
 * [get_billing_subscription](docs/sdks/organizations/README.md#get_billing_subscription) - Retrieve an organization's billing subscription
+* [get_billing_credit_balance](docs/sdks/organizations/README.md#get_billing_credit_balance) - Retrieve an organization's credit balance
+* [adjust_billing_credit_balance](docs/sdks/organizations/README.md#adjust_billing_credit_balance) - Adjust an organization's credit balance
 
 ### [PhoneNumbers](docs/sdks/phonenumbers/README.md)
 
@@ -631,6 +640,8 @@ end
 * [delete_profile_image](docs/sdks/users/README.md#delete_profile_image) - Delete user profile image
 * [update_metadata](docs/sdks/users/README.md#update_metadata) - Merge and update a user's metadata
 * [get_billing_subscription](docs/sdks/users/README.md#get_billing_subscription) - Retrieve a user's billing subscription
+* [get_billing_credit_balance](docs/sdks/users/README.md#get_billing_credit_balance) - Retrieve a user's credit balance
+* [adjust_billing_credit_balance](docs/sdks/users/README.md#adjust_billing_credit_balance) - Adjust a user's credit balance
 * [get_o_auth_access_token](docs/sdks/users/README.md#get_o_auth_access_token) - Retrieve the OAuth access token of a user
 * [get_organization_memberships](docs/sdks/users/README.md#get_organization_memberships) - Retrieve all memberships for a user
 * [get_organization_invitations](docs/sdks/users/README.md#get_organization_invitations) - Retrieve all invitations for a user

@@ -1,5 +1,13 @@
 # SchemasSAMLConnectionObject1
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = SchemasSAMLConnectionObject1::SAML_CONNECTION
+```
+
 
 ## Values
 

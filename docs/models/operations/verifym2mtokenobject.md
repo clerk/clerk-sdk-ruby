@@ -1,5 +1,13 @@
 # VerifyM2MTokenObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = VerifyM2MTokenObject::MACHINE_TO_MACHINE_TOKEN
+```
+
 
 ## Values
 

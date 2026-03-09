@@ -1,5 +1,13 @@
 # VerificationEmailLinkObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = VerificationEmailLinkObject::VERIFICATION_EMAIL_LINK
+```
+
 
 ## Values
 

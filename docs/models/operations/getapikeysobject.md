@@ -1,5 +1,13 @@
 # GetApiKeysObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = GetApiKeysObject::API_KEY
+```
+
 
 ## Values
 

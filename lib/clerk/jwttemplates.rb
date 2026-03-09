@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def list(paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - List all templates
       request = Models::Operations::ListJWTTemplatesRequest.new(
         paginated: paginated,
@@ -95,6 +97,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -163,7 +168,7 @@ module Clerk
 
 
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create a JWT template
       # Create a new JWT template
       url, params = @sdk_configuration.get_server_details
@@ -224,6 +229,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -307,7 +315,7 @@ module Clerk
 
 
     
-    def get(template_id:, retries: nil, timeout_ms: nil)
+    def get(template_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve a template
       # Retrieve the details of a given JWT template
       request = Models::Operations::GetJWTTemplateRequest.new(
@@ -365,6 +373,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -448,7 +459,7 @@ module Clerk
 
 
     
-    def update(template_id:, body: nil, retries: nil, timeout_ms: nil)
+    def update(template_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update a JWT template
       # Updates an existing JWT template
       request = Models::Operations::UpdateJWTTemplateRequest.new(
@@ -518,6 +529,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -601,7 +615,7 @@ module Clerk
 
 
     
-    def delete(template_id:, retries: nil, timeout_ms: nil)
+    def delete(template_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete a Template
       request = Models::Operations::DeleteJWTTemplateRequest.new(
         template_id: template_id
@@ -658,6 +672,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -738,5 +755,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

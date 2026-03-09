@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def list(paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - List all redirect URLs
       # Lists all whitelisted redirect_urls for the instance
       request = Models::Operations::ListRedirectURLsRequest.new(
@@ -96,6 +98,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -164,7 +169,7 @@ module Clerk
 
 
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create a redirect URL
       # Create a redirect URL
       url, params = @sdk_configuration.get_server_details
@@ -225,6 +230,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -308,7 +316,7 @@ module Clerk
 
 
     
-    def get(id:, retries: nil, timeout_ms: nil)
+    def get(id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve a redirect URL
       # Retrieve the details of the redirect URL with the given ID
       request = Models::Operations::GetRedirectURLRequest.new(
@@ -366,6 +374,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -449,7 +460,7 @@ module Clerk
 
 
     
-    def delete(id:, retries: nil, timeout_ms: nil)
+    def delete(id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete a redirect URL
       # Remove the selected redirect URL from the whitelist of the instance
       request = Models::Operations::DeleteRedirectURLRequest.new(
@@ -507,6 +518,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -587,5 +601,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

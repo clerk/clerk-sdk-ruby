@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def update_instance_settings(request: nil, retries: nil, timeout_ms: nil)
+    def update_instance_settings(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # update_instance_settings - Update instance settings
       # Updates the settings of an instance
       url, params = @sdk_configuration.get_server_details
@@ -100,6 +102,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -183,7 +188,7 @@ module Clerk
 
 
     
-    def update_production_instance_domain(request: nil, retries: nil, timeout_ms: nil)
+    def update_production_instance_domain(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # update_production_instance_domain - Update production instance domain
       # Change the domain of a production instance.
       #
@@ -250,6 +255,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -321,5 +329,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

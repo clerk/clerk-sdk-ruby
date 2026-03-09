@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(template_type:, paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil)
+    def list(template_type:, paginated: nil, limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # list - List all templates
       # Returns a list of all templates.
       # The templates are returned sorted by position.
@@ -105,6 +107,9 @@ module Clerk
           req.options.timeout = timeout unless timeout.nil?
           req.params = query_params
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -188,7 +193,7 @@ module Clerk
 
 
     
-    def get(template_type:, slug:, retries: nil, timeout_ms: nil)
+    def get(template_type:, slug:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve a template
       # Returns the details of a template
       #
@@ -249,6 +254,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -332,7 +340,7 @@ module Clerk
 
 
     
-    def revert(template_type:, slug:, retries: nil, timeout_ms: nil)
+    def revert(template_type:, slug:, retries: nil, timeout_ms: nil, http_headers: nil)
       # revert - Revert a template
       # Reverts an updated template to its default state
       #
@@ -393,6 +401,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -476,7 +487,7 @@ module Clerk
 
 
     
-    def toggle_template_delivery(template_type:, slug:, body: nil, retries: nil, timeout_ms: nil)
+    def toggle_template_delivery(template_type:, slug:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # toggle_template_delivery - Toggle the delivery by Clerk for a template of a given type and slug
       # Toggles the delivery by Clerk for a template of a given type and slug.
       # If disabled, Clerk will not deliver the resulting email or SMS.
@@ -551,6 +562,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -631,5 +645,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

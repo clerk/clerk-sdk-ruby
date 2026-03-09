@@ -1,5 +1,13 @@
 # ProxyCheckObject
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = ProxyCheckObject::PROXY_CHECK
+```
+
 
 ## Values
 

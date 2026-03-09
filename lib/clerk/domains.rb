@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(retries: nil, timeout_ms: nil)
+    def list(retries: nil, timeout_ms: nil, http_headers: nil)
       # list - List all instance domains
       # Use this endpoint to get a list of all domains for an instance.
       # The response will contain the primary domain for the instance and any satellite domains. Each domain in the response contains information about the URLs where Clerk operates and the required CNAME targets.
@@ -90,6 +92,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -158,7 +163,7 @@ module Clerk
 
 
     
-    def add(request: nil, retries: nil, timeout_ms: nil)
+    def add(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # add - Add a domain
       # Add a new domain for your instance.
       # Useful in the case of multi-domain instances, allows adding satellite domains to an instance.
@@ -223,6 +228,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -306,7 +314,7 @@ module Clerk
 
 
     
-    def delete(domain_id:, retries: nil, timeout_ms: nil)
+    def delete(domain_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete a satellite domain
       # Deletes a satellite domain for the instance.
       # It is currently not possible to delete the instance's primary domain.
@@ -365,6 +373,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -448,7 +459,7 @@ module Clerk
 
 
     
-    def update(body:, domain_id:, retries: nil, timeout_ms: nil)
+    def update(body:, domain_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update a domain
       # The `proxy_url` can be updated only for production instances.
       # Update one of the instance's domains. Both primary and satellite domains can be updated.
@@ -526,6 +537,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -606,5 +620,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

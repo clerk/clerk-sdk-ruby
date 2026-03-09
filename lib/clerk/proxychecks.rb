@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def verify(request: nil, retries: nil, timeout_ms: nil)
+    def verify(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # verify - Verify the proxy configuration for your domain
       # This endpoint can be used to validate that a proxy-enabled domain is operational.
       # It tries to verify that the proxy URL provided in the parameters maps to a functional proxy that can reach the Clerk Frontend API.
@@ -107,6 +109,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -187,5 +192,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

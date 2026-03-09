@@ -25,7 +25,7 @@ module Clerk
         # The current status of the statement.
         field :status, Models::Components::BillingStatementStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::BillingStatementStatus, false) } }
         # Totals for the statement.
-        field :totals, Models::Components::Totals, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('totals'), required: true } }
+        field :totals, Models::Components::BillingStatementTotals, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('totals'), required: true } }
         # Array of statement groups.
         field :groups, Crystalline::Array.new(Models::Components::Group), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('groups'), required: true } }
 

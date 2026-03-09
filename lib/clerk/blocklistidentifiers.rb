@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def list(retries: nil, timeout_ms: nil)
+    def list(retries: nil, timeout_ms: nil, http_headers: nil)
       # list - List all identifiers on the block-list
       # Get a list of all identifiers which are not allowed to access an instance
       url, params = @sdk_configuration.get_server_details
@@ -89,6 +91,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -172,7 +177,7 @@ module Clerk
 
 
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Add identifier to the block-list
       # Create an identifier that is blocked from accessing an instance
       url, params = @sdk_configuration.get_server_details
@@ -233,6 +238,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -316,7 +324,7 @@ module Clerk
 
 
     
-    def delete(identifier_id:, retries: nil, timeout_ms: nil)
+    def delete(identifier_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete identifier from block-list
       # Delete an identifier from the instance block-list
       request = Models::Operations::DeleteBlocklistIdentifierRequest.new(
@@ -374,6 +382,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -454,5 +465,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

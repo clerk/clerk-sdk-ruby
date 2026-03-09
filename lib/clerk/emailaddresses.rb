@@ -38,8 +38,10 @@ module Clerk
     end
 
 
+
+
     
-    def create(request: nil, retries: nil, timeout_ms: nil)
+    def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create an email address
       # Create a new email address
       url, params = @sdk_configuration.get_server_details
@@ -100,6 +102,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -156,7 +161,7 @@ module Clerk
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['400', '401', '403', '404', '422'])
+      elsif Utils.match_status_code(http_response.status, ['400', '401', '403', '404', '409', '422'])
         if Utils.match_content_type(content_type, 'application/json')
           http_response = @sdk_configuration.hooks.after_success(
             hook_ctx: SDKHooks::AfterSuccessHookContext.new(
@@ -183,7 +188,7 @@ module Clerk
 
 
     
-    def get(email_address_id:, retries: nil, timeout_ms: nil)
+    def get(email_address_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve an email address
       # Returns the details of an email address.
       request = Models::Operations::GetEmailAddressRequest.new(
@@ -241,6 +246,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -324,7 +332,7 @@ module Clerk
 
 
     
-    def delete(email_address_id:, retries: nil, timeout_ms: nil)
+    def delete(email_address_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete an email address
       # Delete the email address with the given ID
       request = Models::Operations::DeleteEmailAddressRequest.new(
@@ -382,6 +390,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -465,7 +476,7 @@ module Clerk
 
 
     
-    def update(email_address_id:, body: nil, retries: nil, timeout_ms: nil)
+    def update(email_address_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update an email address
       # Updates an email address.
       request = Models::Operations::UpdateEmailAddressRequest.new(
@@ -535,6 +546,9 @@ module Clerk
           req.headers.merge!(headers)
           req.options.timeout = timeout unless timeout.nil?
           Utils.configure_request_security(req, security)
+          http_headers&.each do |key, value|
+            req.headers[key.to_s] = value
+          end
 
           @sdk_configuration.hooks.before_request(
             hook_ctx: SDKHooks::BeforeRequestHookContext.new(
@@ -591,7 +605,7 @@ module Clerk
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['400', '401', '403', '404'])
+      elsif Utils.match_status_code(http_response.status, ['400', '401', '403', '404', '409'])
         if Utils.match_content_type(content_type, 'application/json')
           http_response = @sdk_configuration.hooks.after_success(
             hook_ctx: SDKHooks::AfterSuccessHookContext.new(
@@ -615,5 +629,5 @@ module Clerk
 
       end
     end
-  end
+end
 end

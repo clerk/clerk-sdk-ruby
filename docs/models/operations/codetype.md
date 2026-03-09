@@ -1,5 +1,13 @@
 # CodeType
 
+## Example Usage
+
+```ruby
+require "clerk-sdk-ruby"
+
+value = CodeType::TOTP
+```
+
 
 ## Values
 
