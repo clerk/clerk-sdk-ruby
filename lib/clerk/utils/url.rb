@@ -83,9 +83,8 @@ module Clerk
     end
 
     # Percent-encode characters that are invalid in URI path segments
-    
     def self._encode_path_param(value)
-      value.gsub(/[<>{}\[\]|\\^`\s?#%]/) { |c| format('%%%02X', c.ord) }
+      value.gsub(%r{[<>{}\[\]|\\^`\s?#%/.]}) { |c| format('%%%02X', c.ord) }
     end
 
     

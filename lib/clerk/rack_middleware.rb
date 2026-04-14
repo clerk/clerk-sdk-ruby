@@ -20,14 +20,15 @@ module Clerk
         env['clerk.initialized'] = true
 
         req = ::Rack::Request.new(env)
+        path = ::Clerk::Utils.decoded_path(req)
 
-        if @excluded_routes[req.path]
+        if @excluded_routes[path]
           env['clerk.excluded_route'] = true
           return @app.call(env)
         end
 
         @excluded_routes_wildcards.each do |route|
-          if req.path.start_with?(route)
+          if path.start_with?(route)
             env['clerk.excluded_route'] = true
             return @app.call(env)
           end
@@ -101,7 +102,8 @@ module Clerk
         return @app.call(env) if env['clerk.excluded_route']
 
         req = ::Rack::Request.new(env)
-        valid_route = @included_routes[req.path] || @included_routes_wildcards.any? { |route| req.path.start_with?(route) }
+        path = ::Clerk::Utils.decoded_path(req)
+        valid_route = @included_routes[path] || @included_routes_wildcards.any? { |route| path.start_with?(route) }
 
         if valid_route && env['clerk'].user_needs_reverification?(@preset)
           return env['clerk'].user_reverification_rack_response(@preset)
