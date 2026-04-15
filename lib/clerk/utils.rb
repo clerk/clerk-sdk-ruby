@@ -28,6 +28,14 @@ module Clerk
         [filtered_routes, filtered_wildcard_routes]
       end
 
+      # Percent-decoded request path, normalized to match the form the
+      # downstream framework (Sinatra/Rails) uses when matching routes.
+      def decoded_path(request)
+        ::Rack::Utils.unescape_path(request.path.to_s)
+      rescue ArgumentError
+        request.path.to_s
+      end
+
       def retrieve_header_from_request(request, key)
         (request.env[key] || request.env[key.downcase]).to_s
       end
