@@ -39,7 +39,7 @@ module Clerk
 
         field :enterprise_connection_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enterprise_connection_id') } }
 
-        field :enterprise_connection, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::EnterpriseConnection1, Models::Components::EnterpriseConnection2)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enterprise_connection') } }
+        field :enterprise_connection, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::EnterpriseAccountConnection1, Models::Components::EnterpriseAccountConnection2)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enterprise_connection') } }
         # Unix timestamp of last authentication.
         #
         field :last_authenticated_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_authenticated_at') } }

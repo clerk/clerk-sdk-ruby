@@ -10,4 +10,6 @@ end
 class Clerk::Models::Components::Seats
   def quantity(); end
   def quantity=(str_); end
+  def tiers(); end
+  def tiers=(str_); end
 end

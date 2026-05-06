@@ -14,8 +14,6 @@ class Clerk::Models::Components::CommerceSubscriptionItemPlan
   def id=(str_); end
   def name(); end
   def name=(str_); end
-  def fee(); end
-  def fee=(str_); end
   def product_id(); end
   def product_id=(str_); end
   def is_default(); end
@@ -32,6 +30,8 @@ class Clerk::Models::Components::CommerceSubscriptionItemPlan
   def slug=(str_); end
   def free_trial_enabled(); end
   def free_trial_enabled=(str_); end
+  def fee(); end
+  def fee=(str_); end
   def annual_monthly_fee(); end
   def annual_monthly_fee=(str_); end
   def annual_fee(); end

@@ -15,7 +15,6 @@ module Clerk
   SERVERS = [
     'https://api.clerk.com/v1', 
   ].freeze
-  
   # Contains the list of servers available to the SDK
 
   class SDKConfiguration
@@ -77,9 +76,9 @@ module Clerk
       end
       @language = 'ruby'
       @openapi_doc_version = '2025-11-10'
-      @sdk_version = '5.1.3'
-      @gen_version = '2.855.2'
-      @user_agent = 'speakeasy-sdk/ruby 5.1.3 2.855.2 2025-11-10 clerk-sdk-ruby'
+      @sdk_version = '5.1.4'
+      @gen_version = '2.882.0'
+      @user_agent = 'speakeasy-sdk/ruby 5.1.4 2.882.0 2025-11-10 clerk-sdk-ruby'
     end
 
     

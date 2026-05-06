@@ -14,6 +14,6 @@ class Clerk::Models::Operations::GetSAMLConnectionResponse
   def status_code=(str_); end
   def raw_response(); end
   def raw_response=(str_); end
-  def schemas_saml_connection(); end
-  def schemas_saml_connection=(str_); end
+  def saml_connection(); end
+  def saml_connection=(str_); end
 end

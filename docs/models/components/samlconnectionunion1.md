@@ -1,2 +1,0 @@
-# SAMLConnectionUnion1
-

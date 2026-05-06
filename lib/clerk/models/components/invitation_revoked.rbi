@@ -22,10 +22,10 @@ class Clerk::Models::Components::InvitationRevoked
   def created_at=(str_); end
   def updated_at(); end
   def updated_at=(str_); end
-  def revoked(); end
-  def revoked=(str_); end
   def url(); end
   def url=(str_); end
+  def revoked(); end
+  def revoked=(str_); end
   def expires_at(); end
   def expires_at=(str_); end
 end

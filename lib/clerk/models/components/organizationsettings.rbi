@@ -16,6 +16,8 @@ class Clerk::Models::Components::OrganizationSettings
   def max_allowed_memberships=(str_); end
   def max_allowed_roles(); end
   def max_allowed_roles=(str_); end
+  def max_allowed_domains(); end
+  def max_allowed_domains=(str_); end
   def creator_role(); end
   def creator_role=(str_); end
   def admin_delete_enabled(); end

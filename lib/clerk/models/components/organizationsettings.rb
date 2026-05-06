@@ -20,6 +20,8 @@ module Clerk
         field :max_allowed_memberships, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('max_allowed_memberships'), required: true } }
 
         field :max_allowed_roles, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('max_allowed_roles'), required: true } }
+
+        field :max_allowed_domains, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('max_allowed_domains'), required: true } }
         # The role key that a user will be assigned after creating an organization.
         field :creator_role, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('creator_role'), required: true } }
         # The default for whether an admin can delete an organization with the Frontend API.
@@ -42,11 +44,12 @@ module Clerk
         field :initial_role_set_key, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('initial_role_set_key') } }
 
         
-        def initialize(object:, enabled:, max_allowed_memberships:, max_allowed_roles:, creator_role:, admin_delete_enabled:, domains_enabled:, domains_enrollment_modes:, domains_default_role:, max_role_sets_allowed: nil, max_allowed_permissions: nil, slug_disabled: nil, initial_role_set_key: nil)
+        def initialize(object:, enabled:, max_allowed_memberships:, max_allowed_roles:, max_allowed_domains:, creator_role:, admin_delete_enabled:, domains_enabled:, domains_enrollment_modes:, domains_default_role:, max_role_sets_allowed: nil, max_allowed_permissions: nil, slug_disabled: nil, initial_role_set_key: nil)
           @object = object
           @enabled = enabled
           @max_allowed_memberships = max_allowed_memberships
           @max_allowed_roles = max_allowed_roles
+          @max_allowed_domains = max_allowed_domains
           @creator_role = creator_role
           @admin_delete_enabled = admin_delete_enabled
           @domains_enabled = domains_enabled
@@ -65,6 +68,7 @@ module Clerk
           return false unless @enabled == other.enabled
           return false unless @max_allowed_memberships == other.max_allowed_memberships
           return false unless @max_allowed_roles == other.max_allowed_roles
+          return false unless @max_allowed_domains == other.max_allowed_domains
           return false unless @creator_role == other.creator_role
           return false unless @admin_delete_enabled == other.admin_delete_enabled
           return false unless @domains_enabled == other.domains_enabled

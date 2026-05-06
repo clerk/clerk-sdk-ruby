@@ -1,0 +1,16 @@
+# CreateEnterpriseConnectionOidc
+
+OIDC connection-specific properties. Only applied when the enterprise connection uses OIDC (e.g. provider is oidc_custom, oidc_github_enterprise, or oidc_gitlab).
+
+
+## Fields
+
+| Field                                                                            | Type                                                                             | Required                                                                         | Description                                                                      |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `client_id`                                                                      | *Crystalline::Nilable.new(::String)*                                             | :heavy_minus_sign:                                                               | OIDC client ID                                                                   |
+| `client_secret`                                                                  | *Crystalline::Nilable.new(::String)*                                             | :heavy_minus_sign:                                                               | OIDC client secret                                                               |
+| `discovery_url`                                                                  | *Crystalline::Nilable.new(::String)*                                             | :heavy_minus_sign:                                                               | OIDC discovery URL                                                               |
+| `auth_url`                                                                       | *Crystalline::Nilable.new(::String)*                                             | :heavy_minus_sign:                                                               | OIDC authorization URL                                                           |
+| `token_url`                                                                      | *Crystalline::Nilable.new(::String)*                                             | :heavy_minus_sign:                                                               | OIDC token URL                                                                   |
+| `user_info_url`                                                                  | *Crystalline::Nilable.new(::String)*                                             | :heavy_minus_sign:                                                               | OIDC userinfo URL                                                                |
+| `requires_pkce`                                                                  | *Crystalline::Nilable.new(Crystalline::Boolean.new)*                             | :heavy_minus_sign:                                                               | Whether PKCE is required (must be true for public clients with no client secret) |

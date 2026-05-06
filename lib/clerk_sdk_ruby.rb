@@ -36,6 +36,7 @@ module Clerk
   autoload :SignUps, 'clerk/signups'
   autoload :OauthApplications, 'clerk/oauthapplications'
   autoload :SamlConnections, 'clerk/samlconnections'
+  autoload :EnterpriseConnections, 'clerk/enterpriseconnections'
   autoload :TestingTokens, 'clerk/testingtokens'
   autoload :AgentTasks, 'clerk/agenttasks'
   autoload :WaitlistEntries, 'clerk/waitlistentries'

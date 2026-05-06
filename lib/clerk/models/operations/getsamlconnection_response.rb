@@ -19,14 +19,14 @@ module Clerk
         # Raw HTTP response; suitable for custom response parsing
         field :raw_response, ::Faraday::Response
         # A SAML Connection
-        field :schemas_saml_connection, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::SchemasSAMLConnectionSAMLConnection1, Models::Components::SchemasSAMLConnectionSAMLConnection2))
+        field :saml_connection, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::SAMLConnection1, Models::Components::SAMLConnection2))
 
         
-        def initialize(content_type:, status_code:, raw_response:, schemas_saml_connection: nil)
+        def initialize(content_type:, status_code:, raw_response:, saml_connection: nil)
           @content_type = content_type
           @status_code = status_code
           @raw_response = raw_response
-          @schemas_saml_connection = schemas_saml_connection
+          @saml_connection = saml_connection
         end
 
         
@@ -35,7 +35,7 @@ module Clerk
           return false unless @content_type == other.content_type
           return false unless @status_code == other.status_code
           return false unless @raw_response == other.raw_response
-          return false unless @schemas_saml_connection == other.schemas_saml_connection
+          return false unless @saml_connection == other.saml_connection
           true
         end
       end

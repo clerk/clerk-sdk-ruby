@@ -14,12 +14,6 @@ class Clerk::Models::Components::SchemasCommerceSubscriptionItemPlan
   def id=(str_); end
   def name(); end
   def name=(str_); end
-  def fee(); end
-  def fee=(str_); end
-  def annual_monthly_fee(); end
-  def annual_monthly_fee=(str_); end
-  def annual_fee(); end
-  def annual_fee=(str_); end
   def amount(); end
   def amount=(str_); end
   def amount_formatted(); end
@@ -58,6 +52,12 @@ class Clerk::Models::Components::SchemasCommerceSubscriptionItemPlan
   def avatar_url=(str_); end
   def features(); end
   def features=(str_); end
+  def fee(); end
+  def fee=(str_); end
+  def annual_monthly_fee(); end
+  def annual_monthly_fee=(str_); end
+  def annual_fee(); end
+  def annual_fee=(str_); end
   def period(); end
   def period=(str_); end
   def interval(); end

@@ -19,15 +19,21 @@ module Clerk
         field :agent_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('agent_id'), required: true } }
         # A unique identifier for this agent task.
         #
+        field :agent_task_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('agent_task_id'), required: true } }
+        # A unique identifier for this agent task. Deprecated: use agent_task_id instead.
+        #
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :task_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('task_id'), required: true } }
         # The URL that, when visited, creates a session for the user. Only present in the response to a create request.
         #
         field :url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('url') } }
 
         
-        def initialize(object:, agent_id:, task_id:, url: nil)
+        def initialize(object:, agent_id:, agent_task_id:, task_id:, url: nil)
           @object = object
           @agent_id = agent_id
+          @agent_task_id = agent_task_id
           @task_id = task_id
           @url = url
         end
@@ -37,6 +43,7 @@ module Clerk
           return false unless other.is_a? self.class
           return false unless @object == other.object
           return false unless @agent_id == other.agent_id
+          return false unless @agent_task_id == other.agent_task_id
           return false unless @task_id == other.task_id
           return false unless @url == other.url
           true
