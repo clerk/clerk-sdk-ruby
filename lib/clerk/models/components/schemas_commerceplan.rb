@@ -18,12 +18,6 @@ module Clerk
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # The name of the commerce plan.
         field :name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name'), required: true } }
-
-        field :fee, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('fee'), required: true } }
-
-        field :annual_monthly_fee, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_monthly_fee'), required: true } }
-
-        field :annual_fee, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_fee'), required: true } }
         # The amount in cents for the plan.
         field :amount, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('amount'), required: true } }
         # The formatted amount as a string (e.g., "$49.99").
@@ -62,6 +56,12 @@ module Clerk
         field :avatar_url, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('avatar_url'), required: true } }
         # The features included in this plan.
         field :features, Crystalline::Array.new(Models::Components::SchemasFeatureResponse), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('features'), required: true } }
+
+        field :fee, Crystalline::Nilable.new(Models::Components::SchemasCommercePlanFee), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('fee'), required: true } }
+
+        field :annual_monthly_fee, Crystalline::Nilable.new(Models::Components::SchemasCommercePlanAnnualMonthlyFee), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_monthly_fee'), required: true } }
+
+        field :annual_fee, Crystalline::Nilable.new(Models::Components::SchemasCommercePlanAnnualFee), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_fee'), required: true } }
         # The billing period for the plan.
         field :period, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('period') } }
         # The billing interval.
@@ -72,13 +72,10 @@ module Clerk
         field :free_trial_days, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('free_trial_days') } }
 
         
-        def initialize(object:, id:, name:, fee:, annual_monthly_fee:, annual_fee:, amount:, amount_formatted:, annual_monthly_amount:, annual_monthly_amount_formatted:, annual_amount:, annual_amount_formatted:, currency_symbol:, currency:, description:, product_id:, is_default:, is_recurring:, publicly_visible:, has_base_fee:, payer_type:, for_payer_type:, slug:, avatar_url:, features:, period: nil, interval: nil, free_trial_enabled: nil, free_trial_days: nil)
+        def initialize(object:, id:, name:, amount:, amount_formatted:, annual_monthly_amount:, annual_monthly_amount_formatted:, annual_amount:, annual_amount_formatted:, currency_symbol:, currency:, description:, product_id:, is_default:, is_recurring:, publicly_visible:, has_base_fee:, payer_type:, for_payer_type:, slug:, avatar_url:, features:, fee: nil, annual_monthly_fee: nil, annual_fee: nil, period: nil, interval: nil, free_trial_enabled: nil, free_trial_days: nil)
           @object = object
           @id = id
           @name = name
-          @fee = fee
-          @annual_monthly_fee = annual_monthly_fee
-          @annual_fee = annual_fee
           @amount = amount
           @amount_formatted = amount_formatted
           @annual_monthly_amount = annual_monthly_amount
@@ -98,6 +95,9 @@ module Clerk
           @slug = slug
           @avatar_url = avatar_url
           @features = features
+          @fee = fee
+          @annual_monthly_fee = annual_monthly_fee
+          @annual_fee = annual_fee
           @period = period
           @interval = interval
           @free_trial_enabled = free_trial_enabled
@@ -110,9 +110,6 @@ module Clerk
           return false unless @object == other.object
           return false unless @id == other.id
           return false unless @name == other.name
-          return false unless @fee == other.fee
-          return false unless @annual_monthly_fee == other.annual_monthly_fee
-          return false unless @annual_fee == other.annual_fee
           return false unless @amount == other.amount
           return false unless @amount_formatted == other.amount_formatted
           return false unless @annual_monthly_amount == other.annual_monthly_amount
@@ -132,6 +129,9 @@ module Clerk
           return false unless @slug == other.slug
           return false unless @avatar_url == other.avatar_url
           return false unless @features == other.features
+          return false unless @fee == other.fee
+          return false unless @annual_monthly_fee == other.annual_monthly_fee
+          return false unless @annual_fee == other.annual_fee
           return false unless @period == other.period
           return false unless @interval == other.interval
           return false unless @free_trial_enabled == other.free_trial_enabled

@@ -20,6 +20,8 @@ class Clerk::Models::Components::OrganizationMembershipPublicUserData
   def last_name=(str_); end
   def profile_image_url(); end
   def profile_image_url=(str_); end
+  def banned(); end
+  def banned=(str_); end
   def identifier(); end
   def identifier=(str_); end
   def username(); end

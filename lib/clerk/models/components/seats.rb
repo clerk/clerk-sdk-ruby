@@ -14,16 +14,20 @@ module Clerk
 
         # Seat quantity being billed; null means unlimited
         field :quantity, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('quantity'), required: true } }
+        # Per-unit cost breakdown by pricing tier
+        field :tiers, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::CommercePerUnitTotalTier)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('tiers') } }
 
         
-        def initialize(quantity: nil)
+        def initialize(quantity: nil, tiers: nil)
           @quantity = quantity
+          @tiers = tiers
         end
 
         
         def ==(other)
           return false unless other.is_a? self.class
           return false unless @quantity == other.quantity
+          return false unless @tiers == other.tiers
           true
         end
       end

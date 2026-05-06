@@ -115,6 +115,12 @@ tags:
     description: |-
       A SAML Connection holds configuration data required for facilitating a SAML SSO flow between your
       Clerk Instance (SP) and a particular SAML IdP.
+  - name: Enterprise Connections
+    description: |-
+      An Enterprise Connection holds configuration data required for facilitating an enterprise SSO flow between your
+      Clerk instance and an identity provider.
+    externalDocs:
+      url: https://clerk.com/docs/guides/configure/auth-strategies/enterprise-connections/overview
   - name: Sessions
     description: |-
       The Session object is an abstraction over an HTTP session.
@@ -430,6 +436,8 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
     patch:
       operationId: UpdateEmailAddress
       x-speakeasy-group: emailAddresses
@@ -3827,6 +3835,51 @@ paths:
           $ref: '#/components/responses/InstanceProtect'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /instance/communication:
+    get:
+      operationId: GetInstanceCommunication
+      x-speakeasy-group: instanceSettings
+      x-speakeasy-name-override: getCommunication
+      summary: Get instance communication settings
+      description: Retrieves the per-instance SMS communication settings, including the SMS country blocklist.
+      tags:
+        - Instance Settings
+      responses:
+        '200':
+          $ref: '#/components/responses/InstanceCommunication'
+    patch:
+      operationId: UpdateInstanceCommunication
+      x-speakeasy-group: instanceSettings
+      x-speakeasy-name-override: updateCommunication
+      summary: Update instance communication settings
+      description: |
+        Replaces the SMS country blocklist for this instance. Pass the full set of ISO 3166-1
+        alpha-2 country codes that should be blocked; codes that aren't recognized as SMS-tier
+        countries are silently dropped from the persisted list. Omitting `blocked_country_codes`
+        is a no-op.
+      tags:
+        - Instance Settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                blocked_country_codes:
+                  type: array
+                  nullable: true
+                  description: ISO 3166-1 alpha-2 country codes to block for SMS delivery. Whole-list replacement. Codes must be uppercase, 2-letter, and unique within the array.
+                  maxItems: 250
+                  uniqueItems: true
+                  items:
+                    type: string
+                    pattern: ^[A-Z]{2}$
+      responses:
+        '200':
+          $ref: '#/components/responses/InstanceCommunication'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /instance/oauth_application_settings:
     get:
       operationId: GetInstanceOAuthApplicationSettings
@@ -3905,6 +3958,23 @@ paths:
         '422':
           $ref: '#/components/responses/ClerkErrors'
   /instance/organization_settings:
+    get:
+      operationId: GetInstanceOrganizationSettings
+      x-speakeasy-group: instanceSettings
+      x-speakeasy-name-override: getOrganizationSettings
+      summary: Get instance organization settings
+      description: Retrieves the organization settings of the instance
+      tags:
+        - Instance Settings
+      responses:
+        '200':
+          $ref: '#/components/responses/OrganizationSettings'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
     patch:
       operationId: UpdateInstanceOrganizationSettings
       x-speakeasy-group: instanceSettings
@@ -6761,6 +6831,51 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
+  /oauth_applications/{oauth_application_id}/logo:
+    put:
+      operationId: UploadOAuthApplicationLogo
+      x-speakeasy-group: oauthApplications
+      x-speakeasy-name-override: uploadLogo
+      summary: Upload a logo for the OAuth application
+      description: |-
+        Set or replace an OAuth application's logo by uploading an image file.
+        This endpoint uses the `multipart/form-data` request content type and accepts a file of image type.
+        The file size cannot exceed 10MB.
+        Only the following file content types are supported: `image/jpeg`, `image/png`, `image/gif`, `image/webp`.
+      tags:
+        - OAuth Applications
+      parameters:
+        - name: oauth_application_id
+          in: path
+          description: The ID of the OAuth application for which to upload a logo
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                uploader_user_id:
+                  type: string
+                  description: The ID of the user that will be credited with the image upload.
+                file:
+                  type: string
+                  format: binary
+              required:
+                - file
+      responses:
+        '200':
+          $ref: '#/components/responses/OAuthApplication'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '413':
+          $ref: '#/components/responses/ClerkErrors'
   /oauth_applications/{oauth_application_id}/rotate_secret:
     post:
       operationId: RotateOAuthApplicationSecret
@@ -6788,6 +6903,7 @@ paths:
           $ref: '#/components/responses/ResourceNotFound'
   /saml_connections:
     get:
+      deprecated: true
       operationId: ListSAMLConnections
       x-speakeasy-group: samlConnections
       x-speakeasy-name-override: list
@@ -6796,6 +6912,7 @@ paths:
         Returns the list of SAML Connections for an instance.
         Results can be paginated using the optional `limit` and `offset` query parameters.
         The SAML Connections are ordered by descending creation date and the most recent will be returned first.
+        Deprecated: Use the Enterprise Connections API instead. This endpoint will be removed in future versions.
       tags:
         - SAML Connections
       parameters:
@@ -6840,11 +6957,14 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     post:
+      deprecated: true
       operationId: CreateSAMLConnection
       x-speakeasy-group: samlConnections
       x-speakeasy-name-override: create
       summary: Create a SAML Connection
-      description: Create a new SAML Connection.
+      description: |-
+        Create a new SAML Connection.
+        Deprecated: Use the Enterprise Connections API instead. This endpoint will be removed in future versions.
       tags:
         - SAML Connections
       requestBody:
@@ -6932,15 +7052,20 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/ClerkErrors'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /saml_connections/{saml_connection_id}:
     get:
+      deprecated: true
       operationId: GetSAMLConnection
       x-speakeasy-group: samlConnections
       x-speakeasy-name-override: get
       summary: Retrieve a SAML Connection by ID
-      description: Fetches the SAML Connection whose ID matches the provided `saml_connection_id` in the path.
+      description: |-
+        Fetches the SAML Connection whose ID matches the provided `saml_connection_id` in the path.
+        Deprecated: Use the Enterprise Connections API instead. This endpoint will be removed in future versions.
       tags:
         - SAML Connections
       parameters:
@@ -6960,11 +7085,14 @@ paths:
         '404':
           $ref: '#/components/responses/ResourceNotFound'
     patch:
+      deprecated: true
       operationId: UpdateSAMLConnection
       x-speakeasy-group: samlConnections
       x-speakeasy-name-override: update
       summary: Update a SAML Connection
-      description: Updates the SAML Connection whose ID matches the provided `id` in the path.
+      description: |-
+        Updates the SAML Connection whose ID matches the provided `id` in the path.
+        Deprecated: Use the Enterprise Connections API instead. This endpoint will be removed in future versions.
       tags:
         - SAML Connections
       parameters:
@@ -7055,6 +7183,10 @@ paths:
                   type: boolean
                   description: Enable or deactivate additional identifications
                   nullable: true
+                allow_organization_account_linking:
+                  type: boolean
+                  description: Whether this connection supports account linking via organization membership
+                  nullable: true
                 force_authn:
                   type: boolean
                   description: Enable or deactivate ForceAuthn
@@ -7071,14 +7203,19 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/ClerkErrors'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     delete:
+      deprecated: true
       operationId: DeleteSAMLConnection
       x-speakeasy-group: samlConnections
       x-speakeasy-name-override: delete
       summary: Delete a SAML Connection
-      description: Deletes the SAML Connection whose ID matches the provided `id` in the path.
+      description: |-
+        Deletes the SAML Connection whose ID matches the provided `id` in the path.
+        Deprecated: Use the Enterprise Connections API instead. This endpoint will be removed in future versions.
       tags:
         - SAML Connections
       parameters:
@@ -7097,8 +7234,457 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
-  /enterprise_connections: {}
-  /enterprise_connections/{enterprise_connection_id}: {}
+  /enterprise_connections:
+    get:
+      operationId: ListEnterpriseConnections
+      x-speakeasy-group: enterpriseConnections
+      x-speakeasy-name-override: list
+      summary: List enterprise connections
+      description: |-
+        Returns the list of enterprise connections for the instance.
+        Results can be paginated using the optional `limit` and `offset` query parameters.
+      tags:
+        - Enterprise Connections
+      parameters:
+        - $ref: '#/components/parameters/LimitParameter'
+        - $ref: '#/components/parameters/OffsetParameter'
+        - name: organization_id
+          in: query
+          required: false
+          description: Filter enterprise connections by organization ID
+          schema:
+            type: string
+        - name: active
+          in: query
+          required: false
+          description: Filter by active status. If true, only active connections are returned. If false, only inactive connections are returned. If omitted, all connections are returned.
+          schema:
+            type: boolean
+      responses:
+        '200':
+          $ref: '#/components/responses/EnterpriseConnections'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      operationId: CreateEnterpriseConnection
+      x-speakeasy-group: enterpriseConnections
+      x-speakeasy-name-override: create
+      summary: Create an enterprise connection
+      description: Create a new enterprise connection.
+      tags:
+        - Enterprise Connections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - name
+                - provider
+                - domains
+              properties:
+                name:
+                  type: string
+                  description: The display name of the connection
+                provider:
+                  type: string
+                  description: The identity provider (e.g. saml_custom, oidc_custom, oidc_github_enterprise, oidc_gitlab)
+                  enum:
+                    - saml_custom
+                    - saml_okta
+                    - saml_google
+                    - saml_microsoft
+                    - oidc_custom
+                    - oidc_github_enterprise
+                    - oidc_gitlab
+                domains:
+                  type: array
+                  items:
+                    type: string
+                  minItems: 1
+                  description: Domains associated with the enterprise connection (required; at least one). Values are normalized to lowercase. Each domain must be a valid fully qualified domain name.
+                organization_id:
+                  type: string
+                  description: Organization ID when the connection is linked to an organization
+                  nullable: true
+                allow_organization_account_linking:
+                  type: boolean
+                  description: Whether this connection supports account linking via organization membership
+                  nullable: true
+                active:
+                  type: boolean
+                  description: Whether the enterprise connection is active. When true, IdP metadata must be provided via the `saml` object.
+                  nullable: true
+                saml:
+                  type: object
+                  description: |-
+                    SAML connection-specific properties. Only applied when the enterprise connection uses SAML (e.g. provider is saml_custom).
+                    Use this to set IdP configuration, attribute mapping, and other SAML-specific settings at creation time.
+                  nullable: true
+                  additionalProperties: false
+                  properties:
+                    idp_entity_id:
+                      type: string
+                      description: IdP entity ID
+                      nullable: true
+                    idp_sso_url:
+                      type: string
+                      description: IdP SSO URL
+                      nullable: true
+                    idp_certificate:
+                      type: string
+                      description: IdP certificate (PEM)
+                      nullable: true
+                    idp_metadata_url:
+                      type: string
+                      description: URL to IdP metadata
+                      nullable: true
+                    idp_metadata:
+                      type: string
+                      description: Raw IdP metadata XML
+                      nullable: true
+                    attribute_mapping:
+                      type: object
+                      description: Attribute mapping for SAML attributes
+                      nullable: true
+                      additionalProperties: false
+                      properties:
+                        user_id:
+                          type: string
+                          nullable: true
+                        email_address:
+                          type: string
+                          nullable: true
+                        first_name:
+                          type: string
+                          nullable: true
+                        last_name:
+                          type: string
+                          nullable: true
+                    allow_subdomains:
+                      type: boolean
+                      nullable: true
+                    allow_idp_initiated:
+                      type: boolean
+                      nullable: true
+                    force_authn:
+                      type: boolean
+                      nullable: true
+                oidc:
+                  type: object
+                  description: OIDC connection-specific properties. Only applied when the enterprise connection uses OIDC (e.g. provider is oidc_custom, oidc_github_enterprise, or oidc_gitlab).
+                  nullable: true
+                  additionalProperties: false
+                  properties:
+                    client_id:
+                      type: string
+                      description: OIDC client ID
+                      nullable: true
+                    client_secret:
+                      type: string
+                      description: OIDC client secret
+                      nullable: true
+                    discovery_url:
+                      type: string
+                      description: OIDC discovery URL
+                      nullable: true
+                    auth_url:
+                      type: string
+                      description: OIDC authorization URL
+                      nullable: true
+                    token_url:
+                      type: string
+                      description: OIDC token URL
+                      nullable: true
+                    user_info_url:
+                      type: string
+                      description: OIDC userinfo URL
+                      nullable: true
+                    requires_pkce:
+                      type: boolean
+                      description: Whether PKCE is required (must be true for public clients with no client secret)
+                      nullable: true
+                custom_attributes:
+                  type: array
+                  description: Custom attributes to map from the IdP to the user's profile via SSO or SCIM provisioning. Requires the custom attributes feature to be enabled for the instance.
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required:
+                      - name
+                      - key
+                    properties:
+                      name:
+                        type: string
+                        description: Display name for the custom attribute
+                        minLength: 1
+                      key:
+                        type: string
+                        description: Key used to store the attribute in the user's metadata
+                        minLength: 1
+                        pattern: ^[^_][A-Za-z0-9_-]*$
+                      sso_path:
+                        type: string
+                        description: Path to extract the attribute value from SSO claims
+                      scim_path:
+                        type: string
+                        description: GJSON path to extract the attribute value from SCIM user resources
+      responses:
+        '201':
+          $ref: '#/components/responses/EnterpriseConnection'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/ClerkErrors'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /enterprise_connections/{enterprise_connection_id}:
+    get:
+      operationId: GetEnterpriseConnection
+      x-speakeasy-group: enterpriseConnections
+      x-speakeasy-name-override: get
+      summary: Retrieve an enterprise connection
+      description: Fetches the enterprise connection whose ID matches the provided `enterprise_connection_id` in the path.
+      tags:
+        - Enterprise Connections
+      parameters:
+        - in: path
+          name: enterprise_connection_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the enterprise connection
+      responses:
+        '200':
+          $ref: '#/components/responses/EnterpriseConnection'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+    patch:
+      operationId: UpdateEnterpriseConnection
+      x-speakeasy-group: enterpriseConnections
+      x-speakeasy-name-override: update
+      summary: Update an enterprise connection
+      description: |-
+        Updates the enterprise connection whose ID matches the provided `enterprise_connection_id` in the path.
+        When enabling the connection (setting `active` to true), any existing verified organization domains that match the connection's domains (e.g. used for enrollment modes like automatic invitation) may be deleted so the connection can be enabled.
+      tags:
+        - Enterprise Connections
+      parameters:
+        - in: path
+          name: enterprise_connection_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the enterprise connection to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                name:
+                  type: string
+                  description: The display name of the enterprise connection
+                  nullable: true
+                domains:
+                  type: array
+                  items:
+                    type: string
+                  description: |-
+                    Domains associated with the enterprise connection. Values are normalized to lowercase.
+                    Empty array means ignored (no change); non-empty array means set domains to the given list (replaces existing).
+                  nullable: true
+                active:
+                  type: boolean
+                  description: Whether the enterprise connection is active. When set to true (enabling), any existing verified organization domains for the same domain(s) will be removed so the connection can be enabled.
+                  nullable: true
+                sync_user_attributes:
+                  type: boolean
+                  description: Whether to sync user attributes on sign-in
+                  nullable: true
+                disable_additional_identifications:
+                  type: boolean
+                  description: Whether to disable additional identifications
+                  nullable: true
+                allow_organization_account_linking:
+                  type: boolean
+                  description: Whether this connection supports account linking via organization membership
+                  nullable: true
+                organization_id:
+                  type: string
+                  description: Organization ID to link to this enterprise connection. Only linking is supported; sending this field sets or changes the linked organization. There is no way to unlink an organization once linked.
+                  nullable: true
+                saml:
+                  type: object
+                  description: |-
+                    SAML connection-specific properties. Only applied when the enterprise connection uses SAML.
+                    Use this to update IdP configuration, attribute mapping, and other SAML-specific settings.
+                  nullable: true
+                  additionalProperties: false
+                  properties:
+                    name:
+                      type: string
+                      description: Display name of the SAML connection
+                      nullable: true
+                    idp_entity_id:
+                      type: string
+                      description: IdP entity ID
+                      nullable: true
+                    idp_sso_url:
+                      type: string
+                      description: IdP SSO URL
+                      nullable: true
+                    idp_certificate:
+                      type: string
+                      description: IdP certificate (PEM)
+                      nullable: true
+                    idp_metadata_url:
+                      type: string
+                      description: URL to IdP metadata
+                      nullable: true
+                    idp_metadata:
+                      type: string
+                      description: Raw IdP metadata XML
+                      nullable: true
+                    attribute_mapping:
+                      type: object
+                      description: Attribute mapping for SAML attributes
+                      nullable: true
+                      additionalProperties: false
+                      properties:
+                        user_id:
+                          type: string
+                          nullable: true
+                        email_address:
+                          type: string
+                          nullable: true
+                        first_name:
+                          type: string
+                          nullable: true
+                        last_name:
+                          type: string
+                          nullable: true
+                    allow_subdomains:
+                      type: boolean
+                      nullable: true
+                    allow_idp_initiated:
+                      type: boolean
+                      nullable: true
+                    force_authn:
+                      type: boolean
+                      nullable: true
+                oidc:
+                  type: object
+                  description: OIDC connection-specific properties. Only applied when the enterprise connection uses OIDC (e.g. oidc_custom, oidc_github_enterprise, or oidc_gitlab).
+                  nullable: true
+                  additionalProperties: false
+                  properties:
+                    client_id:
+                      type: string
+                      description: OIDC client ID
+                      nullable: true
+                    client_secret:
+                      type: string
+                      description: OIDC client secret
+                      nullable: true
+                    discovery_url:
+                      type: string
+                      description: OIDC discovery URL
+                      nullable: true
+                    auth_url:
+                      type: string
+                      description: OIDC authorization URL
+                      nullable: true
+                    token_url:
+                      type: string
+                      description: OIDC token URL
+                      nullable: true
+                    user_info_url:
+                      type: string
+                      description: OIDC userinfo URL
+                      nullable: true
+                    requires_pkce:
+                      type: boolean
+                      description: Whether PKCE is required (must be true for public clients with no client secret)
+                      nullable: true
+                custom_attributes:
+                  type: array
+                  description: Custom attributes to map from the IdP to the user's profile via SSO or SCIM provisioning. Requires the custom attributes feature to be enabled for the instance.
+                  nullable: true
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required:
+                      - name
+                      - key
+                    properties:
+                      name:
+                        type: string
+                        description: Display name for the custom attribute
+                        minLength: 1
+                      key:
+                        type: string
+                        description: Key used to store the attribute in the user's metadata
+                        minLength: 1
+                        pattern: ^[^_][A-Za-z0-9_-]*$
+                      sso_path:
+                        type: string
+                        description: Path to extract the attribute value from SSO claims
+                      scim_path:
+                        type: string
+                        description: GJSON path to extract the attribute value from SCIM user resources
+      responses:
+        '200':
+          $ref: '#/components/responses/EnterpriseConnection'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      operationId: DeleteEnterpriseConnection
+      x-speakeasy-group: enterpriseConnections
+      x-speakeasy-name-override: delete
+      summary: Delete an enterprise connection
+      description: Deletes the enterprise connection whose ID matches the provided `enterprise_connection_id` in the path.
+      tags:
+        - Enterprise Connections
+      parameters:
+        - in: path
+          name: enterprise_connection_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the enterprise connection to delete
+      responses:
+        '200':
+          $ref: '#/components/responses/DeletedObject'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
   /testing_tokens:
     post:
       operationId: CreateTestingToken
@@ -7120,7 +7706,7 @@ paths:
       description: |-
         Create an agent task on behalf of a user.
         The response contains a URL that, when visited, creates a session for the user.
-        The agent_id is stable per agent_name within an instance. The task_id is unique per call.
+        The agent_id is stable per agent_name within an instance. The agent_task_id is unique per call.
       tags:
         - Agent Tasks
       requestBody:
@@ -8384,6 +8970,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /audit_logs: {}
+  /audit_logs/{event_time_and_id}: {}
   /scim_directories: {}
   /scim_directories/{scim_directory_id}: {}
   /api_keys:
@@ -11514,7 +12101,7 @@ components:
         - created_at
         - updated_at
         - verification
-    SAMLConnection:
+    SAMLAccountConnection:
       type: object
       additionalProperties: false
       properties:
@@ -11612,7 +12199,7 @@ components:
           type: object
           nullable: true
           oneOf:
-            - $ref: '#/components/schemas/SAMLConnection'
+            - $ref: '#/components/schemas/SAMLAccountConnection'
       required:
         - id
         - object
@@ -11620,7 +12207,7 @@ components:
         - active
         - email_address
         - verification
-    EnterpriseConnection:
+    EnterpriseAccountConnection:
       type: object
       additionalProperties: false
       properties:
@@ -11734,7 +12321,7 @@ components:
           type: object
           nullable: true
           oneOf:
-            - $ref: '#/components/schemas/EnterpriseConnection'
+            - $ref: '#/components/schemas/EnterpriseAccountConnection'
         last_authenticated_at:
           type: integer
           format: int64
@@ -11842,6 +12429,8 @@ components:
         username:
           type: string
           nullable: true
+        banned:
+          type: boolean
       required:
         - user_id
         - first_name
@@ -12121,9 +12710,10 @@ components:
         The hashing algorithm that was used to generate the password digest.
 
         The algorithms we support at the moment are [`bcrypt`](https://en.wikipedia.org/wiki/Bcrypt), [`bcrypt_sha256_django`](https://docs.djangoproject.com/en/4.0/topics/auth/passwords/), [`md5`](https://en.wikipedia.org/wiki/MD5), `pbkdf2_sha1`, `pbkdf2_sha256`, [`pbkdf2_sha256_django`](https://docs.djangoproject.com/en/4.0/topics/auth/passwords/),
-        [`phpass`](https://www.openwall.com/phpass/), `md5_phpass`, [`scrypt_firebase`](https://firebaseopensource.com/projects/firebase/scrypt/),
+        `pbkdf2_sha512`, [`phpass`](https://www.openwall.com/phpass/), `md5_phpass`, [`scrypt_firebase`](https://firebaseopensource.com/projects/firebase/scrypt/),
         [`scrypt_werkzeug`](https://werkzeug.palletsprojects.com/en/3.0.x/utils/#werkzeug.security.generate_password_hash), [`sha256`](https://en.wikipedia.org/wiki/SHA-2),
-        [`ldap_ssha`](https://www.openldap.org/faq/data/cache/347.html), the [`argon2`](https://argon2.online/) variants: `argon2i` and `argon2id`, and `sha512_symfony`, the SHA-512 variant of the [Symfony](https://symfony.com/doc/current/security/passwords.html) legacy hasher.
+        [`ldap_ssha`](https://www.openldap.org/faq/data/cache/347.html), the [`argon2`](https://argon2.online/) variants: `argon2i` and `argon2id`, `sha512_symfony`, the SHA-512 variant of the [Symfony](https://symfony.com/doc/current/security/passwords.html) legacy hasher,
+        and `pbkdf2_sha512_hex`, a variant of `pbkdf2_sha512` that accepts hex-encoded salt and hash.
 
         Each of the supported hashers expects the incoming digest to be in a particular format. See the [Clerk docs](https://clerk.com/docs/references/backend/user/create-user) for more information.
     TotalCount:
@@ -12332,7 +12922,9 @@ components:
           type: string
           description: The name of the plan.
         fee:
-          $ref: '#/components/schemas/CommerceMoneyResponse'
+          allOf:
+            - $ref: '#/components/schemas/CommerceMoneyResponse'
+          nullable: true
         annual_monthly_fee:
           allOf:
             - $ref: '#/components/schemas/CommerceMoneyResponse'
@@ -12542,17 +13134,6 @@ components:
           type: integer
           format: int64
           description: Unix timestamp (in milliseconds) when the payer was last updated.
-    CommerceSubscriptionItemSeatsResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        quantity:
-          type: integer
-          format: int64
-          nullable: true
-          description: Seat quantity being billed; null means unlimited
-      required:
-        - quantity
     CommercePerUnitTotalTier:
       type: object
       additionalProperties: false
@@ -12571,6 +13152,22 @@ components:
       required:
         - fee_per_block
         - total
+    CommerceSubscriptionItemSeatsResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: integer
+          format: int64
+          nullable: true
+          description: Seat quantity being billed; null means unlimited
+        tiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommercePerUnitTotalTier'
+          description: Per-unit cost breakdown by pricing tier
+      required:
+        - quantity
     CommercePerUnitTotal:
       type: object
       additionalProperties: false
@@ -13430,6 +14027,22 @@ components:
         - object
         - rules_enabled
         - specter_enabled
+    InstanceCommunication:
+      type: object
+      description: Per-instance SMS communication settings, including the SMS country blocklist.
+      properties:
+        object:
+          type: string
+          enum:
+            - instance_communication
+        blocked_country_codes:
+          type: array
+          description: ISO 3166-1 alpha-2 country codes that are blocked for SMS delivery on this instance. Codes that aren't recognized are silently dropped.
+          items:
+            type: string
+      required:
+        - object
+        - blocked_country_codes
     OAuthApplicationSettings:
       type: object
       properties:
@@ -13465,6 +14078,8 @@ components:
           type: integer
         max_role_sets_allowed:
           type: integer
+        max_allowed_domains:
+          type: integer
         max_allowed_permissions:
           deprecated: true
           description: max_allowed_permissions is now a no-op, as permissions are now unlimited
@@ -13499,6 +14114,7 @@ components:
         - enabled
         - max_allowed_memberships
         - max_allowed_roles
+        - max_allowed_domains
         - creator_role
         - admin_delete_enabled
         - domains_enabled
@@ -14327,7 +14943,7 @@ components:
         - email_address
         - first_name
         - last_name
-    schemas-SAMLConnection:
+    SAMLConnection:
       type: object
       properties:
         object:
@@ -14385,6 +15001,8 @@ components:
           type: boolean
         disable_additional_identifications:
           type: boolean
+        allow_organization_account_linking:
+          type: boolean
         force_authn:
           type: boolean
           description: Enable or deactivate ForceAuthn
@@ -14418,6 +15036,8 @@ components:
         - allow_subdomains
         - allow_idp_initiated
         - disable_additional_identifications
+        - allow_organization_account_linking
+        - authenticatable
         - force_authn
         - created_at
         - updated_at
@@ -14433,12 +15053,197 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/schemas-SAMLConnection'
+            $ref: '#/components/schemas/SAMLConnection'
         total_count:
           type: integer
           format: int64
           description: |
             Total number of SAML Connections
+      required:
+        - data
+        - total_count
+    EnterpriseConnection:
+      type: object
+      required:
+        - id
+        - name
+        - provider
+        - active
+        - domains
+        - authenticatable
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          description: The enterprise connection ID
+        name:
+          type: string
+          description: The display name of the connection
+        provider:
+          type: string
+        logo_public_url:
+          type: string
+          nullable: true
+        active:
+          type: boolean
+          description: Whether the enterprise connection is active
+        domains:
+          type: array
+          items:
+            type: string
+          description: Domains associated with the enterprise connection
+        organization_id:
+          type: string
+          description: Organization ID when the connection is linked to an organization
+          nullable: true
+        sync_user_attributes:
+          type: boolean
+          description: Controls whether to update the user's attributes on each sign-in
+        disable_additional_identifications:
+          type: boolean
+          description: When true, users cannot add additional identifications when using this connection
+        allow_organization_account_linking:
+          type: boolean
+          description: Whether this connection supports account linking via organization membership
+        custom_attributes:
+          type: array
+          description: Custom attributes to map from the IdP to the user's profile via SSO or SCIM provisioning
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - name
+              - key
+            properties:
+              name:
+                type: string
+                description: Display name for the custom attribute
+              key:
+                type: string
+                description: Key used to store the attribute in the user's public/private/unsafe metadata
+              sso_path:
+                type: string
+                description: Path to extract the attribute value from SSO claims (SAML assertions or OIDC claims)
+              scim_path:
+                type: string
+                description: GJSON path to extract the attribute value from SCIM user resources
+        saml_connection:
+          type: object
+          nullable: true
+          description: Present when the enterprise connection uses SAML
+          properties:
+            id:
+              type: string
+              description: SAML connection ID
+            name:
+              type: string
+              description: SAML connection display name
+            idp_entity_id:
+              type: string
+              description: IdP entity ID (optional, when connection details are loaded)
+              nullable: true
+            idp_sso_url:
+              type: string
+              description: IdP SSO URL (optional, when connection details are loaded)
+              nullable: true
+            idp_metadata_url:
+              type: string
+              description: IdP metadata URL (optional, when connection details are loaded)
+              nullable: true
+            acs_url:
+              type: string
+              description: Assertion Consumer Service URL
+              nullable: true
+            sp_entity_id:
+              type: string
+              description: Service Provider entity ID
+              nullable: true
+            sp_metadata_url:
+              type: string
+              description: Service Provider metadata URL
+              nullable: true
+            active:
+              type: boolean
+              description: Whether the SAML connection is active
+            allow_idp_initiated:
+              type: boolean
+              description: Whether IdP-initiated SSO is allowed
+            allow_subdomains:
+              type: boolean
+              description: Whether subdomains are allowed for domain matching
+            force_authn:
+              type: boolean
+              description: Whether to force re-authentication
+        oauth_config:
+          type: object
+          nullable: true
+          description: Present when the enterprise connection uses OIDC or EASIE
+          properties:
+            id:
+              type: string
+              description: OAuth config ID
+            name:
+              type: string
+              description: Custom OIDC provider display name
+            provider_key:
+              type: string
+              description: OAuth provider key (e.g. oidc_custom, oidc_ghe_*, oidc_gitlab_ent_*)
+            client_id:
+              type: string
+              description: OAuth client ID
+              nullable: true
+            discovery_url:
+              type: string
+              description: OIDC discovery URL
+              nullable: true
+            auth_url:
+              type: string
+              description: OAuth authorization endpoint URL (present when configured or resolved from discovery)
+              nullable: true
+            token_url:
+              type: string
+              description: OAuth token endpoint URL (present when configured or resolved from discovery)
+              nullable: true
+            user_info_url:
+              type: string
+              description: OIDC userinfo endpoint URL (present when configured or resolved from discovery)
+              nullable: true
+            requires_pkce:
+              type: boolean
+              description: Whether PKCE is required for this OAuth client
+            logo_public_url:
+              type: string
+              description: Logo URL for the provider
+              nullable: true
+            created_at:
+              type: integer
+              format: int64
+              description: Unix timestamp in milliseconds when the config was created
+            updated_at:
+              type: integer
+              format: int64
+              description: Unix timestamp in milliseconds when the config was last updated
+        created_at:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds when the connection was created
+        updated_at:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds when the connection was last updated
+    EnterpriseConnections:
+      type: object
+      additionalProperties: false
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnterpriseConnection'
+        total_count:
+          type: integer
+          format: int64
+          description: Total number of enterprise connections
       required:
         - data
         - total_count
@@ -14475,10 +15280,15 @@ components:
           type: string
           description: |
             A stable identifier for the agent, unique per agent_name within an instance.
-        task_id:
+        agent_task_id:
           type: string
           description: |
             A unique identifier for this agent task.
+        task_id:
+          type: string
+          deprecated: true
+          description: |
+            A unique identifier for this agent task. Deprecated: use agent_task_id instead.
         url:
           type: string
           description: |
@@ -14486,6 +15296,7 @@ components:
       required:
         - object
         - agent_id
+        - agent_task_id
         - task_id
     WaitlistEntry:
       type: object
@@ -14596,9 +15407,13 @@ components:
           format: int64
           description: The monthly amount in cents when billed annually.
         fee:
-          $ref: '#/components/schemas/CommerceMoneyResponse'
+          allOf:
+            - $ref: '#/components/schemas/CommerceMoneyResponse'
+          nullable: true
         annual_monthly_fee:
-          $ref: '#/components/schemas/CommerceMoneyResponse'
+          allOf:
+            - $ref: '#/components/schemas/CommerceMoneyResponse'
+          nullable: true
         description:
           type: string
           nullable: true
@@ -14643,11 +15458,13 @@ components:
         amount:
           type: integer
           format: int64
-          description: The amount in cents for the price. Must be at least $1 (100 cents).
+          nullable: true
+          description: The monthly amount in cents. Must be at least $1 (100 cents) if not null.
         annual_monthly_amount:
           type: integer
           format: int64
-          description: The monthly amount in cents when billed annually. Optional.
+          nullable: true
+          description: The monthly amount in cents when billed annually. Must be at least $1 (100 cents) if not null.
         description:
           type: string
           description: An optional description for this custom price.
@@ -14753,11 +15570,17 @@ components:
           type: string
           description: The name of the commerce plan.
         fee:
-          $ref: '#/components/schemas/CommerceMoneyResponse'
+          allOf:
+            - $ref: '#/components/schemas/CommerceMoneyResponse'
+          nullable: true
         annual_monthly_fee:
-          $ref: '#/components/schemas/CommerceMoneyResponse'
+          allOf:
+            - $ref: '#/components/schemas/CommerceMoneyResponse'
+          nullable: true
         annual_fee:
-          $ref: '#/components/schemas/CommerceMoneyResponse'
+          allOf:
+            - $ref: '#/components/schemas/CommerceMoneyResponse'
+          nullable: true
         amount:
           type: integer
           format: int64
@@ -15928,6 +16751,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/InstanceProtect'
+    InstanceCommunication:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InstanceCommunication'
     InstanceOAuthApplicationSettings:
       description: Success
       content:
@@ -16196,7 +17025,19 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/schemas-SAMLConnection'
+            $ref: '#/components/schemas/SAMLConnection'
+    EnterpriseConnections:
+      description: A list of enterprise connections
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EnterpriseConnections'
+    EnterpriseConnection:
+      description: An enterprise connection
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EnterpriseConnection'
     TestingToken:
       description: A Testing Token
       content:

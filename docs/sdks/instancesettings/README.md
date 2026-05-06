@@ -9,9 +9,12 @@ Modify the settings of your instance.
 * [get](#get) - Fetch the current instance
 * [update](#update) - Update instance settings
 * [update_restrictions](#update_restrictions) - Update instance restrictions
+* [get_communication](#get_communication) - Get instance communication settings
+* [update_communication](#update_communication) - Update instance communication settings
 * [get_o_auth_application_settings](#get_o_auth_application_settings) - Get OAuth application settings
 * [update_o_auth_application_settings](#update_o_auth_application_settings) - Update OAuth application settings
 * [change_domain](#change_domain) - Update production instance domain
+* [get_organization_settings](#get_organization_settings) - Get instance organization settings
 * [update_organization_settings](#update_organization_settings) - Update instance organization settings
 * [get_instance_protect](#get_instance_protect) - Get instance protect settings
 * [update_instance_protect](#update_instance_protect) - Update instance protect settings
@@ -147,6 +150,83 @@ end
 | Models::Errors::ClerkErrors | 402, 422                    | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
+## get_communication
+
+Retrieves the per-instance SMS communication settings, including the SMS country blocklist.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="GetInstanceCommunication" method="get" path="/instance/communication" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.instance_settings.get_communication
+
+unless res.instance_communication.nil?
+  # handle response
+end
+
+```
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::GetInstanceCommunicationResponse)](../../models/operations/getinstancecommunicationresponse.md)**
+
+### Errors
+
+| Error Type       | Status Code      | Content Type     |
+| ---------------- | ---------------- | ---------------- |
+| Errors::APIError | 4XX, 5XX         | \*/\*            |
+
+## update_communication
+
+Replaces the SMS country blocklist for this instance. Pass the full set of ISO 3166-1
+alpha-2 country codes that should be blocked; codes that aren't recognized as SMS-tier
+countries are silently dropped from the persisted list. Omitting `blocked_country_codes`
+is a no-op.
+
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="UpdateInstanceCommunication" method="patch" path="/instance/communication" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+
+req = nil
+res = s.instance_settings.update_communication(request: req)
+
+unless res.instance_communication.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                                               | Type                                                                                                                    | Required                                                                                                                | Description                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `request`                                                                                                               | [Models::Operations::UpdateInstanceCommunicationRequest](../../models/operations/updateinstancecommunicationrequest.md) | :heavy_check_mark:                                                                                                      | The request object to use for the request.                                                                              |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::UpdateInstanceCommunicationResponse)](../../models/operations/updateinstancecommunicationresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 422                         | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
 ## get_o_auth_application_settings
 
 Retrieves the settings for OAuth applications for the instance (dynamic client registration, JWT access tokens, etc.).
@@ -265,6 +345,39 @@ end
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
 | Models::Errors::ClerkErrors | 400, 422                    | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## get_organization_settings
+
+Retrieves the organization settings of the instance
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="GetInstanceOrganizationSettings" method="get" path="/instance/organization_settings" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.instance_settings.get_organization_settings
+
+unless res.organization_settings.nil?
+  # handle response
+end
+
+```
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::GetInstanceOrganizationSettingsResponse)](../../models/operations/getinstanceorganizationsettingsresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 402, 404, 422               | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## update_organization_settings

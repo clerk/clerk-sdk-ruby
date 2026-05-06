@@ -46,6 +46,9 @@ module Clerk
       # Returns the list of SAML Connections for an instance.
       # Results can be paginated using the optional `limit` and `offset` query parameters.
       # The SAML Connections are ordered by descending creation date and the most recent will be returned first.
+      # Deprecated: Use the Enterprise Connections API instead. This endpoint will be removed in future versions.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
       url = "#{base_url}/saml_connections"
@@ -184,6 +187,9 @@ module Clerk
     def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # create - Create a SAML Connection
       # Create a new SAML Connection.
+      # Deprecated: Use the Enterprise Connections API instead. This endpoint will be removed in future versions.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
       url = "#{base_url}/saml_connections"
@@ -289,19 +295,19 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Crystalline::Union.new(Models::Components::SchemasSAMLConnectionSAMLConnection1, Models::Components::SchemasSAMLConnectionSAMLConnection2))
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Crystalline::Union.new(Models::Components::SAMLConnection1, Models::Components::SAMLConnection2))
           response = Models::Operations::CreateSAMLConnectionResponse.new(
             status_code: http_response.status,
             content_type: content_type,
             raw_response: http_response,
-            schemas_saml_connection: obj
+            saml_connection: obj
           )
 
           return response
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['402', '403', '404', '422'])
+      elsif Utils.match_status_code(http_response.status, ['402', '403', '404', '409', '422'])
         if Utils.match_content_type(content_type, 'application/json')
           http_response = @sdk_configuration.hooks.after_success(
             hook_ctx: SDKHooks::AfterSuccessHookContext.new(
@@ -331,6 +337,9 @@ module Clerk
     def get(saml_connection_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # get - Retrieve a SAML Connection by ID
       # Fetches the SAML Connection whose ID matches the provided `saml_connection_id` in the path.
+      # Deprecated: Use the Enterprise Connections API instead. This endpoint will be removed in future versions.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       request = Models::Operations::GetSAMLConnectionRequest.new(
         saml_connection_id: saml_connection_id
       )
@@ -433,12 +442,12 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Crystalline::Union.new(Models::Components::SchemasSAMLConnectionSAMLConnection1, Models::Components::SchemasSAMLConnectionSAMLConnection2))
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Crystalline::Union.new(Models::Components::SAMLConnection1, Models::Components::SAMLConnection2))
           response = Models::Operations::GetSAMLConnectionResponse.new(
             status_code: http_response.status,
             content_type: content_type,
             raw_response: http_response,
-            schemas_saml_connection: obj
+            saml_connection: obj
           )
 
           return response
@@ -475,6 +484,9 @@ module Clerk
     def update(body:, saml_connection_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # update - Update a SAML Connection
       # Updates the SAML Connection whose ID matches the provided `id` in the path.
+      # Deprecated: Use the Enterprise Connections API instead. This endpoint will be removed in future versions.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       request = Models::Operations::UpdateSAMLConnectionRequest.new(
         saml_connection_id: saml_connection_id,
         body: body
@@ -590,19 +602,19 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Crystalline::Union.new(Models::Components::SchemasSAMLConnectionSAMLConnection1, Models::Components::SchemasSAMLConnectionSAMLConnection2))
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Crystalline::Union.new(Models::Components::SAMLConnection1, Models::Components::SAMLConnection2))
           response = Models::Operations::UpdateSAMLConnectionResponse.new(
             status_code: http_response.status,
             content_type: content_type,
             raw_response: http_response,
-            schemas_saml_connection: obj
+            saml_connection: obj
           )
 
           return response
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['402', '403', '404', '422'])
+      elsif Utils.match_status_code(http_response.status, ['402', '403', '404', '409', '422'])
         if Utils.match_content_type(content_type, 'application/json')
           http_response = @sdk_configuration.hooks.after_success(
             hook_ctx: SDKHooks::AfterSuccessHookContext.new(
@@ -632,6 +644,9 @@ module Clerk
     def delete(saml_connection_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete - Delete a SAML Connection
       # Deletes the SAML Connection whose ID matches the provided `id` in the path.
+      # Deprecated: Use the Enterprise Connections API instead. This endpoint will be removed in future versions.
+      #
+      # @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
       request = Models::Operations::DeleteSAMLConnectionRequest.new(
         saml_connection_id: saml_connection_id
       )
