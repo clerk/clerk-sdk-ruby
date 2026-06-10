@@ -1,0 +1,11 @@
+# NextInvoiceDiscountsProration
+
+
+## Fields
+
+| Field                                                                                     | Type                                                                                      | Required                                                                                  | Description                                                                               |
+| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `amount`                                                                                  | [Models::Components::CommerceMoneyResponse](../../models/shared/commercemoneyresponse.md) | :heavy_check_mark:                                                                        | N/A                                                                                       |
+| `cycle_days_passed`                                                                       | *::Integer*                                                                               | :heavy_check_mark:                                                                        | N/A                                                                                       |
+| `cycle_days_total`                                                                        | *::Integer*                                                                               | :heavy_check_mark:                                                                        | N/A                                                                                       |
+| `cycle_passed_percent`                                                                    | *::Float*                                                                                 | :heavy_check_mark:                                                                        | N/A                                                                                       |

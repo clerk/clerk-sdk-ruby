@@ -32,9 +32,11 @@ module Clerk
         field :cookieless_dev, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('cookieless_dev') } }
         # Whether the instance should use URL-based session syncing in development mode (i.e. without third-party cookies).
         field :url_based_session_syncing, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('url_based_session_syncing') } }
+        # When password is required at the instance level, sets the preferred sign-in strategy surfaced to Clerk components. Has no effect when password is not required. Defaults to `password`. Set to an empty string to clear the override.
+        field :preferred_sign_in_strategy_when_password_required, Crystalline::Nilable.new(Models::Operations::PreferredSignInStrategyWhenPasswordRequired), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('preferred_sign_in_strategy_when_password_required'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::PreferredSignInStrategyWhenPasswordRequired, true) } }
 
         
-        def initialize(allowed_origins: nil, test_mode: nil, hibp: nil, support_email: nil, clerk_js_version: nil, development_origin: nil, cookieless_dev: nil, url_based_session_syncing: nil)
+        def initialize(allowed_origins: nil, test_mode: nil, hibp: nil, support_email: nil, clerk_js_version: nil, development_origin: nil, cookieless_dev: nil, url_based_session_syncing: nil, preferred_sign_in_strategy_when_password_required: nil)
           @allowed_origins = allowed_origins
           @test_mode = test_mode
           @hibp = hibp
@@ -43,6 +45,7 @@ module Clerk
           @development_origin = development_origin
           @cookieless_dev = cookieless_dev
           @url_based_session_syncing = url_based_session_syncing
+          @preferred_sign_in_strategy_when_password_required = preferred_sign_in_strategy_when_password_required
         end
 
         
@@ -56,6 +59,7 @@ module Clerk
           return false unless @development_origin == other.development_origin
           return false unless @cookieless_dev == other.cookieless_dev
           return false unless @url_based_session_syncing == other.url_based_session_syncing
+          return false unless @preferred_sign_in_strategy_when_password_required == other.preferred_sign_in_strategy_when_password_required
           true
         end
       end

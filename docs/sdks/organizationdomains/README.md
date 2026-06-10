@@ -8,6 +8,7 @@
 * [list](#list) - Get a list of all domains of an organization.
 * [update](#update) - Update an organization domain.
 * [delete](#delete) - Remove a domain from an organization.
+* [verify_ownership](#verify_ownership) - Mark an organization domain's ownership as verified
 * [list_all](#list_all) - List all organization domains
 
 ## create
@@ -172,6 +173,53 @@ end
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
 | Models::Errors::ClerkErrors | 400, 401, 404               | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## verify_ownership
+
+Flips the organization domain's ownership state to verified via the
+manual override path, bypassing the self-serve TXT DNS challenge. The
+domain row records strategy=`manual_override` and an
+`organization_domain.ownership_verified` audit event is emitted with the
+same strategy.
+
+Idempotent: re-calling on an already-verified domain returns the current
+ownership state without re-emitting the audit event.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="VerifyOrganizationDomainOwnership" method="post" path="/organizations/{organization_id}/domains/{domain_id}/verify_ownership" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.organization_domains.verify_ownership(organization_id: '<id>', domain_id: '<id>')
+
+unless res.organization_domain.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                              | Type                                                   | Required                                               | Description                                            |
+| ------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------ |
+| `organization_id`                                      | *::String*                                             | :heavy_check_mark:                                     | The ID of the organization to which the domain belongs |
+| `domain_id`                                            | *::String*                                             | :heavy_check_mark:                                     | The ID of the domain                                   |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::VerifyOrganizationDomainOwnershipResponse)](../../models/operations/verifyorganizationdomainownershipresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 401, 403, 404               | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## list_all

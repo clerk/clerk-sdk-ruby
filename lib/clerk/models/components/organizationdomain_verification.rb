@@ -7,26 +7,33 @@
 module Clerk
   module Models
     module Components
-      # Verification details for the domain
+      # Deprecated alias for `affiliation_verification`. Kept for backward compatibility on the current API version; will be removed in the next API version. Prefer `affiliation_verification`.
+      #
+      #
+      # @deprecated class: This will be removed in a future release, please migrate away from it as soon as possible.
       class OrganizationDomainVerification
         
         include Crystalline::MetadataFields
 
-        # Status of the verification. It can be `unverified` or `verified`
-        field :status, Models::Components::OrganizationDomainStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::OrganizationDomainStatus, false) } }
+        # Status of the verification. It can be `unverified`, `verified`, `failed`, or `expired`.
+        field :status, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true } }
         # Name of the strategy used to verify the domain
         field :strategy, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('strategy'), required: true } }
         # How many attempts have been made to verify the domain
         field :attempts, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attempts'), required: true } }
         # Unix timestamp of when the verification will expire
         field :expire_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expire_at'), required: true } }
+        # Unix timestamp of when ownership was verified. Only populated on `ownership_verification`; null on `affiliation_verification`.
+        #
+        field :verified_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('verified_at'), required: true } }
 
         
-        def initialize(status:, strategy:, attempts: nil, expire_at: nil)
+        def initialize(status:, strategy:, attempts: nil, expire_at: nil, verified_at: nil)
           @status = status
           @strategy = strategy
           @attempts = attempts
           @expire_at = expire_at
+          @verified_at = verified_at
         end
 
         
@@ -36,6 +43,7 @@ module Clerk
           return false unless @strategy == other.strategy
           return false unless @attempts == other.attempts
           return false unless @expire_at == other.expire_at
+          return false unless @verified_at == other.verified_at
           true
         end
       end

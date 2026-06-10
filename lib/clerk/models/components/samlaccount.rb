@@ -37,7 +37,7 @@ module Clerk
         #
         field :last_authenticated_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_authenticated_at') } }
 
-        field :saml_connection, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::SAMLConnection1, Models::Components::SAMLConnection2)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('saml_connection') } }
+        field :saml_connection, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::SAMLAccountConnection1, Models::Components::SAMLAccountConnection2)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('saml_connection') } }
 
         
         def initialize(id:, object:, provider:, active:, email_address:, public_metadata: nil, verification: nil, first_name: nil, last_name: nil, provider_user_id: nil, last_authenticated_at: nil, saml_connection: nil)

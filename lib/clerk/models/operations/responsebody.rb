@@ -16,8 +16,11 @@ module Clerk
         field :active, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('active'), required: true } }
 
         
-        def initialize(active:)
-          @active = active
+        def initialize(active: false)
+          unless active == false
+            raise ArgumentError, 'Invalid value for active'
+          end
+          @active = false
         end
 
         

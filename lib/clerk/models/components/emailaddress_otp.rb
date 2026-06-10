@@ -22,16 +22,19 @@ module Clerk
         field :attempts, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attempts'), required: true } }
 
         field :expire_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expire_at'), required: true } }
+        # The delivery channel of the code (phone codes only).
+        field :channel, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('channel') } }
 
         field :verified_at_client, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('verified_at_client') } }
 
         
-        def initialize(status:, strategy:, object: nil, attempts: nil, expire_at: nil, verified_at_client: nil)
+        def initialize(status:, strategy:, object: nil, attempts: nil, expire_at: nil, channel: nil, verified_at_client: nil)
           @status = status
           @strategy = strategy
           @object = object
           @attempts = attempts
           @expire_at = expire_at
+          @channel = channel
           @verified_at_client = verified_at_client
         end
 
@@ -43,6 +46,7 @@ module Clerk
           return false unless @object == other.object
           return false unless @attempts == other.attempts
           return false unless @expire_at == other.expire_at
+          return false unless @channel == other.channel
           return false unless @verified_at_client == other.verified_at_client
           true
         end

@@ -7,7 +7,7 @@
 module Clerk
   module Models
     module Components
-      # Amount for the next payment.
+      # Base plan fee for the next payment. Does not include per-unit (e.g. seat) charges; see `totals.grand_total` for the full amount.
       class NextInvoiceAmount
         
         include Crystalline::MetadataFields

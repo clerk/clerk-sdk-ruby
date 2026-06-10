@@ -21,18 +21,21 @@ module Clerk
 
         field :grand_total, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('grand_total'), required: true } }
 
-        field :per_unit_totals, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::CommercePerUnitTotal)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('per_unit_totals') } }
+        field :per_unit_totals, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::SchemasCommercePerUnitTotal)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('per_unit_totals') } }
 
         field :credits, Crystalline::Nilable.new(Models::Components::CommerceSubscriptionItemTotalsCredits), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('credits') } }
+        # Information about the discounts applied to the payment
+        field :discounts, Crystalline::Nilable.new(Models::Components::CommerceSubscriptionItemDiscounts), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('discounts') } }
 
         
-        def initialize(subtotal:, base_fee:, tax_total:, grand_total:, per_unit_totals: nil, credits: nil)
+        def initialize(subtotal:, base_fee:, tax_total:, grand_total:, per_unit_totals: nil, credits: nil, discounts: nil)
           @subtotal = subtotal
           @base_fee = base_fee
           @tax_total = tax_total
           @grand_total = grand_total
           @per_unit_totals = per_unit_totals
           @credits = credits
+          @discounts = discounts
         end
 
         
@@ -44,6 +47,7 @@ module Clerk
           return false unless @grand_total == other.grand_total
           return false unless @per_unit_totals == other.per_unit_totals
           return false unless @credits == other.credits
+          return false unless @discounts == other.discounts
           true
         end
       end

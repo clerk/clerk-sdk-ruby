@@ -13,25 +13,36 @@ module Clerk
     
 
     
-    def self.configure_request_security(req, security)
+    def self.configure_request_security(req, security, allowed_fields = nil)
       return if security.nil?
-      security.fields.each do |sec_field|
+
+      sec_fields = if allowed_fields.nil?
+        security.fields
+      else
+        allowed_fields.filter_map { |name| security.fields.find { |f| f.name == name } }
+      end
+
+      sec_fields.each do |sec_field|
         value = security.send(sec_field.name)
         next if value.nil?
 
         metadata = sec_field.metadata[:security]
         next if metadata.nil?
 
-        _parse_security_option(req, value) if metadata[:option]
-
-        if metadata[:scheme]
-          # Special case for basic auth which could be a flattened struct
-          if metadata[:sub_type] == 'basic' && !value.respond_to?(:fields)
-            _parse_security_scheme(req, metadata, security)
-          else
-            _parse_security_scheme(req, metadata, value)
-          end
+        if metadata[:option]
+          _parse_security_option(req, value)
+          break unless metadata[:composite]
         end
+
+        next unless metadata[:scheme]
+
+        # Special case for basic auth which could be a flattened struct
+        if metadata[:sub_type] == 'basic' && !value.respond_to?(:fields)
+          _parse_security_scheme(req, metadata, security)
+        else
+          _parse_security_scheme(req, metadata, value)
+        end
+        break unless metadata[:composite]
       end
     end
 

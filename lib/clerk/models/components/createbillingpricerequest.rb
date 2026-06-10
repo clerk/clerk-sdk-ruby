@@ -14,22 +14,25 @@ module Clerk
 
         # The ID of the plan this price belongs to.
         field :plan_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('plan_id'), required: true } }
-        # The amount in cents for the price. Must be at least $1 (100 cents).
-        field :amount, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('amount'), required: true } }
-        # The monthly amount in cents when billed annually. Optional.
-        field :annual_monthly_amount, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_monthly_amount') } }
+        # The monthly amount in cents. Must be at least $1 (100 cents) if not null.
+        field :amount, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('amount'), required: true } }
         # An optional description for this custom price.
         field :description, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('description') } }
+        # Which billing periods this price supports. Inferred from amounts if omitted.
+        field :supported_billing_periods, Crystalline::Nilable.new(Models::Components::CreateBillingPriceRequestSupportedBillingPeriods), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('supported_billing_periods'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::CreateBillingPriceRequestSupportedBillingPeriods, true) } }
         # The currency code (e.g., "USD"). Defaults to USD.
         field :currency, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('currency') } }
+        # The monthly amount in cents when billed annually. Must be at least $1 (100 cents) if not null.
+        field :annual_monthly_amount, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_monthly_amount') } }
 
         
-        def initialize(plan_id:, amount:, annual_monthly_amount: nil, description: nil, currency: 'USD')
+        def initialize(plan_id:, amount: nil, description: nil, supported_billing_periods: nil, currency: 'USD', annual_monthly_amount: nil)
           @plan_id = plan_id
           @amount = amount
-          @annual_monthly_amount = annual_monthly_amount
           @description = description
+          @supported_billing_periods = supported_billing_periods
           @currency = currency
+          @annual_monthly_amount = annual_monthly_amount
         end
 
         
@@ -37,9 +40,10 @@ module Clerk
           return false unless other.is_a? self.class
           return false unless @plan_id == other.plan_id
           return false unless @amount == other.amount
-          return false unless @annual_monthly_amount == other.annual_monthly_amount
           return false unless @description == other.description
+          return false unless @supported_billing_periods == other.supported_billing_periods
           return false unless @currency == other.currency
+          return false unless @annual_monthly_amount == other.annual_monthly_amount
           true
         end
       end

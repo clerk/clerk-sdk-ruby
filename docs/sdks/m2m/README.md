@@ -24,7 +24,9 @@ s = ::Clerk::OpenAPIClient.new(
   bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
 )
 
-req = Models::Operations::CreateM2MTokenRequest.new
+req = Models::Operations::CreateM2MTokenRequest.new(
+  min_remaining_ttl_seconds: 240
+)
 res = s.m2m.create_token(request: req)
 
 unless res.object.nil?
@@ -99,7 +101,7 @@ end
 | Error Type                                  | Status Code                                 | Content Type                                |
 | ------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
 | Models::Errors::GetM2MTokensBadRequestError | 400                                         | application/json                            |
-| Models::Errors::ForbiddenError              | 403                                         | application/json                            |
+| Models::Errors::GetM2MTokensForbiddenError  | 403                                         | application/json                            |
 | Models::Errors::GetM2MTokensNotFoundError   | 404                                         | application/json                            |
 | Errors::APIError                            | 4XX, 5XX                                    | \*/\*                                       |
 

@@ -13,17 +13,37 @@ module Clerk
         include Crystalline::MetadataFields
 
 
+        field :object, Models::Components::SAMLConnectionObject1, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SAMLConnectionObject1, false) } }
+
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
 
         field :name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name'), required: true } }
         # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :domain, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('domain'), required: true } }
 
+        field :acs_url, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('acs_url'), required: true } }
+
+        field :sp_entity_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sp_entity_id'), required: true } }
+
+        field :sp_metadata_url, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sp_metadata_url'), required: true } }
+
         field :active, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('active'), required: true } }
 
         field :provider, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider'), required: true } }
 
+        field :user_count, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('user_count'), required: true } }
+
         field :sync_user_attributes, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sync_user_attributes'), required: true } }
+
+        field :allow_subdomains, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allow_subdomains'), required: true } }
+
+        field :allow_idp_initiated, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allow_idp_initiated'), required: true } }
+
+        field :disable_additional_identifications, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('disable_additional_identifications'), required: true } }
+
+        field :allow_organization_account_linking, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allow_organization_account_linking'), required: true } }
+        # Enable or deactivate ForceAuthn
+        field :force_authn, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('force_authn'), required: true } }
         # Unix timestamp of creation.
         #
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
@@ -33,43 +53,83 @@ module Clerk
 
         field :domains, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('domains') } }
 
-        field :allow_subdomains, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allow_subdomains') } }
+        field :idp_entity_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_entity_id'), required: true } }
 
-        field :allow_idp_initiated, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allow_idp_initiated') } }
+        field :idp_sso_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_sso_url'), required: true } }
 
-        field :disable_additional_identifications, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('disable_additional_identifications') } }
+        field :idp_certificate, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificate'), required: true } }
+
+        field :attribute_mapping, Crystalline::Nilable.new(Models::Components::SAMLConnectionAttributeMapping), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attribute_mapping') } }
+
+        field :idp_metadata_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_metadata_url') } }
+
+        field :idp_metadata, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_metadata') } }
+
+        field :organization_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('organization_id') } }
+
+        field :enterprise_connection_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enterprise_connection_id') } }
 
         
-        def initialize(id:, name:, domain:, active:, provider:, sync_user_attributes:, created_at:, updated_at:, domains: nil, allow_subdomains: nil, allow_idp_initiated: nil, disable_additional_identifications: nil)
+        def initialize(object:, id:, name:, domain:, acs_url:, sp_entity_id:, sp_metadata_url:, active:, provider:, user_count:, sync_user_attributes:, allow_subdomains:, allow_idp_initiated:, disable_additional_identifications:, allow_organization_account_linking:, force_authn:, created_at:, updated_at:, domains: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, attribute_mapping: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, enterprise_connection_id: nil)
+          @object = object
           @id = id
           @name = name
           @domain = domain
+          @acs_url = acs_url
+          @sp_entity_id = sp_entity_id
+          @sp_metadata_url = sp_metadata_url
           @active = active
           @provider = provider
+          @user_count = user_count
           @sync_user_attributes = sync_user_attributes
-          @created_at = created_at
-          @updated_at = updated_at
-          @domains = domains
           @allow_subdomains = allow_subdomains
           @allow_idp_initiated = allow_idp_initiated
           @disable_additional_identifications = disable_additional_identifications
+          @allow_organization_account_linking = allow_organization_account_linking
+          @force_authn = force_authn
+          @created_at = created_at
+          @updated_at = updated_at
+          @domains = domains
+          @idp_entity_id = idp_entity_id
+          @idp_sso_url = idp_sso_url
+          @idp_certificate = idp_certificate
+          @attribute_mapping = attribute_mapping
+          @idp_metadata_url = idp_metadata_url
+          @idp_metadata = idp_metadata
+          @organization_id = organization_id
+          @enterprise_connection_id = enterprise_connection_id
         end
 
         
         def ==(other)
           return false unless other.is_a? self.class
+          return false unless @object == other.object
           return false unless @id == other.id
           return false unless @name == other.name
           return false unless @domain == other.domain
+          return false unless @acs_url == other.acs_url
+          return false unless @sp_entity_id == other.sp_entity_id
+          return false unless @sp_metadata_url == other.sp_metadata_url
           return false unless @active == other.active
           return false unless @provider == other.provider
+          return false unless @user_count == other.user_count
           return false unless @sync_user_attributes == other.sync_user_attributes
-          return false unless @created_at == other.created_at
-          return false unless @updated_at == other.updated_at
-          return false unless @domains == other.domains
           return false unless @allow_subdomains == other.allow_subdomains
           return false unless @allow_idp_initiated == other.allow_idp_initiated
           return false unless @disable_additional_identifications == other.disable_additional_identifications
+          return false unless @allow_organization_account_linking == other.allow_organization_account_linking
+          return false unless @force_authn == other.force_authn
+          return false unless @created_at == other.created_at
+          return false unless @updated_at == other.updated_at
+          return false unless @domains == other.domains
+          return false unless @idp_entity_id == other.idp_entity_id
+          return false unless @idp_sso_url == other.idp_sso_url
+          return false unless @idp_certificate == other.idp_certificate
+          return false unless @attribute_mapping == other.attribute_mapping
+          return false unless @idp_metadata_url == other.idp_metadata_url
+          return false unless @idp_metadata == other.idp_metadata
+          return false unless @organization_id == other.organization_id
+          return false unless @enterprise_connection_id == other.enterprise_connection_id
           true
         end
       end

@@ -33,13 +33,22 @@ module Clerk
         field :updated_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
         # Affiliation email address for the domain, if available.
         field :affiliation_email_address, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('affiliation_email_address'), required: true } }
-        # Verification details for the domain
+        # Verification details for the user-facing affiliation between the domain and the organization (e.g. affiliation_email_code).
+        #
+        field :affiliation_verification, Crystalline::Nilable.new(Models::Components::AffiliationVerification), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('affiliation_verification'), required: true } }
+        # Verification details for the underlying DNS domain ownership proof (TXT challenge or dashboard override). Null until ownership has been attempted.
+        #
+        field :ownership_verification, Crystalline::Nilable.new(Models::Components::OwnershipVerification), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('ownership_verification'), required: true } }
+        # Deprecated alias for `affiliation_verification`. Kept for backward compatibility on the current API version; will be removed in the next API version. Prefer `affiliation_verification`.
+        #
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :verification, Crystalline::Nilable.new(Models::Components::OrganizationDomainVerification), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('verification'), required: true } }
         # Public organization data associated with this domain
         field :public_organization_data, Crystalline::Nilable.new(Models::Components::PublicOrganizationData), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_organization_data') } }
 
         
-        def initialize(object:, id:, organization_id:, name:, enrollment_mode:, total_pending_invitations:, total_pending_suggestions:, created_at:, updated_at:, affiliation_email_address: nil, verification: nil, public_organization_data: nil)
+        def initialize(object:, id:, organization_id:, name:, enrollment_mode:, total_pending_invitations:, total_pending_suggestions:, created_at:, updated_at:, affiliation_email_address: nil, affiliation_verification: nil, ownership_verification: nil, verification: nil, public_organization_data: nil)
           @object = object
           @id = id
           @organization_id = organization_id
@@ -50,6 +59,8 @@ module Clerk
           @created_at = created_at
           @updated_at = updated_at
           @affiliation_email_address = affiliation_email_address
+          @affiliation_verification = affiliation_verification
+          @ownership_verification = ownership_verification
           @verification = verification
           @public_organization_data = public_organization_data
         end
@@ -67,6 +78,8 @@ module Clerk
           return false unless @created_at == other.created_at
           return false unless @updated_at == other.updated_at
           return false unless @affiliation_email_address == other.affiliation_email_address
+          return false unless @affiliation_verification == other.affiliation_verification
+          return false unless @ownership_verification == other.ownership_verification
           return false unless @verification == other.verification
           return false unless @public_organization_data == other.public_organization_data
           true

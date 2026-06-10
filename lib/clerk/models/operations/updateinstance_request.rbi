@@ -24,4 +24,6 @@ class Clerk::Models::Operations::UpdateInstanceRequest
   def cookieless_dev=(str_); end
   def url_based_session_syncing(); end
   def url_based_session_syncing=(str_); end
+  def preferred_sign_in_strategy_when_password_required(); end
+  def preferred_sign_in_strategy_when_password_required=(str_); end
 end

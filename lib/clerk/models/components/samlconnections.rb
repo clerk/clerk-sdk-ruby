@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :data, Crystalline::Array.new(Crystalline::Union.new(Models::Components::SchemasSAMLConnectionSAMLConnection1, Models::Components::SchemasSAMLConnectionSAMLConnection2)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('data'), required: true } }
+        field :data, Crystalline::Array.new(Crystalline::Union.new(Models::Components::SAMLConnection1, Models::Components::SAMLConnection2)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('data'), required: true } }
         # Total number of SAML Connections
         #
         field :total_count, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('total_count'), required: true } }

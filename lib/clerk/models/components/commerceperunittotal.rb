@@ -12,11 +12,11 @@ module Clerk
         
         include Crystalline::MetadataFields
 
-        # Name of the billable unit (for example, seats)
+        # Name of the billable unit (for example, `seats`).
         field :name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name'), required: true } }
-        # Number of units included in each pricing block
+        # Number of units included in each pricing block.
         field :block_size, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('block_size'), required: true } }
-        # Computed totals for each pricing tier
+        # Computed totals for each pricing tier.
         field :tiers, Crystalline::Array.new(Models::Components::CommercePerUnitTotalTier), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('tiers'), required: true } }
 
         

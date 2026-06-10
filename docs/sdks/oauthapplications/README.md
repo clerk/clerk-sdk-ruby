@@ -9,6 +9,7 @@
 * [get](#get) - Retrieve an OAuth application by ID
 * [update](#update) - Update an OAuth application
 * [delete](#delete) - Delete an OAuth application
+* [upload_logo](#upload_logo) - Upload a logo for the OAuth application
 * [rotate_secret](#rotate_secret) - Rotate the client secret of the given OAuth application
 
 ## list
@@ -221,6 +222,49 @@ end
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
 | Models::Errors::ClerkErrors | 403, 404                    | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## upload_logo
+
+Set or replace an OAuth application's logo by uploading an image file.
+This endpoint uses the `multipart/form-data` request content type and accepts a file of image type.
+The file size cannot exceed 10MB.
+Only the following file content types are supported: `image/jpeg`, `image/png`, `image/gif`, `image/webp`.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="UploadOAuthApplicationLogo" method="put" path="/oauth_applications/{oauth_application_id}/logo" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.oauth_applications.upload_logo(oauth_application_id: '<id>')
+
+unless res.o_auth_application.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                                                                               | Type                                                                                                                                                    | Required                                                                                                                                                | Description                                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `oauth_application_id`                                                                                                                                  | *::String*                                                                                                                                              | :heavy_check_mark:                                                                                                                                      | The ID of the OAuth application for which to upload a logo                                                                                              |
+| `body`                                                                                                                                                  | [Crystalline::Nilable.new(Models::Operations::UploadOAuthApplicationLogoRequestBody)](../../models/operations/uploadoauthapplicationlogorequestbody.md) | :heavy_minus_sign:                                                                                                                                      | N/A                                                                                                                                                     |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::UploadOAuthApplicationLogoResponse)](../../models/operations/uploadoauthapplicationlogoresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 400, 403, 404, 413          | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## rotate_secret

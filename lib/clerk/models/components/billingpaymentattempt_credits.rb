@@ -15,7 +15,7 @@ module Clerk
 
         field :total, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('total'), required: true } }
 
-        field :proration, Crystalline::Nilable.new(Models::Components::BillingPaymentAttemptProration), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('proration'), required: true } }
+        field :proration, Crystalline::Nilable.new(Models::Components::BillingPaymentAttemptCreditsProration), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('proration'), required: true } }
 
         field :payer, Crystalline::Nilable.new(Models::Components::BillingPaymentAttemptPayer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payer'), required: true } }
 

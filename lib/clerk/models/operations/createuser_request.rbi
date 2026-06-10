@@ -10,8 +10,12 @@ end
 class Clerk::Models::Operations::CreateUserRequest
   def email_address(); end
   def email_address=(str_); end
+  def email_address_identification_status(); end
+  def email_address_identification_status=(str_); end
   def phone_number(); end
   def phone_number=(str_); end
+  def phone_number_identification_status(); end
+  def phone_number_identification_status=(str_); end
   def web3_wallet(); end
   def web3_wallet=(str_); end
   def password_hasher(); end
@@ -60,4 +64,8 @@ class Clerk::Models::Operations::CreateUserRequest
   def created_at=(str_); end
   def bypass_client_trust(); end
   def bypass_client_trust=(str_); end
+  def banned(); end
+  def banned=(str_); end
+  def locked(); end
+  def locked=(str_); end
 end

@@ -12,22 +12,30 @@ module Clerk
         
         include Crystalline::MetadataFields
 
-        # Amount for the next payment.
+        # Per-unit total breakdown (for example, seats) for the next payment.
+        field :per_unit_totals, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::CommercePerUnitTotal)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('per_unit_totals') } }
+        # Base plan fee for the next payment. Does not include per-unit (e.g. seat) charges; see `totals.grand_total` for the full amount.
         field :amount, Crystalline::Nilable.new(Models::Components::CommerceSubscriptionItemAmount), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('amount') } }
         # Unix timestamp (in milliseconds) for the next payment date.
         field :date, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('date') } }
+        # Breakdown of the recurring amount that will be billed at renewal (base fee + per-unit charges). Tax and credits are not previewed.
+        field :totals, Crystalline::Nilable.new(Models::Components::CommerceSubscriptionItemNextPaymentTotals), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('totals') } }
 
         
-        def initialize(amount: nil, date: nil)
+        def initialize(per_unit_totals: nil, amount: nil, date: nil, totals: nil)
+          @per_unit_totals = per_unit_totals
           @amount = amount
           @date = date
+          @totals = totals
         end
 
         
         def ==(other)
           return false unless other.is_a? self.class
+          return false unless @per_unit_totals == other.per_unit_totals
           return false unless @amount == other.amount
           return false unless @date == other.date
+          return false unless @totals == other.totals
           true
         end
       end
