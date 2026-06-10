@@ -16,4 +16,6 @@ class Clerk::Models::Components::OrganizationDomainVerification
   def attempts=(str_); end
   def expire_at(); end
   def expire_at=(str_); end
+  def verified_at(); end
+  def verified_at=(str_); end
 end

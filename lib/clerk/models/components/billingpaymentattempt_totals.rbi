@@ -20,4 +20,6 @@ class Clerk::Models::Components::BillingPaymentAttemptTotals
   def per_unit_totals=(str_); end
   def credits(); end
   def credits=(str_); end
+  def discounts(); end
+  def discounts=(str_); end
 end

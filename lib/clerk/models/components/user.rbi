@@ -78,6 +78,8 @@ class Clerk::Models::Components::User
   def organization_memberships=(str_); end
   def last_sign_in_at(); end
   def last_sign_in_at=(str_); end
+  def deprovisioned(); end
+  def deprovisioned=(str_); end
   def lockout_expires_in_seconds(); end
   def lockout_expires_in_seconds=(str_); end
   def verification_attempts_remaining(); end
@@ -96,4 +98,6 @@ class Clerk::Models::Components::User
   def create_organizations_limit=(str_); end
   def bypass_client_trust(); end
   def bypass_client_trust=(str_); end
+  def scim(); end
+  def scim=(str_); end
 end

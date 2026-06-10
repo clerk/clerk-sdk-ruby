@@ -19,6 +19,7 @@
 * [set_profile_image](#set_profile_image) - Set user profile image
 * [delete_profile_image](#delete_profile_image) - Delete user profile image
 * [update_metadata](#update_metadata) - Merge and update a user's metadata
+* [replace_metadata](#replace_metadata) - Replace a user's metadata
 * [get_billing_subscription](#get_billing_subscription) - Retrieve a user's billing subscription
 * [get_billing_credit_balance](#get_billing_credit_balance) - Retrieve a user's credit balance
 * [adjust_billing_credit_balance](#adjust_billing_credit_balance) - Adjust a user's credit balance
@@ -113,7 +114,7 @@ end
 
 Creates a new user. Your user management settings determine how you should setup your user model.
 
-Any email address and phone number created using this method will be marked as verified.
+By default, any email address and phone number created using this method is marked as verified. Use the `email_address_identification_status` and `phone_number_identification_status` arrays to instead create some or all of them as reserved (unverified but usable for sign-in and locked so no other user can claim them).
 
 Note: If you are performing a migration, check out our guide on [zero downtime migrations](https://clerk.com/docs/deployments/migrate-overview).
 
@@ -153,7 +154,7 @@ end
 
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
-| Models::Errors::ClerkErrors | 400, 401, 403, 422          | application/json            |
+| Models::Errors::ClerkErrors | 400, 401, 402, 403, 422     | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## count
@@ -724,6 +725,54 @@ end
 ### Response
 
 **[Crystalline::Nilable.new(Models::Operations::UpdateUserMetadataResponse)](../../models/operations/updateusermetadataresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 400, 401, 404, 422          | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## replace_metadata
+
+Replace a user's metadata attributes with the provided values.
+
+Unlike `PATCH /v1/users/{user_id}/metadata` (merge semantics), this endpoint
+replaces the supplied metadata columns entirely — the prior contents of each
+supplied column are discarded. Columns omitted from the request body are
+left unchanged.
+
+Prefer the `PATCH` endpoint for partial updates. Use `PUT` only when you
+explicitly intend to overwrite a metadata column wholesale.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="ReplaceUserMetadata" method="put" path="/users/{user_id}/metadata" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.users.replace_metadata(user_id: '<id>')
+
+unless res.user.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                                                                 | Type                                                                                                                                      | Required                                                                                                                                  | Description                                                                                                                               |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `user_id`                                                                                                                                 | *::String*                                                                                                                                | :heavy_check_mark:                                                                                                                        | The ID of the user whose metadata will be replaced                                                                                        |
+| `body`                                                                                                                                    | [Crystalline::Nilable.new(Models::Operations::ReplaceUserMetadataRequestBody)](../../models/operations/replaceusermetadatarequestbody.md) | :heavy_minus_sign:                                                                                                                        | N/A                                                                                                                                       |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::ReplaceUserMetadataResponse)](../../models/operations/replaceusermetadataresponse.md)**
 
 ### Errors
 

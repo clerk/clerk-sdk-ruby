@@ -22,11 +22,14 @@ module Clerk
         field :deleted, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('deleted'), required: true } }
 
         
-        def initialize(object:, from_machine_id:, to_machine_id:, deleted:)
+        def initialize(object:, from_machine_id:, to_machine_id:, deleted: true)
           @object = object
           @from_machine_id = from_machine_id
           @to_machine_id = to_machine_id
-          @deleted = deleted
+          unless deleted == true
+            raise ArgumentError, 'Invalid value for deleted'
+          end
+          @deleted = true
         end
 
         

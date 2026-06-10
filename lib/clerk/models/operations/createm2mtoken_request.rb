@@ -12,6 +12,14 @@ module Clerk
         
         include Crystalline::MetadataFields
 
+        # Enables server-side token reuse for opaque-format tokens. When set, if a non-revoked, non-expired M2M token already exists for this machine with identical `claims` and `scopes` and at least this many seconds of remaining lifetime, that existing token is returned and no new token is minted.
+        #
+        # Use this when caching tokens in application memory across requests is impractical — for example, in serverless functions, short-lived job workers, or autoscaling containers that churn faster than the token TTL. Pooling at the server collapses many redundant create calls into reuse of a single live token, which is the recommended pattern for high-volume M2M traffic.
+        #
+        # Must be strictly less than the effective token lifetime — that is, `seconds_until_expiration` when provided, or the machine's default TTL otherwise. A value greater than or equal to the lifetime is rejected with a 400, since no freshly-minted token would ever satisfy the requirement.
+        #
+        # Only applies to opaque-format tokens (`token_format` defaults to `opaque`). JWT-format tokens are stateless and are never deduplicated.
+        field :min_remaining_ttl_seconds, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('min_remaining_ttl_seconds') } }
 
         field :token_format, Crystalline::Nilable.new(Models::Operations::TokenFormat), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('token_format'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::TokenFormat, true) } }
 
@@ -20,7 +28,8 @@ module Clerk
         field :claims, Crystalline::Nilable.new(::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('claims') } }
 
         
-        def initialize(token_format: Models::Operations::TokenFormat::OPAQUE, seconds_until_expiration: nil, claims: nil)
+        def initialize(min_remaining_ttl_seconds: nil, token_format: Models::Operations::TokenFormat::OPAQUE, seconds_until_expiration: nil, claims: nil)
+          @min_remaining_ttl_seconds = min_remaining_ttl_seconds
           @token_format = token_format
           @seconds_until_expiration = seconds_until_expiration
           @claims = claims
@@ -29,6 +38,7 @@ module Clerk
         
         def ==(other)
           return false unless other.is_a? self.class
+          return false unless @min_remaining_ttl_seconds == other.min_remaining_ttl_seconds
           return false unless @token_format == other.token_format
           return false unless @seconds_until_expiration == other.seconds_until_expiration
           return false unless @claims == other.claims

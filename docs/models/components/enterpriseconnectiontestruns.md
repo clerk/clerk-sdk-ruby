@@ -1,0 +1,11 @@
+# EnterpriseConnectionTestRuns
+
+A list of enterprise connection test runs
+
+
+## Fields
+
+| Field                                                                                                                     | Type                                                                                                                      | Required                                                                                                                  | Description                                                                                                               |
+| ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `data`                                                                                                                    | Crystalline::Array<[Models::Components::EnterpriseConnectionTestRun](../../models/shared/enterpriseconnectiontestrun.md)> | :heavy_check_mark:                                                                                                        | N/A                                                                                                                       |
+| `total_count`                                                                                                             | *::Integer*                                                                                                               | :heavy_check_mark:                                                                                                        | Total number of test runs                                                                                                 |

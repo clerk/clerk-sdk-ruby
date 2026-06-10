@@ -15,11 +15,27 @@ module Clerk
         # Email addresses to add to the user.
         # Must be unique across your instance.
         # The first email address will be set as the user's primary email address.
+        # Created verified by default; see `email_address_identification_status` to create them reserved.
         field :email_address, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address') } }
+        # Controls the status each email address is created with. Runs parallel to
+        # `email_address`: when provided, it must contain exactly one item per email
+        # address, applied by position. When omitted or empty, every email address is
+        # created `verified`. Set an item to `reserved` to create the corresponding
+        # email address reserved instead (unverified but usable for sign-in and locked
+        # so no other user can claim it).
+        field :email_address_identification_status, Crystalline::Nilable.new(Crystalline::Array.new(Models::Operations::EmailAddressIdentificationStatus)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address_identification_status') } }
         # Phone numbers to add to the user.
         # Must be unique across your instance.
         # The first phone number will be set as the user's primary phone number.
+        # Created verified by default; see `phone_number_identification_status` to create them reserved.
         field :phone_number, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('phone_number') } }
+        # Controls the status each phone number is created with. Runs parallel to
+        # `phone_number`: when provided, it must contain exactly one item per phone
+        # number, applied by position. When omitted or empty, every phone number is
+        # created `verified`. Set an item to `reserved` to create the corresponding
+        # phone number reserved instead (unverified but usable for sign-in and locked
+        # so no other user can claim it).
+        field :phone_number_identification_status, Crystalline::Nilable.new(Crystalline::Array.new(Models::Operations::PhoneNumberIdentificationStatus)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('phone_number_identification_status') } }
         # Web3 wallets to add to the user.
         # Must be unique across your instance.
         # The first wallet will be set as the user's primary wallet.
@@ -27,9 +43,10 @@ module Clerk
         # The hashing algorithm that was used to generate the password digest.
         #
         # The algorithms we support at the moment are [`bcrypt`](https://en.wikipedia.org/wiki/Bcrypt), [`bcrypt_sha256_django`](https://docs.djangoproject.com/en/4.0/topics/auth/passwords/), [`md5`](https://en.wikipedia.org/wiki/MD5), `pbkdf2_sha1`, `pbkdf2_sha256`, [`pbkdf2_sha256_django`](https://docs.djangoproject.com/en/4.0/topics/auth/passwords/),
-        # [`phpass`](https://www.openwall.com/phpass/), `md5_phpass`, [`scrypt_firebase`](https://firebaseopensource.com/projects/firebase/scrypt/),
+        # `pbkdf2_sha512`, [`phpass`](https://www.openwall.com/phpass/), `md5_phpass`, [`scrypt_firebase`](https://firebaseopensource.com/projects/firebase/scrypt/),
         # [`scrypt_werkzeug`](https://werkzeug.palletsprojects.com/en/3.0.x/utils/#werkzeug.security.generate_password_hash), [`sha256`](https://en.wikipedia.org/wiki/SHA-2),
-        # [`ldap_ssha`](https://www.openldap.org/faq/data/cache/347.html), the [`argon2`](https://argon2.online/) variants: `argon2i` and `argon2id`, and `sha512_symfony`, the SHA-512 variant of the [Symfony](https://symfony.com/doc/current/security/passwords.html) legacy hasher.
+        # [`ldap_ssha`](https://www.openldap.org/faq/data/cache/347.html), the [`argon2`](https://argon2.online/) variants: `argon2i` and `argon2id`, `sha512_symfony`, the SHA-512 variant of the [Symfony](https://symfony.com/doc/current/security/passwords.html) legacy hasher,
+        # and `pbkdf2_sha512_hex`, a variant of `pbkdf2_sha512` that accepts hex-encoded salt and hash.
         #
         # Each of the supported hashers expects the incoming digest to be in a particular format. See the [Clerk docs](https://clerk.com/docs/references/backend/user/create-user) for more information.
         field :password_hasher, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('password_hasher') } }
@@ -99,11 +116,19 @@ module Clerk
         field :created_at, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at') } }
         # When set to `true`, the user will bypass client trust checks during sign-in.
         field :bypass_client_trust, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('bypass_client_trust') } }
+        # When set to `true`, the user is created already banned and cannot sign in.
+        # Requires the same plan support as the ban user endpoint.
+        field :banned, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('banned') } }
+        # When set to `true`, the user is created already locked.
+        # Requires the user lockout feature to be enabled on the instance.
+        field :locked, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('locked') } }
 
         
-        def initialize(email_address: nil, phone_number: nil, web3_wallet: nil, password_hasher: nil, backup_codes: nil, public_metadata: nil, private_metadata: nil, unsafe_metadata: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, username: nil, password: nil, password_digest: nil, skip_password_checks: nil, skip_password_requirement: nil, totp_secret: nil, delete_self_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, skip_user_requirement: nil, create_organization_enabled: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil)
+        def initialize(email_address: nil, email_address_identification_status: nil, phone_number: nil, phone_number_identification_status: nil, web3_wallet: nil, password_hasher: nil, backup_codes: nil, public_metadata: nil, private_metadata: nil, unsafe_metadata: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, username: nil, password: nil, password_digest: nil, skip_password_checks: nil, skip_password_requirement: nil, totp_secret: nil, delete_self_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, skip_user_requirement: nil, create_organization_enabled: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil, banned: nil, locked: nil)
           @email_address = email_address
+          @email_address_identification_status = email_address_identification_status
           @phone_number = phone_number
+          @phone_number_identification_status = phone_number_identification_status
           @web3_wallet = web3_wallet
           @password_hasher = password_hasher
           @backup_codes = backup_codes
@@ -128,13 +153,17 @@ module Clerk
           @create_organizations_limit = create_organizations_limit
           @created_at = created_at
           @bypass_client_trust = bypass_client_trust
+          @banned = banned
+          @locked = locked
         end
 
         
         def ==(other)
           return false unless other.is_a? self.class
           return false unless @email_address == other.email_address
+          return false unless @email_address_identification_status == other.email_address_identification_status
           return false unless @phone_number == other.phone_number
+          return false unless @phone_number_identification_status == other.phone_number_identification_status
           return false unless @web3_wallet == other.web3_wallet
           return false unless @password_hasher == other.password_hasher
           return false unless @backup_codes == other.backup_codes
@@ -159,6 +188,8 @@ module Clerk
           return false unless @create_organizations_limit == other.create_organizations_limit
           return false unless @created_at == other.created_at
           return false unless @bypass_client_trust == other.bypass_client_trust
+          return false unless @banned == other.banned
+          return false unless @locked == other.locked
           true
         end
       end

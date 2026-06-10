@@ -18,8 +18,6 @@ module Clerk
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # The name of the plan.
         field :name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name'), required: true } }
-
-        field :fee, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('fee'), required: true } }
         # The ID of the product this plan belongs to.
         #
         # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
@@ -39,9 +37,11 @@ module Clerk
         # Whether free trial is enabled for this plan.
         field :free_trial_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('free_trial_enabled'), required: true } }
 
-        field :annual_monthly_fee, Crystalline::Nilable.new(Models::Components::AnnualMonthlyFee), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_monthly_fee'), required: true } }
+        field :fee, Crystalline::Nilable.new(Models::Components::CommercePlanFee), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('fee'), required: true } }
 
-        field :annual_fee, Crystalline::Nilable.new(Models::Components::AnnualFee), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_fee'), required: true } }
+        field :annual_monthly_fee, Crystalline::Nilable.new(Models::Components::CommercePlanAnnualMonthlyFee), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_monthly_fee'), required: true } }
+
+        field :annual_fee, Crystalline::Nilable.new(Models::Components::CommercePlanAnnualFee), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_fee'), required: true } }
         # The description of the plan.
         field :description, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('description'), required: true } }
         # The URL of the plan's avatar image.
@@ -54,11 +54,10 @@ module Clerk
         field :unit_prices, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::CommercePlanUnitPrice)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('unit_prices') } }
 
         
-        def initialize(object:, id:, name:, fee:, product_id:, is_default:, is_recurring:, publicly_visible:, has_base_fee:, for_payer_type:, slug:, free_trial_enabled:, annual_monthly_fee: nil, annual_fee: nil, description: nil, avatar_url: nil, features: nil, free_trial_days: nil, unit_prices: nil)
+        def initialize(object:, id:, name:, product_id:, is_default:, is_recurring:, publicly_visible:, has_base_fee:, for_payer_type:, slug:, free_trial_enabled:, fee: nil, annual_monthly_fee: nil, annual_fee: nil, description: nil, avatar_url: nil, features: nil, free_trial_days: nil, unit_prices: nil)
           @object = object
           @id = id
           @name = name
-          @fee = fee
           @product_id = product_id
           @is_default = is_default
           @is_recurring = is_recurring
@@ -67,6 +66,7 @@ module Clerk
           @for_payer_type = for_payer_type
           @slug = slug
           @free_trial_enabled = free_trial_enabled
+          @fee = fee
           @annual_monthly_fee = annual_monthly_fee
           @annual_fee = annual_fee
           @description = description
@@ -82,7 +82,6 @@ module Clerk
           return false unless @object == other.object
           return false unless @id == other.id
           return false unless @name == other.name
-          return false unless @fee == other.fee
           return false unless @product_id == other.product_id
           return false unless @is_default == other.is_default
           return false unless @is_recurring == other.is_recurring
@@ -91,6 +90,7 @@ module Clerk
           return false unless @for_payer_type == other.for_payer_type
           return false unless @slug == other.slug
           return false unless @free_trial_enabled == other.free_trial_enabled
+          return false unless @fee == other.fee
           return false unless @annual_monthly_fee == other.annual_monthly_fee
           return false unless @annual_fee == other.annual_fee
           return false unless @description == other.description

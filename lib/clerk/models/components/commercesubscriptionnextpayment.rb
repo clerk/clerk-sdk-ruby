@@ -16,11 +16,17 @@ module Clerk
         field :date, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('date'), required: true } }
 
         field :amount, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('amount'), required: true } }
+        # Per-unit total breakdown (for example, seats) for the next payment.
+        field :per_unit_totals, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::SchemasCommercePerUnitTotal)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('per_unit_totals') } }
+        # Breakdown of the recurring amount that will be billed at renewal (base fee + per-unit charges). Tax and credits are not previewed.
+        field :totals, Crystalline::Nilable.new(Models::Components::CommerceSubscriptionNextPaymentTotals), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('totals') } }
 
         
-        def initialize(date:, amount:)
+        def initialize(date:, amount:, per_unit_totals: nil, totals: nil)
           @date = date
           @amount = amount
+          @per_unit_totals = per_unit_totals
+          @totals = totals
         end
 
         
@@ -28,6 +34,8 @@ module Clerk
           return false unless other.is_a? self.class
           return false unless @date == other.date
           return false unless @amount == other.amount
+          return false unless @per_unit_totals == other.per_unit_totals
+          return false unless @totals == other.totals
           true
         end
       end
