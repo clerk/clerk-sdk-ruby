@@ -356,6 +356,11 @@ end
 * [create](docs/sdks/actortokens/README.md#create) - Create actor token
 * [revoke](docs/sdks/actortokens/README.md#revoke) - Revoke actor token
 
+### [AdminPortalLinkTokens](docs/sdks/adminportallinktokens/README.md)
+
+* [create_admin_portal_link_token](docs/sdks/adminportallinktokens/README.md#create_admin_portal_link_token) - Create an Admin Portal Link Token
+* [revoke_admin_portal_link_token](docs/sdks/adminportallinktokens/README.md#revoke_admin_portal_link_token) - Revoke an Admin Portal Link Token
+
 ### [AgentTasks](docs/sdks/agenttasks/README.md)
 
 * [create](docs/sdks/agenttasks/README.md#create) - Create agent task
@@ -421,6 +426,9 @@ end
 * [get](docs/sdks/emailaddresses/README.md#get) - Retrieve an email address
 * [delete](docs/sdks/emailaddresses/README.md#delete) - Delete an email address
 * [update](docs/sdks/emailaddresses/README.md#update) - Update an email address
+* [prepare_verification](docs/sdks/emailaddresses/README.md#prepare_verification) - Send a verification code to an email address
+* [attempt_verification](docs/sdks/emailaddresses/README.md#attempt_verification) - Verify a code sent to an email address
+* [replace_for_user](docs/sdks/emailaddresses/README.md#replace_for_user) - Replace a user's email address
 
 ### [~~EmailAndSmsTemplates~~](docs/sdks/emailandsmstemplates/README.md)
 
@@ -433,14 +441,27 @@ end
 * [~~revert~~](docs/sdks/emailsmstemplates/README.md#revert) - Revert a template :warning: **Deprecated**
 * [~~toggle_template_delivery~~](docs/sdks/emailsmstemplates/README.md#toggle_template_delivery) - Toggle the delivery by Clerk for a template of a given type and slug :warning: **Deprecated**
 
+### [EnterpriseConnections](docs/sdks/enterpriseconnections/README.md)
+
+* [list](docs/sdks/enterpriseconnections/README.md#list) - List enterprise connections
+* [create](docs/sdks/enterpriseconnections/README.md#create) - Create an enterprise connection
+* [get](docs/sdks/enterpriseconnections/README.md#get) - Retrieve an enterprise connection
+* [update](docs/sdks/enterpriseconnections/README.md#update) - Update an enterprise connection
+* [delete](docs/sdks/enterpriseconnections/README.md#delete) - Delete an enterprise connection
+* [list_test_runs](docs/sdks/enterpriseconnections/README.md#list_test_runs) - List enterprise connection test runs
+* [create_test_run](docs/sdks/enterpriseconnections/README.md#create_test_run) - Create an enterprise connection test run
+
 ### [InstanceSettings](docs/sdks/instancesettings/README.md)
 
 * [get](docs/sdks/instancesettings/README.md#get) - Fetch the current instance
 * [update](docs/sdks/instancesettings/README.md#update) - Update instance settings
 * [update_restrictions](docs/sdks/instancesettings/README.md#update_restrictions) - Update instance restrictions
+* [get_communication](docs/sdks/instancesettings/README.md#get_communication) - Get instance communication settings
+* [update_communication](docs/sdks/instancesettings/README.md#update_communication) - Update instance communication settings
 * [get_o_auth_application_settings](docs/sdks/instancesettings/README.md#get_o_auth_application_settings) - Get OAuth application settings
 * [update_o_auth_application_settings](docs/sdks/instancesettings/README.md#update_o_auth_application_settings) - Update OAuth application settings
 * [change_domain](docs/sdks/instancesettings/README.md#change_domain) - Update production instance domain
+* [get_organization_settings](docs/sdks/instancesettings/README.md#get_organization_settings) - Get instance organization settings
 * [update_organization_settings](docs/sdks/instancesettings/README.md#update_organization_settings) - Update instance organization settings
 * [get_instance_protect](docs/sdks/instancesettings/README.md#get_instance_protect) - Get instance protect settings
 * [update_instance_protect](docs/sdks/instancesettings/README.md#update_instance_protect) - Update instance protect settings
@@ -498,6 +519,7 @@ end
 * [get](docs/sdks/oauthapplications/README.md#get) - Retrieve an OAuth application by ID
 * [update](docs/sdks/oauthapplications/README.md#update) - Update an OAuth application
 * [delete](docs/sdks/oauthapplications/README.md#delete) - Delete an OAuth application
+* [upload_logo](docs/sdks/oauthapplications/README.md#upload_logo) - Upload a logo for the OAuth application
 * [rotate_secret](docs/sdks/oauthapplications/README.md#rotate_secret) - Rotate the client secret of the given OAuth application
 
 ### [OrganizationDomains](docs/sdks/organizationdomains/README.md)
@@ -506,6 +528,7 @@ end
 * [list](docs/sdks/organizationdomains/README.md#list) - Get a list of all domains of an organization.
 * [update](docs/sdks/organizationdomains/README.md#update) - Update an organization domain.
 * [delete](docs/sdks/organizationdomains/README.md#delete) - Remove a domain from an organization.
+* [verify_ownership](docs/sdks/organizationdomains/README.md#verify_ownership) - Mark an organization domain's ownership as verified
 * [list_all](docs/sdks/organizationdomains/README.md#list_all) - List all organization domains
 
 ### [OrganizationInvitations](docs/sdks/organizationinvitations/README.md)
@@ -564,6 +587,9 @@ end
 * [get](docs/sdks/phonenumbers/README.md#get) - Retrieve a phone number
 * [delete](docs/sdks/phonenumbers/README.md#delete) - Delete a phone number
 * [update](docs/sdks/phonenumbers/README.md#update) - Update a phone number
+* [prepare_verification](docs/sdks/phonenumbers/README.md#prepare_verification) - Send a verification code to a phone number
+* [attempt_verification](docs/sdks/phonenumbers/README.md#attempt_verification) - Verify a code sent to a phone number
+* [replace_for_user](docs/sdks/phonenumbers/README.md#replace_for_user) - Replace a user's phone number
 
 ### [ProxyChecks](docs/sdks/proxychecks/README.md)
 
@@ -586,13 +612,13 @@ end
 * [add_roles](docs/sdks/rolesets/README.md#add_roles) - Add roles to a role set
 * [replace_role](docs/sdks/rolesets/README.md#replace_role) - Replace a role in a role set
 
-### [SamlConnections](docs/sdks/samlconnections/README.md)
+### [~~SamlConnections~~](docs/sdks/samlconnections/README.md)
 
-* [list](docs/sdks/samlconnections/README.md#list) - Get a list of SAML Connections for an instance
-* [create](docs/sdks/samlconnections/README.md#create) - Create a SAML Connection
-* [get](docs/sdks/samlconnections/README.md#get) - Retrieve a SAML Connection by ID
-* [update](docs/sdks/samlconnections/README.md#update) - Update a SAML Connection
-* [delete](docs/sdks/samlconnections/README.md#delete) - Delete a SAML Connection
+* [~~list~~](docs/sdks/samlconnections/README.md#list) - Get a list of SAML Connections for an instance :warning: **Deprecated**
+* [~~create~~](docs/sdks/samlconnections/README.md#create) - Create a SAML Connection :warning: **Deprecated**
+* [~~get~~](docs/sdks/samlconnections/README.md#get) - Retrieve a SAML Connection by ID :warning: **Deprecated**
+* [~~update~~](docs/sdks/samlconnections/README.md#update) - Update a SAML Connection :warning: **Deprecated**
+* [~~delete~~](docs/sdks/samlconnections/README.md#delete) - Delete a SAML Connection :warning: **Deprecated**
 
 ### [Sessions](docs/sdks/sessions/README.md)
 
@@ -639,6 +665,7 @@ end
 * [set_profile_image](docs/sdks/users/README.md#set_profile_image) - Set user profile image
 * [delete_profile_image](docs/sdks/users/README.md#delete_profile_image) - Delete user profile image
 * [update_metadata](docs/sdks/users/README.md#update_metadata) - Merge and update a user's metadata
+* [replace_metadata](docs/sdks/users/README.md#replace_metadata) - Replace a user's metadata
 * [get_billing_subscription](docs/sdks/users/README.md#get_billing_subscription) - Retrieve a user's billing subscription
 * [get_billing_credit_balance](docs/sdks/users/README.md#get_billing_credit_balance) - Retrieve a user's credit balance
 * [adjust_billing_credit_balance](docs/sdks/users/README.md#adjust_billing_credit_balance) - Adjust a user's credit balance

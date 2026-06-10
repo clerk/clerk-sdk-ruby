@@ -25,18 +25,21 @@ module Clerk
         # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :profile_image_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('profile_image_url'), required: true } }
 
+        field :banned, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('banned') } }
+
         field :identifier, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('identifier') } }
 
         field :username, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('username') } }
 
         
-        def initialize(user_id:, image_url:, has_image:, first_name: nil, last_name: nil, profile_image_url: nil, identifier: nil, username: nil)
+        def initialize(user_id:, image_url:, has_image:, first_name: nil, last_name: nil, profile_image_url: nil, banned: nil, identifier: nil, username: nil)
           @user_id = user_id
           @image_url = image_url
           @has_image = has_image
           @first_name = first_name
           @last_name = last_name
           @profile_image_url = profile_image_url
+          @banned = banned
           @identifier = identifier
           @username = username
         end
@@ -50,6 +53,7 @@ module Clerk
           return false unless @first_name == other.first_name
           return false unless @last_name == other.last_name
           return false unless @profile_image_url == other.profile_image_url
+          return false unless @banned == other.banned
           return false unless @identifier == other.identifier
           return false unless @username == other.username
           true

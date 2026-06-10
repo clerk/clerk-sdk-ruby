@@ -18,6 +18,8 @@ class Clerk::Models::Components::EmailAddressOTP
   def attempts=(str_); end
   def expire_at(); end
   def expire_at=(str_); end
+  def channel(); end
+  def channel=(str_); end
   def verified_at_client(); end
   def verified_at_client=(str_); end
 end

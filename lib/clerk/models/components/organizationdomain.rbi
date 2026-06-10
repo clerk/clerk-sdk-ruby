@@ -28,6 +28,10 @@ class Clerk::Models::Components::OrganizationDomain
   def updated_at=(str_); end
   def affiliation_email_address(); end
   def affiliation_email_address=(str_); end
+  def affiliation_verification(); end
+  def affiliation_verification=(str_); end
+  def ownership_verification(); end
+  def ownership_verification=(str_); end
   def verification(); end
   def verification=(str_); end
   def public_organization_data(); end

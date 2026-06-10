@@ -1,0 +1,9 @@
+# ReplaceUserPhoneNumberRequest
+
+
+## Fields
+
+| Field                                                                                                                 | Type                                                                                                                  | Required                                                                                                              | Description                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `user_id`                                                                                                             | *::String*                                                                                                            | :heavy_check_mark:                                                                                                    | The ID of the user whose phone number to replace                                                                      |
+| `body`                                                                                                                | [Models::Operations::ReplaceUserPhoneNumberRequestBody](../../models/operations/replaceuserphonenumberrequestbody.md) | :heavy_check_mark:                                                                                                    | N/A                                                                                                                   |

@@ -20,9 +20,12 @@ module Clerk
         field :proxy_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('proxy_url') } }
 
         
-        def initialize(name:, is_satellite:, proxy_url: nil)
+        def initialize(name:, is_satellite: true, proxy_url: nil)
           @name = name
-          @is_satellite = is_satellite
+          unless is_satellite == true
+            raise ArgumentError, 'Invalid value for is_satellite'
+          end
+          @is_satellite = true
           @proxy_url = proxy_url
         end
 

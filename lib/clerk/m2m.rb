@@ -346,7 +346,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ForbiddenError)
+          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::GetM2MTokensForbiddenError)
           obj.raw_response = http_response
           raise obj
         else

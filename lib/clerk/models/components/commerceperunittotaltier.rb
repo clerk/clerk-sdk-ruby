@@ -16,7 +16,7 @@ module Clerk
         field :fee_per_block, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('fee_per_block'), required: true } }
 
         field :total, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('total'), required: true } }
-        # Units billed in this tier; null means unlimited
+        # Units billed in this tier; null means unlimited.
         field :quantity, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('quantity') } }
 
         

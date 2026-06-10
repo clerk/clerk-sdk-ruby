@@ -92,6 +92,9 @@ module Clerk
         # Unix timestamp of last sign-in.
         #
         field :last_sign_in_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_sign_in_at'), required: true } }
+        # Flag to denote whether user has been deprovisioned and is restricted from signing in.
+        #
+        field :deprovisioned, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('deprovisioned') } }
         # The number of seconds remaining until the lockout period expires for a locked user. A null value for a locked user indicates that lockout never expires.
         #
         field :lockout_expires_in_seconds, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('lockout_expires_in_seconds'), required: true } }
@@ -117,8 +120,10 @@ module Clerk
         # When set to `true`, the user will bypass client trust checks during sign-in.
         field :bypass_client_trust, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('bypass_client_trust') } }
 
+        field :scim, Crystalline::Nilable.new(Models::Components::UserScim), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scim') } }
+
         
-        def initialize(id:, object:, has_image:, public_metadata:, email_addresses:, phone_numbers:, web3_wallets:, passkeys:, password_enabled:, two_factor_enabled:, totp_enabled:, backup_code_enabled:, external_accounts:, saml_accounts:, enterprise_accounts:, banned:, locked:, updated_at:, created_at:, delete_self_enabled:, create_organization_enabled:, external_id: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, first_name: nil, last_name: nil, profile_image_url: nil, image_url: nil, unsafe_metadata: nil, mfa_enabled_at: nil, mfa_disabled_at: nil, organization_memberships: nil, last_sign_in_at: nil, lockout_expires_in_seconds: nil, verification_attempts_remaining: nil, last_active_at: nil, legal_accepted_at: nil, locale: nil, private_metadata: nil, password_last_updated_at: nil, create_organizations_limit: nil, bypass_client_trust: false)
+        def initialize(id:, object:, has_image:, public_metadata:, email_addresses:, phone_numbers:, web3_wallets:, passkeys:, password_enabled:, two_factor_enabled:, totp_enabled:, backup_code_enabled:, external_accounts:, saml_accounts:, enterprise_accounts:, banned:, locked:, updated_at:, created_at:, delete_self_enabled:, create_organization_enabled:, external_id: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, first_name: nil, last_name: nil, profile_image_url: nil, image_url: nil, unsafe_metadata: nil, mfa_enabled_at: nil, mfa_disabled_at: nil, organization_memberships: nil, last_sign_in_at: nil, deprovisioned: nil, lockout_expires_in_seconds: nil, verification_attempts_remaining: nil, last_active_at: nil, legal_accepted_at: nil, locale: nil, private_metadata: nil, password_last_updated_at: nil, create_organizations_limit: nil, bypass_client_trust: false, scim: nil)
           @id = id
           @object = object
           @has_image = has_image
@@ -154,6 +159,7 @@ module Clerk
           @mfa_disabled_at = mfa_disabled_at
           @organization_memberships = organization_memberships
           @last_sign_in_at = last_sign_in_at
+          @deprovisioned = deprovisioned
           @lockout_expires_in_seconds = lockout_expires_in_seconds
           @verification_attempts_remaining = verification_attempts_remaining
           @last_active_at = last_active_at
@@ -163,6 +169,7 @@ module Clerk
           @password_last_updated_at = password_last_updated_at
           @create_organizations_limit = create_organizations_limit
           @bypass_client_trust = bypass_client_trust
+          @scim = scim
         end
 
         
@@ -203,6 +210,7 @@ module Clerk
           return false unless @mfa_disabled_at == other.mfa_disabled_at
           return false unless @organization_memberships == other.organization_memberships
           return false unless @last_sign_in_at == other.last_sign_in_at
+          return false unless @deprovisioned == other.deprovisioned
           return false unless @lockout_expires_in_seconds == other.lockout_expires_in_seconds
           return false unless @verification_attempts_remaining == other.verification_attempts_remaining
           return false unless @last_active_at == other.last_active_at
@@ -212,6 +220,7 @@ module Clerk
           return false unless @password_last_updated_at == other.password_last_updated_at
           return false unless @create_organizations_limit == other.create_organizations_limit
           return false unless @bypass_client_trust == other.bypass_client_trust
+          return false unless @scim == other.scim
           true
         end
       end
