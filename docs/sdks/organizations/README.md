@@ -10,6 +10,7 @@
 * [update](#update) - Update an organization
 * [delete](#delete) - Delete an organization
 * [merge_metadata](#merge_metadata) - Merge and update metadata for an organization
+* [replace_metadata](#replace_metadata) - Replace metadata for an organization
 * [upload_logo](#upload_logo) - Upload a logo for the organization
 * [delete_logo](#delete_logo) - Delete the organization's logo.
 * [get_billing_subscription](#get_billing_subscription) - Retrieve an organization's billing subscription
@@ -172,7 +173,10 @@ end
 
 ## update
 
-Updates an existing organization
+Updates an existing organization.
+
+As of API version 2026-05-12, this endpoint no longer accepts `public_metadata` or `private_metadata`.
+Use `PATCH /v1/organizations/{organization_id}/metadata` to merge updates into existing metadata, or `PUT /v1/organizations/{organization_id}/metadata` to replace a metadata field entirely.
 
 ### Example Usage
 
@@ -289,6 +293,51 @@ end
 ### Response
 
 **[Crystalline::Nilable.new(Models::Operations::MergeOrganizationMetadataResponse)](../../models/operations/mergeorganizationmetadataresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 400, 401, 404, 422          | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## replace_metadata
+
+Replace an organization's metadata attributes with the provided values.
+Unlike `PATCH /v1/organizations/{organization_id}/metadata` (merge semantics), this
+endpoint replaces the supplied metadata fields entirely — the prior contents of each
+supplied field are discarded. Fields omitted from the request body are left unchanged.
+Prefer the `PATCH` endpoint for partial updates. Use `PUT` only when you explicitly
+intend to overwrite a metadata field wholesale.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="ReplaceOrganizationMetadata" method="put" path="/organizations/{organization_id}/metadata" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.organizations.replace_metadata(organization_id: '<id>', body: Models::Operations::ReplaceOrganizationMetadataRequestBody.new)
+
+unless res.organization.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                                                       | Type                                                                                                                            | Required                                                                                                                        | Description                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `organization_id`                                                                                                               | *::String*                                                                                                                      | :heavy_check_mark:                                                                                                              | The ID of the organization whose metadata will be replaced                                                                      |
+| `body`                                                                                                                          | [Models::Operations::ReplaceOrganizationMetadataRequestBody](../../models/operations/replaceorganizationmetadatarequestbody.md) | :heavy_check_mark:                                                                                                              | N/A                                                                                                                             |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::ReplaceOrganizationMetadataResponse)](../../models/operations/replaceorganizationmetadataresponse.md)**
 
 ### Errors
 

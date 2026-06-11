@@ -18,7 +18,7 @@ info:
     Each version is identified by its release date, e.g. `2025-04-10`. For more information, please see [Clerk API Versions](https://clerk.com/docs/versioning/available-versions).
 
     Please see https://clerk.com/docs for more information.
-  version: '2025-11-10'
+  version: '2026-05-12'
   termsOfService: https://clerk.com/terms
   license:
     name: MIT
@@ -2266,12 +2266,9 @@ paths:
         Both IDs should correspond to verified identifications that belong to the user.
 
         You can remove a user's username by setting the username attribute to null or the blank string "".
-        This is a destructive action; the identification will be deleted forever.
-        Usernames can be removed only if they are optional in your instance settings and there's at least one other identifier which can be used for authentication.
 
-        This endpoint allows changing a user's password. When passing the `password` parameter directly you have two further options.
-        You can ignore the password policy checks for your instance by setting the `skip_password_checks` parameter to `true`.
-        You can also choose to sign the user out of all their active sessions on any device once the password is updated. Just set `sign_out_of_other_sessions` to `true`.
+        As of API version 2026-05-12, this endpoint no longer accepts `public_metadata`, `private_metadata`, or `unsafe_metadata`.
+        Use `PATCH /v1/users/{user_id}/metadata` to merge updates into existing metadata, or `PUT /v1/users/{user_id}/metadata` to replace a metadata field entirely.
       tags:
         - Users
       parameters:
@@ -2366,37 +2363,13 @@ paths:
                   nullable: true
                 totp_secret:
                   type: string
-                  description: |-
-                    In case TOTP is configured on the instance, you can provide the secret to enable it on the specific user without the need to reset it.
-                    Please note that currently the supported options are:
-                    * Period: 30 seconds
-                    * Code length: 6 digits
-                    * Algorithm: SHA1
+                  description: In case TOTP is configured on the instance, you can provide the secret to enable it on the specific user without the need to reset it.
                   nullable: true
                 backup_codes:
                   type: array
                   items:
                     type: string
-                  description: |-
-                    If Backup Codes are configured on the instance, you can provide them to enable it on the specific user without the need to reset them.
-                    You must provide the backup codes in plain format or the corresponding bcrypt digest.
-                public_metadata:
-                  type: object
-                  description: Metadata saved on the user, that is visible to both your Frontend and Backend APIs
-                  additionalProperties: true
-                  nullable: true
-                private_metadata:
-                  type: object
-                  description: Metadata saved on the user, that is only visible to your Backend API
-                  additionalProperties: true
-                  nullable: true
-                unsafe_metadata:
-                  type: object
-                  description: |-
-                    Metadata saved on the user, that can be updated from both the Frontend and Backend APIs.
-                    Note: Since this data can be modified from the frontend, it is not guaranteed to be safe.
-                  additionalProperties: true
-                  nullable: true
+                  description: If Backup Codes are configured on the instance, you can provide them to enable it on the specific user without the need to reset them.
                 delete_self_enabled:
                   type: boolean
                   description: If true, the user can delete themselves with the Frontend API.
@@ -2407,13 +2380,11 @@ paths:
                   nullable: true
                 legal_accepted_at:
                   type: string
-                  description: A custom timestamp denoting _when_ the user accepted legal requirements, specified in RFC3339 format (e.g. `2012-10-20T07:15:20.902Z`).
+                  description: A custom timestamp denoting _when_ the user accepted legal requirements, specified in RFC3339 format.
                   nullable: true
                 skip_legal_checks:
                   type: boolean
-                  description: |-
-                    When set to `true` all legal checks are skipped.
-                    It is not recommended to skip legal checks unless you are migrating a user to Clerk.
+                  description: When set to `true` all legal checks are skipped.
                   nullable: true
                 create_organizations_limit:
                   type: integer
@@ -2421,7 +2392,7 @@ paths:
                   nullable: true
                 created_at:
                   type: string
-                  description: A custom date/time denoting _when_ the user signed up to the application, specified in RFC3339 format (e.g. `2012-10-20T07:15:20.902Z`).
+                  description: A custom date/time denoting _when_ the user signed up to the application.
                   nullable: true
                 bypass_client_trust:
                   type: boolean
@@ -2740,12 +2711,12 @@ paths:
         Replace a user's metadata attributes with the provided values.
 
         Unlike `PATCH /v1/users/{user_id}/metadata` (merge semantics), this endpoint
-        replaces the supplied metadata columns entirely — the prior contents of each
-        supplied column are discarded. Columns omitted from the request body are
+        replaces the supplied metadata fields entirely — the prior contents of each
+        supplied field are discarded. Fields omitted from the request body are
         left unchanged.
 
         Prefer the `PATCH` endpoint for partial updates. Use `PUT` only when you
-        explicitly intend to overwrite a metadata column wholesale.
+        explicitly intend to overwrite a metadata field wholesale.
       tags:
         - Users
       parameters:
@@ -5213,7 +5184,11 @@ paths:
       x-speakeasy-group: organizations
       x-speakeasy-name-override: update
       summary: Update an organization
-      description: Updates an existing organization
+      description: |-
+        Updates an existing organization.
+
+        As of API version 2026-05-12, this endpoint no longer accepts `public_metadata` or `private_metadata`.
+        Use `PATCH /v1/organizations/{organization_id}/metadata` to merge updates into existing metadata, or `PUT /v1/organizations/{organization_id}/metadata` to replace a metadata field entirely.
       tags:
         - Organizations
       parameters:
@@ -5231,16 +5206,6 @@ paths:
               type: object
               additionalProperties: false
               properties:
-                public_metadata:
-                  type: object
-                  description: Metadata saved on the organization, that is visible to both your frontend and backend.
-                  additionalProperties: true
-                  nullable: true
-                private_metadata:
-                  type: object
-                  description: Metadata saved on the organization that is only visible to your backend.
-                  additionalProperties: true
-                  nullable: true
                 name:
                   type: string
                   description: |-
@@ -5275,7 +5240,7 @@ paths:
         '400':
           $ref: '#/components/responses/ClerkErrors'
         '402':
-          $ref: '#/components/responses/ResourceNotFound'
+          $ref: '#/components/responses/PaymentRequired'
         '403':
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
@@ -5347,6 +5312,58 @@ paths:
                   description: |-
                     Metadata saved on the organization that is only visible to your backend.
                     The new object will be merged with the existing value.
+                  additionalProperties: true
+      responses:
+        '200':
+          $ref: '#/components/responses/Organization'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    put:
+      operationId: ReplaceOrganizationMetadata
+      x-speakeasy-group: organizations
+      x-speakeasy-name-override: replaceMetadata
+      summary: Replace metadata for an organization
+      description: |-
+        Replace an organization's metadata attributes with the provided values.
+        Unlike `PATCH /v1/organizations/{organization_id}/metadata` (merge semantics), this
+        endpoint replaces the supplied metadata fields entirely — the prior contents of each
+        supplied field are discarded. Fields omitted from the request body are left unchanged.
+        Prefer the `PATCH` endpoint for partial updates. Use `PUT` only when you explicitly
+        intend to overwrite a metadata field wholesale.
+      tags:
+        - Organizations
+      parameters:
+        - name: organization_id
+          in: path
+          description: The ID of the organization whose metadata will be replaced
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                public_metadata:
+                  type: object
+                  description: |-
+                    Metadata saved on the organization, that is visible to both your frontend and backend.
+                    The existing value will be replaced entirely with the new object.
+                  additionalProperties: true
+                private_metadata:
+                  type: object
+                  description: |-
+                    Metadata saved on the organization that is only visible to your backend.
+                    The existing value will be replaced entirely with the new object.
                   additionalProperties: true
       responses:
         '200':

@@ -27,7 +27,6 @@ module Clerk
         # Each of the supported hashers expects the incoming digest to be in a particular format. See the [Clerk docs](https://clerk.com/docs/references/backend/user/create-user) for more information.
         field :password_hasher, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('password_hasher') } }
         # If Backup Codes are configured on the instance, you can provide them to enable it on the specific user without the need to reset them.
-        # You must provide the backup codes in plain format or the corresponding bcrypt digest.
         field :backup_codes, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('backup_codes') } }
         # The ID of the user as used in your external systems or your previous authentication solution.
         # Must be unique across your instance.
@@ -60,30 +59,18 @@ module Clerk
         # Set to `true` to sign out the user from all their active sessions once their password is updated. This parameter can only be used when providing a `password`.
         field :sign_out_of_other_sessions, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sign_out_of_other_sessions') } }
         # In case TOTP is configured on the instance, you can provide the secret to enable it on the specific user without the need to reset it.
-        # Please note that currently the supported options are:
-        # * Period: 30 seconds
-        # * Code length: 6 digits
-        # * Algorithm: SHA1
         field :totp_secret, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('totp_secret') } }
-        # Metadata saved on the user, that is visible to both your Frontend and Backend APIs
-        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
-        # Metadata saved on the user, that is only visible to your Backend API
-        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
-        # Metadata saved on the user, that can be updated from both the Frontend and Backend APIs.
-        # Note: Since this data can be modified from the frontend, it is not guaranteed to be safe.
-        field :unsafe_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('unsafe_metadata') } }
         # If true, the user can delete themselves with the Frontend API.
         field :delete_self_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('delete_self_enabled') } }
         # If true, the user can create organizations with the Frontend API.
         field :create_organization_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('create_organization_enabled') } }
-        # A custom timestamp denoting _when_ the user accepted legal requirements, specified in RFC3339 format (e.g. `2012-10-20T07:15:20.902Z`).
+        # A custom timestamp denoting _when_ the user accepted legal requirements, specified in RFC3339 format.
         field :legal_accepted_at, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('legal_accepted_at') } }
         # When set to `true` all legal checks are skipped.
-        # It is not recommended to skip legal checks unless you are migrating a user to Clerk.
         field :skip_legal_checks, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('skip_legal_checks') } }
         # The maximum number of organizations the user can create. 0 means unlimited.
         field :create_organizations_limit, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('create_organizations_limit') } }
-        # A custom date/time denoting _when_ the user signed up to the application, specified in RFC3339 format (e.g. `2012-10-20T07:15:20.902Z`).
+        # A custom date/time denoting _when_ the user signed up to the application.
         field :created_at, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at') } }
         # When set to `true`, the user will bypass client trust checks during sign-in.
         field :bypass_client_trust, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('bypass_client_trust') } }
@@ -92,7 +79,7 @@ module Clerk
         field :notify_primary_email_address_changed, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('notify_primary_email_address_changed') } }
 
         
-        def initialize(password_digest: nil, password_hasher: nil, backup_codes: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, profile_image_id: nil, password: nil, skip_password_checks: nil, sign_out_of_other_sessions: nil, totp_secret: nil, public_metadata: nil, private_metadata: nil, unsafe_metadata: nil, delete_self_enabled: nil, create_organization_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil, notify_primary_email_address_changed: false)
+        def initialize(password_digest: nil, password_hasher: nil, backup_codes: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, profile_image_id: nil, password: nil, skip_password_checks: nil, sign_out_of_other_sessions: nil, totp_secret: nil, delete_self_enabled: nil, create_organization_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil, notify_primary_email_address_changed: false)
           @password_digest = password_digest
           @password_hasher = password_hasher
           @backup_codes = backup_codes
@@ -109,9 +96,6 @@ module Clerk
           @skip_password_checks = skip_password_checks
           @sign_out_of_other_sessions = sign_out_of_other_sessions
           @totp_secret = totp_secret
-          @public_metadata = public_metadata
-          @private_metadata = private_metadata
-          @unsafe_metadata = unsafe_metadata
           @delete_self_enabled = delete_self_enabled
           @create_organization_enabled = create_organization_enabled
           @legal_accepted_at = legal_accepted_at
@@ -141,9 +125,6 @@ module Clerk
           return false unless @skip_password_checks == other.skip_password_checks
           return false unless @sign_out_of_other_sessions == other.sign_out_of_other_sessions
           return false unless @totp_secret == other.totp_secret
-          return false unless @public_metadata == other.public_metadata
-          return false unless @private_metadata == other.private_metadata
-          return false unless @unsafe_metadata == other.unsafe_metadata
           return false unless @delete_self_enabled == other.delete_self_enabled
           return false unless @create_organization_enabled == other.create_organization_enabled
           return false unless @legal_accepted_at == other.legal_accepted_at

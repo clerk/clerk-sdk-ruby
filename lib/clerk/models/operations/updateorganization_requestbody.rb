@@ -12,10 +12,6 @@ module Clerk
         
         include Crystalline::MetadataFields
 
-        # Metadata saved on the organization, that is visible to both your frontend and backend.
-        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
-        # Metadata saved on the organization that is only visible to your backend.
-        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
         # The new name of the organization.
         # May not contain URLs or HTML.
         # Max length: 256
@@ -32,9 +28,7 @@ module Clerk
         field :role_set_key, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('role_set_key') } }
 
         
-        def initialize(public_metadata: nil, private_metadata: nil, name: nil, slug: nil, max_allowed_memberships: nil, admin_delete_enabled: nil, created_at: nil, role_set_key: nil)
-          @public_metadata = public_metadata
-          @private_metadata = private_metadata
+        def initialize(name: nil, slug: nil, max_allowed_memberships: nil, admin_delete_enabled: nil, created_at: nil, role_set_key: nil)
           @name = name
           @slug = slug
           @max_allowed_memberships = max_allowed_memberships
@@ -46,8 +40,6 @@ module Clerk
         
         def ==(other)
           return false unless other.is_a? self.class
-          return false unless @public_metadata == other.public_metadata
-          return false unless @private_metadata == other.private_metadata
           return false unless @name == other.name
           return false unless @slug == other.slug
           return false unless @max_allowed_memberships == other.max_allowed_memberships
