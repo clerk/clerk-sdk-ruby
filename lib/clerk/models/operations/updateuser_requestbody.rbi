@@ -40,12 +40,6 @@ class Clerk::Models::Operations::UpdateUserRequestBody
   def sign_out_of_other_sessions=(str_); end
   def totp_secret(); end
   def totp_secret=(str_); end
-  def public_metadata(); end
-  def public_metadata=(str_); end
-  def private_metadata(); end
-  def private_metadata=(str_); end
-  def unsafe_metadata(); end
-  def unsafe_metadata=(str_); end
   def delete_self_enabled(); end
   def delete_self_enabled=(str_); end
   def create_organization_enabled(); end

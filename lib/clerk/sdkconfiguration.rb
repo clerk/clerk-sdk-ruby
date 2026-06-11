@@ -75,10 +75,10 @@ module Clerk
         @security_source = -> { Models::Components::Security.new(bearer_auth: bearer_auth) }
       end
       @language = 'ruby'
-      @openapi_doc_version = '2025-11-10'
-      @sdk_version = '6.0.0'
-      @gen_version = '2.900.1'
-      @user_agent = 'speakeasy-sdk/ruby 6.0.0 2.900.1 2025-11-10 clerk-sdk-ruby'
+      @openapi_doc_version = '2026-05-12'
+      @sdk_version = '7.0.0'
+      @gen_version = '2.903.0'
+      @user_agent = 'speakeasy-sdk/ruby 7.0.0 2.903.0 2026-05-12 clerk-sdk-ruby'
     end
 
     

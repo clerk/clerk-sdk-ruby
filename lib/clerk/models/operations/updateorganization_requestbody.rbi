@@ -8,10 +8,6 @@ end
 
 
 class Clerk::Models::Operations::UpdateOrganizationRequestBody
-  def public_metadata(); end
-  def public_metadata=(str_); end
-  def private_metadata(); end
-  def private_metadata=(str_); end
   def name(); end
   def name=(str_); end
   def slug(); end

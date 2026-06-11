@@ -99,3 +99,13 @@ Based on:
 - [ruby v6.0.0] .
 ### Releases
 - [Ruby Gems v6.0.0] https://rubygems.org/gems/clerk-sdk-ruby/versions/6.0.0 - .
+
+## 2026-06-11 19:54:25
+### Changes
+Based on:
+- OpenAPI Doc  
+- Speakeasy CLI 1.777.0 (2.903.0) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [ruby v7.0.0] .
+### Releases
+- [Ruby Gems v7.0.0] https://rubygems.org/gems/clerk-sdk-ruby/versions/7.0.0 - .

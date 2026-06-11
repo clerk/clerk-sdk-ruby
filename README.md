@@ -575,6 +575,7 @@ end
 * [update](docs/sdks/organizations/README.md#update) - Update an organization
 * [delete](docs/sdks/organizations/README.md#delete) - Delete an organization
 * [merge_metadata](docs/sdks/organizations/README.md#merge_metadata) - Merge and update metadata for an organization
+* [replace_metadata](docs/sdks/organizations/README.md#replace_metadata) - Replace metadata for an organization
 * [upload_logo](docs/sdks/organizations/README.md#upload_logo) - Upload a logo for the organization
 * [delete_logo](docs/sdks/organizations/README.md#delete_logo) - Delete the organization's logo.
 * [get_billing_subscription](docs/sdks/organizations/README.md#get_billing_subscription) - Retrieve an organization's billing subscription
