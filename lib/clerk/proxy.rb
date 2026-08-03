@@ -61,14 +61,14 @@ module Clerk
       @session_claims['org_permissions']
     end
 
-    # Returns true if the session needs to perform step up verification
+    # Returns true if the session already satisfies the step up verification policy.
     def user_reverified?(params)
       return false unless user?
 
       fva = @session_claims['fva']
 
-      # the feature is disabled
-      return true if fva.nil?
+      # not a session token
+      return false if fva.nil?
 
       level = params[:level]
       after_minutes = params[:after_minutes].to_i
