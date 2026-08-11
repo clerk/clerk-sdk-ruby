@@ -3,6 +3,7 @@
 require 'clerk/jwks_cache'
 require 'clerk/openapiclient'
 # require 'clerk/version'
+require 'digest'
 require 'jwt'
 
 module Clerk
@@ -16,16 +17,33 @@ module Clerk
     # How often (in seconds) should JWKs be refreshed
     JWKS_CACHE_LIFETIME = 3600 # 1 hour
 
+    # One JWKS cache per Clerk instance. A single process-wide cache would let a
+    # token minted by one instance verify against another, since the keys it
+    # holds are whichever instance refreshed last and no issuer check runs.
+    # The cache still outlives individual SDK objects, because
+    # `authenticate_request` builds a fresh SDK per request.
     # rubocop:disable Style/ClassVars
-    @@jwks_cache = JWKSCache.new(JWKS_CACHE_LIFETIME)
+    @@jwks_caches = {}
+    @@jwks_caches_mutex = Mutex.new
     # rubocop:enable Style/ClassVars
-    
-    def self.jwks_cache
-      @@jwks_cache
+
+    # Returns the JWKS cache for a single Clerk instance. `scope` must identify
+    # that instance; see #jwks_cache_scope.
+    def self.jwks_cache(scope)
+      @@jwks_caches_mutex.synchronize do
+        @@jwks_caches[scope] ||= JWKSCache.new(JWKS_CACHE_LIFETIME)
+      end
     end
+
+    # Opaque identifier for the Clerk instance this SDK talks to. The secret key
+    # is hashed so it is never retained as a cache key.
+    attr_reader :jwks_cache_scope
 
     def initialize(client: nil, retry_config: nil, timeout_ms: nil, secret_key: nil, security_source: nil, server_idx: nil, server_url: nil, url_params: nil)
       secret_key ||= Clerk.configuration.secret_key
+      @jwks_cache_scope = Digest::SHA256.hexdigest(
+        [server_url, server_idx, secret_key].join("\0")
+      )
       super(
         client: client,
         retry_config: retry_config,
@@ -56,7 +74,7 @@ module Clerk
       jwk_loader = lambda do |options|
         # JWT.decode requires that the 'keys' key in the Hash is a symbol (as
         # opposed to a string which our SDK returns by default)
-        {keys: SDK.jwks_cache.fetch(self, kid_not_found: options[:invalidate] || options[:kid_not_found], force_refresh: force_refresh_jwks)}
+        {keys: SDK.jwks_cache(@jwks_cache_scope).fetch(self, kid_not_found: options[:invalidate] || options[:kid_not_found], force_refresh: force_refresh_jwks)}
       end
 
       begin
