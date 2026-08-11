@@ -31,9 +31,11 @@ module Clerk
         field :allow_idp_initiated, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allow_idp_initiated') } }
 
         field :force_authn, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('force_authn') } }
+        # Configuration for the login_hint sent to the IdP on SSO sign-in
+        field :login_hint, Crystalline::Nilable.new(Models::Operations::CreateEnterpriseConnectionLoginHint), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('login_hint') } }
 
         
-        def initialize(idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, attribute_mapping: nil, allow_subdomains: nil, allow_idp_initiated: nil, force_authn: nil)
+        def initialize(idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, attribute_mapping: nil, allow_subdomains: nil, allow_idp_initiated: nil, force_authn: nil, login_hint: nil)
           @idp_entity_id = idp_entity_id
           @idp_sso_url = idp_sso_url
           @idp_certificate = idp_certificate
@@ -43,6 +45,7 @@ module Clerk
           @allow_subdomains = allow_subdomains
           @allow_idp_initiated = allow_idp_initiated
           @force_authn = force_authn
+          @login_hint = login_hint
         end
 
         
@@ -57,6 +60,7 @@ module Clerk
           return false unless @allow_subdomains == other.allow_subdomains
           return false unless @allow_idp_initiated == other.allow_idp_initiated
           return false unless @force_authn == other.force_authn
+          return false unless @login_hint == other.login_hint
           true
         end
       end

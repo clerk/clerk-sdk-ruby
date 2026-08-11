@@ -15,7 +15,7 @@ module Clerk
 
         field :errors, Crystalline::Array.new(Models::Components::ClerkError), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('errors'), required: true } }
 
-        field :meta, Crystalline::Nilable.new(Models::Components::ClerkErrorsMeta), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('meta') } }
+        field :meta, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('meta') } }
         # Raw HTTP response; suitable for custom response parsing
         field :raw_response, Crystalline::Nilable.new(::Faraday::Response), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('-') } }
 

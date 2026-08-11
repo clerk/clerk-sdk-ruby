@@ -49,7 +49,7 @@ end
 
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
-| Models::Errors::ClerkErrors | 404, 422                    | application/json            |
+| Models::Errors::ClerkErrors | 403, 404, 422               | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## revoke

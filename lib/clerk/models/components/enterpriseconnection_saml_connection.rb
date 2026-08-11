@@ -24,6 +24,8 @@ module Clerk
         field :allow_subdomains, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allow_subdomains') } }
         # Whether to force re-authentication
         field :force_authn, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('force_authn') } }
+        # Configuration for the login_hint sent to the IdP on SSO sign-in
+        field :login_hint, Crystalline::Nilable.new(Models::Components::LoginHint), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('login_hint') } }
         # IdP entity ID (optional, when connection details are loaded)
         field :idp_entity_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_entity_id') } }
         # IdP SSO URL (optional, when connection details are loaded)
@@ -38,13 +40,14 @@ module Clerk
         field :sp_metadata_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sp_metadata_url') } }
 
         
-        def initialize(id: nil, name: nil, active: nil, allow_idp_initiated: nil, allow_subdomains: nil, force_authn: nil, idp_entity_id: nil, idp_sso_url: nil, idp_metadata_url: nil, acs_url: nil, sp_entity_id: nil, sp_metadata_url: nil)
+        def initialize(id: nil, name: nil, active: nil, allow_idp_initiated: nil, allow_subdomains: nil, force_authn: nil, login_hint: nil, idp_entity_id: nil, idp_sso_url: nil, idp_metadata_url: nil, acs_url: nil, sp_entity_id: nil, sp_metadata_url: nil)
           @id = id
           @name = name
           @active = active
           @allow_idp_initiated = allow_idp_initiated
           @allow_subdomains = allow_subdomains
           @force_authn = force_authn
+          @login_hint = login_hint
           @idp_entity_id = idp_entity_id
           @idp_sso_url = idp_sso_url
           @idp_metadata_url = idp_metadata_url
@@ -62,6 +65,7 @@ module Clerk
           return false unless @allow_idp_initiated == other.allow_idp_initiated
           return false unless @allow_subdomains == other.allow_subdomains
           return false unless @force_authn == other.force_authn
+          return false unless @login_hint == other.login_hint
           return false unless @idp_entity_id == other.idp_entity_id
           return false unless @idp_sso_url == other.idp_sso_url
           return false unless @idp_metadata_url == other.idp_metadata_url

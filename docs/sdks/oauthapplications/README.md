@@ -11,6 +11,7 @@
 * [delete](#delete) - Delete an OAuth application
 * [upload_logo](#upload_logo) - Upload a logo for the OAuth application
 * [rotate_secret](#rotate_secret) - Rotate the client secret of the given OAuth application
+* [revoke_token](#revoke_token) - Revoke an OAuth application token
 
 ## list
 
@@ -305,4 +306,48 @@ end
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
 | Models::Errors::ClerkErrors | 403, 404                    | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## revoke_token
+
+Revoke both OAuth access token and refresh token for the associated grant for the given OAuth application.
+The request may specify either token.
+JWT access tokens cannot be revoked.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="RevokeOAuthApplicationToken" method="post" path="/oauth_applications/{oauth_application_id}/revoke_token" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.oauth_applications.revoke_token(oauth_application_id: '<id>', body: Models::Operations::RevokeOAuthApplicationTokenRequestBody.new(
+  token: '<value>'
+))
+
+if res.status_code == 200
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                                                       | Type                                                                                                                            | Required                                                                                                                        | Description                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `oauth_application_id`                                                                                                          | *::String*                                                                                                                      | :heavy_check_mark:                                                                                                              | The ID of the OAuth application for which to revoke the token                                                                   |
+| `body`                                                                                                                          | [Models::Operations::RevokeOAuthApplicationTokenRequestBody](../../models/operations/revokeoauthapplicationtokenrequestbody.md) | :heavy_check_mark:                                                                                                              | N/A                                                                                                                             |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::RevokeOAuthApplicationTokenResponse)](../../models/operations/revokeoauthapplicationtokenresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 400, 403, 404, 422          | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |

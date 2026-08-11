@@ -254,7 +254,7 @@ res = s.billing.extend_subscription_item_free_trial(subscription_item_id: '<id>'
   extend_to: DateTime.iso8601('2026-01-08T00:00:00Z')
 ))
 
-unless res.schemas_commerce_subscription_item.nil?
+unless res.commerce_subscription_item_2.nil?
   # handle response
 end
 

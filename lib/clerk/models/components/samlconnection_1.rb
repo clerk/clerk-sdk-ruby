@@ -44,6 +44,8 @@ module Clerk
         field :allow_organization_account_linking, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allow_organization_account_linking'), required: true } }
         # Enable or deactivate ForceAuthn
         field :force_authn, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('force_authn'), required: true } }
+        # Configuration for the login_hint sent to the IdP on SSO sign-in
+        field :login_hint, Models::Components::SAMLConnectionLoginHint, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('login_hint'), required: true } }
         # Unix timestamp of creation.
         #
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
@@ -58,6 +60,12 @@ module Clerk
         field :idp_sso_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_sso_url'), required: true } }
 
         field :idp_certificate, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificate'), required: true } }
+        # Unix timestamp (milliseconds) of the start of the IdP certificate validity window (X.509 NotBefore). Null when no certificate is configured.
+        #
+        field :idp_certificate_issued_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificate_issued_at'), required: true } }
+        # Unix timestamp (milliseconds) of the end of the IdP certificate validity window (X.509 NotAfter). Null when no certificate is configured.
+        #
+        field :idp_certificate_expires_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificate_expires_at'), required: true } }
 
         field :attribute_mapping, Crystalline::Nilable.new(Models::Components::SAMLConnectionAttributeMapping), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attribute_mapping') } }
 
@@ -70,7 +78,7 @@ module Clerk
         field :enterprise_connection_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enterprise_connection_id') } }
 
         
-        def initialize(object:, id:, name:, domain:, acs_url:, sp_entity_id:, sp_metadata_url:, active:, provider:, user_count:, sync_user_attributes:, allow_subdomains:, allow_idp_initiated:, disable_additional_identifications:, allow_organization_account_linking:, force_authn:, created_at:, updated_at:, domains: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, attribute_mapping: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, enterprise_connection_id: nil)
+        def initialize(object:, id:, name:, domain:, acs_url:, sp_entity_id:, sp_metadata_url:, active:, provider:, user_count:, sync_user_attributes:, allow_subdomains:, allow_idp_initiated:, disable_additional_identifications:, allow_organization_account_linking:, force_authn:, login_hint:, created_at:, updated_at:, domains: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_certificate_issued_at: nil, idp_certificate_expires_at: nil, attribute_mapping: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, enterprise_connection_id: nil)
           @object = object
           @id = id
           @name = name
@@ -87,12 +95,15 @@ module Clerk
           @disable_additional_identifications = disable_additional_identifications
           @allow_organization_account_linking = allow_organization_account_linking
           @force_authn = force_authn
+          @login_hint = login_hint
           @created_at = created_at
           @updated_at = updated_at
           @domains = domains
           @idp_entity_id = idp_entity_id
           @idp_sso_url = idp_sso_url
           @idp_certificate = idp_certificate
+          @idp_certificate_issued_at = idp_certificate_issued_at
+          @idp_certificate_expires_at = idp_certificate_expires_at
           @attribute_mapping = attribute_mapping
           @idp_metadata_url = idp_metadata_url
           @idp_metadata = idp_metadata
@@ -119,12 +130,15 @@ module Clerk
           return false unless @disable_additional_identifications == other.disable_additional_identifications
           return false unless @allow_organization_account_linking == other.allow_organization_account_linking
           return false unless @force_authn == other.force_authn
+          return false unless @login_hint == other.login_hint
           return false unless @created_at == other.created_at
           return false unless @updated_at == other.updated_at
           return false unless @domains == other.domains
           return false unless @idp_entity_id == other.idp_entity_id
           return false unless @idp_sso_url == other.idp_sso_url
           return false unless @idp_certificate == other.idp_certificate
+          return false unless @idp_certificate_issued_at == other.idp_certificate_issued_at
+          return false unless @idp_certificate_expires_at == other.idp_certificate_expires_at
           return false unless @attribute_mapping == other.attribute_mapping
           return false unless @idp_metadata_url == other.idp_metadata_url
           return false unless @idp_metadata == other.idp_metadata

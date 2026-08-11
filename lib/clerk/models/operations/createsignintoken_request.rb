@@ -14,13 +14,17 @@ module Clerk
 
         # The ID of the user that can use the newly created sign in token
         field :user_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('user_id'), required: true } }
+        # The ID of the organization to activate when the user signs in.
+        # Organizations must be enabled for the instance, and the user must be a member of the organization.
+        field :org_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('org_id') } }
         # Optional parameter to specify the life duration of the sign in token in seconds.
         # By default, the duration is 30 days.
         field :expires_in_seconds, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expires_in_seconds') } }
 
         
-        def initialize(user_id:, expires_in_seconds: 2_592_000)
+        def initialize(user_id:, org_id: nil, expires_in_seconds: 2_592_000)
           @user_id = user_id
+          @org_id = org_id
           @expires_in_seconds = expires_in_seconds
         end
 
@@ -28,6 +32,7 @@ module Clerk
         def ==(other)
           return false unless other.is_a? self.class
           return false unless @user_id == other.user_id
+          return false unless @org_id == other.org_id
           return false unless @expires_in_seconds == other.expires_in_seconds
           true
         end

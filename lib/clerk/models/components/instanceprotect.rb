@@ -18,12 +18,15 @@ module Clerk
         field :rules_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('rules_enabled'), required: true } }
 
         field :specter_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('specter_enabled'), required: true } }
+        # Whether the instance has opted out of the Protect prerequisite checks, asserting its setup already meets the requirements.
+        field :checks_bypassed, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('checks_bypassed'), required: true } }
 
         
-        def initialize(object:, rules_enabled:, specter_enabled:)
+        def initialize(object:, rules_enabled:, specter_enabled:, checks_bypassed:)
           @object = object
           @rules_enabled = rules_enabled
           @specter_enabled = specter_enabled
+          @checks_bypassed = checks_bypassed
         end
 
         
@@ -32,6 +35,7 @@ module Clerk
           return false unless @object == other.object
           return false unless @rules_enabled == other.rules_enabled
           return false unless @specter_enabled == other.specter_enabled
+          return false unless @checks_bypassed == other.checks_bypassed
           true
         end
       end

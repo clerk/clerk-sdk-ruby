@@ -14,6 +14,11 @@ module Clerk
           MANUAL_INVITATION = new('manual_invitation')
           AUTOMATIC_INVITATION = new('automatic_invitation')
           AUTOMATIC_SUGGESTION = new('automatic_suggestion')
+          ENTERPRISE_SSO = new('enterprise_sso')
+          MINUS_MANUAL_INVITATION = new('-manual_invitation')
+          MINUS_AUTOMATIC_INVITATION = new('-automatic_invitation')
+          MINUS_AUTOMATIC_SUGGESTION = new('-automatic_suggestion')
+          MINUS_ENTERPRISE_SSO = new('-enterprise_sso')
         end
       end
     end

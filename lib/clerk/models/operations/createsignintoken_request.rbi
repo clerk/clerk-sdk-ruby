@@ -10,6 +10,8 @@ end
 class Clerk::Models::Operations::CreateSignInTokenRequest
   def user_id(); end
   def user_id=(str_); end
+  def org_id(); end
+  def org_id=(str_); end
   def expires_in_seconds(); end
   def expires_in_seconds=(str_); end
 end

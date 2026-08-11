@@ -19,7 +19,7 @@ module Clerk
 
         field :code, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('code'), required: true } }
 
-        field :meta, Crystalline::Nilable.new(Models::Components::VerificationFromOauthMeta), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('meta') } }
+        field :meta, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('meta') } }
 
         
         def initialize(message:, long_message:, code:, meta: nil)

@@ -8,6 +8,8 @@ end
 
 
 class Clerk::Models::Components::EnterpriseConnection
+  def object(); end
+  def object=(str_); end
   def id(); end
   def id=(str_); end
   def name(); end

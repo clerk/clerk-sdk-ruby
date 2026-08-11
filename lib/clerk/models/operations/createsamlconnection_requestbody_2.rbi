@@ -32,4 +32,6 @@ class Clerk::Models::Operations::CreateSAMLConnectionRequestBody2
   def organization_id=(str_); end
   def attribute_mapping(); end
   def attribute_mapping=(str_); end
+  def login_hint(); end
+  def login_hint=(str_); end
 end

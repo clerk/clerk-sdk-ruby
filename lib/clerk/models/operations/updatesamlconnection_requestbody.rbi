@@ -42,6 +42,8 @@ class Clerk::Models::Operations::UpdateSAMLConnectionRequestBody
   def disable_additional_identifications=(str_); end
   def allow_organization_account_linking(); end
   def allow_organization_account_linking=(str_); end
+  def login_hint(); end
+  def login_hint=(str_); end
   def consent_verified_domains_deletion(); end
   def consent_verified_domains_deletion=(str_); end
 end

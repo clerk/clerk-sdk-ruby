@@ -16,11 +16,16 @@ module Clerk
         field :verified, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('verified') } }
         # Set this email address as the primary email address for the user.
         field :primary, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('primary') } }
+        # If set to `true` and this update makes the email address the user's new primary,
+        # the previous primary email address is notified of the change.
+        # By default, no notification is sent.
+        field :notify_primary_email_address_changed, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('notify_primary_email_address_changed') } }
 
         
-        def initialize(verified: nil, primary: nil)
+        def initialize(verified: nil, primary: nil, notify_primary_email_address_changed: false)
           @verified = verified
           @primary = primary
+          @notify_primary_email_address_changed = notify_primary_email_address_changed
         end
 
         
@@ -28,6 +33,7 @@ module Clerk
           return false unless other.is_a? self.class
           return false unless @verified == other.verified
           return false unless @primary == other.primary
+          return false unless @notify_primary_email_address_changed == other.notify_primary_email_address_changed
           true
         end
       end

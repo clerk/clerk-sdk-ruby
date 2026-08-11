@@ -13,6 +13,7 @@ module Clerk
         enums do
           CARD = new('card')
           LINK = new('link')
+          PAYER_CREDITS = new('payer-credits')
         end
       end
     end

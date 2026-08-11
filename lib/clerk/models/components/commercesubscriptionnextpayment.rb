@@ -17,7 +17,7 @@ module Clerk
 
         field :amount, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('amount'), required: true } }
         # Per-unit total breakdown (for example, seats) for the next payment.
-        field :per_unit_totals, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::SchemasCommercePerUnitTotal)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('per_unit_totals') } }
+        field :per_unit_totals, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::CommercePerUnitTotal2)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('per_unit_totals') } }
         # Breakdown of the recurring amount that will be billed at renewal (base fee + per-unit charges). Tax and credits are not previewed.
         field :totals, Crystalline::Nilable.new(Models::Components::CommerceSubscriptionNextPaymentTotals), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('totals') } }
 

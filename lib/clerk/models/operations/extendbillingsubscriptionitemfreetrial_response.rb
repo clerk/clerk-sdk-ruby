@@ -19,14 +19,14 @@ module Clerk
         # Raw HTTP response; suitable for custom response parsing
         field :raw_response, ::Faraday::Response
         # A commerce subscription item.
-        field :schemas_commerce_subscription_item, Crystalline::Nilable.new(Models::Components::SchemasCommerceSubscriptionItem)
+        field :commerce_subscription_item_2, Crystalline::Nilable.new(Models::Components::CommerceSubscriptionItem2)
 
         
-        def initialize(content_type:, status_code:, raw_response:, schemas_commerce_subscription_item: nil)
+        def initialize(content_type:, status_code:, raw_response:, commerce_subscription_item_2: nil)
           @content_type = content_type
           @status_code = status_code
           @raw_response = raw_response
-          @schemas_commerce_subscription_item = schemas_commerce_subscription_item
+          @commerce_subscription_item_2 = commerce_subscription_item_2
         end
 
         
@@ -35,7 +35,7 @@ module Clerk
           return false unless @content_type == other.content_type
           return false unless @status_code == other.status_code
           return false unless @raw_response == other.raw_response
-          return false unless @schemas_commerce_subscription_item == other.schemas_commerce_subscription_item
+          return false unless @commerce_subscription_item_2 == other.commerce_subscription_item_2
           true
         end
       end

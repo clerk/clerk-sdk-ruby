@@ -22,6 +22,8 @@ class Clerk::Models::Components::OrganizationMembershipPublicUserData
   def profile_image_url=(str_); end
   def banned(); end
   def banned=(str_); end
+  def deprovisioned(); end
+  def deprovisioned=(str_); end
   def identifier(); end
   def identifier=(str_); end
   def username(); end
