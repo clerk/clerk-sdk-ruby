@@ -10,6 +10,14 @@ end
 class Clerk::Models::Operations::UpdateInstanceOAuthApplicationSettingsRequest
   def dynamic_oauth_client_registration(); end
   def dynamic_oauth_client_registration=(str_); end
+  def default_scopes(); end
+  def default_scopes=(str_); end
   def oauth_jwt_access_tokens(); end
   def oauth_jwt_access_tokens=(str_); end
+  def client_id_metadata_documents_advertised(); end
+  def client_id_metadata_documents_advertised=(str_); end
+  def client_id_metadata_documents_only_allow_pre_registered_clients(); end
+  def client_id_metadata_documents_only_allow_pre_registered_clients=(str_); end
+  def client_id_metadata_documents_block_implicitly_allowed_clients(); end
+  def client_id_metadata_documents_block_implicitly_allowed_clients=(str_); end
 end

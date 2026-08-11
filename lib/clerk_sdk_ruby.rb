@@ -43,6 +43,7 @@ module Clerk
   autoload :Billing, 'clerk/billing'
   autoload :OrganizationPermissions, 'clerk/organizationpermissions'
   autoload :RoleSets, 'clerk/rolesets'
+  autoload :ScimDirectories, 'clerk/scimdirectories'
   autoload :AdminPortalLinkTokens, 'clerk/admin_portal_link_tokens'
   autoload :APIKeys, 'clerk/api_keys'
   autoload :M2m, 'clerk/m2m'

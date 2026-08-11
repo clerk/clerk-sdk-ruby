@@ -16,7 +16,8 @@ module Clerk
         field :organization_id, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'organization_id', 'style': 'form', 'explode': true } }
         # Filter by verification status
         field :verified, Crystalline::Nilable.new(Models::Operations::Verified), { 'query_param': { 'field_name': 'verified', 'style': 'form', 'explode': true } }
-        # Filter by enrollment mode
+        # Filter by enrollment mode. Prefix a value with `-` to exclude it instead
+        # (e.g. `-enterprise_sso`). Include and exclude filters can be combined and compose as AND.
         field :enrollment_mode, Crystalline::Nilable.new(Crystalline::Array.new(Models::Operations::EnrollmentMode)), { 'query_param': { 'field_name': 'enrollment_mode', 'style': 'form', 'explode': false } }
         # Search domains by name or organization ID.
         # If the query starts with "org_", it will search by exact organization ID match.

@@ -14,6 +14,6 @@ class Clerk::Models::Operations::ExtendBillingSubscriptionItemFreeTrialResponse
   def status_code=(str_); end
   def raw_response(); end
   def raw_response=(str_); end
-  def schemas_commerce_subscription_item(); end
-  def schemas_commerce_subscription_item=(str_); end
+  def commerce_subscription_item_2(); end
+  def commerce_subscription_item_2=(str_); end
 end

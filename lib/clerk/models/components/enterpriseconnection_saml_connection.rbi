@@ -20,6 +20,8 @@ class Clerk::Models::Components::EnterpriseConnectionSamlConnection
   def allow_subdomains=(str_); end
   def force_authn(); end
   def force_authn=(str_); end
+  def login_hint(); end
+  def login_hint=(str_); end
   def idp_entity_id(); end
   def idp_entity_id=(str_); end
   def idp_sso_url(); end

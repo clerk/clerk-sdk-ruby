@@ -16,7 +16,8 @@ module Clerk
         field :organization_id, ::String, { 'path_param': { 'field_name': 'organization_id', 'style': 'simple', 'explode': false } }
         # Filter domains by their verification status. `true` or `false`
         field :verified, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'verified', 'style': 'form', 'explode': true } }
-        # Filter domains by their enrollment mode
+        # Filter domains by their enrollment mode. Accepts `automatic_invitation`, `automatic_suggestion`, `manual_invitation` or `enterprise_sso`.
+        # Prefix a value with `-` to exclude it instead (e.g. `-enterprise_sso`). Include and exclude filters can be combined and compose as AND.
         field :enrollment_mode, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'enrollment_mode', 'style': 'form', 'explode': true } }
         # Applies a limit to the number of results returned.
         # Can be used for paginating the results together with `offset`.

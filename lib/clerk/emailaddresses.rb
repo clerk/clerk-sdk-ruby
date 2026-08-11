@@ -79,10 +79,10 @@ module Clerk
 
       timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
       timeout ||= @sdk_configuration.timeout
-      
+
 
       connection = @sdk_configuration.client.dup
-      connection.request :retry, retry_options
+      connection.use Utils::RetryMiddleware, retry_options
 
       hook_ctx = SDKHooks::HookContext.new(
         config: @sdk_configuration,
@@ -95,7 +95,7 @@ module Clerk
       error = nil
       http_response = nil
       
-      
+
       begin
         http_response = connection.post(url) do |req|
           req.body = body
@@ -132,13 +132,13 @@ module Clerk
             response: http_response
           )
         end
-        
+
         if http_response.nil?
           raise error if !error.nil?
           raise 'no response'
         end
       end
-      
+
       content_type = http_response.headers.fetch('Content-Type', 'application/octet-stream')
       if Utils.match_status_code(http_response.status, ['200'])
         if Utils.match_content_type(content_type, 'application/json')
@@ -224,10 +224,10 @@ module Clerk
 
       timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
       timeout ||= @sdk_configuration.timeout
-      
+
 
       connection = @sdk_configuration.client.dup
-      connection.request :retry, retry_options
+      connection.use Utils::RetryMiddleware, retry_options
 
       hook_ctx = SDKHooks::HookContext.new(
         config: @sdk_configuration,
@@ -240,7 +240,7 @@ module Clerk
       error = nil
       http_response = nil
       
-      
+
       begin
         http_response = connection.get(url) do |req|
           req.headers.merge!(headers)
@@ -276,13 +276,13 @@ module Clerk
             response: http_response
           )
         end
-        
+
         if http_response.nil?
           raise error if !error.nil?
           raise 'no response'
         end
       end
-      
+
       content_type = http_response.headers.fetch('Content-Type', 'application/octet-stream')
       if Utils.match_status_code(http_response.status, ['200'])
         if Utils.match_content_type(content_type, 'application/json')
@@ -368,10 +368,10 @@ module Clerk
 
       timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
       timeout ||= @sdk_configuration.timeout
-      
+
 
       connection = @sdk_configuration.client.dup
-      connection.request :retry, retry_options
+      connection.use Utils::RetryMiddleware, retry_options
 
       hook_ctx = SDKHooks::HookContext.new(
         config: @sdk_configuration,
@@ -384,7 +384,7 @@ module Clerk
       error = nil
       http_response = nil
       
-      
+
       begin
         http_response = connection.delete(url) do |req|
           req.headers.merge!(headers)
@@ -420,13 +420,13 @@ module Clerk
             response: http_response
           )
         end
-        
+
         if http_response.nil?
           raise error if !error.nil?
           raise 'no response'
         end
       end
-      
+
       content_type = http_response.headers.fetch('Content-Type', 'application/octet-stream')
       if Utils.match_status_code(http_response.status, ['200'])
         if Utils.match_content_type(content_type, 'application/json')
@@ -523,10 +523,10 @@ module Clerk
 
       timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
       timeout ||= @sdk_configuration.timeout
-      
+
 
       connection = @sdk_configuration.client.dup
-      connection.request :retry, retry_options
+      connection.use Utils::RetryMiddleware, retry_options
 
       hook_ctx = SDKHooks::HookContext.new(
         config: @sdk_configuration,
@@ -539,7 +539,7 @@ module Clerk
       error = nil
       http_response = nil
       
-      
+
       begin
         http_response = connection.patch(url) do |req|
           req.body = body
@@ -576,13 +576,13 @@ module Clerk
             response: http_response
           )
         end
-        
+
         if http_response.nil?
           raise error if !error.nil?
           raise 'no response'
         end
       end
-      
+
       content_type = http_response.headers.fetch('Content-Type', 'application/octet-stream')
       if Utils.match_status_code(http_response.status, ['200'])
         if Utils.match_content_type(content_type, 'application/json')
@@ -671,10 +671,10 @@ module Clerk
 
       timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
       timeout ||= @sdk_configuration.timeout
-      
+
 
       connection = @sdk_configuration.client.dup
-      connection.request :retry, retry_options
+      connection.use Utils::RetryMiddleware, retry_options
 
       hook_ctx = SDKHooks::HookContext.new(
         config: @sdk_configuration,
@@ -687,7 +687,7 @@ module Clerk
       error = nil
       http_response = nil
       
-      
+
       begin
         http_response = connection.post(url) do |req|
           req.headers.merge!(headers)
@@ -723,13 +723,13 @@ module Clerk
             response: http_response
           )
         end
-        
+
         if http_response.nil?
           raise error if !error.nil?
           raise 'no response'
         end
       end
-      
+
       content_type = http_response.headers.fetch('Content-Type', 'application/octet-stream')
       if Utils.match_status_code(http_response.status, ['200'])
         if Utils.match_content_type(content_type, 'application/json')
@@ -852,10 +852,10 @@ module Clerk
 
       timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
       timeout ||= @sdk_configuration.timeout
-      
+
 
       connection = @sdk_configuration.client.dup
-      connection.request :retry, retry_options
+      connection.use Utils::RetryMiddleware, retry_options
 
       hook_ctx = SDKHooks::HookContext.new(
         config: @sdk_configuration,
@@ -868,7 +868,7 @@ module Clerk
       error = nil
       http_response = nil
       
-      
+
       begin
         http_response = connection.post(url) do |req|
           req.body = body
@@ -905,13 +905,13 @@ module Clerk
             response: http_response
           )
         end
-        
+
         if http_response.nil?
           raise error if !error.nil?
           raise 'no response'
         end
       end
-      
+
       content_type = http_response.headers.fetch('Content-Type', 'application/octet-stream')
       if Utils.match_status_code(http_response.status, ['200'])
         if Utils.match_content_type(content_type, 'application/json')
@@ -981,9 +981,16 @@ module Clerk
       # Replaces all of the user's email addresses with a single primary email address.
       # By default the new email address is created verified, with the admin verification strategy.
       # When `identification_status` is `reserved` it is created reserved instead: unverified but usable
-      # for sign-in and locked so no other user can claim it. Any existing email addresses are deleted.
+      # for sign-in and locked so no other user can claim it. When it is `unverified` the address is
+      # neither usable for sign-in nor locked. Any existing email addresses are deleted.
       # If an existing email address is linked to a connected account, the request is rejected; remove
       # the connected account first.
+      #
+      # **Warning:** `identification_status: unverified` can lock the user out of their account. An
+      # unverified email address cannot be used to sign in, so if the user has no other verified or
+      # reserved identifier, deleting their existing email addresses leaves them unable to
+      # authenticate — and unable to verify the new address, since that requires signing in. Recovery
+      # then requires another admin API call.
       request = Models::Operations::ReplaceUserEmailAddressRequest.new(
         user_id: user_id,
         body: body
@@ -1029,10 +1036,10 @@ module Clerk
 
       timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
       timeout ||= @sdk_configuration.timeout
-      
+
 
       connection = @sdk_configuration.client.dup
-      connection.request :retry, retry_options
+      connection.use Utils::RetryMiddleware, retry_options
 
       hook_ctx = SDKHooks::HookContext.new(
         config: @sdk_configuration,
@@ -1045,7 +1052,7 @@ module Clerk
       error = nil
       http_response = nil
       
-      
+
       begin
         http_response = connection.put(url) do |req|
           req.body = body
@@ -1082,13 +1089,13 @@ module Clerk
             response: http_response
           )
         end
-        
+
         if http_response.nil?
           raise error if !error.nil?
           raise 'no response'
         end
       end
-      
+
       content_type = http_response.headers.fetch('Content-Type', 'application/octet-stream')
       if Utils.match_status_code(http_response.status, ['200'])
         if Utils.match_content_type(content_type, 'application/json')

@@ -26,11 +26,14 @@
 * [get_o_auth_access_token](#get_o_auth_access_token) - Retrieve the OAuth access token of a user
 * [get_organization_memberships](#get_organization_memberships) - Retrieve all memberships for a user
 * [get_organization_invitations](#get_organization_invitations) - Retrieve all invitations for a user
+* [remove_password](#remove_password) - Remove a user's password
 * [verify_password](#verify_password) - Verify the password of a user
 * [verify_totp](#verify_totp) - Verify a TOTP or backup code for a user
 * [disable_mfa](#disable_mfa) - Disable a user's MFA methods
 * [delete_backup_codes](#delete_backup_codes) - Disable all user's Backup codes
 * [delete_passkey](#delete_passkey) - Delete a user passkey
+* [list_trusted_devices](#list_trusted_devices) - List a user's trusted devices
+* [revoke_trusted_device](#revoke_trusted_device) - Revoke a user's trusted device
 * [delete_web3_wallet](#delete_web3_wallet) - Delete a user web3 wallet
 * [delete_totp](#delete_totp) - Delete all the user's TOTPs
 * [delete_external_account](#delete_external_account) - Delete External Account
@@ -1036,6 +1039,49 @@ end
 | Models::Errors::ClerkErrors | 400, 403, 404               | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
+## remove_password
+
+Removes the password credential from the given user. This is a privileged operation and does not require the user's current password. Password removal is allowed even when the user has no other sign-in method configured.
+
+If the user does not have a password, the user is returned unchanged and no password-deletion or user-update event is emitted. By default, existing sessions remain active. Set `sign_out_of_other_sessions` to `true` to revoke sessions active when the request is processed.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="RemoveUserPassword" method="post" path="/users/{user_id}/remove_password" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.users.remove_password(user_id: '<id>')
+
+unless res.user.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                                                               | Type                                                                                                                                    | Required                                                                                                                                | Description                                                                                                                             |
+| --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `user_id`                                                                                                                               | *::String*                                                                                                                              | :heavy_check_mark:                                                                                                                      | The ID of the user whose password to remove                                                                                             |
+| `body`                                                                                                                                  | [Crystalline::Nilable.new(Models::Operations::RemoveUserPasswordRequestBody)](../../models/operations/removeuserpasswordrequestbody.md) | :heavy_minus_sign:                                                                                                                      | N/A                                                                                                                                     |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::RemoveUserPasswordResponse)](../../models/operations/removeuserpasswordresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 400, 401, 403, 404          | application/json            |
+| Models::Errors::ClerkErrors | 500                         | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
 ## verify_password
 
 Check that the user's password matches the supplied input.
@@ -1245,6 +1291,87 @@ end
 | Models::Errors::ClerkErrors | 500                         | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
+## list_trusted_devices
+
+Returns the active trusted devices enrolled by the user.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="ListUserTrustedDevices" method="get" path="/users/{user_id}/trusted_devices" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.users.list_trusted_devices(user_id: '<id>')
+
+unless res.trusted_device_list.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                             | Type                                                  | Required                                              | Description                                           |
+| ----------------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------- |
+| `user_id`                                             | *::String*                                            | :heavy_check_mark:                                    | The ID of the user whose trusted devices are returned |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::ListUserTrustedDevicesResponse)](../../models/operations/listusertrusteddevicesresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 403, 404                    | application/json            |
+| Models::Errors::ClerkErrors | 500                         | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## revoke_trusted_device
+
+Revokes an active trusted device enrolled by the user.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="RevokeUserTrustedDevice" method="delete" path="/users/{user_id}/trusted_devices/{trusted_device_id}" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.users.revoke_trusted_device(user_id: '<id>', trusted_device_id: '<id>')
+
+unless res.trusted_device.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                       | Type                                            | Required                                        | Description                                     |
+| ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
+| `user_id`                                       | *::String*                                      | :heavy_check_mark:                              | The ID of the user that owns the trusted device |
+| `trusted_device_id`                             | *::String*                                      | :heavy_check_mark:                              | The ID of the trusted device to revoke          |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::RevokeUserTrustedDeviceResponse)](../../models/operations/revokeusertrusteddeviceresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 403, 404                    | application/json            |
+| Models::Errors::ClerkErrors | 500                         | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
 ## delete_web3_wallet
 
 Delete the web3 wallet identification for a given user.
@@ -1410,6 +1537,8 @@ end
 ## unset_password_compromised
 
 Sets the given user's password as no longer compromised. The user will no longer be prompted to reset their password on their next sign-in.
+
+If the user is in reserved-email password quarantine, the quarantine is preserved and the returned user will still have `requires_password_reset` set to `true`. Reserved-email password quarantine can only be cleared by completing a password reset or changing/removing the password.
 
 ### Example Usage
 

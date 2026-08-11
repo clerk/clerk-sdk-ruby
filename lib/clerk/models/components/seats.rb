@@ -15,7 +15,7 @@ module Clerk
         # Seat quantity being billed; null means unlimited
         field :quantity, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('quantity'), required: true } }
         # Per-unit cost breakdown by pricing tier
-        field :tiers, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::SchemasCommercePerUnitTotalTier)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('tiers') } }
+        field :tiers, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::CommercePerUnitTotalTier2)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('tiers') } }
 
         
         def initialize(quantity: nil, tiers: nil)

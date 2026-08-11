@@ -185,5 +185,5 @@ end
 
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
-| Models::Errors::ClerkErrors | 400, 401, 404               | application/json            |
+| Models::Errors::ClerkErrors | 400, 401, 404, 423, 429     | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |

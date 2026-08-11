@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
 
-        field :previous_plan, Models::Components::SchemasCommercePlan, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('previous_plan'), required: true } }
+        field :previous_plan, Models::Components::CommercePlan2, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('previous_plan'), required: true } }
 
         field :previous_price, Models::Components::BillingPriceResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('previous_price'), required: true } }
         # Unix timestamp (milliseconds) when the new price takes effect.

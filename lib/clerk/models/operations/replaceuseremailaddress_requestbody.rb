@@ -15,14 +15,26 @@ module Clerk
         # The new email address. Must adhere to the RFC 5322 specification for email address format.
         field :email_address, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address'), required: true } }
         # Controls the status of the replacement email address. Defaults to `verified`. Set to
-        # `reserved` to create it reserved (unverified but usable for sign-in and locked)
-        # instead of verified.
+        # `reserved` to create it reserved (unverified but usable for sign-in and locked so no
+        # other user can claim it), or to `unverified` to create it neither usable for sign-in
+        # nor locked.
+        #
+        # **Warning:** `unverified` can lock the user out of their account. An unverified email
+        # address cannot be used to sign in, so if the user has no other verified or reserved
+        # identifier, they will be unable to authenticate and unable to verify this address.
+        # Prefer `reserved` unless you specifically need the address left unclaimed — for
+        # example so that another user can also hold it until one of them verifies it.
         field :identification_status, Crystalline::Nilable.new(Models::Operations::ReplaceUserEmailAddressIdentificationStatus), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('identification_status'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::ReplaceUserEmailAddressIdentificationStatus, true) } }
+        # If set to `true`, the user's previous primary email address is notified that the
+        # primary email address has changed. No notification is sent when the replacement
+        # is the user's current primary email address. By default, no notification is sent.
+        field :notify_primary_email_address_changed, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('notify_primary_email_address_changed') } }
 
         
-        def initialize(email_address:, identification_status: Models::Operations::ReplaceUserEmailAddressIdentificationStatus::VERIFIED)
+        def initialize(email_address:, identification_status: Models::Operations::ReplaceUserEmailAddressIdentificationStatus::VERIFIED, notify_primary_email_address_changed: false)
           @email_address = email_address
           @identification_status = identification_status
+          @notify_primary_email_address_changed = notify_primary_email_address_changed
         end
 
         
@@ -30,6 +42,7 @@ module Clerk
           return false unless other.is_a? self.class
           return false unless @email_address == other.email_address
           return false unless @identification_status == other.identification_status
+          return false unless @notify_primary_email_address_changed == other.notify_primary_email_address_changed
           true
         end
       end

@@ -40,6 +40,8 @@ class Clerk::Models::Components::SAMLConnection2
   def allow_organization_account_linking=(str_); end
   def force_authn(); end
   def force_authn=(str_); end
+  def login_hint(); end
+  def login_hint=(str_); end
   def created_at(); end
   def created_at=(str_); end
   def updated_at(); end
@@ -52,6 +54,10 @@ class Clerk::Models::Components::SAMLConnection2
   def idp_sso_url=(str_); end
   def idp_certificate(); end
   def idp_certificate=(str_); end
+  def idp_certificate_issued_at(); end
+  def idp_certificate_issued_at=(str_); end
+  def idp_certificate_expires_at(); end
+  def idp_certificate_expires_at=(str_); end
   def attribute_mapping(); end
   def attribute_mapping=(str_); end
   def idp_metadata_url(); end

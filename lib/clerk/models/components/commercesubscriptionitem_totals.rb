@@ -21,7 +21,7 @@ module Clerk
 
         field :grand_total, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('grand_total'), required: true } }
 
-        field :per_unit_totals, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::SchemasCommercePerUnitTotal)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('per_unit_totals') } }
+        field :per_unit_totals, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::CommercePerUnitTotal2)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('per_unit_totals') } }
 
         field :credits, Crystalline::Nilable.new(Models::Components::CommerceSubscriptionItemTotalsCredits), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('credits') } }
         # Information about the discounts applied to the payment

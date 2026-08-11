@@ -15,7 +15,7 @@ module Clerk
         # String representing the object's type. Objects of the same type share the same value.
         field :object, Models::Components::CommercePriceTransitionResponseObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::CommercePriceTransitionResponseObject, false) } }
 
-        field :subscription_item, Models::Components::SchemasCommerceSubscriptionItem, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('subscription_item'), required: true } }
+        field :subscription_item, Models::Components::CommerceSubscriptionItem2, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('subscription_item'), required: true } }
 
         field :transition, Models::Components::CommercePriceTransitionDetails, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('transition'), required: true } }
 

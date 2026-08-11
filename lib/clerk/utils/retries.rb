@@ -4,6 +4,7 @@
 # frozen_string_literal: true
 
 require 'faraday/retry'
+require 'time'
 
 
 module Clerk
@@ -67,15 +68,56 @@ module Clerk
         if @strategy == 'backoff' && @backoff
           retry_options[:backoff_factor] = @backoff.exponent unless @backoff.exponent.nil?
           retry_options[:interval] = (@backoff.initial_interval.to_f / 1000) unless @backoff.initial_interval.nil?
-          retry_options[:max_interval] = @backoff.max_interval unless @backoff.max_interval.nil?
+          retry_options[:max_interval] = (@backoff.max_interval.to_f / 1000) unless @backoff.max_interval.nil?
 
           unless @backoff.max_elapsed_time.nil?
             stop_time = initial_time + (@backoff.max_elapsed_time.to_f / 1000)
             retry_options[:retry_if] = ->(_env, _exc) { Time.now < stop_time }
           end
+
         end
 
         retry_options
+      end
+    end
+
+    class RetryMiddleware < Faraday::Retry::Middleware
+      
+
+      
+      def calculate_sleep_amount(retries, env)
+        retry_after = [calculate_retry_after(env), calculate_rate_limit_reset(env)].compact.max
+        retry_interval = calculate_retry_interval(retries)
+        return retry_interval if retry_after.nil?
+
+        # unlike the stock middleware, cap server delays at max_interval rather
+        # than abandoning the retry
+        [[retry_after, @options.max_interval].min, retry_interval].max
+      end
+
+      private
+
+      
+      def calculate_retry_after(env)
+        response_headers = env[:response_headers]
+        return unless response_headers
+
+        ms_value = response_headers['retry-after-ms']
+        return ms_value.to_f / 1000 if ms_value&.match?(/\A\s*\d+\s*\z/)
+
+        value = response_headers['retry-after']
+        return if value.nil? || value.strip.empty?
+        return value.to_f if value.match?(/\A\s*\d+\s*\z/)
+
+        begin
+          Time.httpdate(value) - Time.now
+        rescue ArgumentError
+          begin
+            Time.iso8601(value) - Time.now
+          rescue ArgumentError
+            nil
+          end
+        end
       end
     end
   end

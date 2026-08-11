@@ -12,6 +12,8 @@ module Clerk
         
         include Crystalline::MetadataFields
 
+
+        field :object, Models::Components::EnterpriseConnectionObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::EnterpriseConnectionObject, false) } }
         # The enterprise connection ID
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # The display name of the connection
@@ -33,7 +35,7 @@ module Clerk
         # Whether this connection supports account linking via organization membership
         field :allow_organization_account_linking, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allow_organization_account_linking') } }
         # Custom attributes to map from the IdP to the user's profile via SSO or SCIM provisioning
-        field :custom_attributes, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::CustomAttribute)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('custom_attributes') } }
+        field :custom_attributes, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::EnterpriseConnectionCustomAttribute)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('custom_attributes') } }
 
         field :logo_public_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('logo_public_url') } }
         # Organization ID when the connection is linked to an organization
@@ -44,7 +46,8 @@ module Clerk
         field :oauth_config, Crystalline::Nilable.new(Models::Components::OauthConfig), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('oauth_config') } }
 
         
-        def initialize(id:, name:, provider:, active:, domains:, created_at:, updated_at:, sync_user_attributes: nil, disable_additional_identifications: nil, allow_organization_account_linking: nil, custom_attributes: nil, logo_public_url: nil, organization_id: nil, saml_connection: nil, oauth_config: nil)
+        def initialize(object:, id:, name:, provider:, active:, domains:, created_at:, updated_at:, sync_user_attributes: nil, disable_additional_identifications: nil, allow_organization_account_linking: nil, custom_attributes: nil, logo_public_url: nil, organization_id: nil, saml_connection: nil, oauth_config: nil)
+          @object = object
           @id = id
           @name = name
           @provider = provider
@@ -65,6 +68,7 @@ module Clerk
         
         def ==(other)
           return false unless other.is_a? self.class
+          return false unless @object == other.object
           return false unless @id == other.id
           return false unless @name == other.name
           return false unless @provider == other.provider

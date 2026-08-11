@@ -18,10 +18,8 @@ module Clerk
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # The ID of the payer whose balance was adjusted.
         field :payer_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payer_id'), required: true } }
-        # The signed credit amount. Positive for increases, negative for decreases.
-        field :amount, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('amount'), required: true } }
-        # The currency code of the credit adjustment.
-        field :currency, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('currency'), required: true } }
+
+        field :amount, Models::Components::CommerceMoneyResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('amount'), required: true } }
         # The type of source that originated the adjustment (e.g. "grant").
         field :source_type, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('source_type'), required: true } }
         # The ID of the source that originated the adjustment.
@@ -32,12 +30,11 @@ module Clerk
         field :note, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('note') } }
 
         
-        def initialize(object:, id:, payer_id:, amount:, currency:, source_type:, source_id:, created_at:, note: nil)
+        def initialize(object:, id:, payer_id:, amount:, source_type:, source_id:, created_at:, note: nil)
           @object = object
           @id = id
           @payer_id = payer_id
           @amount = amount
-          @currency = currency
           @source_type = source_type
           @source_id = source_id
           @created_at = created_at
@@ -51,7 +48,6 @@ module Clerk
           return false unless @id == other.id
           return false unless @payer_id == other.payer_id
           return false unless @amount == other.amount
-          return false unless @currency == other.currency
           return false unless @source_type == other.source_type
           return false unless @source_id == other.source_id
           return false unless @created_at == other.created_at

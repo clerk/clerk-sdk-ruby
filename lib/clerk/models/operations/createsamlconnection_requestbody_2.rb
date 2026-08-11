@@ -38,9 +38,11 @@ module Clerk
         field :organization_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('organization_id') } }
         # Define the attribute name mapping between Identity Provider and Clerk's user properties
         field :attribute_mapping, Crystalline::Nilable.new(Models::Operations::CreateSAMLConnectionAttributeMapping2), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attribute_mapping') } }
+        # Configuration for the login_hint sent to the IdP on SSO sign-in
+        field :login_hint, Crystalline::Nilable.new(Models::Operations::CreateSAMLConnectionLoginHint2), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('login_hint') } }
 
         
-        def initialize(name:, domains:, provider:, domain: nil, force_authn: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, attribute_mapping: nil)
+        def initialize(name:, domains:, provider:, domain: nil, force_authn: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, attribute_mapping: nil, login_hint: nil)
           @name = name
           @domains = domains
           @provider = provider
@@ -53,6 +55,7 @@ module Clerk
           @idp_metadata = idp_metadata
           @organization_id = organization_id
           @attribute_mapping = attribute_mapping
+          @login_hint = login_hint
         end
 
         
@@ -70,6 +73,7 @@ module Clerk
           return false unless @idp_metadata == other.idp_metadata
           return false unless @organization_id == other.organization_id
           return false unless @attribute_mapping == other.attribute_mapping
+          return false unless @login_hint == other.login_hint
           true
         end
       end

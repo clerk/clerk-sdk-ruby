@@ -1,0 +1,12 @@
+# SCIMGroupRoleMappingDeleted
+
+A SCIM group role mapping was deleted.
+
+
+## Fields
+
+| Field                                                                                                             | Type                                                                                                              | Required                                                                                                          | Description                                                                                                       |
+| ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `object`                                                                                                          | [Models::Components::SCIMGroupRoleMappingDeletedObject](../../models/shared/scimgrouprolemappingdeletedobject.md) | :heavy_check_mark:                                                                                                | String representing the object's type.                                                                            |
+| `id`                                                                                                              | *::String*                                                                                                        | :heavy_check_mark:                                                                                                | The ID of the deleted SCIM group role mapping.                                                                    |
+| `deleted`                                                                                                         | *Crystalline::Boolean.new*                                                                                        | :heavy_check_mark:                                                                                                | Whether the SCIM group role mapping was successfully deleted.                                                     |
