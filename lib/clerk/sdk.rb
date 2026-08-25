@@ -108,6 +108,10 @@ module Clerk
 
     private
 
+    # Decodes the `fea`/`o.per`/`o.fpm` triple of a v2 session token into
+    # `org:<feature>:<action>` permission strings. Anything that cannot be
+    # decoded with confidence is skipped rather than guessed at, so malformed
+    # claims can only ever narrow the permission set, never widen it.
     def compute_org_permissions_from_v2_token(claims)
       features    = claims['fea'] ? claims['fea'].split(',') : []
       permissions = claims['o']['per'] ? claims['o']['per'].split(',') : []
@@ -115,12 +119,28 @@ module Clerk
       org_permissions = []
 
       mappings.each_with_index do |mapping, i|
+        # Each mapping is positionally aligned to a feature. A mapping without a
+        # matching feature entry cannot be attributed to anything, so skip it.
+        next if features[i].nil?
+
         scope, feature = features[i].split(':')
 
+        next if scope.nil? || feature.nil? # malformed feature entry
         next if !scope.include?('o') # not an orgs-related permission
+        # Only a non-negative decimal integer is a valid mask. The backend builds
+        # these masks in a signed 64-bit integer, so an action at index 63
+        # overflows into a negative value whose binary representation is a minus
+        # sign followed by ones ("-111...1"); walking that string character by
+        # character would grant every one of those bits. Reject anything that is
+        # not a plain non-negative decimal, mirroring `decimalToBinaryBits` in
+        # @clerk/shared, which fails closed the same way.
+        next if !/\A\d+\z/.match?(mapping)
 
         mapping.to_i.to_s(2).reverse.each_char.each_with_index do |bit, j|
-          org_permissions << "org:#{feature}:#{permissions[j]}" if bit == '1'
+          next if bit != '1'
+          next if permissions[j].nil? # mask has more bits than the permission vocabulary
+
+          org_permissions << "org:#{feature}:#{permissions[j]}"
         end
       end
 
