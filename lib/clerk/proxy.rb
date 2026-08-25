@@ -130,7 +130,7 @@ module Clerk
 
     def fetch_org(org_id)
       cached_fetch("clerk:org:#{org_id}") do
-        sdk.organizations.get(org_id: org_id).organization
+        sdk.organizations.get(organization_id: org_id).organization
       end
     end
 
