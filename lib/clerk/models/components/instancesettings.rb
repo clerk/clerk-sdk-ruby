@@ -22,7 +22,7 @@ module Clerk
         field :from_email_address, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('from_email_address') } }
 
         field :progressive_sign_up, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('progressive_sign_up') } }
-        # Deprecated. When enabled, production authentication emails for this instance are sent through Clerk's legacy managed email delivery path. This setting is being retired; use the instance's configured email sending domain instead.
+        # Deprecated. This setting is retired and no longer affects email delivery; all email is sent through the instance's configured email sending domain. The field is preserved for API compatibility only and will be removed in a future version.
         #
         #
         # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.

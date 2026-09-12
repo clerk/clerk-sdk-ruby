@@ -15,7 +15,7 @@ module Clerk
   class OpenAPIClient
     
 
-    attr_accessor :miscellaneous, :jwks, :clients, :email_addresses, :phone_numbers, :sessions, :email_sms_templates, :email_and_sms_templates, :templates, :users, :invitations, :organization_invitations, :allowlist_identifiers, :blocklist_identifiers, :beta_features, :actor_tokens, :domains, :instance_settings, :webhooks, :jwt_templates, :machines, :organizations, :organization_roles, :organization_memberships, :organization_domains, :proxy_checks, :redirect_urls, :sign_in_tokens, :sign_ups, :oauth_applications, :saml_connections, :enterprise_connections, :testing_tokens, :agent_tasks, :waitlist_entries, :billing, :organization_permissions, :role_sets, :scim_directories, :admin_portal_link_tokens, :api_keys, :m2m, :oauth_access_tokens
+    attr_accessor :miscellaneous, :jwks, :clients, :email_addresses, :phone_numbers, :sessions, :email_sms_templates, :email_and_sms_templates, :templates, :users, :invitations, :organization_invitations, :allowlist_identifiers, :blocklist_identifiers, :beta_features, :actor_tokens, :domains, :instance_settings, :webhooks, :jwt_templates, :machines, :organizations, :organization_roles, :organization_memberships, :organization_domains, :proxy_checks, :redirect_urls, :sign_in_tokens, :sign_ups, :oauth_applications, :saml_connections, :enterprise_connections, :testing_tokens, :agent_tasks, :waitlist_entries, :billing, :organization_permissions, :role_sets, :scim_directories, :directories, :admin_portal_link_tokens, :api_keys, :m2m, :oauth_access_tokens
 
     # Instantiates the SDK, configuring it with the provided parameters.
     #
@@ -104,6 +104,7 @@ module Clerk
       @organization_permissions = OrganizationPermissions.new(@sdk_configuration)
       @role_sets = RoleSets.new(@sdk_configuration)
       @scim_directories = ScimDirectories.new(@sdk_configuration)
+      @directories = Directories.new(@sdk_configuration)
       @admin_portal_link_tokens = AdminPortalLinkTokens.new(@sdk_configuration)
       @api_keys = APIKeys.new(@sdk_configuration)
       @m2m = M2m.new(@sdk_configuration)

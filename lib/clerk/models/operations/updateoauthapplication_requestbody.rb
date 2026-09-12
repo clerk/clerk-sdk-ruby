@@ -21,24 +21,27 @@ module Clerk
         #
         # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :callback_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('callback_url') } }
+        # Replace the application's complete built-in and custom scope ceiling. Provide scope keys as a space-delimited string. Custom keys must exist in the instance OAuth scope catalog. Required built-in scopes, such as `offline_access`, must be included in the replacement set, otherwise the request is rejected. Omit this field to leave all scope assignments unchanged.
+        field :scopes, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scopes') } }
         # True to enable a consent screen to display in the authentication flow. This cannot be disabled for dynamically registered OAuth Applications.
         field :consent_screen_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('consent_screen_enabled') } }
         # True to require the Proof Key of Code Exchange (PKCE) flow.
         field :pkce_required, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('pkce_required') } }
+        # True to enable the OAuth Device Authorization Grant for this application. Enabling requires the OAuth Device Authorization Grant feature to be enabled for the instance. Omit this field to leave the setting unchanged.
+        field :device_authorization_grant_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('device_authorization_grant_enabled') } }
         # If true, this client is public and you can use the Proof Key of Code Exchange (PKCE) flow.
         field :public, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public') } }
-        # Define the allowed scopes for the new OAuth applications that dictate the user payload of the OAuth user info endpoint. Available scopes are `profile`, `email`, `public_metadata`, `private_metadata`. Provide the requested scopes as a string, separated by spaces.
-        field :scopes, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scopes') } }
 
         
-        def initialize(name: nil, redirect_uris: nil, callback_url: nil, consent_screen_enabled: nil, pkce_required: nil, public: nil, scopes: 'profile email')
+        def initialize(name: nil, redirect_uris: nil, callback_url: nil, scopes: nil, consent_screen_enabled: nil, pkce_required: nil, device_authorization_grant_enabled: nil, public: nil)
           @name = name
           @redirect_uris = redirect_uris
           @callback_url = callback_url
+          @scopes = scopes
           @consent_screen_enabled = consent_screen_enabled
           @pkce_required = pkce_required
+          @device_authorization_grant_enabled = device_authorization_grant_enabled
           @public = public
-          @scopes = scopes
         end
 
         
@@ -47,10 +50,11 @@ module Clerk
           return false unless @name == other.name
           return false unless @redirect_uris == other.redirect_uris
           return false unless @callback_url == other.callback_url
+          return false unless @scopes == other.scopes
           return false unless @consent_screen_enabled == other.consent_screen_enabled
           return false unless @pkce_required == other.pkce_required
+          return false unless @device_authorization_grant_enabled == other.device_authorization_grant_enabled
           return false unless @public == other.public
-          return false unless @scopes == other.scopes
           true
         end
       end

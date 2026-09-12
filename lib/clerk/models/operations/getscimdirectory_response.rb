@@ -18,7 +18,7 @@ module Clerk
         field :status_code, ::Integer
         # Raw HTTP response; suitable for custom response parsing
         field :raw_response, ::Faraday::Response
-        # A SCIM directory
+        # A directory
         field :scim_directory, Crystalline::Nilable.new(Models::Components::SCIMDirectory)
 
         

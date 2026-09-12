@@ -29,8 +29,11 @@ module Clerk
 
         field :pkce_required, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('pkce_required'), required: true } }
 
-        field :public, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public'), required: true } }
+        field :device_authorization_grant_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('device_authorization_grant_enabled'), required: true } }
 
+        field :public, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public'), required: true } }
+        # The complete scope ceiling for the OAuth application, as a space-delimited list of built-in and assigned custom scope keys.
+        #
         field :scopes, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scopes'), required: true } }
 
         field :redirect_uris, Crystalline::Array.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('redirect_uris'), required: true } }
@@ -61,7 +64,7 @@ module Clerk
         field :client_image_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('client_image_url'), required: true } }
 
         
-        def initialize(object:, id:, instance_id:, name:, client_id:, dynamically_registered:, consent_screen_enabled:, pkce_required:, public:, scopes:, redirect_uris:, callback_url:, authorize_url:, token_fetch_url:, user_info_url:, discovery_url:, token_introspection_url:, created_at:, updated_at:, client_uri: nil, client_image_url: nil)
+        def initialize(object:, id:, instance_id:, name:, client_id:, dynamically_registered:, consent_screen_enabled:, pkce_required:, device_authorization_grant_enabled:, public:, scopes:, redirect_uris:, callback_url:, authorize_url:, token_fetch_url:, user_info_url:, discovery_url:, token_introspection_url:, created_at:, updated_at:, client_uri: nil, client_image_url: nil)
           @object = object
           @id = id
           @instance_id = instance_id
@@ -70,6 +73,7 @@ module Clerk
           @dynamically_registered = dynamically_registered
           @consent_screen_enabled = consent_screen_enabled
           @pkce_required = pkce_required
+          @device_authorization_grant_enabled = device_authorization_grant_enabled
           @public = public
           @scopes = scopes
           @redirect_uris = redirect_uris
@@ -96,6 +100,7 @@ module Clerk
           return false unless @dynamically_registered == other.dynamically_registered
           return false unless @consent_screen_enabled == other.consent_screen_enabled
           return false unless @pkce_required == other.pkce_required
+          return false unless @device_authorization_grant_enabled == other.device_authorization_grant_enabled
           return false unless @public == other.public
           return false unless @scopes == other.scopes
           return false unless @redirect_uris == other.redirect_uris

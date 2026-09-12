@@ -7,19 +7,19 @@
 module Clerk
   module Models
     module Components
-      # Metadata describing a user's linkage to a SCIM directory. This object is only delivered on `user.created` and `user.updated` webhook events, and only when the user is provisioned through a SCIM directory. Its absence does not necessarily mean the user is not SCIM-managed.
+      # Metadata describing a user's linkage to a directory. This object is only delivered on `user.created` and `user.updated` webhook events, and only when the user is provisioned through a directory. Its absence does not necessarily mean the user is not managed by a directory.
       #
       class UserScim
         
         include Crystalline::MetadataFields
 
-        # The ID of the SCIM directory the user is provisioned from.
+        # The ID of the directory the user is provisioned from.
         #
         field :directory_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directory_id'), required: true } }
-        # Whether the SCIM directory is currently enabled. Omitted when false.
+        # Whether the directory is currently enabled. Omitted when false.
         #
         field :directory_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directory_enabled') } }
-        # The user's external ID as reported by the SCIM directory, if any.
+        # The user's external ID as reported by the directory, if any.
         #
         field :external_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('external_id'), required: true } }
 

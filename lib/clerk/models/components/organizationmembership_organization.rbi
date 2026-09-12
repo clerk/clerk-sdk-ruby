@@ -42,6 +42,8 @@ class Clerk::Models::Components::OrganizationMembershipOrganization
   def created_by=(str_); end
   def last_active_at(); end
   def last_active_at=(str_); end
+  def self_serve_sso_enabled(); end
+  def self_serve_sso_enabled=(str_); end
   def role_set_key(); end
   def role_set_key=(str_); end
 end

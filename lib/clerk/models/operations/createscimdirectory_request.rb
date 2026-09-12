@@ -12,14 +12,14 @@ module Clerk
         
         include Crystalline::MetadataFields
 
-        # The ID of the enterprise connection to associate with this SCIM directory.
+        # The ID of the enterprise connection to associate with this directory.
         field :enterprise_connection_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enterprise_connection_id'), required: true } }
-        # The identity provider for this SCIM directory.
+        # The identity provider for this directory.
         field :provider, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider'), required: true } }
-        # A human-friendly name for the SCIM directory.
+        # A human-friendly name for the directory.
         field :name, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name') } }
         # Optional SCIM group to organization role mappings to create with the directory.
-        field :group_role_mappings, Crystalline::Nilable.new(Crystalline::Array.new(Models::Operations::GroupRoleMapping)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('group_role_mappings') } }
+        field :group_role_mappings, Crystalline::Nilable.new(Crystalline::Array.new(Models::Operations::CreateSCIMDirectoryGroupRoleMapping)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('group_role_mappings') } }
 
         
         def initialize(enterprise_connection_id:, provider:, name: nil, group_role_mappings: nil)

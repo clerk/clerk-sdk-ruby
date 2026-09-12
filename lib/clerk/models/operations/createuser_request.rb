@@ -87,6 +87,10 @@ module Clerk
         # This is useful when you are trying to create a user that doesn't have a password, in an instance that is using passwords.
         # Please note that you cannot use this flag if password is the only way for a user to sign into your instance.
         field :skip_password_requirement, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('skip_password_requirement') } }
+        # When set to `true`, the instance's restrictions are not applied to this user.
+        # Those settings are the allowlist, the blocklist, blocked disposable email domains and blocked email subaddresses, and they normally reject a matching identifier here just as they do at sign-up.
+        # Use this when your backend is creating a user it already trusts, such as during a migration or from an admin tool.
+        field :skip_restriction_checks, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('skip_restriction_checks') } }
         # In case TOTP is configured on the instance, you can provide the secret to enable it on the newly created user without the need to reset it.
         # Please note that currently the supported options are:
         # * Period: 30 seconds
@@ -114,7 +118,7 @@ module Clerk
         field :create_organizations_limit, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('create_organizations_limit') } }
         # A custom date/time denoting _when_ the user signed up to the application, specified in RFC3339 format (e.g. `2012-10-20T07:15:20.902Z`).
         field :created_at, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at') } }
-        # When set to `true`, the user will bypass client trust checks during sign-in.
+        # When set to `true`, the user will bypass Device Trust checks during sign-in.
         field :bypass_client_trust, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('bypass_client_trust') } }
         # When set to `true`, the user is created already banned and cannot sign in.
         # Requires the same plan support as the ban user endpoint.
@@ -124,7 +128,7 @@ module Clerk
         field :locked, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('locked') } }
 
         
-        def initialize(email_address: nil, email_address_identification_status: nil, phone_number: nil, phone_number_identification_status: nil, web3_wallet: nil, password_hasher: nil, backup_codes: nil, public_metadata: nil, private_metadata: nil, unsafe_metadata: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, username: nil, password: nil, password_digest: nil, skip_password_checks: nil, skip_password_requirement: nil, totp_secret: nil, delete_self_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, skip_user_requirement: nil, create_organization_enabled: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil, banned: nil, locked: nil)
+        def initialize(email_address: nil, email_address_identification_status: nil, phone_number: nil, phone_number_identification_status: nil, web3_wallet: nil, password_hasher: nil, backup_codes: nil, public_metadata: nil, private_metadata: nil, unsafe_metadata: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, username: nil, password: nil, password_digest: nil, skip_password_checks: nil, skip_password_requirement: nil, skip_restriction_checks: nil, totp_secret: nil, delete_self_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, skip_user_requirement: nil, create_organization_enabled: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil, banned: nil, locked: nil)
           @email_address = email_address
           @email_address_identification_status = email_address_identification_status
           @phone_number = phone_number
@@ -144,6 +148,7 @@ module Clerk
           @password_digest = password_digest
           @skip_password_checks = skip_password_checks
           @skip_password_requirement = skip_password_requirement
+          @skip_restriction_checks = skip_restriction_checks
           @totp_secret = totp_secret
           @delete_self_enabled = delete_self_enabled
           @legal_accepted_at = legal_accepted_at
@@ -179,6 +184,7 @@ module Clerk
           return false unless @password_digest == other.password_digest
           return false unless @skip_password_checks == other.skip_password_checks
           return false unless @skip_password_requirement == other.skip_password_requirement
+          return false unless @skip_restriction_checks == other.skip_restriction_checks
           return false unless @totp_secret == other.totp_secret
           return false unless @delete_self_enabled == other.delete_self_enabled
           return false unless @legal_accepted_at == other.legal_accepted_at

@@ -18,20 +18,27 @@ module Clerk
         field :dynamic_oauth_client_registration, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('dynamic_oauth_client_registration'), required: true } }
         # Whether OAuth JWT access tokens are enabled for the instance (disabled indicates opaque access tokens).
         field :oauth_jwt_access_tokens, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('oauth_jwt_access_tokens'), required: true } }
+        # Whether OAuth access tokens can include an aud claim derived from the RFC 8707 resource parameter.
+        field :aud_claim_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('aud_claim_enabled'), required: true } }
+        # Whether all new OAuth authorization-code requests must use PKCE with the S256 challenge method.
+        field :pkce_required, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('pkce_required'), required: true } }
         # Whether the instance advertises support for Client ID Metadata Documents in its OAuth authorization server metadata.
         field :client_id_metadata_documents_advertised, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('client_id_metadata_documents_advertised'), required: true } }
         # When true, new unknown CIMD clients are rejected. Previously auto-connected and pre-registered clients remain admitted; deleting a client makes it unknown again.
         field :client_id_metadata_documents_only_allow_pre_registered_clients, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('client_id_metadata_documents_only_allow_pre_registered_clients'), required: true } }
         # When true, recorded implicitly allowed CIMD clients are rejected on future client lookups. Explicitly allowed clients remain accepted. This does not revoke previously issued access tokens.
         field :client_id_metadata_documents_block_implicitly_allowed_clients, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('client_id_metadata_documents_block_implicitly_allowed_clients'), required: true } }
-        # Default scopes.
+        # Default scopes assigned when a dynamically registered or first-contact CIMD client omits `scope`. Contains built-in keys and custom catalog keys. Null means Clerk-provided defaults. `advertised` does not affect eligibility. An empty input array is stored and returned as null.
+        #
         field :default_scopes, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('default_scopes'), required: true } }
 
         
-        def initialize(object:, dynamic_oauth_client_registration:, oauth_jwt_access_tokens:, client_id_metadata_documents_advertised:, client_id_metadata_documents_only_allow_pre_registered_clients:, client_id_metadata_documents_block_implicitly_allowed_clients:, default_scopes: nil)
+        def initialize(object:, dynamic_oauth_client_registration:, oauth_jwt_access_tokens:, aud_claim_enabled:, pkce_required:, client_id_metadata_documents_advertised:, client_id_metadata_documents_only_allow_pre_registered_clients:, client_id_metadata_documents_block_implicitly_allowed_clients:, default_scopes: nil)
           @object = object
           @dynamic_oauth_client_registration = dynamic_oauth_client_registration
           @oauth_jwt_access_tokens = oauth_jwt_access_tokens
+          @aud_claim_enabled = aud_claim_enabled
+          @pkce_required = pkce_required
           @client_id_metadata_documents_advertised = client_id_metadata_documents_advertised
           @client_id_metadata_documents_only_allow_pre_registered_clients = client_id_metadata_documents_only_allow_pre_registered_clients
           @client_id_metadata_documents_block_implicitly_allowed_clients = client_id_metadata_documents_block_implicitly_allowed_clients
@@ -44,6 +51,8 @@ module Clerk
           return false unless @object == other.object
           return false unless @dynamic_oauth_client_registration == other.dynamic_oauth_client_registration
           return false unless @oauth_jwt_access_tokens == other.oauth_jwt_access_tokens
+          return false unless @aud_claim_enabled == other.aud_claim_enabled
+          return false unless @pkce_required == other.pkce_required
           return false unless @client_id_metadata_documents_advertised == other.client_id_metadata_documents_advertised
           return false unless @client_id_metadata_documents_only_allow_pre_registered_clients == other.client_id_metadata_documents_only_allow_pre_registered_clients
           return false unless @client_id_metadata_documents_block_implicitly_allowed_clients == other.client_id_metadata_documents_block_implicitly_allowed_clients

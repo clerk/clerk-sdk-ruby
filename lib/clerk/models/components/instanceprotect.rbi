@@ -16,4 +16,8 @@ class Clerk::Models::Components::InstanceProtect
   def specter_enabled=(str_); end
   def checks_bypassed(); end
   def checks_bypassed=(str_); end
+  def checks_verified(); end
+  def checks_verified=(str_); end
+  def checks_exempt(); end
+  def checks_exempt=(str_); end
 end

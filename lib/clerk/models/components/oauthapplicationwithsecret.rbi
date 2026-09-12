@@ -24,6 +24,8 @@ class Clerk::Models::Components::OAuthApplicationWithSecret
   def consent_screen_enabled=(str_); end
   def pkce_required(); end
   def pkce_required=(str_); end
+  def device_authorization_grant_enabled(); end
+  def device_authorization_grant_enabled=(str_); end
   def public(); end
   def public=(str_); end
   def scopes(); end

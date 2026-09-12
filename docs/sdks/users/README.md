@@ -32,8 +32,10 @@
 * [disable_mfa](#disable_mfa) - Disable a user's MFA methods
 * [delete_backup_codes](#delete_backup_codes) - Disable all user's Backup codes
 * [delete_passkey](#delete_passkey) - Delete a user passkey
-* [list_trusted_devices](#list_trusted_devices) - List a user's trusted devices
-* [revoke_trusted_device](#revoke_trusted_device) - Revoke a user's trusted device
+* [~~list_trusted_devices~~](#list_trusted_devices) - List a user's trusted devices :warning: **Deprecated**
+* [~~revoke_trusted_device~~](#revoke_trusted_device) - Revoke a user's trusted device :warning: **Deprecated**
+* [list_biometric_credentials](#list_biometric_credentials) - List a user's biometric credentials
+* [revoke_biometric_credential](#revoke_biometric_credential) - Revoke a user's biometric credential
 * [delete_web3_wallet](#delete_web3_wallet) - Delete a user web3 wallet
 * [delete_totp](#delete_totp) - Delete all the user's TOTPs
 * [delete_external_account](#delete_external_account) - Delete External Account
@@ -45,6 +47,11 @@
 
 Returns a list of all users.
 The users are returned sorted by creation date, with the newest users appearing first.
+
+To walk more than a few pages, paginate with `starting_after` rather than `offset`.
+A cursor page costs the same no matter how far into the list it sits, while a large `offset`
+has to walk and discard every row before it, so it gets progressively slower and eventually
+times out. Cursor pagination requires the `created_at` ordering, which is the default.
 
 ### Example Usage
 
@@ -1291,9 +1298,11 @@ end
 | Models::Errors::ClerkErrors | 500                         | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
-## list_trusted_devices
+## ~~list_trusted_devices~~
 
 Returns the active trusted devices enrolled by the user.
+
+> :warning: **DEPRECATED**: This will be removed in a future release, please migrate away from it as soon as possible.
 
 ### Example Usage
 
@@ -1331,9 +1340,11 @@ end
 | Models::Errors::ClerkErrors | 500                         | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
-## revoke_trusted_device
+## ~~revoke_trusted_device~~
 
 Revokes an active trusted device enrolled by the user.
+
+> :warning: **DEPRECATED**: This will be removed in a future release, please migrate away from it as soon as possible.
 
 ### Example Usage
 
@@ -1363,6 +1374,87 @@ end
 ### Response
 
 **[Crystalline::Nilable.new(Models::Operations::RevokeUserTrustedDeviceResponse)](../../models/operations/revokeusertrusteddeviceresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 403, 404                    | application/json            |
+| Models::Errors::ClerkErrors | 500                         | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## list_biometric_credentials
+
+Returns the active biometric credentials enrolled by the user.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="ListUserBiometricCredentials" method="get" path="/users/{user_id}/biometric_credentials" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.users.list_biometric_credentials(user_id: '<id>')
+
+unless res.biometric_credential_list.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                   | Type                                                        | Required                                                    | Description                                                 |
+| ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
+| `user_id`                                                   | *::String*                                                  | :heavy_check_mark:                                          | The ID of the user whose biometric credentials are returned |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::ListUserBiometricCredentialsResponse)](../../models/operations/listuserbiometriccredentialsresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 403, 404                    | application/json            |
+| Models::Errors::ClerkErrors | 500                         | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## revoke_biometric_credential
+
+Revokes an active biometric credential enrolled by the user.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="RevokeUserBiometricCredential" method="delete" path="/users/{user_id}/biometric_credentials/{biometric_credential_id}" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.users.revoke_biometric_credential(user_id: '<id>', biometric_credential_id: '<id>')
+
+unless res.biometric_credential.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                             | Type                                                  | Required                                              | Description                                           |
+| ----------------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------- |
+| `user_id`                                             | *::String*                                            | :heavy_check_mark:                                    | The ID of the user that owns the biometric credential |
+| `biometric_credential_id`                             | *::String*                                            | :heavy_check_mark:                                    | The ID of the biometric credential to revoke          |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::RevokeUserBiometricCredentialResponse)](../../models/operations/revokeuserbiometriccredentialresponse.md)**
 
 ### Errors
 

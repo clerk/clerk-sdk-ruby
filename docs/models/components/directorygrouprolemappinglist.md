@@ -1,0 +1,11 @@
+# DirectoryGroupRoleMappingList
+
+A list of directory group role mappings, ordered by precedence.
+
+
+## Fields
+
+| Field                                                                                                                 | Type                                                                                                                  | Required                                                                                                              | Description                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `data`                                                                                                                | Crystalline::Array<[Models::Components::DirectoryGroupRoleMapping](../../models/shared/directorygrouprolemapping.md)> | :heavy_check_mark:                                                                                                    | N/A                                                                                                                   |
+| `total_count`                                                                                                         | *::Integer*                                                                                                           | :heavy_check_mark:                                                                                                    | Total number of directory group role mappings in the directory.                                                       |
