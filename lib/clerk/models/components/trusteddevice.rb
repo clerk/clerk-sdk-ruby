@@ -17,11 +17,11 @@ module Clerk
 
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
 
-        field :platform, Models::Components::Platform, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('platform'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::Platform, false) } }
+        field :platform, Models::Components::TrustedDevicePlatform, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('platform'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::TrustedDevicePlatform, false) } }
 
         field :app_identifier, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('app_identifier'), required: true } }
 
-        field :algorithm, Models::Components::Algorithm, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('algorithm'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::Algorithm, false) } }
+        field :algorithm, Models::Components::TrustedDeviceAlgorithm, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('algorithm'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::TrustedDeviceAlgorithm, false) } }
 
         field :status, Models::Components::TrustedDeviceStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::TrustedDeviceStatus, false) } }
         # Unix timestamp of creation in milliseconds.

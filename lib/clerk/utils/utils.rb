@@ -78,11 +78,15 @@ module Clerk
 
     
     def self.match_content_type(content_type, pattern)
-      return true if content_type == pattern || ['*', '*/*'].include?(pattern)
+      return true if ['*', '*/*'].include?(pattern)
+
+      # Media types are case-insensitive (RFC 9110 section 8.3.1).
+      pattern = pattern.strip.downcase
+      return true if content_type.strip.downcase == pattern
 
       pieces = content_type.split(';')
       pieces.each do |piece|
-        return true if pattern == piece.strip
+        return true if pattern == piece.strip.downcase
       end
 
       false

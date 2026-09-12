@@ -11,6 +11,8 @@
 * [cancel_subscription_item](#cancel_subscription_item) - Cancel a subscription item
 * [extend_subscription_item_free_trial](#extend_subscription_item_free_trial) - Extend free trial for a subscription item
 * [create_price_transition](#create_price_transition) - Create a price transition for a subscription item
+* [apply_subscription_item_discount](#apply_subscription_item_discount) - Apply a discount to a subscription item
+* [remove_subscription_item_discount](#remove_subscription_item_discount) - Remove a discount from a subscription item
 * [list_statements](#list_statements) - List all billing statements
 * [get_statement](#get_statement) - Retrieve a billing statement
 * [get_statement_payment_attempts](#get_statement_payment_attempts) - List payment attempts for a billing statement
@@ -315,6 +317,94 @@ end
 ### Response
 
 **[Crystalline::Nilable.new(Models::Operations::CreateBillingPriceTransitionResponse)](../../models/operations/createbillingpricetransitionresponse.md)**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| Models::Errors::ClerkErrors  | 400, 401, 403, 404, 409, 422 | application/json             |
+| Models::Errors::ClerkErrors  | 500                          | application/json             |
+| Errors::APIError             | 4XX, 5XX                     | \*/\*                        |
+
+## apply_subscription_item_discount
+
+Applies an existing discount to a subscription item.
+Manual application is an override path: self-serve distribution rules are not enforced.
+At most one active discount is allowed per subscription item; applying a different
+discount replaces the currently active one. Re-applying the same active discount returns a conflict.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="ApplyBillingSubscriptionItemDiscount" method="post" path="/billing/subscription_items/{subscription_item_id}/discounts" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.billing.apply_subscription_item_discount(subscription_item_id: '<id>', body: Models::Components::ApplyCommerceDiscountRequest.new(
+  discount_id: '<id>'
+))
+
+unless res.commerce_discount_redemption_response.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                               | Type                                                                                                    | Required                                                                                                | Description                                                                                             |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `subscription_item_id`                                                                                  | *::String*                                                                                              | :heavy_check_mark:                                                                                      | The ID of the subscription item to apply the discount to                                                |
+| `body`                                                                                                  | [Models::Components::ApplyCommerceDiscountRequest](../../models/shared/applycommercediscountrequest.md) | :heavy_check_mark:                                                                                      | Parameters for applying the discount                                                                    |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::ApplyBillingSubscriptionItemDiscountResponse)](../../models/operations/applybillingsubscriptionitemdiscountresponse.md)**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| Models::Errors::ClerkErrors  | 400, 401, 403, 404, 409, 422 | application/json             |
+| Models::Errors::ClerkErrors  | 500                          | application/json             |
+| Errors::APIError             | 4XX, 5XX                     | \*/\*                        |
+
+## remove_subscription_item_discount
+
+Removes the active discount from a subscription item.
+The discount_id must match the subscription item's currently active discount.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="RemoveBillingSubscriptionItemDiscount" method="delete" path="/billing/subscription_items/{subscription_item_id}/discounts/{discount_id}" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.billing.remove_subscription_item_discount(subscription_item_id: '<id>', discount_id: '<id>')
+
+unless res.commerce_discount_redemption_response.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                   | Type                                                        | Required                                                    | Description                                                 |
+| ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
+| `subscription_item_id`                                      | *::String*                                                  | :heavy_check_mark:                                          | The ID of the subscription item to remove the discount from |
+| `discount_id`                                               | *::String*                                                  | :heavy_check_mark:                                          | The ID of the discount to remove                            |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::RemoveBillingSubscriptionItemDiscountResponse)](../../models/operations/removebillingsubscriptionitemdiscountresponse.md)**
 
 ### Errors
 

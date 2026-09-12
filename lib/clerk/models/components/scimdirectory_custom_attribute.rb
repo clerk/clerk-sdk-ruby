@@ -20,15 +20,18 @@ module Clerk
         field :sso_path, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sso_path') } }
         # GJSON path to extract the attribute value from SCIM user resources
         field :scim_path, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scim_path') } }
+        # GJSON path to extract the attribute value from directory sync user resources. Same value as `scim_path`.
+        field :directory_path, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directory_path') } }
         # When true, the attribute supports multiple values; values from the IdP are written to public_metadata as an array. Defaults to false.
         field :multi_valued, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('multi_valued') } }
 
         
-        def initialize(name: nil, key: nil, sso_path: nil, scim_path: nil, multi_valued: nil)
+        def initialize(name: nil, key: nil, sso_path: nil, scim_path: nil, directory_path: nil, multi_valued: nil)
           @name = name
           @key = key
           @sso_path = sso_path
           @scim_path = scim_path
+          @directory_path = directory_path
           @multi_valued = multi_valued
         end
 
@@ -39,6 +42,7 @@ module Clerk
           return false unless @key == other.key
           return false unless @sso_path == other.sso_path
           return false unless @scim_path == other.scim_path
+          return false unless @directory_path == other.directory_path
           return false unless @multi_valued == other.multi_valued
           true
         end

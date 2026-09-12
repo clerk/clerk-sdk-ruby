@@ -12,7 +12,7 @@ module Clerk
         
         include Crystalline::MetadataFields
 
-        # The ID of the SCIM directory.
+        # The ID of the directory.
         field :scim_directory_id, ::String, { 'path_param': { 'field_name': 'scim_directory_id', 'style': 'simple', 'explode': false } }
         # The ID of the SCIM group role mapping to delete.
         field :mapping_id, ::String, { 'path_param': { 'field_name': 'mapping_id', 'style': 'simple', 'explode': false } }

@@ -4,12 +4,12 @@
 
 ### Available Operations
 
-* [list](#list) - List all SCIM directories
-* [create](#create) - Create a SCIM directory
-* [get](#get) - Retrieve a SCIM directory
-* [update](#update) - Update a SCIM directory
-* [delete](#delete) - Delete a SCIM directory
-* [rotate_api_key](#rotate_api_key) - Rotate a SCIM directory's API key
+* [list](#list) - List all directories
+* [create](#create) - Create a directory
+* [get](#get) - Retrieve a directory
+* [update](#update) - Update a directory
+* [delete](#delete) - Delete a directory
+* [rotate_api_key](#rotate_api_key) - Rotate a directory's API key
 * [list_group_role_mappings](#list_group_role_mappings) - List SCIM group role mappings
 * [create_group_role_mapping](#create_group_role_mapping) - Create a SCIM group role mapping
 * [replace_group_role_mappings](#replace_group_role_mappings) - Replace SCIM group role mappings
@@ -17,7 +17,7 @@
 
 ## list
 
-Returns a list of all SCIM directories for the instance.
+Returns a list of all directories for the instance.
 
 ### Example Usage
 
@@ -57,7 +57,7 @@ end
 
 ## create
 
-Create a new SCIM directory for the instance.
+Create a new directory for the instance.
 
 ### Example Usage
 
@@ -98,7 +98,7 @@ end
 
 ## get
 
-Returns the details of a SCIM directory.
+Returns the details of a directory.
 
 ### Example Usage
 
@@ -120,9 +120,9 @@ end
 
 ### Parameters
 
-| Parameter                                | Type                                     | Required                                 | Description                              |
-| ---------------------------------------- | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
-| `scim_directory_id`                      | *::String*                               | :heavy_check_mark:                       | The ID of the SCIM directory to retrieve |
+| Parameter                           | Type                                | Required                            | Description                         |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| `scim_directory_id`                 | *::String*                          | :heavy_check_mark:                  | The ID of the directory to retrieve |
 
 ### Response
 
@@ -137,7 +137,7 @@ end
 
 ## update
 
-Updates a SCIM directory.
+Updates a directory.
 
 ### Example Usage
 
@@ -161,7 +161,7 @@ end
 
 | Parameter                                                                                                                                 | Type                                                                                                                                      | Required                                                                                                                                  | Description                                                                                                                               |
 | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `scim_directory_id`                                                                                                                       | *::String*                                                                                                                                | :heavy_check_mark:                                                                                                                        | The ID of the SCIM directory to update                                                                                                    |
+| `scim_directory_id`                                                                                                                       | *::String*                                                                                                                                | :heavy_check_mark:                                                                                                                        | The ID of the directory to update                                                                                                         |
 | `body`                                                                                                                                    | [Crystalline::Nilable.new(Models::Operations::UpdateSCIMDirectoryRequestBody)](../../models/operations/updatescimdirectoryrequestbody.md) | :heavy_minus_sign:                                                                                                                        | N/A                                                                                                                                       |
 
 ### Response
@@ -177,7 +177,7 @@ end
 
 ## delete
 
-Deletes a SCIM directory and stops provisioning for it. SCIM requests authenticated
+Deletes a directory and stops provisioning for it. SCIM requests authenticated
 with the directory's API key are rejected afterwards.
 
 ### Example Usage
@@ -200,9 +200,9 @@ end
 
 ### Parameters
 
-| Parameter                              | Type                                   | Required                               | Description                            |
-| -------------------------------------- | -------------------------------------- | -------------------------------------- | -------------------------------------- |
-| `scim_directory_id`                    | *::String*                             | :heavy_check_mark:                     | The ID of the SCIM directory to delete |
+| Parameter                         | Type                              | Required                          | Description                       |
+| --------------------------------- | --------------------------------- | --------------------------------- | --------------------------------- |
+| `scim_directory_id`               | *::String*                        | :heavy_check_mark:                | The ID of the directory to delete |
 
 ### Response
 
@@ -217,7 +217,7 @@ end
 
 ## rotate_api_key
 
-Generates a new API key for the SCIM directory and returns it in the `api_key` field.
+Generates a new API key for the directory and returns it in the `api_key` field.
 This is the only way to obtain the key after creation, so make sure to update it in
 your identity provider. The previous key remains valid for a short grace period before
 it expires.
@@ -242,9 +242,9 @@ end
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `scim_directory_id`                                  | *::String*                                           | :heavy_check_mark:                                   | The ID of the SCIM directory whose API key to rotate |
+| Parameter                                       | Type                                            | Required                                        | Description                                     |
+| ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
+| `scim_directory_id`                             | *::String*                                      | :heavy_check_mark:                              | The ID of the directory whose API key to rotate |
 
 ### Response
 
@@ -254,12 +254,12 @@ end
 
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
-| Models::Errors::ClerkErrors | 401, 403, 404               | application/json            |
+| Models::Errors::ClerkErrors | 401, 403, 404, 422          | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## list_group_role_mappings
 
-Returns the list of SCIM group to organization role mappings for a SCIM directory, ordered by precedence.
+Returns the list of SCIM group to organization role mappings for a directory, ordered by precedence.
 
 ### Example Usage
 
@@ -281,9 +281,9 @@ end
 
 ### Parameters
 
-| Parameter                     | Type                          | Required                      | Description                   |
-| ----------------------------- | ----------------------------- | ----------------------------- | ----------------------------- |
-| `scim_directory_id`           | *::String*                    | :heavy_check_mark:            | The ID of the SCIM directory. |
+| Parameter                | Type                     | Required                 | Description              |
+| ------------------------ | ------------------------ | ------------------------ | ------------------------ |
+| `scim_directory_id`      | *::String*               | :heavy_check_mark:       | The ID of the directory. |
 
 ### Response
 
@@ -298,8 +298,9 @@ end
 
 ## create_group_role_mapping
 
-Creates a new SCIM group to organization role mapping for a SCIM directory.
-Group role mapping must be enabled on the directory.
+Creates a new SCIM group to organization role mapping for a directory.
+Mappings can be created while group role mapping is disabled on the
+directory, but they only take effect once it is enabled.
 
 ### Example Usage
 
@@ -326,7 +327,7 @@ end
 
 | Parameter                                                                                                                     | Type                                                                                                                          | Required                                                                                                                      | Description                                                                                                                   |
 | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `scim_directory_id`                                                                                                           | *::String*                                                                                                                    | :heavy_check_mark:                                                                                                            | The ID of the SCIM directory.                                                                                                 |
+| `scim_directory_id`                                                                                                           | *::String*                                                                                                                    | :heavy_check_mark:                                                                                                            | The ID of the directory.                                                                                                      |
 | `body`                                                                                                                        | [Models::Operations::CreateSCIMGroupRoleMappingRequestBody](../../models/operations/createscimgrouprolemappingrequestbody.md) | :heavy_check_mark:                                                                                                            | N/A                                                                                                                           |
 
 ### Response
@@ -344,8 +345,9 @@ end
 
 Replaces the entire set of SCIM group role mappings for a directory. The position of
 each item in the `mappings` array determines its precedence (the first item gets
-precedence 1). Passing an empty array removes all mappings. Group role mapping must be
-enabled on the directory.
+precedence 1). Passing an empty array removes all mappings. Mappings can be replaced
+while group role mapping is disabled on the directory, but they only take effect once
+it is enabled.
 
 ### Example Usage
 
@@ -371,7 +373,7 @@ end
 
 | Parameter                                                                                                                         | Type                                                                                                                              | Required                                                                                                                          | Description                                                                                                                       |
 | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `scim_directory_id`                                                                                                               | *::String*                                                                                                                        | :heavy_check_mark:                                                                                                                | The ID of the SCIM directory.                                                                                                     |
+| `scim_directory_id`                                                                                                               | *::String*                                                                                                                        | :heavy_check_mark:                                                                                                                | The ID of the directory.                                                                                                          |
 | `body`                                                                                                                            | [Models::Operations::ReplaceSCIMGroupRoleMappingsRequestBody](../../models/operations/replacescimgrouprolemappingsrequestbody.md) | :heavy_check_mark:                                                                                                                | N/A                                                                                                                               |
 
 ### Response
@@ -387,8 +389,9 @@ end
 
 ## delete_group_role_mapping
 
-Deletes a single SCIM group role mapping. Group role mapping must be enabled on the
-directory.
+Deletes a single SCIM group role mapping. Mappings can be deleted while group role
+mapping is disabled on the directory, but the change only takes effect once it is
+enabled.
 
 ### Example Usage
 
@@ -412,7 +415,7 @@ end
 
 | Parameter                                        | Type                                             | Required                                         | Description                                      |
 | ------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------ |
-| `scim_directory_id`                              | *::String*                                       | :heavy_check_mark:                               | The ID of the SCIM directory.                    |
+| `scim_directory_id`                              | *::String*                                       | :heavy_check_mark:                               | The ID of the directory.                         |
 | `mapping_id`                                     | *::String*                                       | :heavy_check_mark:                               | The ID of the SCIM group role mapping to delete. |
 
 ### Response

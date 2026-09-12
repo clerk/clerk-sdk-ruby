@@ -117,7 +117,7 @@ module Clerk
         # The maximum number of organizations the user can create. 0 means unlimited.
         #
         field :create_organizations_limit, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('create_organizations_limit') } }
-        # When set to `true`, the user will bypass client trust checks during sign-in.
+        # When set to `true`, the user will bypass Device Trust checks during sign-in.
         field :bypass_client_trust, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('bypass_client_trust') } }
 
         field :scim, Crystalline::Nilable.new(Models::Components::UserScim), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scim') } }

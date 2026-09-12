@@ -52,6 +52,8 @@ class Clerk::Models::Operations::GetUserListRequest
   def provider=(str_); end
   def provider_user_id(); end
   def provider_user_id=(str_); end
+  def starting_after(); end
+  def starting_after=(str_); end
   def limit(); end
   def limit=(str_); end
   def offset(); end

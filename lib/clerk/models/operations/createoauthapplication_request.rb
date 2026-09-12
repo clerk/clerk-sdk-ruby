@@ -23,15 +23,17 @@ module Clerk
         field :callback_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('callback_url') } }
         # If true, this client is public and you can use the Proof Key of Code Exchange (PKCE) flow.
         field :public, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public') } }
-        # Define the allowed scopes for the new OAuth applications that dictate the user payload of the OAuth user info endpoint. Available scopes are `profile`, `email`, `public_metadata`, `private_metadata`. Provide the requested scopes as a string, separated by spaces.
+        # Define the application's built-in and custom scope ceiling. Provide scope keys as a space-delimited string. Custom keys must exist in the instance OAuth scope catalog.
         field :scopes, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scopes') } }
         # True to enable a consent screen to display in the authentication flow.
         field :consent_screen_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('consent_screen_enabled') } }
         # True to require the Proof Key of Code Exchange (PKCE) flow.
         field :pkce_required, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('pkce_required') } }
+        # True to enable the OAuth Device Authorization Grant for this application. Enabling requires the OAuth Device Authorization Grant feature to be enabled for the instance.
+        field :device_authorization_grant_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('device_authorization_grant_enabled') } }
 
         
-        def initialize(name:, redirect_uris: nil, callback_url: nil, public: nil, scopes: 'profile email', consent_screen_enabled: true, pkce_required: false)
+        def initialize(name:, redirect_uris: nil, callback_url: nil, public: nil, scopes: 'profile email', consent_screen_enabled: true, pkce_required: false, device_authorization_grant_enabled: false)
           @name = name
           @redirect_uris = redirect_uris
           @callback_url = callback_url
@@ -39,6 +41,7 @@ module Clerk
           @scopes = scopes
           @consent_screen_enabled = consent_screen_enabled
           @pkce_required = pkce_required
+          @device_authorization_grant_enabled = device_authorization_grant_enabled
         end
 
         
@@ -51,6 +54,7 @@ module Clerk
           return false unless @scopes == other.scopes
           return false unless @consent_screen_enabled == other.consent_screen_enabled
           return false unless @pkce_required == other.pkce_required
+          return false unless @device_authorization_grant_enabled == other.device_authorization_grant_enabled
           true
         end
       end

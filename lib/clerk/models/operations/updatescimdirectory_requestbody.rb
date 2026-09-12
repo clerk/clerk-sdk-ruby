@@ -12,16 +12,16 @@ module Clerk
         
         include Crystalline::MetadataFields
 
-        # A human-friendly name for the SCIM directory.
+        # A human-friendly name for the directory.
         field :name, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name') } }
-        # Whether the SCIM directory is enabled.
+        # Whether the directory is enabled.
         field :enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enabled') } }
-        # The identity provider for this SCIM directory.
+        # The identity provider for this directory.
         field :provider, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider') } }
         # Attribute-to-SCIM-path entries to merge into the directory's attribute mapping.
         # Set a key to `null` to remove it from the mapping.
         field :attribute_mapping, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attribute_mapping') } }
-        # Whether group-to-role mapping is enabled for this SCIM directory.
+        # Whether group-to-role mapping is enabled for this directory.
         field :group_role_mapping_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('group_role_mapping_enabled') } }
 
         

@@ -29,11 +29,14 @@ module Clerk
         field :accounts_portal_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('accounts_portal_url') } }
 
         field :proxy_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('proxy_url') } }
-
+        # Legacy CNAME-only DNS targets. Prefer `dns_targets` when present.
         field :cname_targets, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::CNameTarget)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('cname_targets') } }
+        # The complete typed DNS contract. Consumers should use this field instead of merging it with `cname_targets`.
+        #
+        field :dns_targets, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::DNSTarget)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('dns_targets') } }
 
         
-        def initialize(object:, id:, name:, is_satellite:, frontend_api_url:, development_origin:, accounts_portal_url: nil, proxy_url: nil, cname_targets: nil)
+        def initialize(object:, id:, name:, is_satellite:, frontend_api_url:, development_origin:, accounts_portal_url: nil, proxy_url: nil, cname_targets: nil, dns_targets: nil)
           @object = object
           @id = id
           @name = name
@@ -43,6 +46,7 @@ module Clerk
           @accounts_portal_url = accounts_portal_url
           @proxy_url = proxy_url
           @cname_targets = cname_targets
+          @dns_targets = dns_targets
         end
 
         
@@ -57,6 +61,7 @@ module Clerk
           return false unless @accounts_portal_url == other.accounts_portal_url
           return false unless @proxy_url == other.proxy_url
           return false unless @cname_targets == other.cname_targets
+          return false unless @dns_targets == other.dns_targets
           true
         end
       end

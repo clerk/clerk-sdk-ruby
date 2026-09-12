@@ -246,8 +246,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/WellKnown.JWKS'
-  /aws_credentials: {}
-  /aws_credentials/{id}: {}
   /clients:
     get:
       deprecated: true
@@ -332,7 +330,6 @@ paths:
           $ref: '#/components/responses/AuthenticationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
-  /clients/handshake_payload: {}
   /email_addresses:
     post:
       operationId: CreateEmailAddress
@@ -1607,6 +1604,11 @@ paths:
       description: |-
         Returns a list of all users.
         The users are returned sorted by creation date, with the newest users appearing first.
+
+        To walk more than a few pages, paginate with `starting_after` rather than `offset`.
+        A cursor page costs the same no matter how far into the list it sits, while a large `offset`
+        has to walk and discard every row before it, so it gets progressively slower and eventually
+        times out. Cursor pagination requires the `created_at` ordering, which is the default.
       tags:
         - Users
       parameters:
@@ -1824,6 +1826,20 @@ paths:
           required: false
         - $ref: '#/components/parameters/LimitParameter'
         - $ref: '#/components/parameters/OffsetParameter'
+        - name: starting_after
+          in: query
+          description: |-
+            A cursor for pagination: the `id` of the last user on the previous page. Returns the users that follow it.
+
+            **Requires ordering by `created_at`** — that is, `order_by` omitted, or set to `created_at`, `+created_at`
+            or `-created_at`. Any other `order_by` value is rejected with a 422: the other orderings sort by a value
+            that is neither unique per user nor immutable, so a cursor over them would skip or repeat users.
+
+            Cannot be combined with a non-zero `offset`, which is also a 422. Keep every other parameter identical
+            across requests, and stop when a page returns fewer than `limit` users.
+          required: false
+          schema:
+            type: string
         - name: order_by
           in: query
           description: |-
@@ -1833,6 +1849,7 @@ paths:
             For example, if you want users to be returned in descending order according to their `created_at` property, you can use `-created_at`.
             If you don't use `+` or `-`, then `+` is implied. We only support one `order_by` parameter, and if multiple `order_by` parameters are provided, we will only keep the first one. For example,
             if you pass `order_by=username&order_by=created_at`, we will consider only the first `order_by` parameter, which is `username`. The `created_at` parameter will be ignored in this case.
+            Only the `created_at` orderings can be combined with `starting_after` cursor pagination; see that parameter.
           schema:
             type: string
             default: '-created_at'
@@ -1976,6 +1993,13 @@ paths:
                     This is useful when you are trying to create a user that doesn't have a password, in an instance that is using passwords.
                     Please note that you cannot use this flag if password is the only way for a user to sign into your instance.
                   nullable: true
+                skip_restriction_checks:
+                  type: boolean
+                  description: |-
+                    When set to `true`, the instance's restrictions are not applied to this user.
+                    Those settings are the allowlist, the blocklist, blocked disposable email domains and blocked email subaddresses, and they normally reject a matching identifier here just as they do at sign-up.
+                    Use this when your backend is creating a user it already trusts, such as during a migration or from an admin tool.
+                  nullable: true
                 totp_secret:
                   type: string
                   description: |-
@@ -2045,7 +2069,7 @@ paths:
                   nullable: true
                 bypass_client_trust:
                   type: boolean
-                  description: When set to `true`, the user will bypass client trust checks during sign-in.
+                  description: When set to `true`, the user will bypass Device Trust checks during sign-in.
                   nullable: true
                 banned:
                   type: boolean
@@ -2458,7 +2482,7 @@ paths:
                   nullable: true
                 bypass_client_trust:
                   type: boolean
-                  description: When set to `true`, the user will bypass client trust checks during sign-in.
+                  description: When set to `true`, the user will bypass Device Trust checks during sign-in.
                   nullable: true
       responses:
         '200':
@@ -3284,6 +3308,7 @@ paths:
           $ref: '#/components/responses/ClerkErrors'
   /users/{user_id}/trusted_devices:
     get:
+      deprecated: true
       operationId: ListUserTrustedDevices
       x-speakeasy-group: users
       x-speakeasy-name-override: listTrustedDevices
@@ -3309,6 +3334,7 @@ paths:
           $ref: '#/components/responses/ClerkErrors'
   /users/{user_id}/trusted_devices/{trusted_device_id}:
     delete:
+      deprecated: true
       operationId: RevokeUserTrustedDevice
       x-speakeasy-group: users
       x-speakeasy-name-override: revokeTrustedDevice
@@ -3332,6 +3358,62 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/TrustedDevice'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '500':
+          $ref: '#/components/responses/ClerkErrors'
+  /users/{user_id}/biometric_credentials:
+    get:
+      operationId: ListUserBiometricCredentials
+      x-speakeasy-group: users
+      x-speakeasy-name-override: listBiometricCredentials
+      summary: List a user's biometric credentials
+      description: Returns the active biometric credentials enrolled by the user.
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user whose biometric credentials are returned
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BiometricCredential.List'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '500':
+          $ref: '#/components/responses/ClerkErrors'
+  /users/{user_id}/biometric_credentials/{biometric_credential_id}:
+    delete:
+      operationId: RevokeUserBiometricCredential
+      x-speakeasy-group: users
+      x-speakeasy-name-override: revokeBiometricCredential
+      summary: Revoke a user's biometric credential
+      description: Revokes an active biometric credential enrolled by the user.
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user that owns the biometric credential
+          required: true
+          schema:
+            type: string
+        - name: biometric_credential_id
+          in: path
+          description: The ID of the biometric credential to revoke
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BiometricCredential'
         '403':
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
@@ -4071,6 +4153,8 @@ paths:
           $ref: '#/components/responses/ClerkErrors'
         '402':
           $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/FeatureNotEnabled'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /actor_tokens/{actor_token_id}/revoke:
@@ -4286,9 +4370,24 @@ paths:
                   nullable: true
                 allowed_origins:
                   type: array
+                  nullable: true
                   items:
                     type: string
-                  description: For browser-like stacks such as browser extensions, Electron (not officially supported), or Capacitor.js (not officially supported), the instance allowed origins need to be updated with the request origin value. For Chrome extensions popup, background, or service worker pages, the origin is chrome-extension://extension_uuid. For Electron apps the default origin is http://localhost:3000. For Capacitor, the origin is capacitor://localhost.
+                  description: |-
+                    For browser-like stacks such as browser extensions, Electron (not officially supported), or Capacitor.js (not officially supported), the instance allowed origins need to be updated with the request origin value. For Chrome extensions popup, background, or service worker pages, the origin is chrome-extension://extension_uuid. For Electron apps the default origin is http://localhost:3000. For Capacitor, the origin is capacitor://localhost.
+                    Send an empty array to remove all allowed origins. A null value leaves the current list unchanged.
+                allowed_subdomains:
+                  type: array
+                  nullable: true
+                  items:
+                    type: string
+                  description: |-
+                    Subdomains of the instance's own domains that may originate requests while `subdomain_allowlist_enabled` is true. Each entry is either an exact host (`app.example.com`) or a wildcard anchored on a host beneath one of the instance's domains (`*.preview.example.com`), which covers every host under that anchor but not the anchor itself.
+                    Entries are stored folded to lower case with any trailing dot removed, the form the origin check compares against, so entries differing only in those respects are one entry. Entries already stored are not validated again, so a list read back from the instance can always be written again unchanged. Send an empty array to remove all entries. A null value leaves the current list unchanged. Production instances only.
+                subdomain_allowlist_enabled:
+                  type: boolean
+                  nullable: true
+                  description: Whether requests from subdomains of the instance's own domains are restricted to `allowed_subdomains`. When false, every subdomain of the instance's domain is accepted. Production instances only.
                 cookieless_dev:
                   type: boolean
                   description: |-
@@ -4375,6 +4474,7 @@ paths:
                 rules_enabled:
                   type: boolean
                   nullable: true
+                  description: Set true to enforce Protect rules on this instance. Set false to stop enforcing and return the instance to its default posture, where traffic is still evaluated in shadow but nothing is blocked. This does not remove the instance from Protect.
                 specter_enabled:
                   type: boolean
                   nullable: true
@@ -4462,13 +4562,22 @@ paths:
                 default_scopes:
                   type: array
                   nullable: true
-                  description: Default scopes. Set to null to reset to Clerk-provided defaults.
+                  description: |
+                    Default scopes assigned when a dynamically registered or first-contact CIMD client omits `scope`. Accepts built-in keys and current custom catalog keys. `advertised` does not affect eligibility. Duplicate keys, unknown keys, and `offline_access` are rejected. An empty array or null resets to Clerk-provided defaults.
                   items:
                     type: string
                 oauth_jwt_access_tokens:
                   type: boolean
                   nullable: true
                   description: Whether OAuth JWT access tokens are enabled for the instance (disabled indicates opaque access tokens).
+                aud_claim_enabled:
+                  type: boolean
+                  nullable: true
+                  description: Whether OAuth access tokens can include an aud claim derived from the RFC 8707 resource parameter.
+                pkce_required:
+                  type: boolean
+                  nullable: true
+                  description: Whether all new OAuth authorization-code requests must use PKCE with the S256 challenge method.
                 client_id_metadata_documents_advertised:
                   type: boolean
                   nullable: true
@@ -4819,7 +4928,6 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
-  /machine_tokens: {}
   /machines:
     get:
       operationId: ListMachines
@@ -5408,6 +5516,12 @@ paths:
                 admin_delete_enabled:
                   type: boolean
                   description: If true, an admin can delete this organization with the Frontend API.
+                  nullable: true
+                self_serve_sso_enabled:
+                  type: boolean
+                  description: |-
+                    Whether this organization can configure self-serve enterprise SSO.
+                    Requires the instance to have the self-serve SSO entitlement enabled.
                   nullable: true
                 created_at:
                   type: string
@@ -7308,7 +7422,10 @@ paths:
             default: +created_at
         - name: name_query
           in: query
-          description: Returns OAuth applications with names that match the given query, via case-insensitive partial match.
+          description: |-
+            Returns OAuth applications with names that match the given query, via case-insensitive partial match.
+            Also returns the OAuth application whose `client_id` is exactly the given query, which is useful for
+            resolving a `client_id` to the OAuth application `id` required by the read, update and delete endpoints.
           required: false
           schema:
             type: string
@@ -7358,7 +7475,7 @@ paths:
                 scopes:
                   type: string
                   maxLength: 1024
-                  description: Define the allowed scopes for the new OAuth applications that dictate the user payload of the OAuth user info endpoint. Available scopes are `profile`, `email`, `public_metadata`, `private_metadata`. Provide the requested scopes as a string, separated by spaces.
+                  description: Define the application's built-in and custom scope ceiling. Provide scope keys as a space-delimited string. Custom keys must exist in the instance OAuth scope catalog.
                   default: profile email
                   example: profile email public_metadata
                   nullable: true
@@ -7371,6 +7488,11 @@ paths:
                   type: boolean
                   default: false
                   description: True to require the Proof Key of Code Exchange (PKCE) flow.
+                  nullable: true
+                device_authorization_grant_enabled:
+                  type: boolean
+                  default: false
+                  description: True to enable the OAuth Device Authorization Grant for this application. Enabling requires the OAuth Device Authorization Grant feature to be enabled for the instance.
                   nullable: true
                 public:
                   type: boolean
@@ -7454,9 +7576,8 @@ paths:
                 scopes:
                   type: string
                   maxLength: 1024
-                  description: Define the allowed scopes for the new OAuth applications that dictate the user payload of the OAuth user info endpoint. Available scopes are `profile`, `email`, `public_metadata`, `private_metadata`. Provide the requested scopes as a string, separated by spaces.
-                  default: profile email
-                  example: profile email public_metadata private_metadata
+                  description: Replace the application's complete built-in and custom scope ceiling. Provide scope keys as a space-delimited string. Custom keys must exist in the instance OAuth scope catalog. Required built-in scopes, such as `offline_access`, must be included in the replacement set, otherwise the request is rejected. Omit this field to leave all scope assignments unchanged.
+                  example: profile email offline_access public_metadata private_metadata
                   nullable: true
                 consent_screen_enabled:
                   type: boolean
@@ -7465,6 +7586,10 @@ paths:
                 pkce_required:
                   type: boolean
                   description: True to require the Proof Key of Code Exchange (PKCE) flow.
+                  nullable: true
+                device_authorization_grant_enabled:
+                  type: boolean
+                  description: True to enable the OAuth Device Authorization Grant for this application. Enabling requires the OAuth Device Authorization Grant feature to be enabled for the instance. Omit this field to leave the setting unchanged.
                   nullable: true
                 public:
                   type: boolean
@@ -8205,6 +8330,9 @@ paths:
                       scim_path:
                         type: string
                         description: GJSON path to extract the attribute value from SCIM user resources
+                      directory_path:
+                        type: string
+                        description: The new name for `scim_path`. Send either one, or both with the same value; sending both with different values is rejected.
                       multi_valued:
                         type: boolean
                         description: When true, the attribute supports multiple values; values from the IdP are written to public_metadata as an array. Defaults to false.
@@ -8440,6 +8568,9 @@ paths:
                       scim_path:
                         type: string
                         description: GJSON path to extract the attribute value from SCIM user resources
+                      directory_path:
+                        type: string
+                        description: The new name for `scim_path`. Send either one, or both with the same value; sending both with different values is rejected.
                       multi_valued:
                         type: boolean
                         description: When true, the attribute supports multiple values; values from the IdP are written to public_metadata as an array. Defaults to false.
@@ -8913,8 +9044,6 @@ paths:
           $ref: '#/components/responses/Conflict'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-  /accountless_applications: {}
-  /accountless_applications/complete: {}
   /billing/plans:
     get:
       operationId: GetCommercePlanList
@@ -9188,6 +9317,91 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/CommercePriceTransition'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/ClerkErrors'
+  /billing/subscription_items/{subscription_item_id}/discounts:
+    post:
+      operationId: ApplyBillingSubscriptionItemDiscount
+      x-speakeasy-group: billing
+      x-speakeasy-name-override: applySubscriptionItemDiscount
+      tags:
+        - Billing
+      summary: Apply a discount to a subscription item
+      description: |-
+        Applies an existing discount to a subscription item.
+        Manual application is an override path: self-serve distribution rules are not enforced.
+        At most one active discount is allowed per subscription item; applying a different
+        discount replaces the currently active one. Re-applying the same active discount returns a conflict.
+      parameters:
+        - name: subscription_item_id
+          in: path
+          description: The ID of the subscription item to apply the discount to
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Parameters for applying the discount
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyCommerceDiscountRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/CommerceDiscountRedemption'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/ClerkErrors'
+  /billing/subscription_items/{subscription_item_id}/discounts/{discount_id}:
+    delete:
+      operationId: RemoveBillingSubscriptionItemDiscount
+      x-speakeasy-group: billing
+      x-speakeasy-name-override: removeSubscriptionItemDiscount
+      tags:
+        - Billing
+      summary: Remove a discount from a subscription item
+      description: |-
+        Removes the active discount from a subscription item.
+        The discount_id must match the subscription item's currently active discount.
+      parameters:
+        - name: subscription_item_id
+          in: path
+          description: The ID of the subscription item to remove the discount from
+          required: true
+          schema:
+            type: string
+        - name: discount_id
+          in: path
+          description: The ID of the discount to remove
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/CommerceDiscountRedemption'
         '400':
           $ref: '#/components/responses/ClerkErrors'
         '401':
@@ -9831,8 +10045,6 @@ paths:
           $ref: '#/components/responses/ResourceNotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-  /audit_logs: {}
-  /audit_logs/{event_time_and_id}: {}
   /scim_directories:
     get:
       operationId: ListSCIMDirectories
@@ -9840,8 +10052,8 @@ paths:
       x-speakeasy-name-override: list
       tags:
         - SCIM Directories
-      summary: List all SCIM directories
-      description: Returns a list of all SCIM directories for the instance.
+      summary: List all directories
+      description: Returns a list of all directories for the instance.
       parameters:
         - $ref: '#/components/parameters/LimitParameter'
         - $ref: '#/components/parameters/OffsetParameter'
@@ -9858,8 +10070,8 @@ paths:
       x-speakeasy-name-override: create
       tags:
         - SCIM Directories
-      summary: Create a SCIM directory
-      description: Create a new SCIM directory for the instance.
+      summary: Create a directory
+      description: Create a new directory for the instance.
       requestBody:
         content:
           application/json:
@@ -9868,13 +10080,13 @@ paths:
               properties:
                 enterprise_connection_id:
                   type: string
-                  description: The ID of the enterprise connection to associate with this SCIM directory.
+                  description: The ID of the enterprise connection to associate with this directory.
                 name:
                   type: string
-                  description: A human-friendly name for the SCIM directory.
+                  description: A human-friendly name for the directory.
                 provider:
                   type: string
-                  description: The identity provider for this SCIM directory.
+                  description: The identity provider for this directory.
                 group_role_mappings:
                   type: array
                   description: Optional SCIM group to organization role mappings to create with the directory.
@@ -9919,12 +10131,12 @@ paths:
       x-speakeasy-name-override: get
       tags:
         - SCIM Directories
-      summary: Retrieve a SCIM directory
-      description: Returns the details of a SCIM directory.
+      summary: Retrieve a directory
+      description: Returns the details of a directory.
       parameters:
         - name: scim_directory_id
           in: path
-          description: The ID of the SCIM directory to retrieve
+          description: The ID of the directory to retrieve
           required: true
           schema:
             type: string
@@ -9943,12 +10155,12 @@ paths:
       x-speakeasy-name-override: update
       tags:
         - SCIM Directories
-      summary: Update a SCIM directory
-      description: Updates a SCIM directory.
+      summary: Update a directory
+      description: Updates a directory.
       parameters:
         - name: scim_directory_id
           in: path
-          description: The ID of the SCIM directory to update
+          description: The ID of the directory to update
           required: true
           schema:
             type: string
@@ -9960,13 +10172,13 @@ paths:
               properties:
                 name:
                   type: string
-                  description: A human-friendly name for the SCIM directory.
+                  description: A human-friendly name for the directory.
                 enabled:
                   type: boolean
-                  description: Whether the SCIM directory is enabled.
+                  description: Whether the directory is enabled.
                 provider:
                   type: string
-                  description: The identity provider for this SCIM directory.
+                  description: The identity provider for this directory.
                 attribute_mapping:
                   type: object
                   additionalProperties:
@@ -9977,7 +10189,7 @@ paths:
                     Set a key to `null` to remove it from the mapping.
                 group_role_mapping_enabled:
                   type: boolean
-                  description: Whether group-to-role mapping is enabled for this SCIM directory.
+                  description: Whether group-to-role mapping is enabled for this directory.
       responses:
         '200':
           $ref: '#/components/responses/SCIMDirectory'
@@ -9997,14 +10209,14 @@ paths:
       x-speakeasy-name-override: delete
       tags:
         - SCIM Directories
-      summary: Delete a SCIM directory
+      summary: Delete a directory
       description: |-
-        Deletes a SCIM directory and stops provisioning for it. SCIM requests authenticated
+        Deletes a directory and stops provisioning for it. SCIM requests authenticated
         with the directory's API key are rejected afterwards.
       parameters:
         - name: scim_directory_id
           in: path
-          description: The ID of the SCIM directory to delete
+          description: The ID of the directory to delete
           required: true
           schema:
             type: string
@@ -10024,16 +10236,16 @@ paths:
       x-speakeasy-name-override: rotateApiKey
       tags:
         - SCIM Directories
-      summary: Rotate a SCIM directory's API key
+      summary: Rotate a directory's API key
       description: |-
-        Generates a new API key for the SCIM directory and returns it in the `api_key` field.
+        Generates a new API key for the directory and returns it in the `api_key` field.
         This is the only way to obtain the key after creation, so make sure to update it in
         your identity provider. The previous key remains valid for a short grace period before
         it expires.
       parameters:
         - name: scim_directory_id
           in: path
-          description: The ID of the SCIM directory whose API key to rotate
+          description: The ID of the directory whose API key to rotate
           required: true
           schema:
             type: string
@@ -10046,9 +10258,8 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
-  /scim_directories/{scim_directory_id}/sync: {}
-  /scim_directories/{scim_directory_id}/credentials: {}
-  /scim_directories/{scim_directory_id}/groups: {}
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /scim_directories/{scim_directory_id}/group_role_mappings:
     get:
       operationId: ListSCIMGroupRoleMappings
@@ -10057,11 +10268,11 @@ paths:
       tags:
         - SCIM Directories
       summary: List SCIM group role mappings
-      description: Returns the list of SCIM group to organization role mappings for a SCIM directory, ordered by precedence.
+      description: Returns the list of SCIM group to organization role mappings for a directory, ordered by precedence.
       parameters:
         - name: scim_directory_id
           in: path
-          description: The ID of the SCIM directory.
+          description: The ID of the directory.
           required: true
           schema:
             type: string
@@ -10082,12 +10293,13 @@ paths:
         - SCIM Directories
       summary: Create a SCIM group role mapping
       description: |-
-        Creates a new SCIM group to organization role mapping for a SCIM directory.
-        Group role mapping must be enabled on the directory.
+        Creates a new SCIM group to organization role mapping for a directory.
+        Mappings can be created while group role mapping is disabled on the
+        directory, but they only take effect once it is enabled.
       parameters:
         - name: scim_directory_id
           in: path
-          description: The ID of the SCIM directory.
+          description: The ID of the directory.
           required: true
           schema:
             type: string
@@ -10137,12 +10349,13 @@ paths:
       description: |-
         Replaces the entire set of SCIM group role mappings for a directory. The position of
         each item in the `mappings` array determines its precedence (the first item gets
-        precedence 1). Passing an empty array removes all mappings. Group role mapping must be
-        enabled on the directory.
+        precedence 1). Passing an empty array removes all mappings. Mappings can be replaced
+        while group role mapping is disabled on the directory, but they only take effect once
+        it is enabled.
       parameters:
         - name: scim_directory_id
           in: path
-          description: The ID of the SCIM directory.
+          description: The ID of the directory.
           required: true
           schema:
             type: string
@@ -10192,12 +10405,13 @@ paths:
         - SCIM Directories
       summary: Delete a SCIM group role mapping
       description: |-
-        Deletes a single SCIM group role mapping. Group role mapping must be enabled on the
-        directory.
+        Deletes a single SCIM group role mapping. Mappings can be deleted while group role
+        mapping is disabled on the directory, but the change only takes effect once it is
+        enabled.
       parameters:
         - name: scim_directory_id
           in: path
-          description: The ID of the SCIM directory.
+          description: The ID of the directory.
           required: true
           schema:
             type: string
@@ -10210,6 +10424,403 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SCIMGroupRoleMapping.Deleted'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+  /directories:
+    get:
+      operationId: ListDirectories
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: list
+      tags:
+        - Directories
+      summary: List all directories
+      description: Returns a list of all directories for the instance.
+      parameters:
+        - $ref: '#/components/parameters/LimitParameter'
+        - $ref: '#/components/parameters/OffsetParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/Directory.List'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+    post:
+      operationId: CreateDirectory
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: create
+      tags:
+        - Directories
+      summary: Create a directory
+      description: Create a new directory for the instance.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enterprise_connection_id:
+                  type: string
+                  description: The ID of the enterprise connection to associate with this directory.
+                name:
+                  type: string
+                  description: A human-friendly name for the directory.
+                provider:
+                  type: string
+                  description: The identity provider for this directory.
+                group_role_mappings:
+                  type: array
+                  description: Optional directory group to organization role mappings to create with the directory.
+                  items:
+                    type: object
+                    properties:
+                      directory_group_id:
+                        type: string
+                        description: The group ID from the identity provider. Exactly one of `directory_group_id` or `scim_group_id` is required.
+                      scim_group_id:
+                        type: string
+                        description: The legacy name for `directory_group_id`. Send either one, or both with the same value; sending both with different values is rejected.
+                      directory_group_display_name:
+                        type: string
+                        maxLength: 255
+                        description: Optional display name for the group.
+                      scim_group_display_name:
+                        type: string
+                        maxLength: 255
+                        description: The legacy name for `directory_group_display_name`. Send either one, or both with the same value; sending both with different values is rejected.
+                      role_id:
+                        type: string
+                        description: The organization role ID to assign to members of the group.
+                      precedence:
+                        type: integer
+                        minimum: 1
+                        description: The precedence for this mapping. If omitted, precedence is assigned by array order.
+                    required:
+                      - role_id
+              required:
+                - enterprise_connection_id
+                - provider
+      responses:
+        '200':
+          $ref: '#/components/responses/Directory'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /directories/{directory_id}:
+    get:
+      operationId: GetDirectory
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: get
+      tags:
+        - Directories
+      summary: Retrieve a directory
+      description: Returns the details of a directory.
+      parameters:
+        - name: directory_id
+          in: path
+          description: The ID of the directory to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Directory'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+    patch:
+      operationId: UpdateDirectory
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: update
+      tags:
+        - Directories
+      summary: Update a directory
+      description: Updates a directory.
+      parameters:
+        - name: directory_id
+          in: path
+          description: The ID of the directory to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: A human-friendly name for the directory.
+                enabled:
+                  type: boolean
+                  description: Whether the directory is enabled.
+                provider:
+                  type: string
+                  description: The identity provider for this directory.
+                attribute_mapping:
+                  type: object
+                  additionalProperties:
+                    type: string
+                    nullable: true
+                  description: |-
+                    Attribute-to-directory-path entries to merge into the directory's attribute mapping.
+                    Set a key to `null` to remove it from the mapping.
+                group_role_mapping_enabled:
+                  type: boolean
+                  description: Whether group-to-role mapping is enabled for this directory.
+      responses:
+        '200':
+          $ref: '#/components/responses/Directory'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      operationId: DeleteDirectory
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: delete
+      tags:
+        - Directories
+      summary: Delete a directory
+      description: |-
+        Deletes a directory and stops provisioning for it. Provisioning requests authenticated
+        with the directory's API key are rejected afterwards.
+      parameters:
+        - name: directory_id
+          in: path
+          description: The ID of the directory to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/DeletedObject'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+  /directories/{directory_id}/rotate_api_key:
+    post:
+      operationId: RotateDirectoryAPIKey
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: rotateApiKey
+      tags:
+        - Directories
+      summary: Rotate a directory's API key
+      description: |-
+        Generates a new API key for the directory and returns it in the `api_key` field.
+        This is the only way to obtain the key after creation, so make sure to update it in
+        your identity provider. The previous key remains valid for a short grace period before
+        it expires.
+      parameters:
+        - name: directory_id
+          in: path
+          description: The ID of the directory whose API key to rotate
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Directory'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /directories/{directory_id}/group_role_mappings:
+    get:
+      operationId: ListDirectoryGroupRoleMappings
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: listGroupRoleMappings
+      tags:
+        - Directories
+      summary: List directory group role mappings
+      description: Returns the list of directory group to organization role mappings for a directory, ordered by precedence.
+      parameters:
+        - name: directory_id
+          in: path
+          description: The ID of the directory.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/DirectoryGroupRoleMapping.List'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+    post:
+      operationId: CreateDirectoryGroupRoleMapping
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: createGroupRoleMapping
+      tags:
+        - Directories
+      summary: Create a directory group role mapping
+      description: |-
+        Creates a new directory group to organization role mapping for a directory.
+        Mappings can be created while group role mapping is disabled on the
+        directory, but they only take effect once it is enabled.
+      parameters:
+        - name: directory_id
+          in: path
+          description: The ID of the directory.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                directory_group_id:
+                  type: string
+                  description: The group ID from the identity provider. Exactly one of `directory_group_id` or `scim_group_id` is required.
+                scim_group_id:
+                  type: string
+                  description: The legacy name for `directory_group_id`. Send either one, or both with the same value; sending both with different values is rejected.
+                role_id:
+                  type: string
+                  description: The ID of the organization role to assign to members of the group.
+                precedence:
+                  type: integer
+                  minimum: 1
+                  description: |-
+                    The precedence for this mapping. Lower values take priority when a user belongs
+                    to multiple mapped groups. If omitted, the mapping is appended with the
+                    next-highest precedence.
+              required:
+                - role_id
+      responses:
+        '200':
+          $ref: '#/components/responses/DirectoryGroupRoleMapping'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    put:
+      operationId: ReplaceDirectoryGroupRoleMappings
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: replaceGroupRoleMappings
+      tags:
+        - Directories
+      summary: Replace directory group role mappings
+      description: |-
+        Replaces the entire set of directory group role mappings for a directory. The position of
+        each item in the `mappings` array determines its precedence (the first item gets
+        precedence 1). Passing an empty array removes all mappings. Mappings can be replaced
+        while group role mapping is disabled on the directory, but they only take effect once
+        it is enabled.
+      parameters:
+        - name: directory_id
+          in: path
+          description: The ID of the directory.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mappings:
+                  type: array
+                  description: The desired set of mappings. Array order sets precedence (1-indexed). An empty array clears all mappings.
+                  items:
+                    type: object
+                    properties:
+                      directory_group_id:
+                        type: string
+                        description: The group ID from the identity provider. Exactly one of `directory_group_id` or `scim_group_id` is required.
+                      scim_group_id:
+                        type: string
+                        description: The legacy name for `directory_group_id`. Send either one, or both with the same value; sending both with different values is rejected.
+                      role_id:
+                        type: string
+                        description: The ID of the organization role to assign to members of the group.
+                    required:
+                      - role_id
+              required:
+                - mappings
+      responses:
+        '200':
+          $ref: '#/components/responses/DirectoryGroupRoleMapping.List'
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /directories/{directory_id}/group_role_mappings/{mapping_id}:
+    delete:
+      operationId: DeleteDirectoryGroupRoleMapping
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: deleteGroupRoleMapping
+      tags:
+        - Directories
+      summary: Delete a directory group role mapping
+      description: |-
+        Deletes a single directory group role mapping. Mappings can be deleted while group role
+        mapping is disabled on the directory, but the change only takes effect once it is
+        enabled.
+      parameters:
+        - name: directory_id
+          in: path
+          description: The ID of the directory.
+          required: true
+          schema:
+            type: string
+        - name: mapping_id
+          in: path
+          description: The ID of the directory group role mapping to delete.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/DirectoryGroupRoleMapping.Deleted'
         '400':
           $ref: '#/components/responses/ClerkErrors'
         '401':
@@ -14095,6 +14706,11 @@ components:
           type: integer
         admin_delete_enabled:
           type: boolean
+        self_serve_sso_enabled:
+          type: boolean
+          nullable: true
+          description: |
+            Whether this organization can configure self-serve enterprise SSO.
         public_metadata:
           type: object
           additionalProperties: true
@@ -14229,21 +14845,21 @@ components:
       type: object
       additionalProperties: false
       description: |
-        Metadata describing a user's linkage to a SCIM directory. This object is only delivered on `user.created` and `user.updated` webhook events, and only when the user is provisioned through a SCIM directory. Its absence does not necessarily mean the user is not SCIM-managed.
+        Metadata describing a user's linkage to a directory. This object is only delivered on `user.created` and `user.updated` webhook events, and only when the user is provisioned through a directory. Its absence does not necessarily mean the user is not managed by a directory.
       properties:
         directory_id:
           type: string
           description: |
-            The ID of the SCIM directory the user is provisioned from.
+            The ID of the directory the user is provisioned from.
         directory_enabled:
           type: boolean
           description: |
-            Whether the SCIM directory is currently enabled. Omitted when false.
+            Whether the directory is currently enabled. Omitted when false.
         external_id:
           type: string
           nullable: true
           description: |
-            The user's external ID as reported by the SCIM directory, if any.
+            The user's external ID as reported by the directory, if any.
       required:
         - directory_id
         - external_id
@@ -14427,7 +15043,7 @@ components:
           example: 1700690400000
         bypass_client_trust:
           type: boolean
-          description: When set to `true`, the user will bypass client trust checks during sign-in.
+          description: When set to `true`, the user will bypass Device Trust checks during sign-in.
           default: false
         scim:
           nullable: true
@@ -15695,6 +16311,63 @@ components:
         - status
         - created_at
         - updated_at
+    BiometricCredential:
+      type: object
+      additionalProperties: false
+      properties:
+        object:
+          type: string
+          enum:
+            - trusted_device
+          description: String representing the object's type.
+        id:
+          type: string
+        platform:
+          type: string
+          enum:
+            - ios
+            - android
+        app_identifier:
+          type: string
+        name:
+          type: string
+          nullable: true
+        algorithm:
+          type: string
+          enum:
+            - ES256
+        status:
+          type: string
+          enum:
+            - active
+            - revoked
+        created_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of creation in milliseconds.
+        updated_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of the last update in milliseconds.
+        last_used_at:
+          type: integer
+          format: int64
+          nullable: true
+          description: Unix timestamp of the last use in milliseconds.
+        revoked_at:
+          type: integer
+          format: int64
+          nullable: true
+          description: Unix timestamp of revocation in milliseconds.
+      required:
+        - object
+        - id
+        - platform
+        - app_identifier
+        - algorithm
+        - status
+        - created_at
+        - updated_at
     Invitation:
       type: object
       additionalProperties: false
@@ -15892,6 +16565,34 @@ components:
         - host
         - value
         - required
+    DNSTarget:
+      type: object
+      additionalProperties: false
+      properties:
+        host:
+          type: string
+        value:
+          type: string
+        record_type:
+          type: string
+          enum:
+            - CNAME
+            - TXT
+        automation_disposition:
+          type: string
+          enum:
+            - already_satisfied
+            - safe_to_create
+            - manual_resolution_required
+        required:
+          description: |
+            Denotes whether this DNS target is required to be set in order for the domain to be considered deployed.
+          type: boolean
+      required:
+        - host
+        - value
+        - record_type
+        - required
     Domain:
       type: object
       properties:
@@ -15922,6 +16623,14 @@ components:
           items:
             $ref: '#/components/schemas/CNameTarget'
           nullable: true
+          description: Legacy CNAME-only DNS targets. Prefer `dns_targets` when present.
+        dns_targets:
+          type: array
+          items:
+            $ref: '#/components/schemas/DNSTarget'
+          nullable: true
+          description: |
+            The complete typed DNS contract. Consumers should use this field instead of merging it with `cname_targets`.
       required:
         - object
         - id
@@ -15966,11 +16675,30 @@ components:
           example:
             - http://localhost:3000
             - https://some-domain
+        allowed_subdomains:
+          type: array
+          items:
+            type: string
+          description: Subdomains of the instance's own domains that may originate requests, when the subdomain allowlist is enabled. Production instances only; always empty on a development instance.
+          example:
+            - app.example.com
+            - '*.preview.example.com'
+        subdomain_allowlist_enabled:
+          type: boolean
+          description: Whether requests from subdomains of the instance's own domains are restricted to `allowed_subdomains`. When false, every subdomain of the instance's domain is accepted. Production instances only; always false on a development instance.
+        workspace_id:
+          type: string
+          nullable: true
+          description: The ID of the Clerk workspace that owns the instance's application. It is null when the application has no owner.
+          example: org_2abc123def456
       required:
         - object
         - id
         - environment_type
         - allowed_origins
+        - allowed_subdomains
+        - subdomain_allowlist_enabled
+        - workspace_id
     InstanceRestrictions:
       type: object
       properties:
@@ -16005,16 +16733,25 @@ components:
             - instance_protect
         rules_enabled:
           type: boolean
+          description: Whether Protect rules are enforced on this instance. False does not mean the instance is outside Protect — by default it is still evaluated in shadow, where rules are scored and recorded but never block.
         specter_enabled:
           type: boolean
         checks_bypassed:
           type: boolean
           description: Whether the instance has opted out of the Protect prerequisite checks, asserting its setup already meets the requirements.
+        checks_verified:
+          type: boolean
+          description: Whether the Protect system has verified the instance's prerequisite checks. Protect rules are gated on checks being verified, bypassed or exempt.
+        checks_exempt:
+          type: boolean
+          description: Whether the instance was created into Protect and so was never subject to the prerequisite checks at all.
       required:
         - object
         - rules_enabled
         - specter_enabled
         - checks_bypassed
+        - checks_verified
+        - checks_exempt
     InstanceCommunication:
       type: object
       description: Per-instance SMS communication settings, including the SMS country blocklist.
@@ -16045,13 +16782,20 @@ components:
         default_scopes:
           type: array
           nullable: true
-          description: Default scopes.
+          description: |
+            Default scopes assigned when a dynamically registered or first-contact CIMD client omits `scope`. Contains built-in keys and custom catalog keys. Null means Clerk-provided defaults. `advertised` does not affect eligibility. An empty input array is stored and returned as null.
           uniqueItems: true
           items:
             type: string
         oauth_jwt_access_tokens:
           type: boolean
           description: Whether OAuth JWT access tokens are enabled for the instance (disabled indicates opaque access tokens).
+        aud_claim_enabled:
+          type: boolean
+          description: Whether OAuth access tokens can include an aud claim derived from the RFC 8707 resource parameter.
+        pkce_required:
+          type: boolean
+          description: Whether all new OAuth authorization-code requests must use PKCE with the S256 challenge method.
         client_id_metadata_documents_advertised:
           type: boolean
           description: Whether the instance advertises support for Client ID Metadata Documents in its OAuth authorization server metadata.
@@ -16066,6 +16810,8 @@ components:
         - dynamic_oauth_client_registration
         - default_scopes
         - oauth_jwt_access_tokens
+        - aud_claim_enabled
+        - pkce_required
         - client_id_metadata_documents_advertised
         - client_id_metadata_documents_only_allow_pre_registered_clients
         - client_id_metadata_documents_block_implicitly_allowed_clients
@@ -16877,10 +17623,14 @@ components:
           type: boolean
         pkce_required:
           type: boolean
+        device_authorization_grant_enabled:
+          type: boolean
         public:
           type: boolean
         scopes:
           type: string
+          description: |
+            The complete scope ceiling for the OAuth application, as a space-delimited list of built-in and assigned custom scope keys.
         redirect_uris:
           type: array
           items:
@@ -16918,6 +17668,7 @@ components:
         - dynamically_registered
         - consent_screen_enabled
         - pkce_required
+        - device_authorization_grant_enabled
         - public
         - client_id
         - client_uri
@@ -17101,10 +17852,8 @@ components:
         - allow_idp_initiated
         - disable_additional_identifications
         - allow_organization_account_linking
-        - authenticatable
         - force_authn
         - login_hint
-        - disable_jit_provisioning
         - created_at
         - updated_at
       anyOf:
@@ -17137,8 +17886,6 @@ components:
         - provider
         - active
         - domains
-        - authenticatable
-        - disable_jit_provisioning
         - created_at
         - updated_at
       properties:
@@ -17200,6 +17947,9 @@ components:
               scim_path:
                 type: string
                 description: GJSON path to extract the attribute value from SCIM user resources
+              directory_path:
+                type: string
+                description: GJSON path to extract the attribute value from directory sync user resources. Same value as `scim_path`.
               multi_valued:
                 type: boolean
                 description: When true, the attribute supports multiple values; values from the IdP are written to public_metadata as an array. Defaults to false.
@@ -17667,12 +18417,12 @@ components:
           type: integer
           format: int64
           nullable: true
-          description: The monthly amount in cents. Must be at least $1 (100 cents) if not null.
+          description: The monthly amount in cents. Use `0` for a complimentary price. Positive amounts must be at least $1 (100 cents).
         annual_monthly_amount:
           type: integer
           format: int64
           nullable: true
-          description: The monthly amount in cents when billed annually. Must be at least $1 (100 cents) if not null.
+          description: The monthly amount in cents when billed annually. Use `0` for a complimentary price. Positive amounts must be at least $1 (100 cents).
         description:
           type: string
           description: An optional description for this custom price.
@@ -18229,6 +18979,103 @@ components:
           $ref: '#/components/schemas/CommerceSubscriptionItem-2'
         transition:
           $ref: '#/components/schemas/CommercePriceTransitionDetails'
+    ApplyCommerceDiscountRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - discount_id
+      properties:
+        discount_id:
+          type: string
+          description: The ID of the discount to apply to the subscription item.
+    CommerceDiscountRedemptionResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - object
+        - id
+        - subscription_item_id
+        - discount_id
+        - source
+        - cycles_applied
+        - cycles_remaining
+        - redeemed_at
+        - redeemed_by
+      properties:
+        object:
+          type: string
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+            - commerce_discount_redemption
+        id:
+          type: string
+          description: Unique identifier for the discount redemption.
+        subscription_item_id:
+          type: string
+          description: Unique identifier for the subscription item the discount was applied to.
+        discount_id:
+          type: string
+          description: Unique identifier for the discount that was applied.
+        name:
+          type: string
+          description: The display name of the discount.
+        source:
+          type: string
+          description: How the discount was applied to the subscription item.
+          enum:
+            - promotion
+            - manual
+            - promo_code
+        promo_code:
+          type: string
+          description: The promo code used to redeem the discount, when applicable.
+        effect:
+          type: string
+          description: The snapshotted discount effect.
+          enum:
+            - percentage
+            - fixed_amount
+        percent_off:
+          type: number
+          format: double
+          nullable: true
+          description: Percent off when the effect is percentage.
+        amount_off:
+          allOf:
+            - $ref: '#/components/schemas/CommerceMoneyResponse'
+          nullable: true
+          description: Fixed amount off when the effect is fixed_amount.
+        amount:
+          allOf:
+            - $ref: '#/components/schemas/CommerceMoneyResponse'
+          nullable: true
+          description: |-
+            How much this discount takes off the subscription item's next renewal charge.
+            Present for either effect when next-payment data is available.
+        cycles_remaining:
+          type: integer
+          format: int32
+          nullable: true
+          description: Remaining billing cycles the discount applies to. Null means the discount lasts forever.
+        cycles_applied:
+          type: integer
+          format: int32
+          description: Number of billing cycles the discount has already been applied to.
+        status:
+          type: string
+          description: Current status of the discount redemption.
+          enum:
+            - active
+            - exhausted
+            - removed
+        redeemed_at:
+          type: integer
+          format: int64
+          description: Unix timestamp (in milliseconds) when the discount was redeemed.
+        redeemed_by:
+          type: string
+          nullable: true
+          description: Identifier of the actor that redeemed the discount, when available.
     BillingPaymentAttempt:
       type: object
       additionalProperties: false
@@ -18674,7 +19521,7 @@ components:
         type: string
     SCIMDirectory:
       type: object
-      description: A SCIM directory configuration for provisioning users via SCIM protocol.
+      description: A directory configuration for provisioning users via SCIM protocol.
       properties:
         object:
           type: string
@@ -18683,10 +19530,10 @@ components:
             - scim_directory
         id:
           type: string
-          description: Unique identifier for the SCIM directory.
+          description: Unique identifier for the directory.
         name:
           type: string
-          description: A human-friendly name for the SCIM directory.
+          description: A human-friendly name for the directory.
         enterprise_connection_id:
           type: string
           nullable: true
@@ -18696,13 +19543,13 @@ components:
           description: The SCIM endpoint URL for this directory.
         provider:
           type: string
-          description: The identity provider for this SCIM directory.
+          description: The identity provider for this directory.
         enabled:
           type: boolean
-          description: Whether the SCIM directory is enabled.
+          description: Whether the directory is enabled.
         group_role_mapping_enabled:
           type: boolean
-          description: Whether group-to-role mapping is enabled for this SCIM directory.
+          description: Whether group-to-role mapping is enabled for this directory.
         attribute_mapping:
           type: object
           additionalProperties:
@@ -18726,6 +19573,9 @@ components:
               scim_path:
                 type: string
                 description: GJSON path to extract the attribute value from SCIM user resources
+              directory_path:
+                type: string
+                description: GJSON path to extract the attribute value from directory sync user resources. Same value as `scim_path`.
               multi_valued:
                 type: boolean
                 description: When true, the attribute supports multiple values; values from the IdP are written to public_metadata as an array. Defaults to false.
@@ -18736,11 +19586,11 @@ components:
         created_at:
           type: integer
           format: int64
-          description: Unix timestamp when the SCIM directory was created.
+          description: Unix timestamp when the directory was created.
         updated_at:
           type: integer
           format: int64
-          description: Unix timestamp when the SCIM directory was last updated.
+          description: Unix timestamp when the directory was last updated.
       required:
         - object
         - id
@@ -18770,13 +19620,22 @@ components:
           description: Unique identifier for the SCIM group role mapping.
         scim_directory_id:
           type: string
-          description: The ID of the SCIM directory this mapping belongs to.
+          description: The ID of the directory this mapping belongs to.
+        directory_id:
+          type: string
+          description: The ID of the directory this mapping belongs to. Same value as `scim_directory_id`.
         scim_group_id:
           type: string
           description: The SCIM group ID from the identity provider.
+        directory_group_id:
+          type: string
+          description: The group ID from the identity provider. Same value as `scim_group_id`.
         scim_group_display_name:
           type: string
           description: The display name of the SCIM group, as reported by the identity provider.
+        directory_group_display_name:
+          type: string
+          description: The display name of the group, as reported by the identity provider. Same value as `scim_group_display_name`.
         role:
           $ref: '#/components/schemas/Role'
         precedence:
@@ -18794,8 +19653,11 @@ components:
         - object
         - id
         - scim_directory_id
+        - directory_id
         - scim_group_id
+        - directory_group_id
         - scim_group_display_name
+        - directory_group_display_name
         - precedence
         - created_at
         - updated_at
@@ -18803,6 +19665,152 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/SCIMGroupRoleMapping'
+    Directory:
+      type: object
+      description: A directory configuration for provisioning users from an identity provider.
+      properties:
+        object:
+          type: string
+          description: String representing the object's type. Always "directory".
+          enum:
+            - directory
+        id:
+          type: string
+          description: Unique identifier for the directory.
+        name:
+          type: string
+          description: A human-friendly name for the directory.
+        enterprise_connection_id:
+          type: string
+          nullable: true
+          description: The ID of the associated enterprise connection.
+        endpoint_url:
+          type: string
+          description: The provisioning endpoint URL for this directory.
+        provider:
+          type: string
+          description: The identity provider for this directory.
+        enabled:
+          type: boolean
+          description: Whether the directory is enabled.
+        group_role_mapping_enabled:
+          type: boolean
+          description: Whether group-to-role mapping is enabled for this directory.
+        attribute_mapping:
+          type: object
+          additionalProperties:
+            type: string
+          description: Mapping of user attributes to the directory attribute paths they are extracted from.
+        custom_attributes:
+          type: array
+          description: Custom attributes to map from the IdP to the user's profile via directory sync. Requires the custom attributes feature to be enabled for the instance.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Display name for the custom attribute
+              key:
+                type: string
+                description: Key used to store the attribute in the user's public/private/unsafe metadata
+              sso_path:
+                type: string
+                description: Path to extract the attribute value from SSO claims (SAML assertions or OIDC claims)
+              scim_path:
+                type: string
+                description: The legacy name for `directory_path`. Carries the same value.
+              directory_path:
+                type: string
+                description: GJSON path to extract the attribute value from directory sync user resources
+              multi_valued:
+                type: boolean
+                description: When true, the attribute supports multiple values; values from the IdP are written to public_metadata as an array. Defaults to false.
+        api_key:
+          type: string
+          nullable: true
+          description: The API key for authenticating provisioning requests. Only returned when the directory is created or the key is rotated.
+        created_at:
+          type: integer
+          format: int64
+          description: Unix timestamp when the directory was created.
+        updated_at:
+          type: integer
+          format: int64
+          description: Unix timestamp when the directory was last updated.
+      required:
+        - object
+        - id
+        - name
+        - endpoint_url
+        - provider
+        - enabled
+        - group_role_mapping_enabled
+        - attribute_mapping
+        - created_at
+        - updated_at
+    Directories:
+      type: array
+      items:
+        $ref: '#/components/schemas/Directory'
+    DirectoryGroupRoleMapping:
+      type: object
+      description: A mapping from a directory group to an organization role. Members of the group are assigned the role; the lowest-precedence match wins when a user belongs to multiple mapped groups.
+      properties:
+        object:
+          type: string
+          description: String representing the object's type. Always "directory_group_role_mapping".
+          enum:
+            - directory_group_role_mapping
+        id:
+          type: string
+          description: Unique identifier for the directory group role mapping.
+        directory_id:
+          type: string
+          description: The ID of the directory this mapping belongs to.
+        scim_directory_id:
+          type: string
+          description: The legacy name for `directory_id`. Carries the same value.
+        directory_group_id:
+          type: string
+          description: The group ID from the identity provider.
+        scim_group_id:
+          type: string
+          description: The legacy name for `directory_group_id`. Carries the same value.
+        directory_group_display_name:
+          type: string
+          description: The display name of the group, as reported by the identity provider.
+        scim_group_display_name:
+          type: string
+          description: The legacy name for `directory_group_display_name`. Carries the same value.
+        role:
+          $ref: '#/components/schemas/Role'
+        precedence:
+          type: integer
+          description: Mapping precedence, starting at 1. Lower values take priority when a user belongs to multiple mapped groups.
+        created_at:
+          type: integer
+          format: int64
+          description: Unix timestamp (milliseconds) of when the mapping was created.
+        updated_at:
+          type: integer
+          format: int64
+          description: Unix timestamp (milliseconds) of when the mapping was last updated.
+      required:
+        - object
+        - id
+        - directory_id
+        - scim_directory_id
+        - directory_group_id
+        - scim_group_id
+        - directory_group_display_name
+        - scim_group_display_name
+        - precedence
+        - created_at
+        - updated_at
+    DirectoryGroupRoleMappings:
+      type: array
+      items:
+        $ref: '#/components/schemas/DirectoryGroupRoleMapping'
   responses:
     WellKnown.JWKS:
       description: Get the JSON Web Key Set
@@ -19051,6 +20059,30 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/TrustedDevice'
+    BiometricCredential.List:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - total_count
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BiometricCredential'
+              total_count:
+                type: integer
+                format: int64
+                description: Total number of biometric credentials
+    BiometricCredential:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BiometricCredential'
     Invitation.List:
       description: List of invitations
       content:
@@ -19133,7 +20165,7 @@ components:
               enhanced_email_deliverability:
                 deprecated: true
                 description: |
-                  Deprecated. When enabled, production authentication emails for this instance are sent through Clerk's legacy managed email delivery path. This setting is being retired; use the instance's configured email sending domain instead.
+                  Deprecated. This setting is retired and no longer affects email delivery; all email is sent through the instance's configured email sending domain. The field is preserved for API compatibility only and will be removed in a future version.
                 type: boolean
     ActorToken:
       description: Success
@@ -19141,6 +20173,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ActorToken'
+    FeatureNotEnabled:
+      description: Feature not enabled
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ClerkErrors'
     Domains:
       description: A list of domains
       content:
@@ -19555,6 +20593,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/CommercePriceTransitionResponse'
+    CommerceDiscountRedemption:
+      description: A commerce discount redemption.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CommerceDiscountRedemptionResponse'
     BillingStatement.List:
       description: A list of billing statements.
       content:
@@ -19598,7 +20642,7 @@ components:
           schema:
             $ref: '#/components/schemas/RoleSet'
     SCIMDirectory.List:
-      description: A list of SCIM directories
+      description: A list of directories
       content:
         application/json:
           schema:
@@ -19608,12 +20652,12 @@ components:
                 $ref: '#/components/schemas/SCIMDirectories'
               total_count:
                 type: integer
-                description: Total number of SCIM directories.
+                description: Total number of directories.
             required:
               - data
               - total_count
     SCIMDirectory:
-      description: A SCIM directory
+      description: A directory
       content:
         application/json:
           schema:
@@ -19660,6 +20704,73 @@ components:
                 enum:
                   - true
                 description: Whether the SCIM group role mapping was successfully deleted.
+            required:
+              - object
+              - id
+              - deleted
+    Directory.List:
+      description: A list of directories
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Directories'
+              total_count:
+                type: integer
+                description: Total number of directories.
+            required:
+              - data
+              - total_count
+    Directory:
+      description: A directory
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Directory'
+    DirectoryGroupRoleMapping.List:
+      description: A list of directory group role mappings, ordered by precedence.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/DirectoryGroupRoleMappings'
+              total_count:
+                type: integer
+                format: int64
+                description: Total number of directory group role mappings in the directory.
+            required:
+              - data
+              - total_count
+    DirectoryGroupRoleMapping:
+      description: A directory group role mapping
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DirectoryGroupRoleMapping'
+    DirectoryGroupRoleMapping.Deleted:
+      description: A directory group role mapping was deleted.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              object:
+                type: string
+                enum:
+                  - directory_group_role_mapping
+                description: String representing the object's type.
+              id:
+                type: string
+                description: The ID of the deleted directory group role mapping.
+              deleted:
+                type: boolean
+                enum:
+                  - true
+                description: Whether the directory group role mapping was successfully deleted.
             required:
               - object
               - id

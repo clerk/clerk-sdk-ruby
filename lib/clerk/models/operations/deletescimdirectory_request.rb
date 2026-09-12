@@ -12,7 +12,7 @@ module Clerk
         
         include Crystalline::MetadataFields
 
-        # The ID of the SCIM directory to delete
+        # The ID of the directory to delete
         field :scim_directory_id, ::String, { 'path_param': { 'field_name': 'scim_directory_id', 'style': 'simple', 'explode': false } }
 
         

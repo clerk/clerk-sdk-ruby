@@ -26,4 +26,6 @@ class Clerk::Models::Components::Domain
   def proxy_url=(str_); end
   def cname_targets(); end
   def cname_targets=(str_); end
+  def dns_targets(); end
+  def dns_targets=(str_); end
 end

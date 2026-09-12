@@ -22,17 +22,21 @@ module Clerk
         field :max_allowed_memberships, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('max_allowed_memberships') } }
         # If true, an admin can delete this organization with the Frontend API.
         field :admin_delete_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('admin_delete_enabled') } }
+        # Whether this organization can configure self-serve enterprise SSO.
+        # Requires the instance to have the self-serve SSO entitlement enabled.
+        field :self_serve_sso_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('self_serve_sso_enabled') } }
         # A custom date/time denoting _when_ the organization was created, specified in RFC3339 format (e.g. `2012-10-20T07:15:20.902Z`).
         field :created_at, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at') } }
         # The key of the [role set](https://clerk.com/docs/guides/organizations/control-access/role-sets) to assign to this organization.
         field :role_set_key, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('role_set_key') } }
 
         
-        def initialize(name: nil, slug: nil, max_allowed_memberships: nil, admin_delete_enabled: nil, created_at: nil, role_set_key: nil)
+        def initialize(name: nil, slug: nil, max_allowed_memberships: nil, admin_delete_enabled: nil, self_serve_sso_enabled: nil, created_at: nil, role_set_key: nil)
           @name = name
           @slug = slug
           @max_allowed_memberships = max_allowed_memberships
           @admin_delete_enabled = admin_delete_enabled
+          @self_serve_sso_enabled = self_serve_sso_enabled
           @created_at = created_at
           @role_set_key = role_set_key
         end
@@ -44,6 +48,7 @@ module Clerk
           return false unless @slug == other.slug
           return false unless @max_allowed_memberships == other.max_allowed_memberships
           return false unless @admin_delete_enabled == other.admin_delete_enabled
+          return false unless @self_serve_sso_enabled == other.self_serve_sso_enabled
           return false unless @created_at == other.created_at
           return false unless @role_set_key == other.role_set_key
           true

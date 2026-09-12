@@ -13,6 +13,8 @@ module Clerk
         include Crystalline::MetadataFields
 
         # Returns OAuth applications with names that match the given query, via case-insensitive partial match.
+        # Also returns the OAuth application whose `client_id` is exactly the given query, which is useful for
+        # resolving a `client_id` to the OAuth application `id` required by the read, update and delete endpoints.
         field :name_query, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'name_query', 'style': 'form', 'explode': true } }
         # Applies a limit to the number of results returned.
         # Can be used for paginating the results together with `offset`.

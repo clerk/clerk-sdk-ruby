@@ -12,7 +12,7 @@ module Clerk
         
         include Crystalline::MetadataFields
 
-        # The ID of the SCIM directory to update
+        # The ID of the directory to update
         field :scim_directory_id, ::String, { 'path_param': { 'field_name': 'scim_directory_id', 'style': 'simple', 'explode': false } }
 
         field :body, Crystalline::Nilable.new(Models::Operations::UpdateSCIMDirectoryRequestBody), { 'request': { 'media_type': 'application/json' } }

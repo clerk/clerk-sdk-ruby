@@ -46,6 +46,8 @@ class Clerk::Models::Operations::CreateUserRequest
   def skip_password_checks=(str_); end
   def skip_password_requirement(); end
   def skip_password_requirement=(str_); end
+  def skip_restriction_checks(); end
+  def skip_restriction_checks=(str_); end
   def totp_secret(); end
   def totp_secret=(str_); end
   def delete_self_enabled(); end

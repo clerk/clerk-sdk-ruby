@@ -14,10 +14,16 @@ class Clerk::Models::Components::SCIMGroupRoleMapping
   def id=(str_); end
   def scim_directory_id(); end
   def scim_directory_id=(str_); end
+  def directory_id(); end
+  def directory_id=(str_); end
   def scim_group_id(); end
   def scim_group_id=(str_); end
+  def directory_group_id(); end
+  def directory_group_id=(str_); end
   def scim_group_display_name(); end
   def scim_group_display_name=(str_); end
+  def directory_group_display_name(); end
+  def directory_group_display_name=(str_); end
   def precedence(); end
   def precedence=(str_); end
   def created_at(); end

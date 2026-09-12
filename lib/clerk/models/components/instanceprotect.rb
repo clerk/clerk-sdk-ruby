@@ -14,19 +14,25 @@ module Clerk
 
 
         field :object, Models::Components::InstanceProtectObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::InstanceProtectObject, false) } }
-
+        # Whether Protect rules are enforced on this instance. False does not mean the instance is outside Protect — by default it is still evaluated in shadow, where rules are scored and recorded but never block.
         field :rules_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('rules_enabled'), required: true } }
 
         field :specter_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('specter_enabled'), required: true } }
         # Whether the instance has opted out of the Protect prerequisite checks, asserting its setup already meets the requirements.
         field :checks_bypassed, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('checks_bypassed'), required: true } }
+        # Whether the Protect system has verified the instance's prerequisite checks. Protect rules are gated on checks being verified, bypassed or exempt.
+        field :checks_verified, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('checks_verified'), required: true } }
+        # Whether the instance was created into Protect and so was never subject to the prerequisite checks at all.
+        field :checks_exempt, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('checks_exempt'), required: true } }
 
         
-        def initialize(object:, rules_enabled:, specter_enabled:, checks_bypassed:)
+        def initialize(object:, rules_enabled:, specter_enabled:, checks_bypassed:, checks_verified:, checks_exempt:)
           @object = object
           @rules_enabled = rules_enabled
           @specter_enabled = specter_enabled
           @checks_bypassed = checks_bypassed
+          @checks_verified = checks_verified
+          @checks_exempt = checks_exempt
         end
 
         
@@ -36,6 +42,8 @@ module Clerk
           return false unless @rules_enabled == other.rules_enabled
           return false unless @specter_enabled == other.specter_enabled
           return false unless @checks_bypassed == other.checks_bypassed
+          return false unless @checks_verified == other.checks_verified
+          return false unless @checks_exempt == other.checks_exempt
           true
         end
       end
