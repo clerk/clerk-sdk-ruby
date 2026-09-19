@@ -27,7 +27,7 @@ module Clerk
         # Totals for the statement.
         field :totals, Models::Components::BillingStatementTotals, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('totals'), required: true } }
         # Array of statement groups.
-        field :groups, Crystalline::Array.new(Models::Components::Group), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('groups'), required: true } }
+        field :groups, Crystalline::Array.new(Models::Components::BillingStatementGroup), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('groups'), required: true } }
 
         
         def initialize(object:, id:, instance_id:, timestamp:, payer:, status:, totals:, groups:)

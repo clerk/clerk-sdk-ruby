@@ -18,15 +18,24 @@ module Clerk
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
 
         field :environment_type, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('environment_type'), required: true } }
+        # Subdomains of the instance's own domains that may originate requests, when the subdomain allowlist is enabled. Production instances only; always empty on a development instance.
+        field :allowed_subdomains, Crystalline::Array.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allowed_subdomains'), required: true } }
+        # Whether requests from subdomains of the instance's own domains are restricted to `allowed_subdomains`. When false, every subdomain of the instance's domain is accepted. Production instances only; always false on a development instance.
+        field :subdomain_allowlist_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('subdomain_allowlist_enabled'), required: true } }
 
         field :allowed_origins, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allowed_origins'), required: true } }
+        # The ID of the Clerk workspace that owns the instance's application. It is null when the application has no owner.
+        field :workspace_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('workspace_id'), required: true } }
 
         
-        def initialize(object:, id:, environment_type:, allowed_origins: nil)
+        def initialize(object:, id:, environment_type:, allowed_subdomains:, subdomain_allowlist_enabled:, allowed_origins: nil, workspace_id: nil)
           @object = object
           @id = id
           @environment_type = environment_type
+          @allowed_subdomains = allowed_subdomains
+          @subdomain_allowlist_enabled = subdomain_allowlist_enabled
           @allowed_origins = allowed_origins
+          @workspace_id = workspace_id
         end
 
         
@@ -35,7 +44,10 @@ module Clerk
           return false unless @object == other.object
           return false unless @id == other.id
           return false unless @environment_type == other.environment_type
+          return false unless @allowed_subdomains == other.allowed_subdomains
+          return false unless @subdomain_allowlist_enabled == other.subdomain_allowlist_enabled
           return false unless @allowed_origins == other.allowed_origins
+          return false unless @workspace_id == other.workspace_id
           true
         end
       end

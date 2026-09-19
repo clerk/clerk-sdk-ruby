@@ -16,6 +16,8 @@ class Clerk::Models::Operations::UpdateOrganizationRequestBody
   def max_allowed_memberships=(str_); end
   def admin_delete_enabled(); end
   def admin_delete_enabled=(str_); end
+  def self_serve_sso_enabled(); end
+  def self_serve_sso_enabled=(str_); end
   def created_at(); end
   def created_at=(str_); end
   def role_set_key(); end

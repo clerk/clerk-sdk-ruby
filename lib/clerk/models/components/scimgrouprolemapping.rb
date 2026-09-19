@@ -16,12 +16,18 @@ module Clerk
         field :object, Models::Components::SCIMGroupRoleMappingObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SCIMGroupRoleMappingObject, false) } }
         # Unique identifier for the SCIM group role mapping.
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
-        # The ID of the SCIM directory this mapping belongs to.
+        # The ID of the directory this mapping belongs to.
         field :scim_directory_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scim_directory_id'), required: true } }
+        # The ID of the directory this mapping belongs to. Same value as `scim_directory_id`.
+        field :directory_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directory_id'), required: true } }
         # The SCIM group ID from the identity provider.
         field :scim_group_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scim_group_id'), required: true } }
+        # The group ID from the identity provider. Same value as `scim_group_id`.
+        field :directory_group_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directory_group_id'), required: true } }
         # The display name of the SCIM group, as reported by the identity provider.
         field :scim_group_display_name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scim_group_display_name'), required: true } }
+        # The display name of the group, as reported by the identity provider. Same value as `scim_group_display_name`.
+        field :directory_group_display_name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directory_group_display_name'), required: true } }
         # Mapping precedence, starting at 1. Lower values take priority when a user belongs to multiple mapped groups.
         field :precedence, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('precedence'), required: true } }
         # Unix timestamp (milliseconds) of when the mapping was created.
@@ -32,12 +38,15 @@ module Clerk
         field :role, Crystalline::Nilable.new(Models::Components::Role), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('role') } }
 
         
-        def initialize(object:, id:, scim_directory_id:, scim_group_id:, scim_group_display_name:, precedence:, created_at:, updated_at:, role: nil)
+        def initialize(object:, id:, scim_directory_id:, directory_id:, scim_group_id:, directory_group_id:, scim_group_display_name:, directory_group_display_name:, precedence:, created_at:, updated_at:, role: nil)
           @object = object
           @id = id
           @scim_directory_id = scim_directory_id
+          @directory_id = directory_id
           @scim_group_id = scim_group_id
+          @directory_group_id = directory_group_id
           @scim_group_display_name = scim_group_display_name
+          @directory_group_display_name = directory_group_display_name
           @precedence = precedence
           @created_at = created_at
           @updated_at = updated_at
@@ -50,8 +59,11 @@ module Clerk
           return false unless @object == other.object
           return false unless @id == other.id
           return false unless @scim_directory_id == other.scim_directory_id
+          return false unless @directory_id == other.directory_id
           return false unless @scim_group_id == other.scim_group_id
+          return false unless @directory_group_id == other.directory_group_id
           return false unless @scim_group_display_name == other.scim_group_display_name
+          return false unless @directory_group_display_name == other.directory_group_display_name
           return false unless @precedence == other.precedence
           return false unless @created_at == other.created_at
           return false unless @updated_at == other.updated_at

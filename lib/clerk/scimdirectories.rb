@@ -42,8 +42,8 @@ module Clerk
 
     
     def list(limit: nil, offset: nil, retries: nil, timeout_ms: nil, http_headers: nil)
-      # list - List all SCIM directories
-      # Returns a list of all SCIM directories for the instance.
+      # list - List all directories
+      # Returns a list of all directories for the instance.
       request = Models::Operations::ListSCIMDirectoriesRequest.new(
         limit: limit,
         offset: offset
@@ -184,8 +184,8 @@ module Clerk
 
     
     def create(request: nil, retries: nil, timeout_ms: nil, http_headers: nil)
-      # create - Create a SCIM directory
-      # Create a new SCIM directory for the instance.
+      # create - Create a directory
+      # Create a new directory for the instance.
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
       url = "#{base_url}/scim_directories"
@@ -331,8 +331,8 @@ module Clerk
 
     
     def get(scim_directory_id:, retries: nil, timeout_ms: nil, http_headers: nil)
-      # get - Retrieve a SCIM directory
-      # Returns the details of a SCIM directory.
+      # get - Retrieve a directory
+      # Returns the details of a directory.
       request = Models::Operations::GetSCIMDirectoryRequest.new(
         scim_directory_id: scim_directory_id
       )
@@ -475,8 +475,8 @@ module Clerk
 
     
     def update(scim_directory_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
-      # update - Update a SCIM directory
-      # Updates a SCIM directory.
+      # update - Update a directory
+      # Updates a directory.
       request = Models::Operations::UpdateSCIMDirectoryRequest.new(
         scim_directory_id: scim_directory_id,
         body: body
@@ -631,8 +631,8 @@ module Clerk
 
     
     def delete(scim_directory_id:, retries: nil, timeout_ms: nil, http_headers: nil)
-      # delete - Delete a SCIM directory
-      # Deletes a SCIM directory and stops provisioning for it. SCIM requests authenticated
+      # delete - Delete a directory
+      # Deletes a directory and stops provisioning for it. SCIM requests authenticated
       # with the directory's API key are rejected afterwards.
       request = Models::Operations::DeleteSCIMDirectoryRequest.new(
         scim_directory_id: scim_directory_id
@@ -776,8 +776,8 @@ module Clerk
 
     
     def rotate_api_key(scim_directory_id:, retries: nil, timeout_ms: nil, http_headers: nil)
-      # rotate_api_key - Rotate a SCIM directory's API key
-      # Generates a new API key for the SCIM directory and returns it in the `api_key` field.
+      # rotate_api_key - Rotate a directory's API key
+      # Generates a new API key for the directory and returns it in the `api_key` field.
       # This is the only way to obtain the key after creation, so make sure to update it in
       # your identity provider. The previous key remains valid for a short grace period before
       # it expires.
@@ -895,7 +895,7 @@ module Clerk
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['401', '403', '404'])
+      elsif Utils.match_status_code(http_response.status, ['401', '403', '404', '422'])
         if Utils.match_content_type(content_type, 'application/json')
           http_response = @sdk_configuration.hooks.after_success(
             hook_ctx: SDKHooks::AfterSuccessHookContext.new(
@@ -924,7 +924,7 @@ module Clerk
     
     def list_group_role_mappings(scim_directory_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # list_group_role_mappings - List SCIM group role mappings
-      # Returns the list of SCIM group to organization role mappings for a SCIM directory, ordered by precedence.
+      # Returns the list of SCIM group to organization role mappings for a directory, ordered by precedence.
       request = Models::Operations::ListSCIMGroupRoleMappingsRequest.new(
         scim_directory_id: scim_directory_id
       )
@@ -1068,8 +1068,9 @@ module Clerk
     
     def create_group_role_mapping(body:, scim_directory_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # create_group_role_mapping - Create a SCIM group role mapping
-      # Creates a new SCIM group to organization role mapping for a SCIM directory.
-      # Group role mapping must be enabled on the directory.
+      # Creates a new SCIM group to organization role mapping for a directory.
+      # Mappings can be created while group role mapping is disabled on the
+      # directory, but they only take effect once it is enabled.
       request = Models::Operations::CreateSCIMGroupRoleMappingRequest.new(
         scim_directory_id: scim_directory_id,
         body: body
@@ -1228,8 +1229,9 @@ module Clerk
       # replace_group_role_mappings - Replace SCIM group role mappings
       # Replaces the entire set of SCIM group role mappings for a directory. The position of
       # each item in the `mappings` array determines its precedence (the first item gets
-      # precedence 1). Passing an empty array removes all mappings. Group role mapping must be
-      # enabled on the directory.
+      # precedence 1). Passing an empty array removes all mappings. Mappings can be replaced
+      # while group role mapping is disabled on the directory, but they only take effect once
+      # it is enabled.
       request = Models::Operations::ReplaceSCIMGroupRoleMappingsRequest.new(
         scim_directory_id: scim_directory_id,
         body: body
@@ -1386,8 +1388,9 @@ module Clerk
     
     def delete_group_role_mapping(scim_directory_id:, mapping_id:, retries: nil, timeout_ms: nil, http_headers: nil)
       # delete_group_role_mapping - Delete a SCIM group role mapping
-      # Deletes a single SCIM group role mapping. Group role mapping must be enabled on the
-      # directory.
+      # Deletes a single SCIM group role mapping. Mappings can be deleted while group role
+      # mapping is disabled on the directory, but the change only takes effect once it is
+      # enabled.
       request = Models::Operations::DeleteSCIMGroupRoleMappingRequest.new(
         scim_directory_id: scim_directory_id,
         mapping_id: mapping_id

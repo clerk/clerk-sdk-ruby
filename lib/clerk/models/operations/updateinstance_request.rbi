@@ -8,8 +8,6 @@ end
 
 
 class Clerk::Models::Operations::UpdateInstanceRequest
-  def allowed_origins(); end
-  def allowed_origins=(str_); end
   def test_mode(); end
   def test_mode=(str_); end
   def hibp(); end
@@ -20,6 +18,12 @@ class Clerk::Models::Operations::UpdateInstanceRequest
   def clerk_js_version=(str_); end
   def development_origin(); end
   def development_origin=(str_); end
+  def allowed_origins(); end
+  def allowed_origins=(str_); end
+  def allowed_subdomains(); end
+  def allowed_subdomains=(str_); end
+  def subdomain_allowlist_enabled(); end
+  def subdomain_allowlist_enabled=(str_); end
   def cookieless_dev(); end
   def cookieless_dev=(str_); end
   def url_based_session_syncing(); end
