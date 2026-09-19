@@ -1,6 +1,6 @@
 # SCIMDirectoryList
 
-A list of SCIM directories
+A list of directories
 
 
 ## Fields
@@ -8,4 +8,4 @@ A list of SCIM directories
 | Field                                                                                         | Type                                                                                          | Required                                                                                      | Description                                                                                   |
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | `data`                                                                                        | Crystalline::Array<[Models::Components::SCIMDirectory](../../models/shared/scimdirectory.md)> | :heavy_check_mark:                                                                            | N/A                                                                                           |
-| `total_count`                                                                                 | *::Integer*                                                                                   | :heavy_check_mark:                                                                            | Total number of SCIM directories.                                                             |
+| `total_count`                                                                                 | *::Integer*                                                                                   | :heavy_check_mark:                                                                            | Total number of directories.                                                                  |

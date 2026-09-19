@@ -8,6 +8,7 @@
 * [create](#create) - Create a new active session
 * [get](#get) - Retrieve a session
 * [refresh](#refresh) - Refresh a session
+* [get_reverification](#get_reverification) - Retrieve a reverification
 * [revoke](#revoke) - Revoke a session
 * [create_token](#create_token) - Create a session token
 * [create_token_from_template](#create_token_from_template) - Create a session token from a JWT template
@@ -185,6 +186,47 @@ end
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
 | Models::Errors::ClerkErrors | 400, 401                    | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## get_reverification
+
+Retrieve a reverification scoped to a session. A resource server can use this to validate a reverification id it received from its client: confirm it is real, scoped to the expected session, completed, and how fresh each factor is. Single-use / replay detection is the caller's responsibility (the id is stable, so the caller dedups consumed ids).
+
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="GetReverification" method="get" path="/sessions/{session_id}/reverifications/{reverification_id}" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.sessions.get_reverification(session_id: '<id>', reverification_id: '<id>')
+
+unless res.reverification.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                           | Type                                                | Required                                            | Description                                         |
+| --------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------- |
+| `session_id`                                        | *::String*                                          | :heavy_check_mark:                                  | The ID of the session the reverification belongs to |
+| `reverification_id`                                 | *::String*                                          | :heavy_check_mark:                                  | The ID of the reverification                        |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::GetReverificationResponse)](../../models/operations/getreverificationresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 400, 401, 404               | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## revoke

@@ -30,13 +30,15 @@ module Clerk
         field :created_at, ::Float, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
 
         field :updated_at, ::Float, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
+        # The audiences of the access token. Omitted when no audience is set.
+        field :aud, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('aud') } }
 
         field :revocation_reason, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('revocation_reason'), required: true } }
 
         field :expiration, Crystalline::Nilable.new(::Float), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expiration'), required: true } }
 
         
-        def initialize(object:, id:, client_id:, subject:, scopes:, revoked:, expired:, created_at:, updated_at:, revocation_reason: nil, expiration: nil)
+        def initialize(object:, id:, client_id:, subject:, scopes:, revoked:, expired:, created_at:, updated_at:, aud: nil, revocation_reason: nil, expiration: nil)
           @object = object
           @id = id
           @client_id = client_id
@@ -46,6 +48,7 @@ module Clerk
           @expired = expired
           @created_at = created_at
           @updated_at = updated_at
+          @aud = aud
           @revocation_reason = revocation_reason
           @expiration = expiration
         end
@@ -62,6 +65,7 @@ module Clerk
           return false unless @expired == other.expired
           return false unless @created_at == other.created_at
           return false unless @updated_at == other.updated_at
+          return false unless @aud == other.aud
           return false unless @revocation_reason == other.revocation_reason
           return false unless @expiration == other.expiration
           true

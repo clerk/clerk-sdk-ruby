@@ -14,18 +14,15 @@ module Clerk
 
         # The new domain name. Can contain the port for development instances.
         field :name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name'), required: true } }
-        # Marks the new domain as satellite. Only `true` is accepted at the moment.
+        # Marks the new domain as satellite. Set to `false` only when migrating a production instance from an active provider domain to a custom domain.
         field :is_satellite, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('is_satellite'), required: true } }
         # The full URL of the proxy which will forward requests to the Clerk Frontend API for this domain. Applicable only to production instances.
         field :proxy_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('proxy_url') } }
 
         
-        def initialize(name:, is_satellite: true, proxy_url: nil)
+        def initialize(name:, is_satellite:, proxy_url: nil)
           @name = name
-          unless is_satellite == true
-            raise ArgumentError, 'Invalid value for is_satellite'
-          end
-          @is_satellite = true
+          @is_satellite = is_satellite
           @proxy_url = proxy_url
         end
 

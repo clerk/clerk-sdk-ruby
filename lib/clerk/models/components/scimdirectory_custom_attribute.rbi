@@ -16,6 +16,8 @@ class Clerk::Models::Components::SCIMDirectoryCustomAttribute
   def sso_path=(str_); end
   def scim_path(); end
   def scim_path=(str_); end
+  def directory_path(); end
+  def directory_path=(str_); end
   def multi_valued(); end
   def multi_valued=(str_); end
 end

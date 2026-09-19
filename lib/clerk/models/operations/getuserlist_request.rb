@@ -103,6 +103,15 @@ module Clerk
         # Accepts up to 100 provider user IDs.
         # Any provider user IDs not found are ignored.
         field :provider_user_id, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'query_param': { 'field_name': 'provider_user_id', 'style': 'form', 'explode': true } }
+        # A cursor for pagination: the `id` of the last user on the previous page. Returns the users that follow it.
+        #
+        # **Requires ordering by `created_at`** — that is, `order_by` omitted, or set to `created_at`, `+created_at`
+        # or `-created_at`. Any other `order_by` value is rejected with a 422: the other orderings sort by a value
+        # that is neither unique per user nor immutable, so a cursor over them would skip or repeat users.
+        #
+        # Cannot be combined with a non-zero `offset`, which is also a 422. Keep every other parameter identical
+        # across requests, and stop when a page returns fewer than `limit` users.
+        field :starting_after, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'starting_after', 'style': 'form', 'explode': true } }
         # Applies a limit to the number of results returned.
         # Can be used for paginating the results together with `offset`.
         field :limit, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'limit', 'style': 'form', 'explode': true } }
@@ -116,10 +125,11 @@ module Clerk
         # For example, if you want users to be returned in descending order according to their `created_at` property, you can use `-created_at`.
         # If you don't use `+` or `-`, then `+` is implied. We only support one `order_by` parameter, and if multiple `order_by` parameters are provided, we will only keep the first one. For example,
         # if you pass `order_by=username&order_by=created_at`, we will consider only the first `order_by` parameter, which is `username`. The `created_at` parameter will be ignored in this case.
+        # Only the `created_at` orderings can be combined with `starting_after` cursor pagination; see that parameter.
         field :order_by, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'order_by', 'style': 'form', 'explode': true } }
 
         
-        def initialize(email_address: nil, phone_number: nil, external_id: nil, username: nil, web3_wallet: nil, user_id: nil, organization_id: nil, query: nil, email_address_query: nil, phone_number_query: nil, username_query: nil, name_query: nil, banned: nil, last_active_at_before: nil, last_active_at_after: nil, last_active_at_since: nil, created_at_before: nil, created_at_after: nil, last_sign_in_at_before: nil, last_sign_in_at_after: nil, provider: nil, provider_user_id: nil, limit: 10, offset: 0, order_by: '-created_at')
+        def initialize(email_address: nil, phone_number: nil, external_id: nil, username: nil, web3_wallet: nil, user_id: nil, organization_id: nil, query: nil, email_address_query: nil, phone_number_query: nil, username_query: nil, name_query: nil, banned: nil, last_active_at_before: nil, last_active_at_after: nil, last_active_at_since: nil, created_at_before: nil, created_at_after: nil, last_sign_in_at_before: nil, last_sign_in_at_after: nil, provider: nil, provider_user_id: nil, starting_after: nil, limit: 10, offset: 0, order_by: '-created_at')
           @email_address = email_address
           @phone_number = phone_number
           @external_id = external_id
@@ -142,6 +152,7 @@ module Clerk
           @last_sign_in_at_after = last_sign_in_at_after
           @provider = provider
           @provider_user_id = provider_user_id
+          @starting_after = starting_after
           @limit = limit
           @offset = offset
           @order_by = order_by
@@ -172,6 +183,7 @@ module Clerk
           return false unless @last_sign_in_at_after == other.last_sign_in_at_after
           return false unless @provider == other.provider
           return false unless @provider_user_id == other.provider_user_id
+          return false unless @starting_after == other.starting_after
           return false unless @limit == other.limit
           return false unless @offset == other.offset
           return false unless @order_by == other.order_by

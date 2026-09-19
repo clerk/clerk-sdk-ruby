@@ -12,7 +12,7 @@ module Clerk
         
         include Crystalline::MetadataFields
 
-        # The ID of the domain that will be deleted. Must be a satellite domain.
+        # The ID of the domain that will be deleted.
         field :domain_id, ::String, { 'path_param': { 'field_name': 'domain_id', 'style': 'simple', 'explode': false } }
 
         

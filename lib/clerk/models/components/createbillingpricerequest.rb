@@ -14,7 +14,7 @@ module Clerk
 
         # The ID of the plan this price belongs to.
         field :plan_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('plan_id'), required: true } }
-        # The monthly amount in cents. Must be at least $1 (100 cents) if not null.
+        # The monthly amount in cents. Use `0` for a complimentary price. Positive amounts must be at least $1 (100 cents).
         field :amount, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('amount'), required: true } }
         # An optional description for this custom price.
         field :description, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('description') } }
@@ -22,7 +22,7 @@ module Clerk
         field :supported_billing_periods, Crystalline::Nilable.new(Models::Components::CreateBillingPriceRequestSupportedBillingPeriods), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('supported_billing_periods'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::CreateBillingPriceRequestSupportedBillingPeriods, true) } }
         # The currency code (e.g., "USD"). Defaults to USD.
         field :currency, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('currency') } }
-        # The monthly amount in cents when billed annually. Must be at least $1 (100 cents) if not null.
+        # The monthly amount in cents when billed annually. Use `0` for a complimentary price. Positive amounts must be at least $1 (100 cents).
         field :annual_monthly_amount, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('annual_monthly_amount') } }
 
         

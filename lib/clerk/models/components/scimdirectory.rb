@@ -7,30 +7,30 @@
 module Clerk
   module Models
     module Components
-      # A SCIM directory configuration for provisioning users via SCIM protocol.
+      # A directory configuration for provisioning users via SCIM protocol.
       class SCIMDirectory
         
         include Crystalline::MetadataFields
 
         # String representing the object's type. Always "scim_directory".
         field :object, Models::Components::SCIMDirectoryObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SCIMDirectoryObject, false) } }
-        # Unique identifier for the SCIM directory.
+        # Unique identifier for the directory.
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
-        # A human-friendly name for the SCIM directory.
+        # A human-friendly name for the directory.
         field :name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name'), required: true } }
         # The SCIM endpoint URL for this directory.
         field :endpoint_url, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('endpoint_url'), required: true } }
-        # The identity provider for this SCIM directory.
+        # The identity provider for this directory.
         field :provider, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider'), required: true } }
-        # Whether the SCIM directory is enabled.
+        # Whether the directory is enabled.
         field :enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enabled'), required: true } }
-        # Whether group-to-role mapping is enabled for this SCIM directory.
+        # Whether group-to-role mapping is enabled for this directory.
         field :group_role_mapping_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('group_role_mapping_enabled'), required: true } }
         # Mapping of user attributes to the SCIM attribute paths they are extracted from.
         field :attribute_mapping, Crystalline::Hash.new(Symbol, ::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('attribute_mapping'), required: true } }
-        # Unix timestamp when the SCIM directory was created.
+        # Unix timestamp when the directory was created.
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
-        # Unix timestamp when the SCIM directory was last updated.
+        # Unix timestamp when the directory was last updated.
         field :updated_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
         # Custom attributes to map from the IdP to the user's profile via SCIM provisioning. Requires the custom attributes feature to be enabled for the instance.
         field :custom_attributes, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::SCIMDirectoryCustomAttribute)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('custom_attributes') } }

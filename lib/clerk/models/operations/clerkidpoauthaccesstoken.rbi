@@ -26,6 +26,8 @@ class Clerk::Models::Operations::ClerkIdpOauthAccessToken
   def created_at=(str_); end
   def updated_at(); end
   def updated_at=(str_); end
+  def aud(); end
+  def aud=(str_); end
   def revocation_reason(); end
   def revocation_reason=(str_); end
   def expiration(); end

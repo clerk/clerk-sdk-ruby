@@ -1,0 +1,23 @@
+# typed: false
+# frozen_string_literal: true
+
+
+class Clerk::Models::Components::DirectoryCustomAttribute
+  extend ::Crystalline::MetadataFields::ClassMethods
+end
+
+
+class Clerk::Models::Components::DirectoryCustomAttribute
+  def name(); end
+  def name=(str_); end
+  def key(); end
+  def key=(str_); end
+  def sso_path(); end
+  def sso_path=(str_); end
+  def scim_path(); end
+  def scim_path=(str_); end
+  def directory_path(); end
+  def directory_path=(str_); end
+  def multi_valued(); end
+  def multi_valued=(str_); end
+end
