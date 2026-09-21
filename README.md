@@ -397,6 +397,8 @@ end
 * [cancel_subscription_item](docs/sdks/billing/README.md#cancel_subscription_item) - Cancel a subscription item
 * [extend_subscription_item_free_trial](docs/sdks/billing/README.md#extend_subscription_item_free_trial) - Extend free trial for a subscription item
 * [create_price_transition](docs/sdks/billing/README.md#create_price_transition) - Create a price transition for a subscription item
+* [apply_subscription_item_discount](docs/sdks/billing/README.md#apply_subscription_item_discount) - Apply a discount to a subscription item
+* [remove_subscription_item_discount](docs/sdks/billing/README.md#remove_subscription_item_discount) - Remove a discount from a subscription item
 * [list_statements](docs/sdks/billing/README.md#list_statements) - List all billing statements
 * [get_statement](docs/sdks/billing/README.md#get_statement) - Retrieve a billing statement
 * [get_statement_payment_attempts](docs/sdks/billing/README.md#get_statement_payment_attempts) - List payment attempts for a billing statement
@@ -413,11 +415,24 @@ end
 * [verify](docs/sdks/clients/README.md#verify) - Verify a client
 * [get](docs/sdks/clients/README.md#get) - Get a client
 
+### [Directories](docs/sdks/directories/README.md)
+
+* [list](docs/sdks/directories/README.md#list) - List all directories
+* [create](docs/sdks/directories/README.md#create) - Create a directory
+* [get](docs/sdks/directories/README.md#get) - Retrieve a directory
+* [update](docs/sdks/directories/README.md#update) - Update a directory
+* [delete](docs/sdks/directories/README.md#delete) - Delete a directory
+* [rotate_api_key](docs/sdks/directories/README.md#rotate_api_key) - Rotate a directory's API key
+* [list_group_role_mappings](docs/sdks/directories/README.md#list_group_role_mappings) - List directory group role mappings
+* [create_group_role_mapping](docs/sdks/directories/README.md#create_group_role_mapping) - Create a directory group role mapping
+* [replace_group_role_mappings](docs/sdks/directories/README.md#replace_group_role_mappings) - Replace directory group role mappings
+* [delete_group_role_mapping](docs/sdks/directories/README.md#delete_group_role_mapping) - Delete a directory group role mapping
+
 ### [Domains](docs/sdks/domains/README.md)
 
 * [list](docs/sdks/domains/README.md#list) - List all instance domains
 * [add](docs/sdks/domains/README.md#add) - Add a domain
-* [delete](docs/sdks/domains/README.md#delete) - Delete a satellite domain
+* [delete](docs/sdks/domains/README.md#delete) - Delete a domain
 * [update](docs/sdks/domains/README.md#update) - Update a domain
 
 ### [EmailAddresses](docs/sdks/emailaddresses/README.md)
@@ -624,12 +639,12 @@ end
 
 ### [ScimDirectories](docs/sdks/scimdirectories/README.md)
 
-* [list](docs/sdks/scimdirectories/README.md#list) - List all SCIM directories
-* [create](docs/sdks/scimdirectories/README.md#create) - Create a SCIM directory
-* [get](docs/sdks/scimdirectories/README.md#get) - Retrieve a SCIM directory
-* [update](docs/sdks/scimdirectories/README.md#update) - Update a SCIM directory
-* [delete](docs/sdks/scimdirectories/README.md#delete) - Delete a SCIM directory
-* [rotate_api_key](docs/sdks/scimdirectories/README.md#rotate_api_key) - Rotate a SCIM directory's API key
+* [list](docs/sdks/scimdirectories/README.md#list) - List all directories
+* [create](docs/sdks/scimdirectories/README.md#create) - Create a directory
+* [get](docs/sdks/scimdirectories/README.md#get) - Retrieve a directory
+* [update](docs/sdks/scimdirectories/README.md#update) - Update a directory
+* [delete](docs/sdks/scimdirectories/README.md#delete) - Delete a directory
+* [rotate_api_key](docs/sdks/scimdirectories/README.md#rotate_api_key) - Rotate a directory's API key
 * [list_group_role_mappings](docs/sdks/scimdirectories/README.md#list_group_role_mappings) - List SCIM group role mappings
 * [create_group_role_mapping](docs/sdks/scimdirectories/README.md#create_group_role_mapping) - Create a SCIM group role mapping
 * [replace_group_role_mappings](docs/sdks/scimdirectories/README.md#replace_group_role_mappings) - Replace SCIM group role mappings
@@ -641,6 +656,7 @@ end
 * [create](docs/sdks/sessions/README.md#create) - Create a new active session
 * [get](docs/sdks/sessions/README.md#get) - Retrieve a session
 * [refresh](docs/sdks/sessions/README.md#refresh) - Refresh a session
+* [get_reverification](docs/sdks/sessions/README.md#get_reverification) - Retrieve a reverification
 * [revoke](docs/sdks/sessions/README.md#revoke) - Revoke a session
 * [create_token](docs/sdks/sessions/README.md#create_token) - Create a session token
 * [create_token_from_template](docs/sdks/sessions/README.md#create_token_from_template) - Create a session token from a JWT template
@@ -693,8 +709,10 @@ end
 * [disable_mfa](docs/sdks/users/README.md#disable_mfa) - Disable a user's MFA methods
 * [delete_backup_codes](docs/sdks/users/README.md#delete_backup_codes) - Disable all user's Backup codes
 * [delete_passkey](docs/sdks/users/README.md#delete_passkey) - Delete a user passkey
-* [list_trusted_devices](docs/sdks/users/README.md#list_trusted_devices) - List a user's trusted devices
-* [revoke_trusted_device](docs/sdks/users/README.md#revoke_trusted_device) - Revoke a user's trusted device
+* [~~list_trusted_devices~~](docs/sdks/users/README.md#list_trusted_devices) - List a user's trusted devices :warning: **Deprecated**
+* [~~revoke_trusted_device~~](docs/sdks/users/README.md#revoke_trusted_device) - Revoke a user's trusted device :warning: **Deprecated**
+* [list_biometric_credentials](docs/sdks/users/README.md#list_biometric_credentials) - List a user's biometric credentials
+* [revoke_biometric_credential](docs/sdks/users/README.md#revoke_biometric_credential) - Revoke a user's biometric credential
 * [delete_web3_wallet](docs/sdks/users/README.md#delete_web3_wallet) - Delete a user web3 wallet
 * [delete_totp](docs/sdks/users/README.md#delete_totp) - Delete all the user's TOTPs
 * [delete_external_account](docs/sdks/users/README.md#delete_external_account) - Delete External Account

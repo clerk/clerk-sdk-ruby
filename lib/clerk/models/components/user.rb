@@ -107,6 +107,13 @@ module Clerk
         # Unix timestamp of when the user accepted the legal requirements.
         #
         field :legal_accepted_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('legal_accepted_at'), required: true } }
+        # All loaded directory links. Omitted when links were not loaded; an empty array means the user has no directory links.
+        #
+        field :directories, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::SCIMUserMetadata)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directories') } }
+        # The most recently updated directory link. Use directories for all links.
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
+        field :directory, Crystalline::Nilable.new(Models::Components::UserDirectory), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directory') } }
 
         field :locale, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('locale') } }
 
@@ -117,13 +124,15 @@ module Clerk
         # The maximum number of organizations the user can create. 0 means unlimited.
         #
         field :create_organizations_limit, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('create_organizations_limit') } }
-        # When set to `true`, the user will bypass client trust checks during sign-in.
+        # When set to `true`, the user will bypass Device Trust checks during sign-in.
         field :bypass_client_trust, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('bypass_client_trust') } }
-
+        # Alias of directory. Use directories for all links.
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :scim, Crystalline::Nilable.new(Models::Components::UserScim), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scim') } }
 
         
-        def initialize(id:, object:, has_image:, public_metadata:, email_addresses:, phone_numbers:, web3_wallets:, passkeys:, password_enabled:, two_factor_enabled:, totp_enabled:, backup_code_enabled:, external_accounts:, saml_accounts:, enterprise_accounts:, banned:, locked:, updated_at:, created_at:, delete_self_enabled:, create_organization_enabled:, external_id: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, first_name: nil, last_name: nil, profile_image_url: nil, image_url: nil, unsafe_metadata: nil, mfa_enabled_at: nil, mfa_disabled_at: nil, organization_memberships: nil, last_sign_in_at: nil, deprovisioned: nil, lockout_expires_in_seconds: nil, verification_attempts_remaining: nil, last_active_at: nil, legal_accepted_at: nil, locale: nil, private_metadata: nil, password_last_updated_at: nil, create_organizations_limit: nil, bypass_client_trust: false, scim: nil)
+        def initialize(id:, object:, has_image:, public_metadata:, email_addresses:, phone_numbers:, web3_wallets:, passkeys:, password_enabled:, two_factor_enabled:, totp_enabled:, backup_code_enabled:, external_accounts:, saml_accounts:, enterprise_accounts:, banned:, locked:, updated_at:, created_at:, delete_self_enabled:, create_organization_enabled:, external_id: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, first_name: nil, last_name: nil, profile_image_url: nil, image_url: nil, unsafe_metadata: nil, mfa_enabled_at: nil, mfa_disabled_at: nil, organization_memberships: nil, last_sign_in_at: nil, deprovisioned: nil, lockout_expires_in_seconds: nil, verification_attempts_remaining: nil, last_active_at: nil, legal_accepted_at: nil, directories: nil, directory: nil, locale: nil, private_metadata: nil, password_last_updated_at: nil, create_organizations_limit: nil, bypass_client_trust: false, scim: nil)
           @id = id
           @object = object
           @has_image = has_image
@@ -164,6 +173,8 @@ module Clerk
           @verification_attempts_remaining = verification_attempts_remaining
           @last_active_at = last_active_at
           @legal_accepted_at = legal_accepted_at
+          @directories = directories
+          @directory = directory
           @locale = locale
           @private_metadata = private_metadata
           @password_last_updated_at = password_last_updated_at
@@ -215,6 +226,8 @@ module Clerk
           return false unless @verification_attempts_remaining == other.verification_attempts_remaining
           return false unless @last_active_at == other.last_active_at
           return false unless @legal_accepted_at == other.legal_accepted_at
+          return false unless @directories == other.directories
+          return false unless @directory == other.directory
           return false unless @locale == other.locale
           return false unless @private_metadata == other.private_metadata
           return false unless @password_last_updated_at == other.password_last_updated_at

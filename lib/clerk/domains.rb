@@ -168,7 +168,10 @@ module Clerk
       # Add a new domain for your instance.
       # Useful in the case of multi-domain instances, allows adding satellite domains to an instance.
       # The new domain must have a `name`. The domain name can contain the port for development instances, like `localhost:3000`.
-      # At the moment, instances can have only one primary domain, so the `is_satellite` parameter must be set to `true`.
+      # Set `is_satellite` to `true` to add a satellite domain.
+      # To migrate a production instance from an active provider domain to its first custom primary domain,
+      # set `is_satellite` to `false`. The custom domain becomes active and the provider domain stays attached.
+      # Additional custom primary domains are not supported.
       # If you're planning to configure the new satellite domain to run behind a proxy, pass the `proxy_url` parameter accordingly.
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
@@ -315,9 +318,9 @@ module Clerk
 
     
     def delete(domain_id:, retries: nil, timeout_ms: nil, http_headers: nil)
-      # delete - Delete a satellite domain
-      # Deletes a satellite domain for the instance.
-      # It is currently not possible to delete the instance's primary domain.
+      # delete - Delete a domain
+      # Deletes a domain for the instance.
+      # The instance's active domain cannot be deleted.
       request = Models::Operations::DeleteDomainRequest.new(
         domain_id: domain_id
       )

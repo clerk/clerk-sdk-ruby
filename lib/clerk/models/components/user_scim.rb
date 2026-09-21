@@ -7,34 +7,55 @@
 module Clerk
   module Models
     module Components
-      # Metadata describing a user's linkage to a SCIM directory. This object is only delivered on `user.created` and `user.updated` webhook events, and only when the user is provisioned through a SCIM directory. Its absence does not necessarily mean the user is not SCIM-managed.
+      # Alias of directory. Use directories for all links.
       #
+      # @deprecated class: This will be removed in a future release, please migrate away from it as soon as possible.
       class UserScim
         
         include Crystalline::MetadataFields
 
-        # The ID of the SCIM directory the user is provisioned from.
+        # The user's resource ID in this directory.
+        field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
+
+        field :directory_name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directory_name'), required: true } }
+
+        field :provider, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider'), required: true } }
+        # The ID of the directory the user is provisioned from.
         #
         field :directory_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directory_id'), required: true } }
-        # Whether the SCIM directory is currently enabled. Omitted when false.
+        # Whether the directory is currently enabled.
         #
-        field :directory_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directory_enabled') } }
-        # The user's external ID as reported by the SCIM directory, if any.
+        field :directory_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('directory_enabled'), required: true } }
+
+        field :enterprise_connection_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enterprise_connection_id'), required: true } }
+        # Omitted when groups were not loaded; an empty array means no group memberships.
+        field :groups, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::ScimGroup)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('groups') } }
+        # The user's external ID as reported by the directory, if any.
         #
         field :external_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('external_id'), required: true } }
 
         
-        def initialize(directory_id:, directory_enabled: nil, external_id: nil)
+        def initialize(id:, directory_name:, provider:, directory_id:, directory_enabled:, enterprise_connection_id: nil, groups: nil, external_id: nil)
+          @id = id
+          @directory_name = directory_name
+          @provider = provider
           @directory_id = directory_id
           @directory_enabled = directory_enabled
+          @enterprise_connection_id = enterprise_connection_id
+          @groups = groups
           @external_id = external_id
         end
 
         
         def ==(other)
           return false unless other.is_a? self.class
+          return false unless @id == other.id
+          return false unless @directory_name == other.directory_name
+          return false unless @provider == other.provider
           return false unless @directory_id == other.directory_id
           return false unless @directory_enabled == other.directory_enabled
+          return false unless @enterprise_connection_id == other.enterprise_connection_id
+          return false unless @groups == other.groups
           return false unless @external_id == other.external_id
           true
         end
