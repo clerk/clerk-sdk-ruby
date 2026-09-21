@@ -12,7 +12,7 @@ module Clerk
         
         include Crystalline::MetadataFields
 
-
+        # Set true to enforce Protect rules on this instance. Set false to stop enforcing and return the instance to its default posture, where traffic is still evaluated in shadow but nothing is blocked. This does not remove the instance from Protect.
         field :rules_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('rules_enabled') } }
 
         field :specter_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('specter_enabled') } }

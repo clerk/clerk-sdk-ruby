@@ -88,6 +88,10 @@ class Clerk::Models::Components::User
   def last_active_at=(str_); end
   def legal_accepted_at(); end
   def legal_accepted_at=(str_); end
+  def directories(); end
+  def directories=(str_); end
+  def directory(); end
+  def directory=(str_); end
   def locale(); end
   def locale=(str_); end
   def private_metadata(); end

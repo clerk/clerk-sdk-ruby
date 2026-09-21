@@ -12,8 +12,6 @@ module Clerk
         
         include Crystalline::MetadataFields
 
-        # For browser-like stacks such as browser extensions, Electron (not officially supported), or Capacitor.js (not officially supported), the instance allowed origins need to be updated with the request origin value. For Chrome extensions popup, background, or service worker pages, the origin is chrome-extension://extension_uuid. For Electron apps the default origin is http://localhost:3000. For Capacitor, the origin is capacitor://localhost.
-        field :allowed_origins, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allowed_origins') } }
         # Toggles test mode for this instance, allowing the use of test email addresses and phone numbers.
         # Defaults to true for development instances.
         field :test_mode, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('test_mode') } }
@@ -25,6 +23,14 @@ module Clerk
         field :clerk_js_version, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('clerk_js_version') } }
 
         field :development_origin, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('development_origin') } }
+        # For browser-like stacks such as browser extensions, Electron (not officially supported), or Capacitor.js (not officially supported), the instance allowed origins need to be updated with the request origin value. For Chrome extensions popup, background, or service worker pages, the origin is chrome-extension://extension_uuid. For Electron apps the default origin is http://localhost:3000. For Capacitor, the origin is capacitor://localhost.
+        # Send an empty array to remove all allowed origins. A null value leaves the current list unchanged.
+        field :allowed_origins, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allowed_origins') } }
+        # Subdomains of the instance's own domains that may originate requests while `subdomain_allowlist_enabled` is true. Each entry is either an exact host (`app.example.com`) or a wildcard anchored on a host beneath one of the instance's domains (`*.preview.example.com`), which covers every host under that anchor but not the anchor itself.
+        # Entries are stored folded to lower case with any trailing dot removed, the form the origin check compares against, so entries differing only in those respects are one entry. Entries already stored are not validated again, so a list read back from the instance can always be written again unchanged. Send an empty array to remove all entries. A null value leaves the current list unchanged. Production instances only.
+        field :allowed_subdomains, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allowed_subdomains') } }
+        # Whether requests from subdomains of the instance's own domains are restricted to `allowed_subdomains`. When false, every subdomain of the instance's domain is accepted. Production instances only.
+        field :subdomain_allowlist_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('subdomain_allowlist_enabled') } }
         # Whether the instance should operate in cookieless development mode (i.e. without third-party cookies).
         # Deprecated: Please use `url_based_session_syncing` instead.
         #
@@ -36,13 +42,15 @@ module Clerk
         field :preferred_sign_in_strategy_when_password_required, Crystalline::Nilable.new(Models::Operations::PreferredSignInStrategyWhenPasswordRequired), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('preferred_sign_in_strategy_when_password_required'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::PreferredSignInStrategyWhenPasswordRequired, true) } }
 
         
-        def initialize(allowed_origins: nil, test_mode: nil, hibp: nil, support_email: nil, clerk_js_version: nil, development_origin: nil, cookieless_dev: nil, url_based_session_syncing: nil, preferred_sign_in_strategy_when_password_required: nil)
-          @allowed_origins = allowed_origins
+        def initialize(test_mode: nil, hibp: nil, support_email: nil, clerk_js_version: nil, development_origin: nil, allowed_origins: nil, allowed_subdomains: nil, subdomain_allowlist_enabled: nil, cookieless_dev: nil, url_based_session_syncing: nil, preferred_sign_in_strategy_when_password_required: nil)
           @test_mode = test_mode
           @hibp = hibp
           @support_email = support_email
           @clerk_js_version = clerk_js_version
           @development_origin = development_origin
+          @allowed_origins = allowed_origins
+          @allowed_subdomains = allowed_subdomains
+          @subdomain_allowlist_enabled = subdomain_allowlist_enabled
           @cookieless_dev = cookieless_dev
           @url_based_session_syncing = url_based_session_syncing
           @preferred_sign_in_strategy_when_password_required = preferred_sign_in_strategy_when_password_required
@@ -51,12 +59,14 @@ module Clerk
         
         def ==(other)
           return false unless other.is_a? self.class
-          return false unless @allowed_origins == other.allowed_origins
           return false unless @test_mode == other.test_mode
           return false unless @hibp == other.hibp
           return false unless @support_email == other.support_email
           return false unless @clerk_js_version == other.clerk_js_version
           return false unless @development_origin == other.development_origin
+          return false unless @allowed_origins == other.allowed_origins
+          return false unless @allowed_subdomains == other.allowed_subdomains
+          return false unless @subdomain_allowlist_enabled == other.subdomain_allowlist_enabled
           return false unless @cookieless_dev == other.cookieless_dev
           return false unless @url_based_session_syncing == other.url_based_session_syncing
           return false unless @preferred_sign_in_strategy_when_password_required == other.preferred_sign_in_strategy_when_password_required

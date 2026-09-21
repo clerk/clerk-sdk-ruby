@@ -7,14 +7,14 @@
 module Clerk
   module Models
     module Components
-      # A list of SCIM directories
+      # A list of directories
       class SCIMDirectoryList
         
         include Crystalline::MetadataFields
 
 
         field :data, Crystalline::Array.new(Models::Components::SCIMDirectory), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('data'), required: true } }
-        # Total number of SCIM directories.
+        # Total number of directories.
         field :total_count, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('total_count'), required: true } }
 
         

@@ -72,7 +72,7 @@ module Clerk
         field :create_organizations_limit, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('create_organizations_limit') } }
         # A custom date/time denoting _when_ the user signed up to the application.
         field :created_at, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at') } }
-        # When set to `true`, the user will bypass client trust checks during sign-in.
+        # When set to `true`, the user will bypass Device Trust checks during sign-in.
         field :bypass_client_trust, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('bypass_client_trust') } }
         # If set to `true`, the user will be notified that their primary email address has changed.
         # By default, no notification is sent.

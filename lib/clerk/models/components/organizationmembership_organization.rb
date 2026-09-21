@@ -49,12 +49,15 @@ module Clerk
         # Unix timestamp of last activity.
         #
         field :last_active_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_active_at') } }
+        # Whether this organization can configure self-serve enterprise SSO.
+        #
+        field :self_serve_sso_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('self_serve_sso_enabled') } }
         # The key of the [role set](https://clerk.com/docs/guides/organizations/control-access/role-sets) assigned to this organization.
         #
         field :role_set_key, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('role_set_key') } }
 
         
-        def initialize(object:, id:, name:, slug:, has_image:, max_allowed_memberships:, admin_delete_enabled:, public_metadata:, created_at:, updated_at:, image_url: nil, members_count: nil, missing_member_with_elevated_permissions: nil, pending_invitations_count: nil, private_metadata: nil, created_by: nil, last_active_at: nil, role_set_key: nil)
+        def initialize(object:, id:, name:, slug:, has_image:, max_allowed_memberships:, admin_delete_enabled:, public_metadata:, created_at:, updated_at:, image_url: nil, members_count: nil, missing_member_with_elevated_permissions: nil, pending_invitations_count: nil, private_metadata: nil, created_by: nil, last_active_at: nil, self_serve_sso_enabled: nil, role_set_key: nil)
           @object = object
           @id = id
           @name = name
@@ -72,6 +75,7 @@ module Clerk
           @private_metadata = private_metadata
           @created_by = created_by
           @last_active_at = last_active_at
+          @self_serve_sso_enabled = self_serve_sso_enabled
           @role_set_key = role_set_key
         end
 
@@ -95,6 +99,7 @@ module Clerk
           return false unless @private_metadata == other.private_metadata
           return false unless @created_by == other.created_by
           return false unless @last_active_at == other.last_active_at
+          return false unless @self_serve_sso_enabled == other.self_serve_sso_enabled
           return false unless @role_set_key == other.role_set_key
           true
         end

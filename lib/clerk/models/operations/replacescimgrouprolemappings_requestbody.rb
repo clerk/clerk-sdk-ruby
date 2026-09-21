@@ -13,7 +13,7 @@ module Clerk
         include Crystalline::MetadataFields
 
         # The desired set of mappings. Array order sets precedence (1-indexed). An empty array clears all mappings.
-        field :mappings, Crystalline::Array.new(Models::Operations::Mapping), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('mappings'), required: true } }
+        field :mappings, Crystalline::Array.new(Models::Operations::ReplaceSCIMGroupRoleMappingsMapping), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('mappings'), required: true } }
 
         
         def initialize(mappings:)
