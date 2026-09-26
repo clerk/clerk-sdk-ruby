@@ -1,4 +1,4 @@
-speakeasyVersion: 1.798.0
+speakeasyVersion: 1.799.0
 sources:
     Clerk-OAS:
         sourceNamespace: clerk-openapi
@@ -14,7 +14,7 @@ targets:
         sourceRevisionDigest: sha256:9379d51a1b15b61a7695a5e1545e6451dd1bba70f1475e925eb91a5fd9d16ba2
         sourceBlobDigest: sha256:c5a2b505204842c00daa4e8cf02cd1ee6153f6bb8c616e8330eaefb5557ff297
         codeSamplesNamespace: clerk-oas-ruby-code-samples
-        codeSamplesRevisionDigest: sha256:3603adf7ac00c211b15063d8cef3257b157328ff181ec1b0fbcac1c76f2ac72c
+        codeSamplesRevisionDigest: sha256:00ba01d4a22b55f975859bcbe2216fe1ebc348e5ee9cc3c498dec21430eb90b3
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest

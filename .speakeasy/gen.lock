@@ -3,17 +3,17 @@ id: fd90517c-269f-472b-924b-9e891a9dd646
 management:
   docChecksum: b03e3390aaa6e645468a26976949a077
   docVersion: "2026-05-12"
-  speakeasyVersion: 1.798.0
-  generationVersion: 2.938.0
-  releaseVersion: 8.0.1
-  configChecksum: 8eff33eae067c108c12b16e813839705
+  speakeasyVersion: 1.799.0
+  generationVersion: 2.941.0
+  releaseVersion: 8.0.2
+  configChecksum: e3d3f99a8cf421600f4bb5cbad948030
   repoURL: https://github.com/clerk/clerk-sdk-ruby.git
   installationURL: https://github.com/clerk/clerk-sdk-ruby
   published: true
 persistentEdits:
-  generation_id: 5ce1ba72-b512-4141-8e5b-71a788fbc49f
-  pristine_commit_hash: e302245bfbc12da91e04463f4625c85352905033
-  pristine_tree_hash: e4bdc170ef33b33128f960b3a09895ec02b7cb03
+  generation_id: 0f271584-36ef-4b38-a0a1-a23a685df1a6
+  pristine_commit_hash: 19fbcb331496a263181e315a0403594a9ed9a589
+  pristine_tree_hash: 2354fadd11065b41427325a0cd26bda92130d9ac
 features:
   ruby:
     additionalProperties: 0.1.1
@@ -51,8 +51,8 @@ trackedFiles:
     pristine_git_object: b0ea40558f3ca80dcf7d30b159d34a1e5ab33440
   Gemfile.lock:
     id: 21fb5836b499
-    last_write_checksum: sha1:f03cd211ddedffc21f73499ae9acc0d7027c0d4a
-    pristine_git_object: 519a6271a70d689d1ee66f1cdd300b58da4c8f77
+    last_write_checksum: sha1:b3ede7a0531e927902616aca9c9ecfbaf9ed1e6b
+    pristine_git_object: d8dc15fed6992319f04bd4788a883aa9760959ad
   Rakefile:
     id: 44b7fa1ba503
     last_write_checksum: sha1:a586fbe304fe2796dd3ae6d82eab76a6d0ed19ae
@@ -63,8 +63,8 @@ trackedFiles:
     pristine_git_object: 02061974cdb8ca553123eda01f761a8b145e2f5c
   clerk-sdk-ruby.gemspec:
     id: 1d24faa8ee4c
-    last_write_checksum: sha1:3afd3b6dcabd05d369cdad7d03eb435b70e9a56e
-    pristine_git_object: 90a4af964df0dcf54bbdcdc79eccc181539fa825
+    last_write_checksum: sha1:347bf443505162e7c4ec5a831ebc14704e021a49
+    pristine_git_object: dd3702f725a5a02b2891f8f93d199b947bfd14ee
   docs/models/components/action.md:
     id: 4c3e678208a3
     last_write_checksum: sha1:b2c812855b499311371bbfcfc1146bb169fcde20
@@ -15171,8 +15171,8 @@ trackedFiles:
     pristine_git_object: a9439db9cbc91b3abef17baf0d438a99a9190cf0
   lib/clerk/sdkconfiguration.rb:
     id: 005b930c709e
-    last_write_checksum: sha1:43b409cf3559acd65e464cb400beac466db9415c
-    pristine_git_object: 1ca5dd177aa0b476ba48393eddccb40fcd91d64f
+    last_write_checksum: sha1:1d2ff687adb5b525626b7507c477382e8112bc78
+    pristine_git_object: e2b283b36aa0a2a1bd7404b7b8a98e754e60543a
   lib/clerk/sdkconfiguration.rbi:
     id: c7163e8cf2ca
     last_write_checksum: sha1:fea1767a154b4575f107e7dda123f1cc89a1c581
@@ -18021,7 +18021,6 @@ examples:
         "400":
           application/json: {"errors": [{"message": "<value>", "long_message": "<value>", "code": "<value>"}]}
 examplesVersion: 1.0.2
-releaseNotes: "## Ruby SDK Changes:\n* `open_api_client.sessions.get_reverification()`: **Added**\n* `open_api_client.users.list_biometric_credentials()`: **Added**\n* `open_api_client.users.revoke_biometric_credential()`: **Added**\n* `open_api_client.billing.apply_subscription_item_discount()`: **Added**\n* `open_api_client.billing.remove_subscription_item_discount()`: **Added**\n* `open_api_client.directories.list()`: **Added**\n* `open_api_client.directories.create()`: **Added**\n* `open_api_client.directories.get()`: **Added**\n* `open_api_client.directories.update()`: **Added**\n* `open_api_client.directories.delete()`: **Added**\n* `open_api_client.directories.rotate_api_key()`: **Added**\n* `open_api_client.directories.list_group_role_mappings()`: **Added**\n* `open_api_client.directories.create_group_role_mapping()`: **Added**\n* `open_api_client.directories.replace_group_role_mappings()`: **Added**\n* `open_api_client.directories.delete_group_role_mapping()`: **Added**\n* `open_api_client.phone_numbers.attempt_verification()`:  `error` **Changed**\n* `open_api_client.users.list()`: \n  *  `request.starting_after` **Added**\n  *  `response.[]` **Changed**\n* `open_api_client.users.create()`: \n  *  `request.skip_restriction_checks` **Added**\n  *  `response` **Changed**\n* `open_api_client.users.get()`:  `response` **Changed**\n* `open_api_client.users.update()`:  `response` **Changed**\n* `open_api_client.users.ban()`:  `response` **Changed**\n* `open_api_client.users.unban()`:  `response` **Changed**\n* `open_api_client.users.bulk_ban()`:  `response.[]` **Changed**\n* `open_api_client.users.bulk_unban()`:  `response.[]` **Changed**\n* `open_api_client.users.lock()`:  `response` **Changed**\n* `open_api_client.users.unlock()`:  `response` **Changed**\n* `open_api_client.users.set_profile_image()`:  `response` **Changed**\n* `open_api_client.users.delete_profile_image()`:  `response` **Changed**\n* `open_api_client.users.update_metadata()`:  `response` **Changed**\n* `open_api_client.users.replace_metadata()`:  `response` **Changed**\n* `open_api_client.users.get_organization_memberships()`:  `response.data[].organization.self_serve_sso_enabled` **Added**\n* `open_api_client.users.remove_password()`:  `response` **Changed**\n* `open_api_client.users.list_trusted_devices()`: **Deprecated**\n* `open_api_client.users.revoke_trusted_device()`: **Deprecated**\n* `open_api_client.users.set_password_compromised()`:  `response` **Changed**\n* `open_api_client.users.unset_password_compromised()`:  `response` **Changed**\n* `open_api_client.users.get_instance_organization_memberships()`:  `response.data[].organization.self_serve_sso_enabled` **Added**\n* `open_api_client.actor_tokens.create()`:  `error.status[403]` **Added**\n* `open_api_client.domains.list()`:  `response.data[].dns_targets` **Added**\n* `open_api_client.domains.add()`: \n  *  `request.is_satellite` **Changed**\n  *  `response.dns_targets` **Added**\n* `open_api_client.domains.update()`:  `response.dns_targets` **Added**\n* `open_api_client.instance_settings.get()`:  `response` **Changed**\n* `open_api_client.instance_settings.update()`:  `request` **Changed**\n* `open_api_client.instance_settings.get_o_auth_application_settings()`:  `response` **Changed**\n* `open_api_client.instance_settings.update_o_auth_application_settings()`: \n  *  `request` **Changed**\n  *  `response` **Changed**\n* `open_api_client.instance_settings.get_instance_protect()`:  `response` **Changed**\n* `open_api_client.instance_settings.update_instance_protect()`:  `response` **Changed**\n* `open_api_client.organizations.list()`:  `response.data[].self_serve_sso_enabled` **Added**\n* `open_api_client.organizations.create()`:  `response.self_serve_sso_enabled` **Added**\n* `open_api_client.organizations.get()`:  `response.self_serve_sso_enabled` **Added**\n* `open_api_client.organizations.update()`: \n  *  `request.body.self_serve_sso_enabled` **Added**\n  *  `response.self_serve_sso_enabled` **Added**\n* `open_api_client.organizations.merge_metadata()`:  `response.self_serve_sso_enabled` **Added**\n* `open_api_client.organizations.replace_metadata()`:  `response.self_serve_sso_enabled` **Added**\n* `open_api_client.organizations.upload_logo()`:  `response.self_serve_sso_enabled` **Added**\n* `open_api_client.organizations.delete_logo()`:  `response.self_serve_sso_enabled` **Added**\n* `open_api_client.organization_memberships.create()`:  `response.organization.self_serve_sso_enabled` **Added**\n* `open_api_client.organization_memberships.list()`:  `response.data[].organization.self_serve_sso_enabled` **Added**\n* `open_api_client.organization_memberships.update()`:  `response.organization.self_serve_sso_enabled` **Added**\n* `open_api_client.organization_memberships.delete()`:  `response.organization.self_serve_sso_enabled` **Added**\n* `open_api_client.organization_memberships.update_metadata()`:  `response.organization.self_serve_sso_enabled` **Added**\n* `open_api_client.oauth_applications.list()`:  `response.data[].device_authorization_grant_enabled` **Added**\n* `open_api_client.oauth_applications.create()`: \n  *  `request.device_authorization_grant_enabled` **Added**\n  *  `response.device_authorization_grant_enabled` **Added**\n* `open_api_client.oauth_applications.get()`:  `response.device_authorization_grant_enabled` **Added**\n* `open_api_client.oauth_applications.update()`: \n  *  `request.body` **Changed**\n  *  `response.device_authorization_grant_enabled` **Added**\n* `open_api_client.oauth_applications.upload_logo()`:  `response.device_authorization_grant_enabled` **Added**\n* `open_api_client.oauth_applications.rotate_secret()`:  `response.device_authorization_grant_enabled` **Added**\n* `open_api_client.enterprise_connections.list()`:  `response.data[].custom_attributes[].directory_path` **Added**\n* `open_api_client.enterprise_connections.create()`: \n  *  `request.custom_attributes[].directory_path` **Added**\n  *  `response.custom_attributes[].directory_path` **Added**\n* `open_api_client.enterprise_connections.get()`:  `response.custom_attributes[].directory_path` **Added**\n* `open_api_client.enterprise_connections.update()`: \n  *  `request.body.custom_attributes[].directory_path` **Added**\n  *  `response.custom_attributes[].directory_path` **Added**\n* `open_api_client.scim_directories.list()`:  `response.data[].custom_attributes[].directory_path` **Added**\n* `open_api_client.scim_directories.create()`:  `response.custom_attributes[].directory_path` **Added**\n* `open_api_client.scim_directories.get()`:  `response.custom_attributes[].directory_path` **Added**\n* `open_api_client.scim_directories.update()`:  `response.custom_attributes[].directory_path` **Added**\n* `open_api_client.scim_directories.rotate_api_key()`: \n  *  `response.custom_attributes[].directory_path` **Added**\n  *  `error.status[422]` **Added**\n* `open_api_client.scim_directories.list_group_role_mappings()`:  `response.data[]` **Changed**\n* `open_api_client.scim_directories.create_group_role_mapping()`:  `response` **Changed**\n* `open_api_client.scim_directories.replace_group_role_mappings()`:  `response.data[]` **Changed**\n* `open_api_client.oauth_access_tokens.verify()`:  `response.union(class (0)).aud` **Added**\n"
 generatedFiles:
   - .gitattributes
   - .rubocop.yml
