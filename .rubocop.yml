@@ -103,3 +103,6 @@ Layout/FirstArgumentIndentation:
   Enabled: false
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
+Naming/FileName:
+  Exclude:
+    - lib/clerk-sdk-ruby.rb
