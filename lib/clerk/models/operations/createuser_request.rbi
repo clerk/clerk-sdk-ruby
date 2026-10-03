@@ -36,6 +36,8 @@ class Clerk::Models::Operations::CreateUserRequest
   def last_name=(str_); end
   def locale(); end
   def locale=(str_); end
+  def timezone(); end
+  def timezone=(str_); end
   def username(); end
   def username=(str_); end
   def password(); end

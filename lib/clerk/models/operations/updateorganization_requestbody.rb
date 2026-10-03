@@ -29,9 +29,14 @@ module Clerk
         field :created_at, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at') } }
         # The key of the [role set](https://clerk.com/docs/guides/organizations/control-access/role-sets) to assign to this organization.
         field :role_set_key, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('role_set_key') } }
+        # Maps role keys in the organization's current role set to role keys in the new role set. Only applies when `role_set_key` changes the role set.
+        # Every role that a member holds and that the new role set does not include must be mapped, otherwise the request fails with a 422.
+        # Mapping a role that both role sets include moves its members to the destination role.
+        # Memberships are reassigned asynchronously after the response.
+        field :reassignment_mappings, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('reassignment_mappings') } }
 
         
-        def initialize(name: nil, slug: nil, max_allowed_memberships: nil, admin_delete_enabled: nil, self_serve_sso_enabled: nil, created_at: nil, role_set_key: nil)
+        def initialize(name: nil, slug: nil, max_allowed_memberships: nil, admin_delete_enabled: nil, self_serve_sso_enabled: nil, created_at: nil, role_set_key: nil, reassignment_mappings: nil)
           @name = name
           @slug = slug
           @max_allowed_memberships = max_allowed_memberships
@@ -39,6 +44,7 @@ module Clerk
           @self_serve_sso_enabled = self_serve_sso_enabled
           @created_at = created_at
           @role_set_key = role_set_key
+          @reassignment_mappings = reassignment_mappings
         end
 
         
@@ -51,6 +57,7 @@ module Clerk
           return false unless @self_serve_sso_enabled == other.self_serve_sso_enabled
           return false unless @created_at == other.created_at
           return false unless @role_set_key == other.role_set_key
+          return false unless @reassignment_mappings == other.reassignment_mappings
           true
         end
       end

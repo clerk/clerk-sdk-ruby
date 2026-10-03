@@ -37,6 +37,8 @@ module Clerk
         field :last_name, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_name') } }
         # The locale to assign to the user (e.g., "en-US", "fr-FR")
         field :locale, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('locale') } }
+        # The IANA timezone to assign to the user (e.g., "America/New_York", "Europe/Paris"). Set to null to clear it and allow automatic capture on a later trusted sign-in.
+        field :timezone, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('timezone') } }
         # The ID of the email address to set as primary.
         # It must be verified, and present on the current user.
         field :primary_email_address_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('primary_email_address_id') } }
@@ -79,7 +81,7 @@ module Clerk
         field :notify_primary_email_address_changed, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('notify_primary_email_address_changed') } }
 
         
-        def initialize(password_digest: nil, password_hasher: nil, backup_codes: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, profile_image_id: nil, password: nil, skip_password_checks: nil, sign_out_of_other_sessions: nil, totp_secret: nil, delete_self_enabled: nil, create_organization_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil, notify_primary_email_address_changed: false)
+        def initialize(password_digest: nil, password_hasher: nil, backup_codes: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, timezone: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, profile_image_id: nil, password: nil, skip_password_checks: nil, sign_out_of_other_sessions: nil, totp_secret: nil, delete_self_enabled: nil, create_organization_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil, notify_primary_email_address_changed: false)
           @password_digest = password_digest
           @password_hasher = password_hasher
           @backup_codes = backup_codes
@@ -87,6 +89,7 @@ module Clerk
           @first_name = first_name
           @last_name = last_name
           @locale = locale
+          @timezone = timezone
           @primary_email_address_id = primary_email_address_id
           @primary_phone_number_id = primary_phone_number_id
           @primary_web3_wallet_id = primary_web3_wallet_id
@@ -116,6 +119,7 @@ module Clerk
           return false unless @first_name == other.first_name
           return false unless @last_name == other.last_name
           return false unless @locale == other.locale
+          return false unless @timezone == other.timezone
           return false unless @primary_email_address_id == other.primary_email_address_id
           return false unless @primary_phone_number_id == other.primary_phone_number_id
           return false unless @primary_web3_wallet_id == other.primary_web3_wallet_id

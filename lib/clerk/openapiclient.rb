@@ -15,7 +15,7 @@ module Clerk
   class OpenAPIClient
     
 
-    attr_accessor :miscellaneous, :jwks, :clients, :email_addresses, :phone_numbers, :sessions, :email_sms_templates, :email_and_sms_templates, :templates, :users, :invitations, :organization_invitations, :allowlist_identifiers, :blocklist_identifiers, :beta_features, :actor_tokens, :domains, :instance_settings, :webhooks, :jwt_templates, :machines, :organizations, :organization_roles, :organization_memberships, :organization_domains, :proxy_checks, :redirect_urls, :sign_in_tokens, :sign_ups, :oauth_applications, :saml_connections, :enterprise_connections, :testing_tokens, :agent_tasks, :waitlist_entries, :billing, :organization_permissions, :role_sets, :scim_directories, :directories, :admin_portal_link_tokens, :api_keys, :m2m, :oauth_access_tokens
+    attr_accessor :miscellaneous, :jwks, :clients, :email_addresses, :phone_numbers, :sessions, :email_sms_templates, :email_and_sms_templates, :templates, :users, :invitations, :organization_invitations, :allowlist_identifiers, :blocklist_identifiers, :beta_features, :actor_tokens, :domains, :instance_settings, :webhooks, :jwt_templates, :machines, :organizations, :organization_roles, :organization_memberships, :organization_domains, :proxy_checks, :redirect_urls, :sign_in_tokens, :sign_ups, :oauth_applications, :saml_connections, :enterprise_connections, :sso_bypass_allowlist_users, :testing_tokens, :agent_tasks, :waitlist_entries, :billing, :organization_permissions, :role_sets, :scim_directories, :directories, :admin_portal_link_tokens, :api_keys, :m2m, :oauth_access_tokens
 
     # Instantiates the SDK, configuring it with the provided parameters.
     #
@@ -97,6 +97,7 @@ module Clerk
       @oauth_applications = OauthApplications.new(@sdk_configuration)
       @saml_connections = SamlConnections.new(@sdk_configuration)
       @enterprise_connections = EnterpriseConnections.new(@sdk_configuration)
+      @sso_bypass_allowlist_users = SsoBypassAllowlistUsers.new(@sdk_configuration)
       @testing_tokens = TestingTokens.new(@sdk_configuration)
       @agent_tasks = AgentTasks.new(@sdk_configuration)
       @waitlist_entries = WaitlistEntries.new(@sdk_configuration)
