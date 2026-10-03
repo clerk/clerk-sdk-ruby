@@ -16,6 +16,8 @@ class Clerk::Models::Operations::CreateSAMLConnectionRequestBody1
   def provider=(str_); end
   def domains(); end
   def domains=(str_); end
+  def idp_certificates(); end
+  def idp_certificates=(str_); end
   def force_authn(); end
   def force_authn=(str_); end
   def idp_entity_id(); end

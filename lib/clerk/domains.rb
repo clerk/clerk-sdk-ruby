@@ -173,6 +173,7 @@ module Clerk
       # set `is_satellite` to `false`. The custom domain becomes active and the provider domain stays attached.
       # Additional custom primary domains are not supported.
       # If you're planning to configure the new satellite domain to run behind a proxy, pass the `proxy_url` parameter accordingly.
+      # Adding a custom primary domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
       url, params = @sdk_configuration.get_server_details
       base_url = Utils.template_url(url, params)
       url = "#{base_url}/domains"
@@ -290,7 +291,7 @@ module Clerk
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['400', '402', '422'])
+      elsif Utils.match_status_code(http_response.status, ['400', '402', '403', '422'])
         if Utils.match_content_type(content_type, 'application/json')
           http_response = @sdk_configuration.hooks.after_success(
             hook_ctx: SDKHooks::AfterSuccessHookContext.new(
@@ -321,6 +322,7 @@ module Clerk
       # delete - Delete a domain
       # Deletes a domain for the instance.
       # The instance's active domain cannot be deleted.
+      # Deleting a non-satellite domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
       request = Models::Operations::DeleteDomainRequest.new(
         domain_id: domain_id
       )
@@ -472,6 +474,7 @@ module Clerk
       # you have to make sure that you've completed all the necessary setup steps for DNS and
       # emails to work. Expect downtime otherwise. Updating a primary domain's name will also
       # update the instance's home origin, affecting the default application paths.
+      # Updating the `name` or `is_secondary` of a primary domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
       request = Models::Operations::UpdateDomainRequest.new(
         domain_id: domain_id,
         body: body
@@ -599,7 +602,7 @@ module Clerk
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['400', '404', '422'])
+      elsif Utils.match_status_code(http_response.status, ['400', '403', '404', '422'])
         if Utils.match_content_type(content_type, 'application/json')
           http_response = @sdk_configuration.hooks.after_success(
             hook_ctx: SDKHooks::AfterSuccessHookContext.new(
