@@ -8,6 +8,8 @@ end
 
 
 class Clerk::Models::Operations::UpdateSAMLConnectionRequestBody
+  def idp_certificates(); end
+  def idp_certificates=(str_); end
   def force_authn(); end
   def force_authn=(str_); end
   def name(); end
