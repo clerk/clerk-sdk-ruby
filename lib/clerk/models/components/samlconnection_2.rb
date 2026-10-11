@@ -20,6 +20,9 @@ module Clerk
         field :name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name'), required: true } }
 
         field :domains, Crystalline::Array.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('domains'), required: true } }
+        # Every IdP signing certificate the connection trusts, primary first. A SAML response verifies against any of them.
+        #
+        field :idp_certificates, Crystalline::Array.new(Models::Components::SAMLConnectionIdpCertificate2), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificates'), required: true } }
 
         field :acs_url, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('acs_url'), required: true } }
 
@@ -78,11 +81,12 @@ module Clerk
         field :enterprise_connection_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enterprise_connection_id') } }
 
         
-        def initialize(object:, id:, name:, domains:, acs_url:, sp_entity_id:, sp_metadata_url:, active:, provider:, user_count:, sync_user_attributes:, allow_subdomains:, allow_idp_initiated:, disable_additional_identifications:, allow_organization_account_linking:, force_authn:, login_hint:, created_at:, updated_at:, domain: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_certificate_issued_at: nil, idp_certificate_expires_at: nil, attribute_mapping: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, enterprise_connection_id: nil)
+        def initialize(object:, id:, name:, domains:, idp_certificates:, acs_url:, sp_entity_id:, sp_metadata_url:, active:, provider:, user_count:, sync_user_attributes:, allow_subdomains:, allow_idp_initiated:, disable_additional_identifications:, allow_organization_account_linking:, force_authn:, login_hint:, created_at:, updated_at:, domain: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_certificate_issued_at: nil, idp_certificate_expires_at: nil, attribute_mapping: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, enterprise_connection_id: nil)
           @object = object
           @id = id
           @name = name
           @domains = domains
+          @idp_certificates = idp_certificates
           @acs_url = acs_url
           @sp_entity_id = sp_entity_id
           @sp_metadata_url = sp_metadata_url
@@ -118,6 +122,7 @@ module Clerk
           return false unless @id == other.id
           return false unless @name == other.name
           return false unless @domains == other.domains
+          return false unless @idp_certificates == other.idp_certificates
           return false unless @acs_url == other.acs_url
           return false unless @sp_entity_id == other.sp_entity_id
           return false unless @sp_metadata_url == other.sp_metadata_url
