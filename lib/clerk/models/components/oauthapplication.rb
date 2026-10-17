@@ -28,6 +28,8 @@ module Clerk
         field :consent_screen_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('consent_screen_enabled'), required: true } }
 
         field :pkce_required, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('pkce_required'), required: true } }
+        # Whether this confidential application accepts token exchanges from its active audience.
+        field :token_exchange_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('token_exchange_enabled'), required: true } }
 
         field :device_authorization_grant_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('device_authorization_grant_enabled'), required: true } }
 
@@ -62,9 +64,11 @@ module Clerk
         field :client_uri, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('client_uri'), required: true } }
 
         field :client_image_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('client_image_url'), required: true } }
+        # The active application audience URI, whose registry identity is permanently reserved to this application.
+        field :audience_uri, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('audience_uri'), required: true } }
 
         
-        def initialize(object:, id:, instance_id:, name:, client_id:, dynamically_registered:, consent_screen_enabled:, pkce_required:, device_authorization_grant_enabled:, public:, scopes:, redirect_uris:, callback_url:, authorize_url:, token_fetch_url:, user_info_url:, discovery_url:, token_introspection_url:, created_at:, updated_at:, client_uri: nil, client_image_url: nil)
+        def initialize(object:, id:, instance_id:, name:, client_id:, dynamically_registered:, consent_screen_enabled:, pkce_required:, token_exchange_enabled:, device_authorization_grant_enabled:, public:, scopes:, redirect_uris:, callback_url:, authorize_url:, token_fetch_url:, user_info_url:, discovery_url:, token_introspection_url:, created_at:, updated_at:, client_uri: nil, client_image_url: nil, audience_uri: nil)
           @object = object
           @id = id
           @instance_id = instance_id
@@ -73,6 +77,7 @@ module Clerk
           @dynamically_registered = dynamically_registered
           @consent_screen_enabled = consent_screen_enabled
           @pkce_required = pkce_required
+          @token_exchange_enabled = token_exchange_enabled
           @device_authorization_grant_enabled = device_authorization_grant_enabled
           @public = public
           @scopes = scopes
@@ -87,6 +92,7 @@ module Clerk
           @updated_at = updated_at
           @client_uri = client_uri
           @client_image_url = client_image_url
+          @audience_uri = audience_uri
         end
 
         
@@ -100,6 +106,7 @@ module Clerk
           return false unless @dynamically_registered == other.dynamically_registered
           return false unless @consent_screen_enabled == other.consent_screen_enabled
           return false unless @pkce_required == other.pkce_required
+          return false unless @token_exchange_enabled == other.token_exchange_enabled
           return false unless @device_authorization_grant_enabled == other.device_authorization_grant_enabled
           return false unless @public == other.public
           return false unless @scopes == other.scopes
@@ -114,6 +121,7 @@ module Clerk
           return false unless @updated_at == other.updated_at
           return false unless @client_uri == other.client_uri
           return false unless @client_image_url == other.client_image_url
+          return false unless @audience_uri == other.audience_uri
           true
         end
       end
