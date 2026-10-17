@@ -37,6 +37,7 @@ module Clerk
   autoload :OauthApplications, 'clerk/oauthapplications'
   autoload :SamlConnections, 'clerk/samlconnections'
   autoload :EnterpriseConnections, 'clerk/enterpriseconnections'
+  autoload :SsoBypassAllowlistUsers, 'clerk/ssobypassallowlistusers'
   autoload :TestingTokens, 'clerk/testingtokens'
   autoload :AgentTasks, 'clerk/agenttasks'
   autoload :WaitlistEntries, 'clerk/waitlistentries'

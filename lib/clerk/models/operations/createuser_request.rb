@@ -69,6 +69,8 @@ module Clerk
         field :last_name, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_name') } }
         # The locale to assign to the user (e.g., "en-US", "fr-FR")
         field :locale, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('locale') } }
+        # The IANA timezone to assign to the user (e.g., "America/New_York", "Europe/Paris"). Set to null to clear it and allow automatic capture on a later trusted sign-in.
+        field :timezone, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('timezone') } }
         # The username to give to the user.
         # It must be unique across your instance.
         field :username, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('username') } }
@@ -128,7 +130,7 @@ module Clerk
         field :locked, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('locked') } }
 
         
-        def initialize(email_address: nil, email_address_identification_status: nil, phone_number: nil, phone_number_identification_status: nil, web3_wallet: nil, password_hasher: nil, backup_codes: nil, public_metadata: nil, private_metadata: nil, unsafe_metadata: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, username: nil, password: nil, password_digest: nil, skip_password_checks: nil, skip_password_requirement: nil, skip_restriction_checks: nil, totp_secret: nil, delete_self_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, skip_user_requirement: nil, create_organization_enabled: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil, banned: nil, locked: nil)
+        def initialize(email_address: nil, email_address_identification_status: nil, phone_number: nil, phone_number_identification_status: nil, web3_wallet: nil, password_hasher: nil, backup_codes: nil, public_metadata: nil, private_metadata: nil, unsafe_metadata: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, timezone: nil, username: nil, password: nil, password_digest: nil, skip_password_checks: nil, skip_password_requirement: nil, skip_restriction_checks: nil, totp_secret: nil, delete_self_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, skip_user_requirement: nil, create_organization_enabled: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil, banned: nil, locked: nil)
           @email_address = email_address
           @email_address_identification_status = email_address_identification_status
           @phone_number = phone_number
@@ -143,6 +145,7 @@ module Clerk
           @first_name = first_name
           @last_name = last_name
           @locale = locale
+          @timezone = timezone
           @username = username
           @password = password
           @password_digest = password_digest
@@ -179,6 +182,7 @@ module Clerk
           return false unless @first_name == other.first_name
           return false unless @last_name == other.last_name
           return false unless @locale == other.locale
+          return false unless @timezone == other.timezone
           return false unless @username == other.username
           return false unless @password == other.password
           return false unless @password_digest == other.password_digest

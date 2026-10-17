@@ -23,22 +23,31 @@ module Clerk
         # If true, an admin can delete this organization with the Frontend API.
         field :admin_delete_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('admin_delete_enabled') } }
         # Whether this organization can configure self-serve enterprise SSO.
-        # Requires the instance to have the self-serve SSO entitlement enabled.
         field :self_serve_sso_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('self_serve_sso_enabled') } }
+        # Whether this organization can configure self-serve Directory Sync (SCIM).
+        # Independent of `self_serve_sso_enabled`.
+        field :self_serve_directory_sync_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('self_serve_directory_sync_enabled') } }
         # A custom date/time denoting _when_ the organization was created, specified in RFC3339 format (e.g. `2012-10-20T07:15:20.902Z`).
         field :created_at, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at') } }
         # The key of the [role set](https://clerk.com/docs/guides/organizations/control-access/role-sets) to assign to this organization.
         field :role_set_key, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('role_set_key') } }
+        # Maps role keys in the organization's current role set to role keys in the new role set. Only applies when `role_set_key` changes the role set.
+        # Every role that a member holds and that the new role set does not include must be mapped, otherwise the request fails with a 422.
+        # Mapping a role that both role sets include moves its members to the destination role.
+        # Memberships are reassigned asynchronously after the response.
+        field :reassignment_mappings, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('reassignment_mappings') } }
 
         
-        def initialize(name: nil, slug: nil, max_allowed_memberships: nil, admin_delete_enabled: nil, self_serve_sso_enabled: nil, created_at: nil, role_set_key: nil)
+        def initialize(name: nil, slug: nil, max_allowed_memberships: nil, admin_delete_enabled: nil, self_serve_sso_enabled: nil, self_serve_directory_sync_enabled: nil, created_at: nil, role_set_key: nil, reassignment_mappings: nil)
           @name = name
           @slug = slug
           @max_allowed_memberships = max_allowed_memberships
           @admin_delete_enabled = admin_delete_enabled
           @self_serve_sso_enabled = self_serve_sso_enabled
+          @self_serve_directory_sync_enabled = self_serve_directory_sync_enabled
           @created_at = created_at
           @role_set_key = role_set_key
+          @reassignment_mappings = reassignment_mappings
         end
 
         
@@ -49,8 +58,10 @@ module Clerk
           return false unless @max_allowed_memberships == other.max_allowed_memberships
           return false unless @admin_delete_enabled == other.admin_delete_enabled
           return false unless @self_serve_sso_enabled == other.self_serve_sso_enabled
+          return false unless @self_serve_directory_sync_enabled == other.self_serve_directory_sync_enabled
           return false unless @created_at == other.created_at
           return false unless @role_set_key == other.role_set_key
+          return false unless @reassignment_mappings == other.reassignment_mappings
           true
         end
       end
