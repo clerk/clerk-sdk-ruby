@@ -26,9 +26,11 @@ module Clerk
         field :allowed_origins, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('allowed_origins'), required: true } }
         # The ID of the Clerk workspace that owns the instance's application. It is null when the application has no owner.
         field :workspace_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('workspace_id'), required: true } }
+        # The maximum number of users the instance can hold. Creating a user fails with a `user_quota_exceeded` error once the instance's total user count, as returned by `GET /v1/users/count` without filters, reaches this value. It is null when the instance has no user limit.
+        field :max_allowed_users, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('max_allowed_users'), required: true } }
 
         
-        def initialize(object:, id:, environment_type:, allowed_subdomains:, subdomain_allowlist_enabled:, allowed_origins: nil, workspace_id: nil)
+        def initialize(object:, id:, environment_type:, allowed_subdomains:, subdomain_allowlist_enabled:, allowed_origins: nil, workspace_id: nil, max_allowed_users: nil)
           @object = object
           @id = id
           @environment_type = environment_type
@@ -36,6 +38,7 @@ module Clerk
           @subdomain_allowlist_enabled = subdomain_allowlist_enabled
           @allowed_origins = allowed_origins
           @workspace_id = workspace_id
+          @max_allowed_users = max_allowed_users
         end
 
         
@@ -48,6 +51,7 @@ module Clerk
           return false unless @subdomain_allowlist_enabled == other.subdomain_allowlist_enabled
           return false unless @allowed_origins == other.allowed_origins
           return false unless @workspace_id == other.workspace_id
+          return false unless @max_allowed_users == other.max_allowed_users
           true
         end
       end

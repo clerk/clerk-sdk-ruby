@@ -25,7 +25,8 @@ s = ::Clerk::OpenAPIClient.new(
 )
 
 req = Models::Operations::CreateSignInTokenRequest.new(
-  user_id: 'user_12345'
+  user_id: 'user_12345',
+  expires_in_seconds: 2_592_000
 )
 res = s.sign_in_tokens.create(request: req)
 

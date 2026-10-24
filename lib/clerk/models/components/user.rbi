@@ -94,6 +94,8 @@ class Clerk::Models::Components::User
   def directory=(str_); end
   def locale(); end
   def locale=(str_); end
+  def timezone(); end
+  def timezone=(str_); end
   def private_metadata(); end
   def private_metadata=(str_); end
   def password_last_updated_at(); end

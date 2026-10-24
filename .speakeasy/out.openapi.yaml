@@ -121,6 +121,10 @@ tags:
       Clerk instance and an identity provider.
     externalDocs:
       url: https://clerk.com/docs/guides/configure/auth-strategies/enterprise-connections/overview
+  - name: SSO Bypass
+    description: |-
+      The SSO bypass allowlist names users who may sign in with an email code when their enterprise identity
+      provider is unreachable.
   - name: Sessions
     description: |-
       The Session object is an abstraction over an HTTP session.
@@ -524,6 +528,8 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/ClerkErrors'
         '500':
           $ref: '#/components/responses/ClerkErrors'
   /email_addresses/{email_address_id}/attempt_verification:
@@ -1948,6 +1954,10 @@ paths:
                   type: string
                   description: The locale to assign to the user (e.g., "en-US", "fr-FR")
                   nullable: true
+                timezone:
+                  type: string
+                  description: The IANA timezone to assign to the user (e.g., "America/New_York", "Europe/Paris"). Set to null to clear it and allow automatic capture on a later trusted sign-in.
+                  nullable: true
                 email_address:
                   type: array
                   items:
@@ -2434,6 +2444,10 @@ paths:
                   type: string
                   description: The locale to assign to the user (e.g., "en-US", "fr-FR")
                   nullable: true
+                timezone:
+                  type: string
+                  description: The IANA timezone to assign to the user (e.g., "America/New_York", "Europe/Paris"). Set to null to clear it and allow automatic capture on a later trusted sign-in.
+                  nullable: true
                 primary_email_address_id:
                   type: string
                   description: |-
@@ -2715,6 +2729,93 @@ paths:
           $ref: '#/components/responses/User'
         '403':
           $ref: '#/components/responses/AuthorizationInvalid'
+  /users/{user_id}/merge:
+    post:
+      operationId: MergeUser
+      x-speakeasy-group: users
+      x-speakeasy-name-override: merge
+      summary: Merge another user into this user
+      description: |-
+        Moves the identifications, connected accounts, passkeys, TOTP, backup codes, organization
+        memberships, membership requests, suggestions and metadata of the user in `from_user_id` onto the
+        user in the path, then deletes the `from_user_id` user.
+        Where both users have a value, the user in the path keeps its own. First and last name, profile
+        image, `external_id`, and the password are taken from the `from_user_id` user only where the user in
+        the path has none, so if it has no password, the `from_user_id` user's password signs in to it
+        afterwards. When both users have the same
+        identifier, the verified copy is kept. The `from_user_id` user's sessions are revoked.
+        With `dry_run`, the merge is computed and returned but nothing is changed.
+
+        A merge cannot be undone. The response's `deleted_user` is the `from_user_id` user as it was before
+        the merge, so store it if you may need it. It does not include passwords, TOTP secrets, backup codes,
+        passkeys or connected-account tokens, which cannot be restored. Use `dry_run` to preview a merge.
+
+        The merge sends a `user.merged` webhook alongside `user.updated` and `user.deleted`. Webhooks are not
+        delivered in order, so `user.updated` (the user now owning the `from_user_id` user's emails) can arrive
+        before `user.deleted`; handle `user.merged` by moving the `from_user_id` user's data to the user rather
+        than relying on that order. Moved organization memberships keep their ID, so their
+        `organizationMembership.updated` webhook carries the same membership ID with a different user.
+
+        Some users cannot be merged. The request then fails with a 409 `user_merge_not_allowed` error whose
+        `meta.reasons` lists every reason that applies:
+        - `user_banned`, `from_user_banned`: either user is banned.
+        - `user_directory_managed`, `from_user_directory_managed`: either user is linked to a SCIM directory.
+        - `from_user_enterprise_account`: the `from_user_id` user has a SAML or enterprise SSO account.
+        - `from_user_billing_payer`: the `from_user_id` user is a billing payer.
+        - `from_user_student_pack`: the `from_user_id` user has claimed a student pack.
+        - `too_many_resources`: the users have too many identifications and organization memberships, requests
+          and suggestions combined to merge in one request. This reason is returned on its own.
+        - `same_user`: `from_user_id` is the user in the path.
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          description: The ID of the user that remains after the merge
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                from_user_id:
+                  type: string
+                  description: The ID of the user to merge into the user in the path. This user is deleted.
+                dry_run:
+                  type: boolean
+                  description: Return the merged user without changing anything.
+                  default: false
+              required:
+                - from_user_id
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  deleted_user:
+                    $ref: '#/components/schemas/User'
+                required:
+                  - user
+                  - deleted_user
+        '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /users/{user_id}/profile_image:
     post:
       operationId: SetUserProfileImage
@@ -3824,6 +3925,31 @@ paths:
           $ref: '#/components/responses/ClerkErrors'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /invitations/{invitation_id}:
+    delete:
+      operationId: DeleteInvitation
+      x-speakeasy-group: invitations
+      x-speakeasy-name-override: delete
+      summary: Delete an invitation
+      description: |-
+        Permanently deletes the given invitation and the copies of the invitation email Clerk stored for its recipient.
+        Unlike revoking, deleting removes the invitation record itself, which helps honor a data erasure request from someone who was invited but never signed up.
+        Other records that contain the same email address, such as users or organization invitations, are not affected.
+        Invitations of any status can be deleted.
+      tags:
+        - Invitations
+      parameters:
+        - name: invitation_id
+          in: path
+          description: The ID of the invitation to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/DeletedObject'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
   /invitations/{invitation_id}/revoke:
     post:
       operationId: RevokeInvitation
@@ -4118,6 +4244,8 @@ paths:
         Changing the domain requires updating the [DNS records](https://clerk.com/docs/deployments/overview#dns-records) accordingly, deploying new [SSL certificates](https://clerk.com/docs/deployments/overview#deploy-certificates), updating your Social Connection's redirect URLs and setting the new keys in your code.
 
         WARNING: Changing your domain will invalidate all current user sessions (i.e. users will be logged out). Also, while your application is being deployed, a small downtime is expected to occur.
+
+        Returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
       tags:
         - Beta Features
       requestBody:
@@ -4137,6 +4265,8 @@ paths:
         '202':
           description: Accepted
         '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '403':
           $ref: '#/components/responses/ClerkErrors'
         '422':
           $ref: '#/components/responses/ClerkErrors'
@@ -4252,6 +4382,7 @@ paths:
         set `is_satellite` to `false`. The custom domain becomes active and the provider domain stays attached.
         Additional custom primary domains are not supported.
         If you're planning to configure the new satellite domain to run behind a proxy, pass the `proxy_url` parameter accordingly.
+        Adding a custom primary domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
       tags:
         - Domains
       requestBody:
@@ -4280,6 +4411,8 @@ paths:
           $ref: '#/components/responses/ClerkErrors'
         '402':
           $ref: '#/components/responses/ClerkErrors'
+        '403':
+          $ref: '#/components/responses/ClerkErrors'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /domains/{domain_id}:
@@ -4291,6 +4424,7 @@ paths:
       description: |-
         Deletes a domain for the instance.
         The instance's active domain cannot be deleted.
+        Deleting a non-satellite domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
       tags:
         - Domains
       parameters:
@@ -4321,6 +4455,7 @@ paths:
         you have to make sure that you've completed all the necessary setup steps for DNS and
         emails to work. Expect downtime otherwise. Updating a primary domain's name will also
         update the instance's home origin, affecting the default application paths.
+        Updating the `name` or `is_secondary` of a primary domain returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
       tags:
         - Domains
       parameters:
@@ -4362,6 +4497,8 @@ paths:
         '200':
           $ref: '#/components/responses/Domain'
         '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '403':
           $ref: '#/components/responses/ClerkErrors'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
@@ -4419,7 +4556,7 @@ paths:
                   items:
                     type: string
                   description: |-
-                    For browser-like stacks such as browser extensions, Electron (not officially supported), or Capacitor.js (not officially supported), the instance allowed origins need to be updated with the request origin value. For Chrome extensions popup, background, or service worker pages, the origin is chrome-extension://extension_uuid. For Electron apps the default origin is http://localhost:3000. For Capacitor, the origin is capacitor://localhost.
+                    For browser-like stacks such as browser extensions, Electron, or Capacitor.js (not officially supported), the instance allowed origins need to be updated with the request origin value. For Chrome extensions popup, background, or service worker pages, the origin is chrome-extension://extension_uuid. For Electron apps using `@clerk/electron`, the origins are the custom renderer scheme registered with `createClerkBridge()`, for example `my-app://renderer`, and, during development, the renderer's dev server origin, for example `http://localhost:5173`. For Capacitor, the origin is capacitor://localhost.
                     Send an empty array to remove all allowed origins. A null value leaves the current list unchanged.
                 allowed_subdomains:
                   type: array
@@ -4520,9 +4657,6 @@ paths:
                   type: boolean
                   nullable: true
                   description: Set true to enforce Protect rules on this instance. Set false to stop enforcing and return the instance to its default posture, where traffic is still evaluated in shadow but nothing is blocked. This does not remove the instance from Protect.
-                specter_enabled:
-                  type: boolean
-                  nullable: true
       responses:
         '200':
           $ref: '#/components/responses/InstanceProtect'
@@ -4604,6 +4738,12 @@ paths:
                   type: boolean
                   nullable: true
                   description: Whether dynamic OAuth client registration is enabled for the instance (RFC 7591).
+                dynamic_client_allowed_scopes:
+                  type: array
+                  nullable: true
+                  description: Administrator-selected scope ceiling for dynamically registered and automatically admitted CIMD clients. Null preserves registered client limits; defaults must be a subset. Fresh user consent is required for expansion.
+                  items:
+                    type: string
                 default_scopes:
                   type: array
                   nullable: true
@@ -4619,6 +4759,10 @@ paths:
                   type: boolean
                   nullable: true
                   description: Whether OAuth access tokens can include an aud claim derived from the RFC 8707 resource parameter.
+                aud_claim_refresh_backfill_enabled:
+                  type: boolean
+                  nullable: true
+                  description: Whether refresh grants without a resource can adopt the requested resource when audience claims are enabled.
                 pkce_required:
                   type: boolean
                   nullable: true
@@ -4652,6 +4796,8 @@ paths:
         Changing the domain requires updating the [DNS records](https://clerk.com/docs/deployments/overview#dns-records) accordingly, deploying new [SSL certificates](https://clerk.com/docs/deployments/overview#deploy-certificates), updating your Social Connection's redirect URLs and setting the new keys in your code.
 
         WARNING: Changing your domain will invalidate all current user sessions (i.e. users will be logged out). Also, while your application is being deployed, a small downtime is expected to occur.
+
+        Returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
       tags:
         - Beta Features
       requestBody:
@@ -4674,6 +4820,8 @@ paths:
         '202':
           description: Accepted
         '400':
+          $ref: '#/components/responses/ClerkErrors'
+        '403':
           $ref: '#/components/responses/ClerkErrors'
         '422':
           $ref: '#/components/responses/ClerkErrors'
@@ -5564,9 +5712,7 @@ paths:
                   nullable: true
                 self_serve_sso_enabled:
                   type: boolean
-                  description: |-
-                    Whether this organization can configure self-serve enterprise SSO.
-                    Requires the instance to have the self-serve SSO entitlement enabled.
+                  description: Whether this organization can configure self-serve enterprise SSO.
                   nullable: true
                 created_at:
                   type: string
@@ -5576,6 +5722,15 @@ paths:
                   type: string
                   description: The key of the [role set](https://clerk.com/docs/guides/organizations/control-access/role-sets) to assign to this organization.
                   nullable: true
+                reassignment_mappings:
+                  allOf:
+                    - $ref: '#/components/schemas/ReassignmentMappings'
+                  nullable: true
+                  description: |-
+                    Maps role keys in the organization's current role set to role keys in the new role set. Only applies when `role_set_key` changes the role set.
+                    Every role that a member holds and that the new role set does not include must be mapped, otherwise the request fails with a 422.
+                    Mapping a role that both role sets include moves its members to the destination role.
+                    Memberships are reassigned asynchronously after the response.
       responses:
         '200':
           $ref: '#/components/responses/Organization'
@@ -7341,9 +7496,21 @@ paths:
                   type: integer
                   description: |-
                     Optional parameter to specify the life duration of the sign in token in seconds.
-                    By default, the duration is 30 days.
+                    By default, the duration is 30 days, or 10 minutes when `second_factor_verification` is set.
                   minimum: 1
-                  default: 2592000
+                  nullable: true
+                second_factor_verification:
+                  type: string
+                  enum:
+                    - fresh
+                    - stale
+                  description: |-
+                    Optional parameter that lets a user with a second factor enabled complete the sign in without being prompted for it.
+                    When omitted, redeeming the token completes only the first factor, and the user must still complete their second factor.
+                    `fresh`: the second factor is treated as verified at sign in. The session token's `fva` claim reports a second factor age of 0.
+                    `stale`: the second factor is treated as unverified. The session token's `fva` claim reports the maximum second factor age of 99999, so any reverification that requires a second factor prompts the user to complete one.
+                    Has no effect for users without a second factor enabled.
+                    A token created with this parameter signs in a user with a second factor enabled without prompting for it, so `expires_in_seconds` defaults to 10 minutes. We recommend keeping it short.
                   nullable: true
               required:
                 - user_id
@@ -7534,6 +7701,16 @@ paths:
                   default: false
                   description: True to require the Proof Key of Code Exchange (PKCE) flow.
                   nullable: true
+                audience_uri:
+                  type: string
+                  nullable: true
+                  description: An absolute resource URI for a confidential application (RFC 8707 section 2). Registers a resource with no accepted scopes, or adopts an unowned resource with confirmation. Every claimed URI remains permanently reserved to this app, including retirement and deletion, and counts toward the instance resource quota. Changing it stops new exchanges from the old audience immediately. Already-issued tokens retain their lifetime. Clearing requires exchange disabled in an earlier update.
+                token_exchange_enabled:
+                  type: boolean
+                  description: Enable exchanges from the active audience. Requires an audience URI. Disabling preserves target configuration.
+                adopt_audience_resource:
+                  type: boolean
+                  description: Confirm adoption of an existing unowned resource, preserving its accepted scopes and target references. Does not override another application's reservation.
                 device_authorization_grant_enabled:
                   type: boolean
                   default: false
@@ -7632,6 +7809,16 @@ paths:
                   type: boolean
                   description: True to require the Proof Key of Code Exchange (PKCE) flow.
                   nullable: true
+                audience_uri:
+                  type: string
+                  nullable: true
+                  description: An absolute resource URI for a confidential application (RFC 8707 section 2). Registers a resource with no accepted scopes, or adopts an unowned resource with confirmation. Every claimed URI remains permanently reserved to this app, including retirement and deletion, and counts toward the instance resource quota. Changing it stops new exchanges from the old audience immediately. Already-issued tokens retain their lifetime. Clearing requires exchange disabled in an earlier update.
+                token_exchange_enabled:
+                  type: boolean
+                  description: Enable exchanges from the active audience. Requires an audience URI. Disabling preserves target configuration.
+                adopt_audience_resource:
+                  type: boolean
+                  description: Confirm adoption of an existing unowned resource, preserving its accepted scopes and target references. Does not override another application's reservation.
                 device_authorization_grant_enabled:
                   type: boolean
                   description: True to enable the OAuth Device Authorization Grant for this application. Enabling requires the new OAuth IdP and a reachable device verification page. Omit this field to leave the setting unchanged.
@@ -7891,8 +8078,16 @@ paths:
                   nullable: true
                 idp_certificate:
                   type: string
-                  description: The X.509 certificate as provided by the IdP
+                  description: Deprecated, use idp_certificates. One X.509 certificate, PEM or bare base64, or several concatenated PEM certificates; replaces the connection's whole certificate set
+                  deprecated: true
                   nullable: true
+                idp_certificates:
+                  type: array
+                  description: The IdP X.509 signing certificates the connection trusts, one per entry, in PEM or bare base64. Replaces the connection's whole certificate set and takes precedence over idp_certificate
+                  minItems: 1
+                  maxItems: 5
+                  items:
+                    type: string
                 idp_metadata_url:
                   type: string
                   description: The URL which serves the IdP metadata. If present, it takes priority over the corresponding individual properties
@@ -8040,8 +8235,16 @@ paths:
                   nullable: true
                 idp_certificate:
                   type: string
-                  description: The x509 certificated as provided by the IdP
+                  description: Deprecated, use idp_certificates. One X.509 certificate, PEM or bare base64, or several concatenated PEM certificates; replaces the connection's whole certificate set
+                  deprecated: true
                   nullable: true
+                idp_certificates:
+                  type: array
+                  description: The IdP X.509 signing certificates the connection trusts, one per entry, in PEM or bare base64. Replaces the connection's whole certificate set and takes precedence over idp_certificate
+                  minItems: 1
+                  maxItems: 5
+                  items:
+                    type: string
                 idp_metadata_url:
                   type: string
                   description: The URL which serves the IdP metadata. If present, it takes priority over the corresponding individual properties and replaces them
@@ -8261,8 +8464,16 @@ paths:
                       nullable: true
                     idp_certificate:
                       type: string
-                      description: IdP certificate (PEM)
+                      description: Deprecated, use idp_certificates. One X.509 certificate, PEM or bare base64, or several concatenated PEM certificates; replaces the connection's whole certificate set
+                      deprecated: true
                       nullable: true
+                    idp_certificates:
+                      type: array
+                      description: The IdP X.509 signing certificates the connection trusts, one per entry, in PEM or bare base64. Replaces the connection's whole certificate set and takes precedence over idp_certificate
+                      minItems: 1
+                      maxItems: 5
+                      items:
+                        type: string
                     idp_metadata_url:
                       type: string
                       description: URL to IdP metadata
@@ -8498,8 +8709,16 @@ paths:
                       nullable: true
                     idp_certificate:
                       type: string
-                      description: IdP certificate (PEM)
+                      description: Deprecated, use idp_certificates. One X.509 certificate, PEM or bare base64, or several concatenated PEM certificates; replaces the connection's whole certificate set
+                      deprecated: true
                       nullable: true
+                    idp_certificates:
+                      type: array
+                      description: The IdP X.509 signing certificates the connection trusts, one per entry, in PEM or bare base64. Replaces the connection's whole certificate set and takes precedence over idp_certificate
+                      minItems: 1
+                      maxItems: 5
+                      items:
+                        type: string
                     idp_metadata_url:
                       type: string
                       description: URL to IdP metadata
@@ -8719,6 +8938,88 @@ paths:
           $ref: '#/components/responses/EnterpriseConnectionTestRun'
         '402':
           $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+  /sso_bypass_allowlist_users:
+    get:
+      operationId: ListSSOBypassAllowlistUsers
+      x-speakeasy-group: ssoBypassAllowlistUsers
+      x-speakeasy-name-override: list
+      summary: List the SSO bypass allowlist
+      description: |-
+        Returns the users who may verify an email code instead of reaching their identity provider when
+        enterprise SSO is unreachable.
+      tags:
+        - SSO Bypass
+      parameters:
+        - name: enterprise_connection_id
+          in: query
+          required: false
+          description: Restrict the list to the users this enterprise connection serves.
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/SSOBypassAllowlistUsers'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+    post:
+      operationId: CreateSSOBypassAllowlistUser
+      x-speakeasy-group: ssoBypassAllowlistUsers
+      x-speakeasy-name-override: create
+      summary: Add a user to the SSO bypass allowlist
+      description: |-
+        Puts a user on the allowlist. The request is rejected unless the user holds a verified email
+        address on a domain one of the instance's enterprise connections serves.
+      tags:
+        - SSO Bypass
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - user_id
+              properties:
+                user_id:
+                  type: string
+                  description: The ID of the user to allowlist.
+      responses:
+        '201':
+          $ref: '#/components/responses/SSOBypassAllowlistUser'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /sso_bypass_allowlist_users/{userID}:
+    delete:
+      operationId: DeleteSSOBypassAllowlistUser
+      x-speakeasy-group: ssoBypassAllowlistUsers
+      x-speakeasy-name-override: delete
+      summary: Remove a user from the SSO bypass allowlist
+      description: Removes the user from the allowlist, across every enterprise connection that serves them.
+      tags:
+        - SSO Bypass
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          description: The ID of the allowlisted user
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/DeletedObject'
         '403':
           $ref: '#/components/responses/AuthorizationInvalid'
         '404':
@@ -10221,6 +10522,12 @@ paths:
                 enabled:
                   type: boolean
                   description: Whether the directory is enabled.
+                paused:
+                  type: boolean
+                  description: |-
+                    Pause or resume syncing. Pausing rejects provisioning requests and skips scheduled
+                    syncs while keeping the organization memberships the directory granted, so sync picks
+                    up where it left off. Disabling removes them instead.
                 provider:
                   type: string
                   description: The identity provider for this directory.
@@ -10614,6 +10921,12 @@ paths:
                 enabled:
                   type: boolean
                   description: Whether the directory is enabled.
+                paused:
+                  type: boolean
+                  description: |-
+                    Pause or resume syncing. Pausing rejects provisioning requests and skips scheduled
+                    syncs while keeping the organization memberships the directory granted, so sync picks
+                    up where it left off. Disabling removes them instead.
                 provider:
                   type: string
                   description: The identity provider for this directory.
@@ -10698,6 +11011,89 @@ paths:
           $ref: '#/components/responses/ResourceNotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /directories/{directory_id}/groups/{group_id}:
+    get:
+      operationId: GetDirectoryGroup
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: getGroup
+      tags:
+        - Directories
+      summary: Retrieve a directory group
+      description: |-
+        Returns one group of the directory, as reported by the identity provider.
+        Responds with 404 once the identity provider has deleted the group.
+      parameters:
+        - name: directory_id
+          in: path
+          description: The ID of the directory.
+          required: true
+          schema:
+            type: string
+        - name: group_id
+          in: path
+          description: The ID of the group, as assigned by the directory.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/DirectoryGroup'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+  /directories/{directory_id}/groups/{group_id}/members:
+    get:
+      operationId: ListDirectoryGroupMembers
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: listGroupMembers
+      tags:
+        - Directories
+      summary: List directory group members
+      description: |-
+        Returns the members of a group, as reported by the identity provider, using cursor-based pagination.
+        Each member carries the Clerk user it is linked to, or null until that user has been provisioned.
+      parameters:
+        - name: directory_id
+          in: path
+          description: The ID of the directory.
+          required: true
+          schema:
+            type: string
+        - name: group_id
+          in: path
+          description: The ID of the group, as assigned by the directory.
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: |-
+            Applies a limit to the number of results returned.
+            Can be used for paginating the results together with `starting_after`.
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 500
+        - name: starting_after
+          in: query
+          description: A cursor for pagination. Provide the `starting_after` cursor from a previous response to fetch the next page.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/DirectoryGroupMember.List'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
   /directories/{directory_id}/group_role_mappings:
     get:
       operationId: ListDirectoryGroupRoleMappings
@@ -13339,6 +13735,31 @@ paths:
                         description: The audiences of the access token. Omitted when no audience is set.
                         example:
                           - https://api.example.com
+                      act:
+                        type: object
+                        properties:
+                          iss:
+                            type: string
+                          sub:
+                            type: string
+                          act:
+                            type: object
+                            properties:
+                              iss:
+                                type: string
+                              sub:
+                                type: string
+                            required:
+                              - sub
+                        required:
+                          - sub
+                        description: The actor chain of an access token issued by an OAuth 2.0 Token Exchange (RFC 8693 section 4.1). Omitted for other access tokens.
+                        example:
+                          iss: https://clerk.example.com
+                          sub: client_2xhFjEI5X2qWRvtV13BzSj8H6Dk
+                          act:
+                            iss: https://clerk.example.com
+                            sub: client_3yiGkFJ6Y3rXSwuW24CaTk9I7El
                       revoked:
                         type: boolean
                         example: false
@@ -13545,12 +13966,12 @@ components:
           type: integer
           format: int64
           description: |
-            Unix timestamp of expiration.
+            Unix timestamp in milliseconds of expiration. Zero means no maximum lifetime.
         abandon_at:
           type: integer
           format: int64
           description: |
-            Unix timestamp of abandonment.
+            Unix timestamp in milliseconds of abandonment. Zero means no abandonment deadline.
         updated_at:
           type: integer
           format: int64
@@ -14824,7 +15245,6 @@ components:
           type: boolean
         self_serve_sso_enabled:
           type: boolean
-          nullable: true
           description: |
             Whether this organization can configure self-serve enterprise SSO.
         public_metadata:
@@ -15042,6 +15462,9 @@ components:
           nullable: true
           type: string
         locale:
+          nullable: true
+          type: string
+        timezone:
           nullable: true
           type: string
         profile_image_url:
@@ -16849,6 +17272,11 @@ components:
           nullable: true
           description: The ID of the Clerk workspace that owns the instance's application. It is null when the application has no owner.
           example: org_2abc123def456
+        max_allowed_users:
+          type: integer
+          nullable: true
+          description: The maximum number of users the instance can hold. Creating a user fails with a `user_quota_exceeded` error once the instance's total user count, as returned by `GET /v1/users/count` without filters, reaches this value. It is null when the instance has no user limit.
+          example: 100
       required:
         - object
         - id
@@ -16857,6 +17285,7 @@ components:
         - allowed_subdomains
         - subdomain_allowlist_enabled
         - workspace_id
+        - max_allowed_users
     InstanceRestrictions:
       type: object
       properties:
@@ -16894,6 +17323,8 @@ components:
           description: Whether Protect rules are enforced on this instance. False does not mean the instance is outside Protect — by default it is still evaluated in shadow, where rules are scored and recorded but never block.
         specter_enabled:
           type: boolean
+          readOnly: true
+          description: Whether Device Intelligence is enabled. Managed automatically or by Clerk support.
         checks_bypassed:
           type: boolean
           description: Whether the instance has opted out of the Protect prerequisite checks, asserting its setup already meets the requirements.
@@ -16937,6 +17368,12 @@ components:
         dynamic_oauth_client_registration:
           type: boolean
           description: Whether dynamic OAuth client registration is enabled for the instance (RFC 7591).
+        dynamic_client_allowed_scopes:
+          type: array
+          nullable: true
+          description: Administrator-selected scope ceiling for dynamically registered and automatically admitted CIMD clients. Null preserves registered client limits; defaults must be a subset. Fresh user consent is required for expansion.
+          items:
+            type: string
         default_scopes:
           type: array
           nullable: true
@@ -16951,6 +17388,9 @@ components:
         aud_claim_enabled:
           type: boolean
           description: Whether OAuth access tokens can include an aud claim derived from the RFC 8707 resource parameter.
+        aud_claim_refresh_backfill_enabled:
+          type: boolean
+          description: Whether refresh grants without a resource can adopt the requested resource when audience claims are enabled.
         pkce_required:
           type: boolean
           description: Whether all new OAuth authorization-code requests must use PKCE with the S256 challenge method.
@@ -16969,6 +17409,7 @@ components:
         - default_scopes
         - oauth_jwt_access_tokens
         - aud_claim_enabled
+        - aud_claim_refresh_backfill_enabled
         - pkce_required
         - client_id_metadata_documents_advertised
         - client_id_metadata_documents_only_allow_pre_registered_clients
@@ -17171,6 +17612,11 @@ components:
       required:
         - data
         - total_count
+    ReassignmentMappings:
+      type: object
+      description: Mappings from source role keys to destination role keys for role reassignment
+      additionalProperties:
+        type: string
     OrganizationWithLogo:
       type: object
       allOf:
@@ -17724,6 +18170,11 @@ components:
           description: |
             Unix timestamp at which the user accepted the legal requirements.
           example: 1700690400000
+        timezone:
+          type: string
+          nullable: true
+          description: The IANA timezone associated with the sign-up attempt.
+          example: America/New_York
         locale:
           type: string
           nullable: true
@@ -17781,6 +18232,13 @@ components:
           type: boolean
         pkce_required:
           type: boolean
+        audience_uri:
+          type: string
+          nullable: true
+          description: The active application audience URI, whose registry identity is permanently reserved to this application.
+        token_exchange_enabled:
+          type: boolean
+          description: Whether this confidential application accepts token exchanges from its active audience.
         device_authorization_grant_enabled:
           type: boolean
         public:
@@ -17826,6 +18284,8 @@ components:
         - dynamically_registered
         - consent_screen_enabled
         - pkce_required
+        - audience_uri
+        - token_exchange_enabled
         - device_authorization_grant_enabled
         - public
         - client_id
@@ -17939,6 +18399,30 @@ components:
           nullable: true
           description: |
             Unix timestamp (milliseconds) of the end of the IdP certificate validity window (X.509 NotAfter). Null when no certificate is configured.
+        idp_certificates:
+          type: array
+          description: |
+            Every IdP signing certificate the connection trusts, primary first. A SAML response verifies against any of them.
+          items:
+            type: object
+            properties:
+              certificate:
+                type: string
+                description: The X.509 certificate, base64 DER without PEM armor
+              issued_at:
+                type: integer
+                format: int64
+                nullable: true
+                description: Unix timestamp (milliseconds) of the X.509 NotBefore
+              expires_at:
+                type: integer
+                format: int64
+                nullable: true
+                description: Unix timestamp (milliseconds) of the X.509 NotAfter
+            required:
+              - certificate
+              - issued_at
+              - expires_at
         idp_metadata_url:
           type: string
           nullable: true
@@ -17999,6 +18483,7 @@ components:
         - idp_certificate
         - idp_certificate_issued_at
         - idp_certificate_expires_at
+        - idp_certificates
         - acs_url
         - sp_entity_id
         - sp_metadata_url
@@ -18130,6 +18615,44 @@ components:
               type: string
               description: IdP SSO URL (optional, when connection details are loaded)
               nullable: true
+            idp_certificate:
+              type: string
+              description: Primary IdP X.509 signing certificate (optional, when connection details are loaded)
+              nullable: true
+            idp_certificate_issued_at:
+              type: integer
+              format: int64
+              description: Unix timestamp (milliseconds) of the primary certificate's X.509 NotBefore
+              nullable: true
+            idp_certificate_expires_at:
+              type: integer
+              format: int64
+              description: Unix timestamp (milliseconds) of the primary certificate's X.509 NotAfter
+              nullable: true
+            idp_certificates:
+              type: array
+              description: |
+                Every IdP signing certificate the connection trusts, primary first. A SAML response verifies against any of them.
+              items:
+                type: object
+                properties:
+                  certificate:
+                    type: string
+                    description: The X.509 certificate, base64 DER without PEM armor
+                  issued_at:
+                    type: integer
+                    format: int64
+                    nullable: true
+                    description: Unix timestamp (milliseconds) of the X.509 NotBefore
+                  expires_at:
+                    type: integer
+                    format: int64
+                    nullable: true
+                    description: Unix timestamp (milliseconds) of the X.509 NotAfter
+                required:
+                  - certificate
+                  - issued_at
+                  - expires_at
             idp_metadata_url:
               type: string
               description: IdP metadata URL (optional, when connection details are loaded)
@@ -18355,6 +18878,72 @@ components:
         url:
           type: string
           description: A short-lived URL that can be used to initiate the test run flow
+    SSOBypassAllowlistPublicUserData:
+      description: The allowlisted user's public data.
+      type: object
+      additionalProperties: false
+      properties:
+        first_name:
+          type: string
+          nullable: true
+        last_name:
+          type: string
+          nullable: true
+        image_url:
+          type: string
+        has_image:
+          type: boolean
+        identifier:
+          type: string
+        username:
+          type: string
+          nullable: true
+        profile_image_url:
+          type: string
+          nullable: true
+          deprecated: true
+          description: Use `image_url` instead.
+      required:
+        - first_name
+        - last_name
+        - identifier
+        - has_image
+        - username
+        - profile_image_url
+    SSOBypassAllowlistUser:
+      description: |
+        A user who may verify an email code instead of reaching their identity provider when enterprise SSO is unreachable.
+      type: object
+      additionalProperties: false
+      properties:
+        object:
+          type: string
+          enum:
+            - sso_bypass_allowlist_user
+        user_id:
+          type: string
+          description: The allowlisted user, and the identifier the delete endpoint takes.
+        public_user_data:
+          $ref: '#/components/schemas/SSOBypassAllowlistPublicUserData'
+        created_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of creation.
+        updated_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of last update.
+      required:
+        - object
+        - user_id
+        - public_user_data
+        - created_at
+        - updated_at
+    SSOBypassAllowlistUsers:
+      description: The instance's SSO bypass allowlist, deduplicated by user.
+      type: array
+      items:
+        $ref: '#/components/schemas/SSOBypassAllowlistUser'
     TestingToken:
       type: object
       properties:
@@ -19672,11 +20261,6 @@ components:
       required:
         - data
         - total_count
-    ReassignmentMappings:
-      type: object
-      description: Mappings from source role keys to destination role keys for role reassignment
-      additionalProperties:
-        type: string
     SCIMDirectory:
       type: object
       description: A directory configuration for provisioning users via SCIM protocol.
@@ -19705,6 +20289,12 @@ components:
         enabled:
           type: boolean
           description: Whether the directory is enabled.
+        paused:
+          type: boolean
+          description: |-
+            Whether syncing is paused. A paused directory rejects SCIM requests and skips
+            scheduled syncs, but keeps the organization memberships it granted. Disabling a directory
+            removes them instead.
         group_role_mapping_enabled:
           type: boolean
           description: Whether group-to-role mapping is enabled for this directory.
@@ -19756,6 +20346,7 @@ components:
         - endpoint_url
         - provider
         - enabled
+        - paused
         - group_role_mapping_enabled
         - attribute_mapping
         - created_at
@@ -19851,6 +20442,12 @@ components:
         enabled:
           type: boolean
           description: Whether the directory is enabled.
+        paused:
+          type: boolean
+          description: |-
+            Whether syncing is paused. A paused directory rejects provisioning requests and skips
+            scheduled syncs, but keeps the organization memberships it granted. Disabling a directory
+            removes them instead.
         group_role_mapping_enabled:
           type: boolean
           description: Whether group-to-role mapping is enabled for this directory.
@@ -19902,6 +20499,7 @@ components:
         - endpoint_url
         - provider
         - enabled
+        - paused
         - group_role_mapping_enabled
         - attribute_mapping
         - created_at
@@ -19910,6 +20508,50 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Directory'
+    DirectoryGroup:
+      type: object
+      description: A group reported by the identity provider for a directory.
+      properties:
+        object:
+          type: string
+          description: String representing the object's type. Always "directory_group".
+          enum:
+            - directory_group
+        id:
+          type: string
+          description: The group ID from the identity provider.
+        display_name:
+          type: string
+          description: The display name of the group.
+        updated_at:
+          type: integer
+          format: int64
+          description: Unix timestamp (milliseconds) of when the group was last updated on the identity provider.
+      required:
+        - object
+        - id
+        - display_name
+        - updated_at
+    DirectoryGroupMember:
+      type: object
+      description: A member of a group reported by the identity provider for a directory.
+      properties:
+        object:
+          type: string
+          description: String representing the object's type. Always "directory_group_member".
+          enum:
+            - directory_group_member
+        id:
+          type: string
+          description: The directory user ID of the member, as assigned by the directory.
+        user_id:
+          type: string
+          nullable: true
+          description: The ID of the Clerk user this member is linked to. Null until the member has been provisioned into Clerk.
+      required:
+        - object
+        - id
+        - user_id
     DirectoryGroupRoleMapping:
       type: object
       description: A mapping from a directory group to an organization role. Members of the group are assigned the role; the lowest-precedence match wins when a user belongs to multiple mapped groups.
@@ -20672,6 +21314,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/EnterpriseConnectionTestRunResponse'
+    SSOBypassAllowlistUsers:
+      description: The instance's SSO bypass allowlist, deduplicated by user
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SSOBypassAllowlistUsers'
+    SSOBypassAllowlistUser:
+      description: An SSO bypass allowlist entry
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SSOBypassAllowlistUser'
     TestingToken:
       description: A Testing Token
       content:
@@ -20893,6 +21547,43 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Directory'
+    DirectoryGroup:
+      description: A group reported by the identity provider for a directory.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DirectoryGroup'
+    DirectoryGroupMember.List:
+      description: A cursor-paginated list of the members of a group.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DirectoryGroupMember'
+              cursor:
+                type: object
+                description: Cursor information for pagination.
+                properties:
+                  starting_after:
+                    type: string
+                    nullable: true
+                    description: Cursor to fetch the next page of results. Pass it back as `starting_after` on the next request.
+                  ending_before:
+                    type: string
+                    nullable: true
+                    description: Cursor to fetch the previous page of results. Pass it back as `ending_before` on the next request.
+                  has_next_page:
+                    type: boolean
+                    description: Whether more results can be fetched using the `starting_after` cursor.
+                required:
+                  - has_next_page
+            required:
+              - data
+              - cursor
     DirectoryGroupRoleMapping.List:
       description: A list of directory group role mappings, ordered by precedence.
       content:

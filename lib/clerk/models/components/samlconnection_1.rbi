@@ -16,6 +16,8 @@ class Clerk::Models::Components::SAMLConnection1
   def name=(str_); end
   def domain(); end
   def domain=(str_); end
+  def idp_certificates(); end
+  def idp_certificates=(str_); end
   def acs_url(); end
   def acs_url=(str_); end
   def sp_entity_id(); end

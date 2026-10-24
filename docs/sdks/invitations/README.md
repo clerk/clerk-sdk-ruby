@@ -7,6 +7,7 @@
 * [create](#create) - Create an invitation
 * [list](#list) - List all invitations
 * [bulk_create](#bulk_create) - Create multiple invitations
+* [delete](#delete) - Delete an invitation
 * [revoke](#revoke) - Revokes an invitation
 
 ## create
@@ -142,6 +143,48 @@ end
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
 | Models::Errors::ClerkErrors | 400, 422                    | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## delete
+
+Permanently deletes the given invitation and the copies of the invitation email Clerk stored for its recipient.
+Unlike revoking, deleting removes the invitation record itself, which helps honor a data erasure request from someone who was invited but never signed up.
+Other records that contain the same email address, such as users or organization invitations, are not affected.
+Invitations of any status can be deleted.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="DeleteInvitation" method="delete" path="/invitations/{invitation_id}" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.invitations.delete(invitation_id: '<id>')
+
+unless res.deleted_object.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                          | Type                               | Required                           | Description                        |
+| ---------------------------------- | ---------------------------------- | ---------------------------------- | ---------------------------------- |
+| `invitation_id`                    | *::String*                         | :heavy_check_mark:                 | The ID of the invitation to delete |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::DeleteInvitationResponse)](../../models/operations/deleteinvitationresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 404                         | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## revoke

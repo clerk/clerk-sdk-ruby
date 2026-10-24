@@ -18,14 +18,22 @@ module Clerk
         # Organizations must be enabled for the instance, and the user must be a member of the organization.
         field :org_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('org_id') } }
         # Optional parameter to specify the life duration of the sign in token in seconds.
-        # By default, the duration is 30 days.
+        # By default, the duration is 30 days, or 10 minutes when `second_factor_verification` is set.
         field :expires_in_seconds, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expires_in_seconds') } }
+        # Optional parameter that lets a user with a second factor enabled complete the sign in without being prompted for it.
+        # When omitted, redeeming the token completes only the first factor, and the user must still complete their second factor.
+        # `fresh`: the second factor is treated as verified at sign in. The session token's `fva` claim reports a second factor age of 0.
+        # `stale`: the second factor is treated as unverified. The session token's `fva` claim reports the maximum second factor age of 99999, so any reverification that requires a second factor prompts the user to complete one.
+        # Has no effect for users without a second factor enabled.
+        # A token created with this parameter signs in a user with a second factor enabled without prompting for it, so `expires_in_seconds` defaults to 10 minutes. We recommend keeping it short.
+        field :second_factor_verification, Crystalline::Nilable.new(Models::Operations::SecondFactorVerification), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('second_factor_verification'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::SecondFactorVerification, true) } }
 
         
-        def initialize(user_id:, org_id: nil, expires_in_seconds: 2_592_000)
+        def initialize(user_id:, org_id: nil, expires_in_seconds: nil, second_factor_verification: nil)
           @user_id = user_id
           @org_id = org_id
           @expires_in_seconds = expires_in_seconds
+          @second_factor_verification = second_factor_verification
         end
 
         
@@ -34,6 +42,7 @@ module Clerk
           return false unless @user_id == other.user_id
           return false unless @org_id == other.org_id
           return false unless @expires_in_seconds == other.expires_in_seconds
+          return false unless @second_factor_verification == other.second_factor_verification
           true
         end
       end

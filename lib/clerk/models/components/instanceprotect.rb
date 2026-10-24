@@ -16,7 +16,7 @@ module Clerk
         field :object, Models::Components::InstanceProtectObject, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::InstanceProtectObject, false) } }
         # Whether Protect rules are enforced on this instance. False does not mean the instance is outside Protect — by default it is still evaluated in shadow, where rules are scored and recorded but never block.
         field :rules_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('rules_enabled'), required: true } }
-
+        # Whether Device Intelligence is enabled. Managed automatically or by Clerk support.
         field :specter_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('specter_enabled'), required: true } }
         # Whether the instance has opted out of the Protect prerequisite checks, asserting its setup already meets the requirements.
         field :checks_bypassed, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('checks_bypassed'), required: true } }
