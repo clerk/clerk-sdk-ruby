@@ -12,6 +12,8 @@ class Clerk::Models::Operations::UpdateDirectoryRequestBody
   def name=(str_); end
   def enabled(); end
   def enabled=(str_); end
+  def paused(); end
+  def paused=(str_); end
   def provider(); end
   def provider=(str_); end
   def attribute_mapping(); end

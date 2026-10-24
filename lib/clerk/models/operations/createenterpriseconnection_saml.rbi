@@ -8,6 +8,8 @@ end
 
 
 class Clerk::Models::Operations::CreateEnterpriseConnectionSaml
+  def idp_certificates(); end
+  def idp_certificates=(str_); end
   def idp_entity_id(); end
   def idp_entity_id=(str_); end
   def idp_sso_url(); end

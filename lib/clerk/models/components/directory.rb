@@ -24,6 +24,10 @@ module Clerk
         field :provider, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider'), required: true } }
         # Whether the directory is enabled.
         field :enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enabled'), required: true } }
+        # Whether syncing is paused. A paused directory rejects provisioning requests and skips
+        # scheduled syncs, but keeps the organization memberships it granted. Disabling a directory
+        # removes them instead.
+        field :paused, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('paused'), required: true } }
         # Whether group-to-role mapping is enabled for this directory.
         field :group_role_mapping_enabled, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('group_role_mapping_enabled'), required: true } }
         # Mapping of user attributes to the directory attribute paths they are extracted from.
@@ -40,13 +44,14 @@ module Clerk
         field :api_key, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('api_key') } }
 
         
-        def initialize(object:, id:, name:, endpoint_url:, provider:, enabled:, group_role_mapping_enabled:, attribute_mapping:, created_at:, updated_at:, custom_attributes: nil, enterprise_connection_id: nil, api_key: nil)
+        def initialize(object:, id:, name:, endpoint_url:, provider:, enabled:, paused:, group_role_mapping_enabled:, attribute_mapping:, created_at:, updated_at:, custom_attributes: nil, enterprise_connection_id: nil, api_key: nil)
           @object = object
           @id = id
           @name = name
           @endpoint_url = endpoint_url
           @provider = provider
           @enabled = enabled
+          @paused = paused
           @group_role_mapping_enabled = group_role_mapping_enabled
           @attribute_mapping = attribute_mapping
           @created_at = created_at
@@ -65,6 +70,7 @@ module Clerk
           return false unless @endpoint_url == other.endpoint_url
           return false unless @provider == other.provider
           return false unless @enabled == other.enabled
+          return false unless @paused == other.paused
           return false unless @group_role_mapping_enabled == other.group_role_mapping_enabled
           return false unless @attribute_mapping == other.attribute_mapping
           return false unless @created_at == other.created_at

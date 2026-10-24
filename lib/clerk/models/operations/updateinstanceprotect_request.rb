@@ -15,19 +15,15 @@ module Clerk
         # Set true to enforce Protect rules on this instance. Set false to stop enforcing and return the instance to its default posture, where traffic is still evaluated in shadow but nothing is blocked. This does not remove the instance from Protect.
         field :rules_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('rules_enabled') } }
 
-        field :specter_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('specter_enabled') } }
-
         
-        def initialize(rules_enabled: nil, specter_enabled: nil)
+        def initialize(rules_enabled: nil)
           @rules_enabled = rules_enabled
-          @specter_enabled = specter_enabled
         end
 
         
         def ==(other)
           return false unless other.is_a? self.class
           return false unless @rules_enabled == other.rules_enabled
-          return false unless @specter_enabled == other.specter_enabled
           true
         end
       end

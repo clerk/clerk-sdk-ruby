@@ -22,4 +22,6 @@ class Clerk::Models::Operations::UpdateOrganizationRequestBody
   def created_at=(str_); end
   def role_set_key(); end
   def role_set_key=(str_); end
+  def reassignment_mappings(); end
+  def reassignment_mappings=(str_); end
 end

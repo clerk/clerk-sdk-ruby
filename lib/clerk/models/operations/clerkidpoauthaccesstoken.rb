@@ -32,13 +32,15 @@ module Clerk
         field :updated_at, ::Float, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('updated_at'), required: true } }
         # The audiences of the access token. Omitted when no audience is set.
         field :aud, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('aud') } }
+        # The actor chain of an access token issued by an OAuth 2.0 Token Exchange (RFC 8693 section 4.1). Omitted for other access tokens.
+        field :act, Crystalline::Nilable.new(Models::Operations::Act), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('act') } }
 
         field :revocation_reason, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('revocation_reason'), required: true } }
 
         field :expiration, Crystalline::Nilable.new(::Float), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expiration'), required: true } }
 
         
-        def initialize(object:, id:, client_id:, subject:, scopes:, revoked:, expired:, created_at:, updated_at:, aud: nil, revocation_reason: nil, expiration: nil)
+        def initialize(object:, id:, client_id:, subject:, scopes:, revoked:, expired:, created_at:, updated_at:, aud: nil, act: nil, revocation_reason: nil, expiration: nil)
           @object = object
           @id = id
           @client_id = client_id
@@ -49,6 +51,7 @@ module Clerk
           @created_at = created_at
           @updated_at = updated_at
           @aud = aud
+          @act = act
           @revocation_reason = revocation_reason
           @expiration = expiration
         end
@@ -66,6 +69,7 @@ module Clerk
           return false unless @created_at == other.created_at
           return false unless @updated_at == other.updated_at
           return false unless @aud == other.aud
+          return false unless @act == other.act
           return false unless @revocation_reason == other.revocation_reason
           return false unless @expiration == other.expiration
           true
