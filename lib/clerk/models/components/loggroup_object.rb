@@ -7,12 +7,11 @@
 module Clerk
   module Models
     module Components
-      # Type - The type of the role set ("initial" or "custom")
-      class Type
+      # LogGroupObject - String representing the object's type. Always "log_group".
+      class LogGroupObject
         include ::Crystalline::Enum
         enums do
-          INITIAL = new('initial')
-          CUSTOM = new('custom')
+          LOG_GROUP = new('log_group')
         end
       end
     end

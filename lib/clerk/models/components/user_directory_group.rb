@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Components
 
-      class DirectoryGroup
+      class UserDirectoryGroup
         
         include Crystalline::MetadataFields
 

@@ -28,6 +28,8 @@ class Clerk::Models::Operations::ClerkIdpOauthAccessToken
   def updated_at=(str_); end
   def aud(); end
   def aud=(str_); end
+  def act(); end
+  def act=(str_); end
   def revocation_reason(); end
   def revocation_reason=(str_); end
   def expiration(); end

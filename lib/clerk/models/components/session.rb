@@ -25,10 +25,10 @@ module Clerk
         field :status, Models::Components::SessionStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::SessionStatus, false) } }
 
         field :last_active_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_active_at'), required: true } }
-        # Unix timestamp of expiration.
+        # Unix timestamp in milliseconds of expiration.
         #
         field :expire_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expire_at'), required: true } }
-        # Unix timestamp of abandonment.
+        # Unix timestamp in milliseconds of abandonment.
         #
         field :abandon_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('abandon_at'), required: true } }
         # Unix timestamp of last update.

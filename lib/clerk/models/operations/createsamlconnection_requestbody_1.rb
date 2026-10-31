@@ -22,13 +22,17 @@ module Clerk
         field :provider, Models::Operations::CreateSAMLConnectionProvider1, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Operations::CreateSAMLConnectionProvider1, false) } }
         # The domains of your organization. Sign in flows using an email with one of these domains, will use this SAML Connection.
         field :domains, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('domains') } }
+        # The IdP X.509 signing certificates the connection trusts, one per entry, in PEM or bare base64. Replaces the connection's whole certificate set and takes precedence over idp_certificate
+        field :idp_certificates, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificates') } }
         # Enable or deactivate ForceAuthn
         field :force_authn, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('force_authn') } }
         # The Entity ID as provided by the IdP
         field :idp_entity_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_entity_id') } }
         # The Single-Sign On URL as provided by the IdP
         field :idp_sso_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_sso_url') } }
-        # The X.509 certificate as provided by the IdP
+        # Deprecated, use idp_certificates. One X.509 certificate, PEM or bare base64, or several concatenated PEM certificates; replaces the connection's whole certificate set
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :idp_certificate, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificate') } }
         # The URL which serves the IdP metadata. If present, it takes priority over the corresponding individual properties
         field :idp_metadata_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_metadata_url') } }
@@ -42,11 +46,12 @@ module Clerk
         field :login_hint, Crystalline::Nilable.new(Models::Operations::CreateSAMLConnectionLoginHint1), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('login_hint') } }
 
         
-        def initialize(name:, domain:, provider:, domains: nil, force_authn: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, attribute_mapping: nil, login_hint: nil)
+        def initialize(name:, domain:, provider:, domains: nil, idp_certificates: nil, force_authn: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, attribute_mapping: nil, login_hint: nil)
           @name = name
           @domain = domain
           @provider = provider
           @domains = domains
+          @idp_certificates = idp_certificates
           @force_authn = force_authn
           @idp_entity_id = idp_entity_id
           @idp_sso_url = idp_sso_url
@@ -65,6 +70,7 @@ module Clerk
           return false unless @domain == other.domain
           return false unless @provider == other.provider
           return false unless @domains == other.domains
+          return false unless @idp_certificates == other.idp_certificates
           return false unless @force_authn == other.force_authn
           return false unless @idp_entity_id == other.idp_entity_id
           return false unless @idp_sso_url == other.idp_sso_url

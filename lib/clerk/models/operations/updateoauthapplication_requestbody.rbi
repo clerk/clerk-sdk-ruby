@@ -8,6 +8,10 @@ end
 
 
 class Clerk::Models::Operations::UpdateOAuthApplicationRequestBody
+  def token_exchange_enabled(); end
+  def token_exchange_enabled=(str_); end
+  def adopt_audience_resource(); end
+  def adopt_audience_resource=(str_); end
   def name(); end
   def name=(str_); end
   def redirect_uris(); end
@@ -20,6 +24,8 @@ class Clerk::Models::Operations::UpdateOAuthApplicationRequestBody
   def consent_screen_enabled=(str_); end
   def pkce_required(); end
   def pkce_required=(str_); end
+  def audience_uri(); end
+  def audience_uri=(str_); end
   def device_authorization_grant_enabled(); end
   def device_authorization_grant_enabled=(str_); end
   def public(); end

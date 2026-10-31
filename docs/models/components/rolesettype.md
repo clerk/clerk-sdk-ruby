@@ -1,4 +1,4 @@
-# Type
+# RoleSetType
 
 The type of the role set ("initial" or "custom")
 
@@ -7,7 +7,7 @@ The type of the role set ("initial" or "custom")
 ```ruby
 require "clerk-sdk-ruby"
 
-value = Type::INITIAL
+value = RoleSetType::INITIAL
 ```
 
 
