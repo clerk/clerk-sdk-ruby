@@ -22,6 +22,8 @@ class Clerk::Models::Operations::UpdateUserRequestBody
   def last_name=(str_); end
   def locale(); end
   def locale=(str_); end
+  def timezone(); end
+  def timezone=(str_); end
   def primary_email_address_id(); end
   def primary_email_address_id=(str_); end
   def primary_phone_number_id(); end

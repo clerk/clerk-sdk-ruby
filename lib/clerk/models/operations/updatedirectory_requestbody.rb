@@ -16,6 +16,10 @@ module Clerk
         field :name, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name') } }
         # Whether the directory is enabled.
         field :enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enabled') } }
+        # Pause or resume syncing. Pausing rejects provisioning requests and skips scheduled
+        # syncs while keeping the organization memberships the directory granted, so sync picks
+        # up where it left off. Disabling removes them instead.
+        field :paused, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('paused') } }
         # The identity provider for this directory.
         field :provider, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider') } }
         # Attribute-to-directory-path entries to merge into the directory's attribute mapping.
@@ -25,9 +29,10 @@ module Clerk
         field :group_role_mapping_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('group_role_mapping_enabled') } }
 
         
-        def initialize(name: nil, enabled: nil, provider: nil, attribute_mapping: nil, group_role_mapping_enabled: nil)
+        def initialize(name: nil, enabled: nil, paused: nil, provider: nil, attribute_mapping: nil, group_role_mapping_enabled: nil)
           @name = name
           @enabled = enabled
+          @paused = paused
           @provider = provider
           @attribute_mapping = attribute_mapping
           @group_role_mapping_enabled = group_role_mapping_enabled
@@ -38,6 +43,7 @@ module Clerk
           return false unless other.is_a? self.class
           return false unless @name == other.name
           return false unless @enabled == other.enabled
+          return false unless @paused == other.paused
           return false unless @provider == other.provider
           return false unless @attribute_mapping == other.attribute_mapping
           return false unless @group_role_mapping_enabled == other.group_role_mapping_enabled

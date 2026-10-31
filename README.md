@@ -423,6 +423,8 @@ end
 * [update](docs/sdks/directories/README.md#update) - Update a directory
 * [delete](docs/sdks/directories/README.md#delete) - Delete a directory
 * [rotate_api_key](docs/sdks/directories/README.md#rotate_api_key) - Rotate a directory's API key
+* [get_group](docs/sdks/directories/README.md#get_group) - Retrieve a directory group
+* [list_group_members](docs/sdks/directories/README.md#list_group_members) - List directory group members
 * [list_group_role_mappings](docs/sdks/directories/README.md#list_group_role_mappings) - List directory group role mappings
 * [create_group_role_mapping](docs/sdks/directories/README.md#create_group_role_mapping) - Create a directory group role mapping
 * [replace_group_role_mappings](docs/sdks/directories/README.md#replace_group_role_mappings) - Replace directory group role mappings
@@ -486,6 +488,7 @@ end
 * [create](docs/sdks/invitations/README.md#create) - Create an invitation
 * [list](docs/sdks/invitations/README.md#list) - List all invitations
 * [bulk_create](docs/sdks/invitations/README.md#bulk_create) - Create multiple invitations
+* [delete](docs/sdks/invitations/README.md#delete) - Delete an invitation
 * [revoke](docs/sdks/invitations/README.md#revoke) - Revokes an invitation
 
 ### [Jwks](docs/sdks/jwks/README.md)
@@ -499,6 +502,13 @@ end
 * [get](docs/sdks/jwttemplates/README.md#get) - Retrieve a template
 * [update](docs/sdks/jwttemplates/README.md#update) - Update a JWT template
 * [delete](docs/sdks/jwttemplates/README.md#delete) - Delete a Template
+
+### [Logs](docs/sdks/logs/README.md)
+
+* [list](docs/sdks/logs/README.md#list) - List all logs
+* [get_schema](docs/sdks/logs/README.md#get_schema) - Retrieve the payload schema of a log event type
+* [list_group_events](docs/sdks/logs/README.md#list_group_events) - List an event group's logs
+* [get](docs/sdks/logs/README.md#get) - Retrieve a single log
 
 ### [M2m](docs/sdks/m2m/README.md)
 
@@ -671,6 +681,12 @@ end
 * [get](docs/sdks/signups/README.md#get) - Retrieve a sign-up by ID
 * [update](docs/sdks/signups/README.md#update) - Update a sign-up
 
+### [SsoBypassAllowlistUsers](docs/sdks/ssobypassallowlistusers/README.md)
+
+* [list](docs/sdks/ssobypassallowlistusers/README.md#list) - List the SSO bypass allowlist
+* [create](docs/sdks/ssobypassallowlistusers/README.md#create) - Add a user to the SSO bypass allowlist
+* [delete](docs/sdks/ssobypassallowlistusers/README.md#delete) - Remove a user from the SSO bypass allowlist
+
 ### [~~Templates~~](docs/sdks/templates/README.md)
 
 * [~~preview~~](docs/sdks/templates/README.md#preview) - Preview changes to a template :warning: **Deprecated**
@@ -693,6 +709,7 @@ end
 * [bulk_unban](docs/sdks/users/README.md#bulk_unban) - Unban multiple users
 * [lock](docs/sdks/users/README.md#lock) - Lock a user
 * [unlock](docs/sdks/users/README.md#unlock) - Unlock a user
+* [merge](docs/sdks/users/README.md#merge) - Merge another user into this user
 * [set_profile_image](docs/sdks/users/README.md#set_profile_image) - Set user profile image
 * [delete_profile_image](docs/sdks/users/README.md#delete_profile_image) - Delete user profile image
 * [update_metadata](docs/sdks/users/README.md#update_metadata) - Merge and update a user's metadata

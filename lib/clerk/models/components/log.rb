@@ -7,35 +7,104 @@
 module Clerk
   module Models
     module Components
-
+      # A log entry representing a recorded event.
       class Log
         
         include Crystalline::MetadataFields
 
-
-        field :level, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('level'), required: true } }
-
-        field :message, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('message'), required: true } }
-
-        field :code, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('code') } }
-
-        field :short_message, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('short_message') } }
+        # String representing the object's type. Always "log".
+        field :object, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('object'), required: true } }
+        # Unique identifier for the log event.
+        field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
+        # The timestamp when the event occurred (Unix timestamp in milliseconds).
+        field :event_time, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('event_time'), required: true } }
+        # The actor that performed the action (e.g., user ID).
+        field :actor, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('actor'), required: true } }
+        # The subject of the event (e.g., user ID, resource ID).
+        field :subject, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('subject'), required: true } }
+        # The type of the log event.
+        field :type, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('type'), required: true } }
+        # Trace ID for distributed tracing (32 hex characters).
+        field :trace_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('trace_id'), required: true } }
+        # Span ID for distributed tracing (16 hex characters).
+        field :span_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('span_id'), required: true } }
+        # Context information about the environment and device where the event occurred.
+        field :event_context, Models::Components::LogContext, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('event_context'), required: true } }
+        # The kind of principal the `actor` identifies, classified when the
+        # event was recorded: `user` (an end user of your application),
+        # `dashboard_user` (a member of your Clerk Dashboard workspace),
+        # `instance_key`, `api_key`, `integration`, or `clerk_system`.
+        field :actor_type, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('actor_type') } }
+        # The source service that generated the event.
+        field :source, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('source'), required: true } }
+        # Present only when the request selected payload fields via
+        # `payload_fields`. Partial by construction: contains just the
+        # requested fields, keyed by their dot-paths, with fields absent
+        # from this event's payload omitted (an empty object when the
+        # event carries none of them). Use the single-event endpoint for
+        # the full payload.
+        field :payload, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('payload') } }
+        # The impersonator that performed the action.
+        field :impersonator, Crystalline::Nilable.new(Models::Components::LogImpersonator), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('impersonator') } }
+        # The client ID of the request. Set on FAPI requests, unset on BAPI requests.
+        field :client_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('client_id') } }
+        # The ID of the session the event occurred in, if any.
+        field :session_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('session_id') } }
+        # Parent span ID for hierarchical tracing.
+        field :parent_span_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('parent_span_id') } }
+        # The ID of the event group (a flow such as a sign-in) the event
+        # belongs to, e.g. a sign-in ID. Null for an event outside any group.
+        field :group_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('group_id') } }
+        # The kind of event group the event belongs to, e.g. `sign_in`. Null for an event outside any group.
+        field :group_type, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('group_type') } }
+        # When the event's group started (Unix timestamp in milliseconds). Null for an event outside any group.
+        field :group_started_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('group_started_at') } }
 
         
-        def initialize(level:, message:, code: nil, short_message: nil)
-          @level = level
-          @message = message
-          @code = code
-          @short_message = short_message
+        def initialize(object:, id:, event_time:, actor:, subject:, type:, trace_id:, span_id:, event_context:, actor_type: nil, source: nil, payload: nil, impersonator: nil, client_id: nil, session_id: nil, parent_span_id: nil, group_id: nil, group_type: nil, group_started_at: nil)
+          @object = object
+          @id = id
+          @event_time = event_time
+          @actor = actor
+          @subject = subject
+          @type = type
+          @trace_id = trace_id
+          @span_id = span_id
+          @event_context = event_context
+          @actor_type = actor_type
+          @source = source
+          @payload = payload
+          @impersonator = impersonator
+          @client_id = client_id
+          @session_id = session_id
+          @parent_span_id = parent_span_id
+          @group_id = group_id
+          @group_type = group_type
+          @group_started_at = group_started_at
         end
 
         
         def ==(other)
           return false unless other.is_a? self.class
-          return false unless @level == other.level
-          return false unless @message == other.message
-          return false unless @code == other.code
-          return false unless @short_message == other.short_message
+          return false unless @object == other.object
+          return false unless @id == other.id
+          return false unless @event_time == other.event_time
+          return false unless @actor == other.actor
+          return false unless @subject == other.subject
+          return false unless @type == other.type
+          return false unless @trace_id == other.trace_id
+          return false unless @span_id == other.span_id
+          return false unless @event_context == other.event_context
+          return false unless @actor_type == other.actor_type
+          return false unless @source == other.source
+          return false unless @payload == other.payload
+          return false unless @impersonator == other.impersonator
+          return false unless @client_id == other.client_id
+          return false unless @session_id == other.session_id
+          return false unless @parent_span_id == other.parent_span_id
+          return false unless @group_id == other.group_id
+          return false unless @group_type == other.group_type
+          return false unless @group_started_at == other.group_started_at
           true
         end
       end
