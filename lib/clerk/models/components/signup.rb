@@ -62,11 +62,13 @@ module Clerk
         field :legal_accepted_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('legal_accepted_at'), required: true } }
         # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :external_account, Crystalline::Nilable.new(Models::Components::SignUpExternalAccount), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('external_account') } }
+        # The IANA timezone associated with the sign-up attempt.
+        field :timezone, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('timezone') } }
         # The user locale preference for the sign-up specified as a BCP-47 language tag.
         field :locale, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('locale') } }
 
         
-        def initialize(object:, id:, status:, required_fields:, optional_fields:, missing_fields:, unverified_fields:, verifications:, password_enabled:, custom_action:, abandon_at:, username: nil, email_address: nil, phone_number: nil, web3_wallet: nil, first_name: nil, last_name: nil, unsafe_metadata: nil, public_metadata: nil, external_id: nil, created_session_id: nil, created_user_id: nil, legal_accepted_at: nil, external_account: nil, locale: nil)
+        def initialize(object:, id:, status:, required_fields:, optional_fields:, missing_fields:, unverified_fields:, verifications:, password_enabled:, custom_action:, abandon_at:, username: nil, email_address: nil, phone_number: nil, web3_wallet: nil, first_name: nil, last_name: nil, unsafe_metadata: nil, public_metadata: nil, external_id: nil, created_session_id: nil, created_user_id: nil, legal_accepted_at: nil, external_account: nil, timezone: nil, locale: nil)
           @object = object
           @id = id
           @status = status
@@ -91,6 +93,7 @@ module Clerk
           @created_user_id = created_user_id
           @legal_accepted_at = legal_accepted_at
           @external_account = external_account
+          @timezone = timezone
           @locale = locale
         end
 
@@ -121,6 +124,7 @@ module Clerk
           return false unless @created_user_id == other.created_user_id
           return false unless @legal_accepted_at == other.legal_accepted_at
           return false unless @external_account == other.external_account
+          return false unless @timezone == other.timezone
           return false unless @locale == other.locale
           true
         end

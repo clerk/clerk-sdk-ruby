@@ -12,6 +12,8 @@ class Clerk::Models::Operations::ListInvitationsRequest
   def status=(str_); end
   def query(); end
   def query=(str_); end
+  def email_address(); end
+  def email_address=(str_); end
   def paginated(); end
   def paginated=(str_); end
   def order_by(); end

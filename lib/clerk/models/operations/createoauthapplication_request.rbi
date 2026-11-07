@@ -10,10 +10,16 @@ end
 class Clerk::Models::Operations::CreateOAuthApplicationRequest
   def name(); end
   def name=(str_); end
+  def token_exchange_enabled(); end
+  def token_exchange_enabled=(str_); end
+  def adopt_audience_resource(); end
+  def adopt_audience_resource=(str_); end
   def redirect_uris(); end
   def redirect_uris=(str_); end
   def callback_url(); end
   def callback_url=(str_); end
+  def audience_uri(); end
+  def audience_uri=(str_); end
   def public(); end
   def public=(str_); end
   def scopes(); end

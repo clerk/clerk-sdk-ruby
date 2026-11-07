@@ -42,6 +42,12 @@ module Clerk
         field :missing_member_with_elevated_permissions, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('missing_member_with_elevated_permissions') } }
 
         field :pending_invitations_count, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('pending_invitations_count') } }
+        # Whether this organization can configure self-serve enterprise SSO.
+        #
+        field :self_serve_sso_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('self_serve_sso_enabled') } }
+        # Whether this organization can configure self-serve Directory Sync (SCIM).
+        #
+        field :self_serve_directory_sync_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('self_serve_directory_sync_enabled') } }
 
         field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
 
@@ -51,15 +57,12 @@ module Clerk
         field :last_active_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_active_at') } }
         # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :logo_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('logo_url') } }
-        # Whether this organization can configure self-serve enterprise SSO.
-        #
-        field :self_serve_sso_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('self_serve_sso_enabled') } }
         # The key of the [role set](https://clerk.com/docs/guides/organizations/control-access/role-sets) assigned to this organization.
         #
         field :role_set_key, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('role_set_key') } }
 
         
-        def initialize(object:, id:, name:, slug:, image_url:, has_image:, max_allowed_memberships:, admin_delete_enabled:, public_metadata:, created_at:, updated_at:, members_count: nil, missing_member_with_elevated_permissions: nil, pending_invitations_count: nil, private_metadata: nil, created_by: nil, last_active_at: nil, logo_url: nil, self_serve_sso_enabled: nil, role_set_key: nil)
+        def initialize(object:, id:, name:, slug:, image_url:, has_image:, max_allowed_memberships:, admin_delete_enabled:, public_metadata:, created_at:, updated_at:, members_count: nil, missing_member_with_elevated_permissions: nil, pending_invitations_count: nil, self_serve_sso_enabled: nil, self_serve_directory_sync_enabled: nil, private_metadata: nil, created_by: nil, last_active_at: nil, logo_url: nil, role_set_key: nil)
           @object = object
           @id = id
           @name = name
@@ -74,11 +77,12 @@ module Clerk
           @members_count = members_count
           @missing_member_with_elevated_permissions = missing_member_with_elevated_permissions
           @pending_invitations_count = pending_invitations_count
+          @self_serve_sso_enabled = self_serve_sso_enabled
+          @self_serve_directory_sync_enabled = self_serve_directory_sync_enabled
           @private_metadata = private_metadata
           @created_by = created_by
           @last_active_at = last_active_at
           @logo_url = logo_url
-          @self_serve_sso_enabled = self_serve_sso_enabled
           @role_set_key = role_set_key
         end
 
@@ -99,11 +103,12 @@ module Clerk
           return false unless @members_count == other.members_count
           return false unless @missing_member_with_elevated_permissions == other.missing_member_with_elevated_permissions
           return false unless @pending_invitations_count == other.pending_invitations_count
+          return false unless @self_serve_sso_enabled == other.self_serve_sso_enabled
+          return false unless @self_serve_directory_sync_enabled == other.self_serve_directory_sync_enabled
           return false unless @private_metadata == other.private_metadata
           return false unless @created_by == other.created_by
           return false unless @last_active_at == other.last_active_at
           return false unless @logo_url == other.logo_url
-          return false unless @self_serve_sso_enabled == other.self_serve_sso_enabled
           return false unless @role_set_key == other.role_set_key
           true
         end

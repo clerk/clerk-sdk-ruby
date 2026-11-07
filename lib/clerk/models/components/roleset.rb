@@ -23,7 +23,7 @@ module Clerk
         # The list of roles in this role set
         field :roles, Crystalline::Array.new(Models::Components::RoleSetItem), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('roles'), required: true } }
         # The type of the role set ("initial" or "custom")
-        field :type, Models::Components::Type, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('type'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::Type, false) } }
+        field :type, Models::Components::RoleSetType, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('type'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::RoleSetType, false) } }
         # Unix timestamp of role set creation
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # Unix timestamp of last role set update
