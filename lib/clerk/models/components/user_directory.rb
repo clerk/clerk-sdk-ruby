@@ -29,7 +29,7 @@ module Clerk
 
         field :enterprise_connection_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('enterprise_connection_id'), required: true } }
         # Omitted when groups were not loaded; an empty array means no group memberships.
-        field :groups, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::DirectoryGroup)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('groups') } }
+        field :groups, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::UserDirectoryGroup)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('groups') } }
         # The user's external ID as reported by the directory, if any.
         #
         field :external_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('external_id'), required: true } }

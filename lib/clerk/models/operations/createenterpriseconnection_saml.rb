@@ -13,11 +13,15 @@ module Clerk
         
         include Crystalline::MetadataFields
 
+        # The IdP X.509 signing certificates the connection trusts, one per entry, in PEM or bare base64. Replaces the connection's whole certificate set and takes precedence over idp_certificate
+        field :idp_certificates, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificates') } }
         # IdP entity ID
         field :idp_entity_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_entity_id') } }
         # IdP SSO URL
         field :idp_sso_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_sso_url') } }
-        # IdP certificate (PEM)
+        # Deprecated, use idp_certificates. One X.509 certificate, PEM or bare base64, or several concatenated PEM certificates; replaces the connection's whole certificate set
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :idp_certificate, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificate') } }
         # URL to IdP metadata
         field :idp_metadata_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_metadata_url') } }
@@ -35,7 +39,8 @@ module Clerk
         field :login_hint, Crystalline::Nilable.new(Models::Operations::CreateEnterpriseConnectionLoginHint), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('login_hint') } }
 
         
-        def initialize(idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, attribute_mapping: nil, allow_subdomains: nil, allow_idp_initiated: nil, force_authn: nil, login_hint: nil)
+        def initialize(idp_certificates: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, attribute_mapping: nil, allow_subdomains: nil, allow_idp_initiated: nil, force_authn: nil, login_hint: nil)
+          @idp_certificates = idp_certificates
           @idp_entity_id = idp_entity_id
           @idp_sso_url = idp_sso_url
           @idp_certificate = idp_certificate
@@ -51,6 +56,7 @@ module Clerk
         
         def ==(other)
           return false unless other.is_a? self.class
+          return false unless @idp_certificates == other.idp_certificates
           return false unless @idp_entity_id == other.idp_entity_id
           return false unless @idp_sso_url == other.idp_sso_url
           return false unless @idp_certificate == other.idp_certificate

@@ -36,14 +36,16 @@ class Clerk::Models::Components::OrganizationMembershipOrganization
   def missing_member_with_elevated_permissions=(str_); end
   def pending_invitations_count(); end
   def pending_invitations_count=(str_); end
+  def self_serve_sso_enabled(); end
+  def self_serve_sso_enabled=(str_); end
+  def self_serve_directory_sync_enabled(); end
+  def self_serve_directory_sync_enabled=(str_); end
   def private_metadata(); end
   def private_metadata=(str_); end
   def created_by(); end
   def created_by=(str_); end
   def last_active_at(); end
   def last_active_at=(str_); end
-  def self_serve_sso_enabled(); end
-  def self_serve_sso_enabled=(str_); end
   def role_set_key(); end
   def role_set_key=(str_); end
 end
