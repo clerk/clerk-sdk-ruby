@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 404 Not Found
-      class VerifyOAuthAccessTokenNotFoundError < StandardError
+      class VerifyOAuthAccessTokenNotFoundError < ::StandardError
         
         include Crystalline::MetadataFields
 

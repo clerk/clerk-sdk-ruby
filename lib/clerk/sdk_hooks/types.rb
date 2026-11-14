@@ -87,7 +87,7 @@ module Clerk
 
       
       def sdk_init(config:)
-        Kernel.raise NotImplementedError.new
+        ::Kernel.raise ::NotImplementedError.new
       end
     end
 
@@ -98,7 +98,7 @@ module Clerk
 
       
       def before_request(hook_ctx:, request:)
-        Kernel.raise NotImplementedError.new
+        ::Kernel.raise ::NotImplementedError.new
       end
     end
 
@@ -109,7 +109,7 @@ module Clerk
 
       
       def after_success(hook_ctx:, response:)
-        Kernel.raise NotImplementedError.new
+        ::Kernel.raise ::NotImplementedError.new
       end
     end
 
@@ -120,7 +120,7 @@ module Clerk
 
       
       def after_error(error:, hook_ctx:, response:)
-        Kernel.raise NotImplementedError.new
+        ::Kernel.raise ::NotImplementedError.new
       end
     end
 

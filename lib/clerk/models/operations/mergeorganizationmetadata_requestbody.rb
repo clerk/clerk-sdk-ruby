@@ -14,10 +14,10 @@ module Clerk
 
         # Metadata saved on the organization, that is visible to both your frontend and backend.
         # The new object will be merged with the existing value.
-        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
+        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
         # Metadata saved on the organization that is only visible to your backend.
         # The new object will be merged with the existing value.
-        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
+        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
 
         
         def initialize(public_metadata: nil, private_metadata: nil)

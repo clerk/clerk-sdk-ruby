@@ -21,10 +21,10 @@ module Clerk
         field :inviter_user_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('inviter_user_id') } }
         # Metadata saved on the organization invitation, read-only from the Frontend API and fully accessible (read/write) from the Backend API.
         # When the organization invitation is accepted, the metadata will be transferred to the newly created organization membership.
-        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
+        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
         # Metadata saved on the organization invitation, fully accessible (read/write) from the Backend API but not visible from the Frontend API.
         # When the organization invitation is accepted, the metadata will be transferred to the newly created organization membership.
-        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
+        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
         # Optional URL that the invitee will be redirected to once they accept the invitation by clicking the join link in the invitation email.
         field :redirect_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('redirect_url') } }
         # The number of days the invitation will be valid for. By default, the invitation has a 30 days expire.

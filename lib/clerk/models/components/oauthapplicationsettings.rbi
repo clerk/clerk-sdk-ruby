@@ -16,6 +16,8 @@ class Clerk::Models::Components::OAuthApplicationSettings
   def oauth_jwt_access_tokens=(str_); end
   def aud_claim_enabled(); end
   def aud_claim_enabled=(str_); end
+  def aud_claim_refresh_backfill_enabled(); end
+  def aud_claim_refresh_backfill_enabled=(str_); end
   def pkce_required(); end
   def pkce_required=(str_); end
   def client_id_metadata_documents_advertised(); end
@@ -26,4 +28,6 @@ class Clerk::Models::Components::OAuthApplicationSettings
   def client_id_metadata_documents_block_implicitly_allowed_clients=(str_); end
   def default_scopes(); end
   def default_scopes=(str_); end
+  def dynamic_client_allowed_scopes(); end
+  def dynamic_client_allowed_scopes=(str_); end
 end

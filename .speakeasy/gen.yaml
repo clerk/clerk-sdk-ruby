@@ -15,6 +15,7 @@ generation:
     sharedErrorComponentsApr2025: true
     sharedNestedComponentsJan2026: false
     nameOverrideFeb2026: false
+    openSingleValueEnumsOct2026: false
   auth:
     oAuth2ClientCredentialsEnabled: true
     oAuth2PasswordEnabled: true
@@ -31,7 +32,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 ruby:
-  version: 8.0.2
+  version: 8.0.3
   additionalDependencies:
     development:
       activesupport: ~> 8.0.0

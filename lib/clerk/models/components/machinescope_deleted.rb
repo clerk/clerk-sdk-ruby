@@ -27,7 +27,7 @@ module Clerk
           @from_machine_id = from_machine_id
           @to_machine_id = to_machine_id
           unless deleted == true
-            raise ArgumentError, 'Invalid value for deleted'
+            raise ::ArgumentError, 'Invalid value for deleted'
           end
           @deleted = true
         end

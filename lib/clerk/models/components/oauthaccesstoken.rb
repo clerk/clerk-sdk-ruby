@@ -23,7 +23,7 @@ module Clerk
         # The ID of the provider
         field :provider, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('provider'), required: true } }
 
-        field :public_metadata, Crystalline::Hash.new(Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
+        field :public_metadata, Crystalline::Hash.new(::Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
         # Unix timestamp of the access token expiration.
         field :expires_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('expires_at'), required: true } }
 

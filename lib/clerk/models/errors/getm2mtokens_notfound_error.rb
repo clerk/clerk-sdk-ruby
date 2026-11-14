@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 404 Not Found
-      class GetM2MTokensNotFoundError < StandardError
+      class GetM2MTokensNotFoundError < ::StandardError
         
         include Crystalline::MetadataFields
 

@@ -53,7 +53,7 @@ module Clerk
         end
 
         items.join(',') if !items.empty?
-      elsif obj.is_a? Hash
+      elsif obj.is_a? ::Hash
         items = []
         obj.each do |key, value|
           next if value.nil?
@@ -67,7 +67,7 @@ module Clerk
         end
 
         items.join(',') if !items.empty?
-      elsif obj.is_a? Array
+      elsif obj.is_a? ::Array
         items = obj.filter { |v| !v.nil? }.map { |v| val_to_string(v) }.join(',')
       else
         val_to_string(obj)

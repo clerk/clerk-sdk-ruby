@@ -68,7 +68,7 @@ module Clerk
       @server_url = server_url
       @timeout = (timeout_ms.to_f / 1000) unless timeout_ms.nil?
       @server_idx = server_idx.nil? ? 0 : server_idx
-      raise StandardError, "Invalid server index #{server_idx}" if @server_idx.negative? || @server_idx >= SERVERS.length
+      raise ::StandardError, "Invalid server index #{server_idx}" if @server_idx.negative? || @server_idx >= SERVERS.length
       if !security_source.nil?
         @security_source = security_source
       elsif !bearer_auth.nil?
@@ -76,9 +76,9 @@ module Clerk
       end
       @language = 'ruby'
       @openapi_doc_version = '2026-05-12'
-      @sdk_version = '8.0.2'
-      @gen_version = '2.943.0'
-      @user_agent = 'speakeasy-sdk/ruby 8.0.2 2.943.0 2026-05-12 clerk-sdk-ruby'
+      @sdk_version = '8.0.3'
+      @gen_version = '2.961.1'
+      @user_agent = 'speakeasy-sdk/ruby 8.0.3 2.961.1 2026-05-12 clerk-sdk-ruby'
     end
 
     

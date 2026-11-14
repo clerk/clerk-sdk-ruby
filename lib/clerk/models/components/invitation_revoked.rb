@@ -19,7 +19,7 @@ module Clerk
 
         field :email_address, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address'), required: true } }
 
-        field :public_metadata, Crystalline::Hash.new(Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
+        field :public_metadata, Crystalline::Hash.new(::Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
 
         field :status, Models::Components::StatusResponse, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::StatusResponse, false) } }
         # Unix timestamp of creation.
@@ -47,7 +47,7 @@ module Clerk
           @updated_at = updated_at
           @url = url
           unless revoked == true
-            raise ArgumentError, 'Invalid value for revoked'
+            raise ::ArgumentError, 'Invalid value for revoked'
           end
           @revoked = true
           @expires_at = expires_at

@@ -31,7 +31,7 @@ module Clerk
 
         field :last_name, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_name'), required: true } }
 
-        field :public_metadata, Crystalline::Hash.new(Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
+        field :public_metadata, Crystalline::Hash.new(::Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
         # Unix timestamp of creation
         #
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
@@ -45,7 +45,7 @@ module Clerk
 
         field :verification, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::ExternalAccountWithVerificationOauth, Models::Components::GoogleOneTap)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('verification'), required: true }, 'discriminator': 'object', 'discriminator_mapping': { 'verification_oauth' => Models::Components::ExternalAccountWithVerificationOauth, 'verification_google_one_tap' => Models::Components::GoogleOneTap } }
 
-        field :additional_properties, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('additional_properties'), 'additional_properties': true } }
+        field :additional_properties, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('additional_properties'), 'additional_properties': true } }
         # Whether the email was verified by the OAuth provider at creation time. null = unknown (pre-migration data or custom OAuth providers), true = provider confirmed email was verified, false = provider confirmed email was NOT verified
         #
         field :email_address_verified, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address_verified') } }
