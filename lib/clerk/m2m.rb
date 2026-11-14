@@ -51,12 +51,12 @@ module Clerk
       
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :request, :json)
       headers['content-type'] = req_content_type
-      raise StandardError, 'request body is required' if data.nil? && form.nil?
+      raise ::StandardError, 'request body is required' if data.nil? && form.nil?
 
       if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
-        body = URI.encode_www_form(data)
+        body = ::URI.encode_www_form(data)
       else
         body = data
       end
@@ -73,7 +73,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -114,7 +114,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -150,7 +150,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::CreateM2MTokenResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::CreateM2MTokenResponseBody)
           response = Models::Operations::CreateM2MTokenResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -171,7 +171,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::CreateM2MTokenBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::CreateM2MTokenBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -186,7 +186,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::CreateM2MTokenConflictError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::CreateM2MTokenConflictError)
           obj.raw_response = http_response
           raise obj
         else
@@ -233,7 +233,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -274,7 +274,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -310,7 +310,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::GetM2MTokensResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::GetM2MTokensResponseBody)
           response = Models::Operations::GetM2MTokensResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -331,7 +331,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::GetM2MTokensBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::GetM2MTokensBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -346,7 +346,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::GetM2MTokensForbiddenError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::GetM2MTokensForbiddenError)
           obj.raw_response = http_response
           raise obj
         else
@@ -361,7 +361,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::GetM2MTokensNotFoundError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::GetM2MTokensNotFoundError)
           obj.raw_response = http_response
           raise obj
         else
@@ -405,12 +405,12 @@ module Clerk
       
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
-      raise StandardError, 'request body is required' if data.nil? && form.nil?
+      raise ::StandardError, 'request body is required' if data.nil? && form.nil?
 
       if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
-        body = URI.encode_www_form(data)
+        body = ::URI.encode_www_form(data)
       else
         body = data
       end
@@ -427,7 +427,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -468,7 +468,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -504,7 +504,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::RevokeM2MTokenResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::RevokeM2MTokenResponseBody)
           response = Models::Operations::RevokeM2MTokenResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -525,7 +525,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::RevokeM2MTokenBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::RevokeM2MTokenBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -540,7 +540,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::RevokeM2MTokenNotFoundError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::RevokeM2MTokenNotFoundError)
           obj.raw_response = http_response
           raise obj
         else
@@ -573,12 +573,12 @@ module Clerk
       
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :request, :json)
       headers['content-type'] = req_content_type
-      raise StandardError, 'request body is required' if data.nil? && form.nil?
+      raise ::StandardError, 'request body is required' if data.nil? && form.nil?
 
       if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
-        body = URI.encode_www_form(data)
+        body = ::URI.encode_www_form(data)
       else
         body = data
       end
@@ -595,7 +595,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -636,7 +636,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -672,7 +672,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::VerifyM2MTokenResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::VerifyM2MTokenResponseBody)
           response = Models::Operations::VerifyM2MTokenResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -693,7 +693,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::VerifyM2MTokenBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::VerifyM2MTokenBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -708,7 +708,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::VerifyM2MTokenNotFoundError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::VerifyM2MTokenNotFoundError)
           obj.raw_response = http_response
           raise obj
         else

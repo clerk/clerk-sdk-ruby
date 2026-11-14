@@ -27,7 +27,7 @@ module Clerk
         #
         field :protocol, Crystalline::Nilable.new(Models::Components::Protocol), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('protocol'), 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::Protocol, true) } }
 
-        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
+        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
 
         field :verification, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::EnterpriseAccountTicket, Models::Components::EnterpriseAccountSAML, Models::Components::EnterpriseAccountOauth)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('verification'), required: true }, 'discriminator': 'object', 'discriminator_mapping': { 'verification_ticket' => Models::Components::EnterpriseAccountTicket, 'verification_saml' => Models::Components::EnterpriseAccountSAML, 'verification_oauth' => Models::Components::EnterpriseAccountOauth } }
 

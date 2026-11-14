@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 409 Conflict
-      class CreateAdminPortalLinkTokenConflictError < StandardError
+      class CreateAdminPortalLinkTokenConflictError < ::StandardError
         
         include Crystalline::MetadataFields
 

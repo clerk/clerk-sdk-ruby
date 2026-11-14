@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 400 Bad Request
-      class GetM2MTokensBadRequestError < StandardError
+      class GetM2MTokensBadRequestError < ::StandardError
         
         include Crystalline::MetadataFields
 

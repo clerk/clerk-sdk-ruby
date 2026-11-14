@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 400 Bad Request
-      class RevokeAdminPortalLinkTokenBadRequestError < StandardError
+      class RevokeAdminPortalLinkTokenBadRequestError < ::StandardError
         
         include Crystalline::MetadataFields
 

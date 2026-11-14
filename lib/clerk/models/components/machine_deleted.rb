@@ -24,7 +24,7 @@ module Clerk
           @object = object
           @id = id
           unless deleted == true
-            raise ArgumentError, 'Invalid value for deleted'
+            raise ::ArgumentError, 'Invalid value for deleted'
           end
           @deleted = true
         end

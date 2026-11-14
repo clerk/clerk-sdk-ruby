@@ -16,7 +16,7 @@ module Clerk
         field :dest_role_set_key, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('dest_role_set_key'), required: true } }
         # Mappings from source role keys to destination role keys.
         # Required if members have roles that need to be reassigned.
-        field :reassignment_mappings, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('reassignment_mappings') } }
+        field :reassignment_mappings, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('reassignment_mappings') } }
 
         
         def initialize(dest_role_set_key:, reassignment_mappings: nil)

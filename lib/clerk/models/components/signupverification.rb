@@ -17,7 +17,7 @@ module Clerk
 
         field :supported_strategies, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('supported_strategies') } }
 
-        field :additional_properties, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('additional_properties'), 'additional_properties': true } }
+        field :additional_properties, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('additional_properties'), 'additional_properties': true } }
 
         
         def initialize(next_action: nil, supported_strategies: nil, additional_properties: nil)

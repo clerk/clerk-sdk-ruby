@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 401 Unauthorized
-      class CreateAdminPortalLinkTokenUnauthorizedError < StandardError
+      class CreateAdminPortalLinkTokenUnauthorizedError < ::StandardError
         
         include Crystalline::MetadataFields
 

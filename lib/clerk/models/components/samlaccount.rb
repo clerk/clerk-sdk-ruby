@@ -24,7 +24,7 @@ module Clerk
 
         field :email_address, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address'), required: true } }
 
-        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
+        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
 
         field :verification, Crystalline::Nilable.new(Crystalline::Union.new(Models::Components::SAMLAccountSAML, Models::Components::SAMLAccountTicket)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('verification'), required: true }, 'discriminator': 'object', 'discriminator_mapping': { 'verification_saml' => Models::Components::SAMLAccountSAML, 'verification_ticket' => Models::Components::SAMLAccountTicket } }
 

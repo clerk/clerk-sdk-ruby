@@ -7,14 +7,14 @@ module Clerk
   module Models
     module Errors
 
-      class APIError < StandardError
+      class APIError < ::StandardError
         include Crystalline::MetadataFields
         
 
         
-        field :body, Crystalline::Nilable.new(String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('body') } }
+        field :body, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('body') } }
         field :raw_response, Crystalline::Nilable.new(Faraday::Response), {}
-        field :status_code, Crystalline::Nilable.new(Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status_code') } }
+        field :status_code, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status_code') } }
 
         
         

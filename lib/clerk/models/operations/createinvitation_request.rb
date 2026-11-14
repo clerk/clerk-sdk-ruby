@@ -17,7 +17,7 @@ module Clerk
         # Metadata that will be attached to the newly created invitation.
         # The value of this property should be a well-formed JSON object.
         # Once the user accepts the invitation and signs up, these metadata will end up in the user's public metadata.
-        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
+        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
         # Optional URL which specifies where to redirect the user once they click the invitation link.
         # This is only required if you have implemented a [custom flow](https://clerk.com/docs/authentication/invitations#custom-flow) and you're not using Clerk Hosted Pages or Clerk Components.
         field :redirect_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('redirect_url') } }

@@ -12,6 +12,10 @@ module Clerk
         
         include Crystalline::MetadataFields
 
+        # Enable exchanges from the active audience. Requires an audience URI. Disabling preserves target configuration.
+        field :token_exchange_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('token_exchange_enabled') } }
+        # Confirm adoption of an existing unowned resource, preserving its accepted scopes and target references. Does not override another application's reservation.
+        field :adopt_audience_resource, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('adopt_audience_resource') } }
         # The new name of the OAuth application.
         # Max length: 256
         field :name, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name') } }
@@ -27,19 +31,24 @@ module Clerk
         field :consent_screen_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('consent_screen_enabled') } }
         # True to require the Proof Key of Code Exchange (PKCE) flow.
         field :pkce_required, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('pkce_required') } }
+        # An absolute resource URI for a confidential application (RFC 8707 section 2). Registers a resource with no accepted scopes, or adopts an unowned resource with confirmation. Every claimed URI remains permanently reserved to this app, including retirement and deletion, and counts toward the instance resource quota. Changing it stops new exchanges from the old audience immediately. Already-issued tokens retain their lifetime. Clearing requires exchange disabled in an earlier update.
+        field :audience_uri, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('audience_uri') } }
         # True to enable the OAuth Device Authorization Grant for this application. Enabling requires the new OAuth IdP and a reachable device verification page. Omit this field to leave the setting unchanged.
         field :device_authorization_grant_enabled, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('device_authorization_grant_enabled') } }
         # If true, this client is public and you can use the Proof Key of Code Exchange (PKCE) flow.
         field :public, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public') } }
 
         
-        def initialize(name: nil, redirect_uris: nil, callback_url: nil, scopes: nil, consent_screen_enabled: nil, pkce_required: nil, device_authorization_grant_enabled: nil, public: nil)
+        def initialize(token_exchange_enabled: nil, adopt_audience_resource: nil, name: nil, redirect_uris: nil, callback_url: nil, scopes: nil, consent_screen_enabled: nil, pkce_required: nil, audience_uri: nil, device_authorization_grant_enabled: nil, public: nil)
+          @token_exchange_enabled = token_exchange_enabled
+          @adopt_audience_resource = adopt_audience_resource
           @name = name
           @redirect_uris = redirect_uris
           @callback_url = callback_url
           @scopes = scopes
           @consent_screen_enabled = consent_screen_enabled
           @pkce_required = pkce_required
+          @audience_uri = audience_uri
           @device_authorization_grant_enabled = device_authorization_grant_enabled
           @public = public
         end
@@ -47,12 +56,15 @@ module Clerk
         
         def ==(other)
           return false unless other.is_a? self.class
+          return false unless @token_exchange_enabled == other.token_exchange_enabled
+          return false unless @adopt_audience_resource == other.adopt_audience_resource
           return false unless @name == other.name
           return false unless @redirect_uris == other.redirect_uris
           return false unless @callback_url == other.callback_url
           return false unless @scopes == other.scopes
           return false unless @consent_screen_enabled == other.consent_screen_enabled
           return false unless @pkce_required == other.pkce_required
+          return false unless @audience_uri == other.audience_uri
           return false unless @device_authorization_grant_enabled == other.device_authorization_grant_enabled
           return false unless @public == other.public
           true

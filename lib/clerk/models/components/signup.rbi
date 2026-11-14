@@ -56,6 +56,8 @@ class Clerk::Models::Components::SignUp
   def legal_accepted_at=(str_); end
   def external_account(); end
   def external_account=(str_); end
+  def timezone(); end
+  def timezone=(str_); end
   def locale(); end
   def locale=(str_); end
 end

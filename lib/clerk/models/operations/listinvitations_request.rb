@@ -16,6 +16,9 @@ module Clerk
         field :status, Crystalline::Nilable.new(Models::Operations::ListInvitationsStatus), { 'query_param': { 'field_name': 'status', 'style': 'form', 'explode': true } }
         # Filter invitations based on their `email_address` or `id`
         field :query, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'query', 'style': 'form', 'explode': true } }
+        # Returns invitations with the specified email addresses.
+        # Accepts up to 100 email addresses.
+        field :email_address, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'query_param': { 'field_name': 'email_address', 'style': 'form', 'explode': true } }
         # Whether to paginate the results.
         # If true, the results will be paginated.
         # If false, the results will not be paginated.
@@ -36,9 +39,10 @@ module Clerk
         field :offset, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'offset', 'style': 'form', 'explode': true } }
 
         
-        def initialize(status: nil, query: nil, paginated: nil, order_by: '-created_at', limit: 10, offset: 0)
+        def initialize(status: nil, query: nil, email_address: nil, paginated: nil, order_by: '-created_at', limit: 10, offset: 0)
           @status = status
           @query = query
+          @email_address = email_address
           @paginated = paginated
           @order_by = order_by
           @limit = limit
@@ -50,6 +54,7 @@ module Clerk
           return false unless other.is_a? self.class
           return false unless @status == other.status
           return false unless @query == other.query
+          return false unless @email_address == other.email_address
           return false unless @paginated == other.paginated
           return false unless @order_by == other.order_by
           return false unless @limit == other.limit
