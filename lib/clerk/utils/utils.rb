@@ -11,14 +11,14 @@ require 'stringio'
 
 module Clerk
   module Utils
-    include Kernel
+    include ::Kernel
     
 
     
     def self.val_to_string(val)
       if val.class.respond_to?(:enums)
         val.serialize.to_s
-      elsif val.is_a? DateTime
+      elsif val.is_a? ::DateTime
         val.strftime('%Y-%m-%dT%H:%M:%S.%NZ').sub(/(\.\d*[1-9])0+Z\z/, '\1Z').sub(/\.0+Z\z/, 'Z')
       else
         val.to_s
@@ -52,7 +52,7 @@ module Clerk
 
     
     def self.mime_type_for_filename(filename)
-      ext = File.extname(filename).downcase
+      ext = ::File.extname(filename).downcase
       MIME_TYPES.fetch(ext, 'application/octet-stream')
     end
 
@@ -105,25 +105,25 @@ module Clerk
 
     
     def self.datetime_from_iso_format(optional)
-      Kernel.lambda do |s|
+      ::Kernel.lambda do |s|
         return nil if optional && s.nil?
 
-        return DateTime.strptime(s, '%Y-%m-%dT%H:%M:%S.%NZ')
+        return ::DateTime.strptime(s, '%Y-%m-%dT%H:%M:%S.%NZ')
       end
     end
 
     
     def self.date_from_iso_format(optional)
-      Kernel.lambda do |s|
+      ::Kernel.lambda do |s|
         return nil if optional && s.nil?
 
-        return Date.iso8601(s)
+        return ::Date.iso8601(s)
       end
     end
 
     
     def self.enum_from_string(enum_type, optional)
-      Kernel.lambda do |s|
+      ::Kernel.lambda do |s|
         return nil if optional && s.nil?
 
         return enum_type.deserialize(s)
@@ -132,7 +132,7 @@ module Clerk
 
     
     def self.open_enum_from_string(enum_type, optional)
-      Kernel.lambda do |s|
+      ::Kernel.lambda do |s|
         return nil if optional && s.nil?
 
         return enum_type.deserialize(s)
@@ -166,7 +166,7 @@ module Clerk
             # Handle multiple values for the same field name (arrays)
             if payload.key?(field_name)
               # Convert to array if not already
-              unless payload[field_name].is_a?(Array)
+              unless payload[field_name].is_a?(::Array)
                 payload[field_name] = [payload[field_name]]
               end
               payload[field_name] << field[1]
@@ -176,14 +176,14 @@ module Clerk
           else
             # Handle file uploads
             file_part = Faraday::Multipart::FilePart.new(
-              StringIO.new(field[1]),
+              ::StringIO.new(field[1]),
               mime_type_for_filename(field[0]),
               field[0]
             )
             
             # Handle multiple files for the same field name (arrays)
             if payload.key?(field_name)
-              unless payload[field_name].is_a?(Array)
+              unless payload[field_name].is_a?(::Array)
                 payload[field_name] = [payload[field_name]]
               end
               payload[field_name] << file_part
@@ -196,7 +196,7 @@ module Clerk
           
           # Handle multiple values for the same field name (arrays)
           if payload.key?(field_name)
-            unless payload[field_name].is_a?(Array)
+            unless payload[field_name].is_a?(::Array)
               payload[field_name] = [payload[field_name]]
             end
             payload[field_name] << param_part

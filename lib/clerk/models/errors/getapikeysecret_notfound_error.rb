@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 404 Not Found
-      class GetApiKeySecretNotFoundError < StandardError
+      class GetApiKeySecretNotFoundError < ::StandardError
         
         include Crystalline::MetadataFields
 

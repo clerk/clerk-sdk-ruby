@@ -14,16 +14,22 @@ module Clerk
 
         # The user password to verify
         field :password, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('password'), required: true } }
+        # When `true`, a wrong password counts toward the user's lockout, and a locked user is rejected with a `user_locked` error before the password is checked.
+        # Has no effect on instances with user lockout disabled.
+        # To enforce lockout across a password check and a sign-in token, set this parameter on both requests.
+        field :honor_lockout, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('honor_lockout') } }
 
         
-        def initialize(password:)
+        def initialize(password:, honor_lockout: false)
           @password = password
+          @honor_lockout = honor_lockout
         end
 
         
         def ==(other)
           return false unless other.is_a? self.class
           return false unless @password == other.password
+          return false unless @honor_lockout == other.honor_lockout
           true
         end
       end

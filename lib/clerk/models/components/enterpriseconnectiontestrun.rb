@@ -21,7 +21,7 @@ module Clerk
         # Unix timestamp in milliseconds when the test run was created
         field :created_at, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('created_at'), required: true } }
         # Log entries captured during the test run
-        field :logs, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::Log)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('logs') } }
+        field :logs, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::EnterpriseConnectionTestRunLog)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('logs') } }
         # The user information parsed from the IdP response
         field :parsed_user_info, Crystalline::Nilable.new(Models::Components::ParsedUserInfo), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('parsed_user_info') } }
         # SAML-specific metadata, present for SAML connections

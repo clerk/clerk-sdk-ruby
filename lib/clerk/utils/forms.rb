@@ -35,7 +35,7 @@ module Clerk
         end
 
         params[field_name] = [items.join(delimiter)] if !items.empty?
-      elsif obj.is_a? Hash
+      elsif obj.is_a? ::Hash
         items = []
         obj.each do |key, value|
           next if value.nil?
@@ -48,7 +48,7 @@ module Clerk
         end
         params[field_name] = [items.join(delimiter)] if !items.empty?
 
-      elsif obj.is_a? Array
+      elsif obj.is_a? ::Array
         items = []
         obj.each do |value|
           next if value.nil?
@@ -83,7 +83,7 @@ module Clerk
           field_name = field_metadata[:field_name]
           
           # Handle arrays of files
-          if val.is_a? Array
+          if val.is_a? ::Array
             val.each do |file_obj|
               file_name = ''
               content = nil
@@ -98,7 +98,7 @@ module Clerk
                   file_name = file_obj.send(file_field.name)
                 end
               end
-              raise StandardError, 'invalid multipart/form-data file' if file_name == '' || content.nil?
+              raise ::StandardError, 'invalid multipart/form-data file' if file_name == '' || content.nil?
 
               form.append([field_name, [file_name, content]])
             end
@@ -117,7 +117,7 @@ module Clerk
                 file_name = val.send(file_field.name)
               end
             end
-            raise StandardError, 'invalid multipart/form-data file' if file_name == '' || content.nil?
+            raise ::StandardError, 'invalid multipart/form-data file' if file_name == '' || content.nil?
 
             form.append([field_name, [file_name, content]])
           end
@@ -132,7 +132,7 @@ module Clerk
           field_name = field_metadata.fetch(
             :field_name, field.name
           )
-          if val.is_a? Array
+          if val.is_a? ::Array
             val.each do |value|
               next if value.nil?
 
@@ -181,16 +181,16 @@ module Clerk
                 )
               )
             else
-              raise StandardError, "Invalid form style for field #{field.name}"
+              raise ::StandardError, "Invalid form style for field #{field.name}"
             end
           end
         end
-      elsif data.is_a? Hash
+      elsif data.is_a? ::Hash
         data.each do |key, value|
           form[key] = [val_to_string(value)]
         end
       else
-        raise StandardError, "Invalid request body type #{data.class}"
+        raise ::StandardError, "Invalid request body type #{data.class}"
       end
 
       form

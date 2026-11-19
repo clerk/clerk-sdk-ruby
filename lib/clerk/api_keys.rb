@@ -50,12 +50,12 @@ module Clerk
       
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :request, :json)
       headers['content-type'] = req_content_type
-      raise StandardError, 'request body is required' if data.nil? && form.nil?
+      raise ::StandardError, 'request body is required' if data.nil? && form.nil?
 
       if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
-        body = URI.encode_www_form(data)
+        body = ::URI.encode_www_form(data)
       else
         body = data
       end
@@ -72,7 +72,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -113,7 +113,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -149,7 +149,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::CreateApiKeyResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::CreateApiKeyResponseBody)
           response = Models::Operations::CreateApiKeyResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -170,7 +170,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::CreateApiKeyBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::CreateApiKeyBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -185,7 +185,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::CreateApiKeyConflictError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::CreateApiKeyConflictError)
           obj.raw_response = http_response
           raise obj
         else
@@ -224,7 +224,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -265,7 +265,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -301,7 +301,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::GetApiKeysResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::GetApiKeysResponseBody)
           response = Models::Operations::GetApiKeysResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -322,7 +322,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::GetApiKeysBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::GetApiKeysBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -337,7 +337,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::GetApiKeysNotFoundError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::GetApiKeysNotFoundError)
           obj.raw_response = http_response
           raise obj
         else
@@ -383,7 +383,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -423,7 +423,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -459,7 +459,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::GetApiKeyResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::GetApiKeyResponseBody)
           response = Models::Operations::GetApiKeyResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -480,7 +480,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::GetApiKeyBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::GetApiKeyBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -495,7 +495,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::GetApiKeyNotFoundError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::GetApiKeyNotFoundError)
           obj.raw_response = http_response
           raise obj
         else
@@ -531,12 +531,12 @@ module Clerk
       
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
-      raise StandardError, 'request body is required' if data.nil? && form.nil?
+      raise ::StandardError, 'request body is required' if data.nil? && form.nil?
 
       if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
-        body = URI.encode_www_form(data)
+        body = ::URI.encode_www_form(data)
       else
         body = data
       end
@@ -553,7 +553,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -594,7 +594,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -630,7 +630,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::UpdateApiKeyResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::UpdateApiKeyResponseBody)
           response = Models::Operations::UpdateApiKeyResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -651,7 +651,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::UpdateApiKeyBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::UpdateApiKeyBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -666,7 +666,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::UpdateApiKeyNotFoundError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::UpdateApiKeyNotFoundError)
           obj.raw_response = http_response
           raise obj
         else
@@ -712,7 +712,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -752,7 +752,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -788,7 +788,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::DeleteApiKeyResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::DeleteApiKeyResponseBody)
           response = Models::Operations::DeleteApiKeyResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -809,7 +809,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::DeleteApiKeyBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::DeleteApiKeyBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -824,7 +824,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::DeleteApiKeyNotFoundError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::DeleteApiKeyNotFoundError)
           obj.raw_response = http_response
           raise obj
         else
@@ -870,7 +870,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -910,7 +910,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -946,7 +946,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::GetApiKeySecretResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::GetApiKeySecretResponseBody)
           response = Models::Operations::GetApiKeySecretResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -967,7 +967,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::GetApiKeySecretBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::GetApiKeySecretBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -982,7 +982,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::GetApiKeySecretNotFoundError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::GetApiKeySecretNotFoundError)
           obj.raw_response = http_response
           raise obj
         else
@@ -1018,12 +1018,12 @@ module Clerk
       
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :body, :json)
       headers['content-type'] = req_content_type
-      raise StandardError, 'request body is required' if data.nil? && form.nil?
+      raise ::StandardError, 'request body is required' if data.nil? && form.nil?
 
       if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
-        body = URI.encode_www_form(data)
+        body = ::URI.encode_www_form(data)
       else
         body = data
       end
@@ -1040,7 +1040,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -1081,7 +1081,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -1117,7 +1117,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::RevokeApiKeyResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::RevokeApiKeyResponseBody)
           response = Models::Operations::RevokeApiKeyResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -1138,7 +1138,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::RevokeApiKeyBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::RevokeApiKeyBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -1153,7 +1153,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::RevokeApiKeyNotFoundError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::RevokeApiKeyNotFoundError)
           obj.raw_response = http_response
           raise obj
         else
@@ -1180,12 +1180,12 @@ module Clerk
       
       req_content_type, data, form = Utils.serialize_request_body(request, false, false, :request, :json)
       headers['content-type'] = req_content_type
-      raise StandardError, 'request body is required' if data.nil? && form.nil?
+      raise ::StandardError, 'request body is required' if data.nil? && form.nil?
 
       if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
-        body = URI.encode_www_form(data)
+        body = ::URI.encode_www_form(data)
       else
         body = data
       end
@@ -1202,7 +1202,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -1243,7 +1243,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -1279,7 +1279,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Operations::VerifyApiKeyResponseBody)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Operations::VerifyApiKeyResponseBody)
           response = Models::Operations::VerifyApiKeyResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -1300,7 +1300,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::VerifyApiKeyBadRequestError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::VerifyApiKeyBadRequestError)
           obj.raw_response = http_response
           raise obj
         else
@@ -1315,7 +1315,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::VerifyApiKeyNotFoundError)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::VerifyApiKeyNotFoundError)
           obj.raw_response = http_response
           raise obj
         else

@@ -10,4 +10,6 @@ end
 class Clerk::Models::Operations::RevokeSessionRequest
   def session_id(); end
   def session_id=(str_); end
+  def body(); end
+  def body=(str_); end
 end

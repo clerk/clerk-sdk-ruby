@@ -106,7 +106,7 @@ module Clerk
         when 'cookie'
           req.headers['Cookie'][header_name] = value
         else
-          raise StandardError, 'not supported'
+          raise ::StandardError, 'not supported'
         end
       when 'openIdConnect'
         req.headers[header_name] = value.downcase.start_with?('bearer ') ? value : "Bearer #{value}"
@@ -116,10 +116,10 @@ module Clerk
         if sub_type == 'bearer'
           req.headers[header_name] = value.downcase.start_with?('bearer ') ? value : "Bearer #{value}"
         elsif sub_type != 'custom'
-          raise StandardError, 'not supported'
+          raise ::StandardError, 'not supported'
         end
       else
-        raise StandardError, 'not supported'
+        raise ::StandardError, 'not supported'
       end
     end
 
@@ -142,7 +142,7 @@ module Clerk
       data = "#{username}:#{password}".encode
       # Use strict_encode, because encode adds newlines after 60 chars
       # https://docs.ruby-lang.org/en/3.0/Base64.html#method-i-encode64
-      req.headers['Authorization'] = "Basic #{Base64.strict_encode64(data)}"
+      req.headers['Authorization'] = "Basic #{::Base64.strict_encode64(data)}"
     end
   end
 end

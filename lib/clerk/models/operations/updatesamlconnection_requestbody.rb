@@ -12,6 +12,8 @@ module Clerk
         
         include Crystalline::MetadataFields
 
+        # The IdP X.509 signing certificates the connection trusts, one per entry, in PEM or bare base64. Replaces the connection's whole certificate set and takes precedence over idp_certificate
+        field :idp_certificates, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificates') } }
         # Enable or deactivate ForceAuthn
         field :force_authn, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('force_authn') } }
         # The name of the new SAML Connection
@@ -26,7 +28,9 @@ module Clerk
         field :idp_entity_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_entity_id') } }
         # The SSO URL as provided by the IdP
         field :idp_sso_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_sso_url') } }
-        # The x509 certificated as provided by the IdP
+        # Deprecated, use idp_certificates. One X.509 certificate, PEM or bare base64, or several concatenated PEM certificates; replaces the connection's whole certificate set
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :idp_certificate, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificate') } }
         # The URL which serves the IdP metadata. If present, it takes priority over the corresponding individual properties and replaces them
         field :idp_metadata_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_metadata_url') } }
@@ -54,7 +58,8 @@ module Clerk
         field :consent_verified_domains_deletion, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('consent_verified_domains_deletion') } }
 
         
-        def initialize(force_authn: nil, name: nil, domain: nil, domains: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, attribute_mapping: nil, active: nil, sync_user_attributes: nil, allow_subdomains: nil, allow_idp_initiated: nil, disable_additional_identifications: nil, allow_organization_account_linking: nil, login_hint: nil, consent_verified_domains_deletion: nil)
+        def initialize(idp_certificates: nil, force_authn: nil, name: nil, domain: nil, domains: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_metadata_url: nil, idp_metadata: nil, organization_id: nil, attribute_mapping: nil, active: nil, sync_user_attributes: nil, allow_subdomains: nil, allow_idp_initiated: nil, disable_additional_identifications: nil, allow_organization_account_linking: nil, login_hint: nil, consent_verified_domains_deletion: nil)
+          @idp_certificates = idp_certificates
           @force_authn = force_authn
           @name = name
           @domain = domain
@@ -79,6 +84,7 @@ module Clerk
         
         def ==(other)
           return false unless other.is_a? self.class
+          return false unless @idp_certificates == other.idp_certificates
           return false unless @force_authn == other.force_authn
           return false unless @name == other.name
           return false unless @domain == other.domain

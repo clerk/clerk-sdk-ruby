@@ -12,6 +12,8 @@ class Clerk::Models::Components::EnterpriseConnectionSamlConnection
   def id=(str_); end
   def name(); end
   def name=(str_); end
+  def idp_certificates(); end
+  def idp_certificates=(str_); end
   def active(); end
   def active=(str_); end
   def allow_idp_initiated(); end
@@ -26,6 +28,12 @@ class Clerk::Models::Components::EnterpriseConnectionSamlConnection
   def idp_entity_id=(str_); end
   def idp_sso_url(); end
   def idp_sso_url=(str_); end
+  def idp_certificate(); end
+  def idp_certificate=(str_); end
+  def idp_certificate_issued_at(); end
+  def idp_certificate_issued_at=(str_); end
+  def idp_certificate_expires_at(); end
+  def idp_certificate_expires_at=(str_); end
   def idp_metadata_url(); end
   def idp_metadata_url=(str_); end
   def acs_url(); end

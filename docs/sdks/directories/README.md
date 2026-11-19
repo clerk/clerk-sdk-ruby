@@ -10,6 +10,8 @@
 * [update](#update) - Update a directory
 * [delete](#delete) - Delete a directory
 * [rotate_api_key](#rotate_api_key) - Rotate a directory's API key
+* [get_group](#get_group) - Retrieve a directory group
+* [list_group_members](#list_group_members) - List directory group members
 * [list_group_role_mappings](#list_group_role_mappings) - List directory group role mappings
 * [create_group_role_mapping](#create_group_role_mapping) - Create a directory group role mapping
 * [replace_group_role_mappings](#replace_group_role_mappings) - Replace directory group role mappings
@@ -255,6 +257,90 @@ end
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
 | Models::Errors::ClerkErrors | 401, 403, 404, 422          | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## get_group
+
+Returns one group of the directory, as reported by the identity provider.
+Responds with 404 once the identity provider has deleted the group.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="GetDirectoryGroup" method="get" path="/directories/{directory_id}/groups/{group_id}" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.directories.get_group(directory_id: '<id>', group_id: '<id>')
+
+unless res.directory_group.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                          | Type                                               | Required                                           | Description                                        |
+| -------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- |
+| `directory_id`                                     | *::String*                                         | :heavy_check_mark:                                 | The ID of the directory.                           |
+| `group_id`                                         | *::String*                                         | :heavy_check_mark:                                 | The ID of the group, as assigned by the directory. |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::GetDirectoryGroupResponse)](../../models/operations/getdirectorygroupresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 401, 403, 404               | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## list_group_members
+
+Returns the members of a group, as reported by the identity provider, using cursor-based pagination.
+Each member carries the Clerk user it is linked to, or null until that user has been provisioned.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="ListDirectoryGroupMembers" method="get" path="/directories/{directory_id}/groups/{group_id}/members" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.directories.list_group_members(directory_id: '<id>', group_id: '<id>', limit: 10)
+
+unless res.directory_group_member_list.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter                                                                                                                 | Type                                                                                                                      | Required                                                                                                                  | Description                                                                                                               |
+| ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `directory_id`                                                                                                            | *::String*                                                                                                                | :heavy_check_mark:                                                                                                        | The ID of the directory.                                                                                                  |
+| `group_id`                                                                                                                | *::String*                                                                                                                | :heavy_check_mark:                                                                                                        | The ID of the group, as assigned by the directory.                                                                        |
+| `limit`                                                                                                                   | *Crystalline::Nilable.new(::Integer)*                                                                                     | :heavy_minus_sign:                                                                                                        | Applies a limit to the number of results returned.<br/>Can be used for paginating the results together with `starting_after`. |
+| `starting_after`                                                                                                          | *Crystalline::Nilable.new(::String)*                                                                                      | :heavy_minus_sign:                                                                                                        | A cursor for pagination. Provide the `starting_after` cursor from a previous response to fetch the next page.             |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::ListDirectoryGroupMembersResponse)](../../models/operations/listdirectorygroupmembersresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 401, 403, 404               | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## list_group_role_mappings

@@ -14,4 +14,8 @@ class Clerk::Models::Operations::CreateSignInTokenRequest
   def org_id=(str_); end
   def expires_in_seconds(); end
   def expires_in_seconds=(str_); end
+  def second_factor_verification(); end
+  def second_factor_verification=(str_); end
+  def honor_lockout(); end
+  def honor_lockout=(str_); end
 end

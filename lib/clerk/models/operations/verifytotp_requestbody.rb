@@ -14,16 +14,22 @@ module Clerk
 
         # The TOTP or backup code to verify
         field :code, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('code'), required: true } }
+        # When `true`, a wrong code counts toward the user's lockout, and a locked user is rejected with a `user_locked` error before the code is checked.
+        # Has no effect on instances with user lockout disabled.
+        # To enforce lockout across a password check and a sign-in token, set this parameter on both requests.
+        field :honor_lockout, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('honor_lockout') } }
 
         
-        def initialize(code:)
+        def initialize(code:, honor_lockout: false)
           @code = code
+          @honor_lockout = honor_lockout
         end
 
         
         def ==(other)
           return false unless other.is_a? self.class
           return false unless @code == other.code
+          return false unless @honor_lockout == other.honor_lockout
           true
         end
       end

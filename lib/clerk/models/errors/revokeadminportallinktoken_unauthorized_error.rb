@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 401 Unauthorized
-      class RevokeAdminPortalLinkTokenUnauthorizedError < StandardError
+      class RevokeAdminPortalLinkTokenUnauthorizedError < ::StandardError
         
         include Crystalline::MetadataFields
 

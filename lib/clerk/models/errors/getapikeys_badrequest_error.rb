@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 400 Bad Request
-      class GetApiKeysBadRequestError < StandardError
+      class GetApiKeysBadRequestError < ::StandardError
         
         include Crystalline::MetadataFields
 

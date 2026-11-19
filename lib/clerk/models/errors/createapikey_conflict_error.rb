@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 409 Conflict
-      class CreateApiKeyConflictError < StandardError
+      class CreateApiKeyConflictError < ::StandardError
         
         include Crystalline::MetadataFields
 

@@ -18,9 +18,9 @@ module Clerk
         # The role that the new member will have in the organization.
         field :role, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('role'), required: true } }
         # Metadata saved on the organization membership, that is visible to both your frontend and backend.
-        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
+        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
         # Metadata saved on the organization membership that is only visible to your backend.
-        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
+        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
 
         
         def initialize(user_id:, role:, public_metadata: nil, private_metadata: nil)
