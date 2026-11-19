@@ -62,7 +62,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -102,7 +102,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -138,7 +138,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Components::TestingToken)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Components::TestingToken)
           response = Models::Operations::CreateTestingTokenResponse.new(
             status_code: http_response.status,
             content_type: content_type,

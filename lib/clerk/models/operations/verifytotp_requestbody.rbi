@@ -10,4 +10,6 @@ end
 class Clerk::Models::Operations::VerifyTOTPRequestBody
   def code(); end
   def code=(str_); end
+  def honor_lockout(); end
+  def honor_lockout=(str_); end
 end

@@ -16,6 +16,9 @@ module Clerk
         field :id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id') } }
         # SAML connection display name
         field :name, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('name') } }
+        # Every IdP signing certificate the connection trusts, primary first. A SAML response verifies against any of them.
+        #
+        field :idp_certificates, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::EnterpriseConnectionIdpCertificate)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificates') } }
         # Whether the SAML connection is active
         field :active, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('active') } }
         # Whether IdP-initiated SSO is allowed
@@ -30,6 +33,12 @@ module Clerk
         field :idp_entity_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_entity_id') } }
         # IdP SSO URL (optional, when connection details are loaded)
         field :idp_sso_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_sso_url') } }
+        # Primary IdP X.509 signing certificate (optional, when connection details are loaded)
+        field :idp_certificate, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificate') } }
+        # Unix timestamp (milliseconds) of the primary certificate's X.509 NotBefore
+        field :idp_certificate_issued_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificate_issued_at') } }
+        # Unix timestamp (milliseconds) of the primary certificate's X.509 NotAfter
+        field :idp_certificate_expires_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_certificate_expires_at') } }
         # IdP metadata URL (optional, when connection details are loaded)
         field :idp_metadata_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('idp_metadata_url') } }
         # Assertion Consumer Service URL
@@ -40,9 +49,10 @@ module Clerk
         field :sp_metadata_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sp_metadata_url') } }
 
         
-        def initialize(id: nil, name: nil, active: nil, allow_idp_initiated: nil, allow_subdomains: nil, force_authn: nil, login_hint: nil, idp_entity_id: nil, idp_sso_url: nil, idp_metadata_url: nil, acs_url: nil, sp_entity_id: nil, sp_metadata_url: nil)
+        def initialize(id: nil, name: nil, idp_certificates: nil, active: nil, allow_idp_initiated: nil, allow_subdomains: nil, force_authn: nil, login_hint: nil, idp_entity_id: nil, idp_sso_url: nil, idp_certificate: nil, idp_certificate_issued_at: nil, idp_certificate_expires_at: nil, idp_metadata_url: nil, acs_url: nil, sp_entity_id: nil, sp_metadata_url: nil)
           @id = id
           @name = name
+          @idp_certificates = idp_certificates
           @active = active
           @allow_idp_initiated = allow_idp_initiated
           @allow_subdomains = allow_subdomains
@@ -50,6 +60,9 @@ module Clerk
           @login_hint = login_hint
           @idp_entity_id = idp_entity_id
           @idp_sso_url = idp_sso_url
+          @idp_certificate = idp_certificate
+          @idp_certificate_issued_at = idp_certificate_issued_at
+          @idp_certificate_expires_at = idp_certificate_expires_at
           @idp_metadata_url = idp_metadata_url
           @acs_url = acs_url
           @sp_entity_id = sp_entity_id
@@ -61,6 +74,7 @@ module Clerk
           return false unless other.is_a? self.class
           return false unless @id == other.id
           return false unless @name == other.name
+          return false unless @idp_certificates == other.idp_certificates
           return false unless @active == other.active
           return false unless @allow_idp_initiated == other.allow_idp_initiated
           return false unless @allow_subdomains == other.allow_subdomains
@@ -68,6 +82,9 @@ module Clerk
           return false unless @login_hint == other.login_hint
           return false unless @idp_entity_id == other.idp_entity_id
           return false unless @idp_sso_url == other.idp_sso_url
+          return false unless @idp_certificate == other.idp_certificate
+          return false unless @idp_certificate_issued_at == other.idp_certificate_issued_at
+          return false unless @idp_certificate_expires_at == other.idp_certificate_expires_at
           return false unless @idp_metadata_url == other.idp_metadata_url
           return false unless @acs_url == other.acs_url
           return false unless @sp_entity_id == other.sp_entity_id

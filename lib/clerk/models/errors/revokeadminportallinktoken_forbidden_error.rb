@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 403 Forbidden
-      class RevokeAdminPortalLinkTokenForbiddenError < StandardError
+      class RevokeAdminPortalLinkTokenForbiddenError < ::StandardError
         
         include Crystalline::MetadataFields
 

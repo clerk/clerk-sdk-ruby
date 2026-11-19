@@ -22,7 +22,7 @@ module Clerk
 
         field :permissions, Crystalline::Array.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('permissions'), required: true } }
         # Metadata saved on the organization membership, accessible from both Frontend and Backend APIs
-        field :public_metadata, Crystalline::Hash.new(Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
+        field :public_metadata, Crystalline::Hash.new(::Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
 
         field :organization, Models::Components::OrganizationMembershipOrganization, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('organization'), required: true } }
         # Unix timestamp of creation.
@@ -32,7 +32,7 @@ module Clerk
 
         field :role_name, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('role_name') } }
         # Metadata saved on the organization membership, accessible only from the Backend API
-        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
+        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
         # An organization membership with public user data populated
         field :public_user_data, Crystalline::Nilable.new(Models::Components::OrganizationMembershipPublicUserData), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_user_data') } }
 

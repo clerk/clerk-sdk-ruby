@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 400 Bad Request
-      class RevokeM2MTokenBadRequestError < StandardError
+      class RevokeM2MTokenBadRequestError < ::StandardError
         
         include Crystalline::MetadataFields
 

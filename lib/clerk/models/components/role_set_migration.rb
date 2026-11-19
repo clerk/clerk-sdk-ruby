@@ -35,7 +35,7 @@ module Clerk
         # The ID of the destination role set being migrated to
         field :dest_role_set_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('dest_role_set_id') } }
         # Role key mappings from source to destination roles
-        field :mappings, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('mappings') } }
+        field :mappings, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::String)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('mappings') } }
         # Unix timestamp when the migration started
         field :started_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('started_at') } }
         # Unix timestamp when the migration completed

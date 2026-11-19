@@ -18,7 +18,7 @@ module Clerk
         
         def initialize(active: false)
           unless active == false
-            raise ArgumentError, 'Invalid value for active'
+            raise ::ArgumentError, 'Invalid value for active'
           end
           @active = false
         end

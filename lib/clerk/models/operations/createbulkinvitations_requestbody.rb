@@ -17,7 +17,7 @@ module Clerk
         # Metadata that will be attached to the newly created invitation.
         # The value of this property should be a well-formed JSON object.
         # Once the user accepts the invitation and signs up, these metadata will end up in the user's public metadata.
-        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
+        field :public_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata') } }
         # The URL where the user is redirected upon visiting the invitation link, where they can accept the invitation. Required if you have implemented a [custom flow for handling application invitations](/docs/custom-flows/invitations).
         field :redirect_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('redirect_url') } }
         # The number of days the invitation will be valid for. By default, the invitation expires after 30 days.

@@ -24,6 +24,8 @@ class Clerk::Models::Components::OAuthApplicationWithSecret
   def consent_screen_enabled=(str_); end
   def pkce_required(); end
   def pkce_required=(str_); end
+  def token_exchange_enabled(); end
+  def token_exchange_enabled=(str_); end
   def device_authorization_grant_enabled(); end
   def device_authorization_grant_enabled=(str_); end
   def public(); end
@@ -52,6 +54,8 @@ class Clerk::Models::Components::OAuthApplicationWithSecret
   def client_uri=(str_); end
   def client_image_url(); end
   def client_image_url=(str_); end
+  def audience_uri(); end
+  def audience_uri=(str_); end
   def client_secret(); end
   def client_secret=(str_); end
 end

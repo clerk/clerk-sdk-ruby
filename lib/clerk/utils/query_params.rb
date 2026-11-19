@@ -15,8 +15,8 @@ module Clerk
     def self.get_query_params(clazz, query_params, url_override = nil, gbls = nil)
       parsed_params = {}
       if !url_override.nil?
-        parsed_url = URI.parse url_override
-        URI.decode_www_form(parsed_url.query.to_s).each do |key, value|
+        parsed_url = ::URI.parse url_override
+        ::URI.decode_www_form(parsed_url.query.to_s).each do |key, value|
           parsed_params[key] ||= []
           parsed_params[key] << value
         end
@@ -55,7 +55,7 @@ module Clerk
               metadata, f_name, value, '|'
             )
           else
-            raise StandardError, 'not yet implemented'
+            raise ::StandardError, 'not yet implemented'
           end
         end
       end
@@ -77,7 +77,7 @@ module Clerk
           next if val.nil?
 
           key = "#{metadata.fetch(:field_name, field_name)}[#{obj_param_metadata.fetch(:field_name, obj_field.name)}]"
-          if val.is_a? Array
+          if val.is_a? ::Array
             val.each do |v|
               next if v.nil?
 
@@ -89,12 +89,12 @@ module Clerk
             params[key] = [val_to_string(val)]
           end
         end
-      elsif obj.is_a? Hash
+      elsif obj.is_a? ::Hash
         obj.each do |key, value|
           next if value.nil?
 
           param_key = "#{metadata.fetch(:field_name, field_name)}[#{key}]"
-          if value.is_a? Array
+          if value.is_a? ::Array
             value.each do |val|
               next if val.nil?
 

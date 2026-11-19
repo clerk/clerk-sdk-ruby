@@ -20,6 +20,8 @@ class Clerk::Models::Components::SCIMDirectory
   def provider=(str_); end
   def enabled(); end
   def enabled=(str_); end
+  def paused(); end
+  def paused=(str_); end
   def group_role_mapping_enabled(); end
   def group_role_mapping_enabled=(str_); end
   def attribute_mapping(); end

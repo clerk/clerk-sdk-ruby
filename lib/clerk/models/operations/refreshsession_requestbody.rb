@@ -20,7 +20,7 @@ module Clerk
         # The origin of the request.
         field :request_origin, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('request_origin'), required: true } }
         # The headers of the request.
-        field :request_headers, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('request_headers') } }
+        field :request_headers, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('request_headers') } }
         # The IP address of the request.
         field :request_originating_ip, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('request_originating_ip') } }
         # The format of the response.

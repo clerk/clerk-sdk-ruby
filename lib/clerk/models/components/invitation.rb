@@ -19,7 +19,7 @@ module Clerk
 
         field :email_address, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_address'), required: true } }
 
-        field :public_metadata, Crystalline::Hash.new(Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
+        field :public_metadata, Crystalline::Hash.new(::Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
 
         field :status, Models::Components::InvitationStatus, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true, 'decoder': ::Clerk::Utils.enum_from_string(Models::Components::InvitationStatus, false) } }
         # Unix timestamp of creation.

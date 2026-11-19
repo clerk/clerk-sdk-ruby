@@ -77,7 +77,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -118,7 +118,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -154,7 +154,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Crystalline::Array.new(Models::Components::Template))
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Crystalline::Array.new(Models::Components::Template))
           response = Models::Operations::GetTemplateListResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -175,7 +175,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::ClerkErrors)
           obj.raw_response = http_response
           raise obj
         else
@@ -225,7 +225,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -265,7 +265,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -301,7 +301,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Components::Template)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Components::Template)
           response = Models::Operations::GetTemplateResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -322,7 +322,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::ClerkErrors)
           obj.raw_response = http_response
           raise obj
         else
@@ -372,7 +372,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -412,7 +412,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -448,7 +448,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Components::Template)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Components::Template)
           response = Models::Operations::RevertTemplateResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -469,7 +469,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::ClerkErrors)
           obj.raw_response = http_response
           raise obj
         else
@@ -515,7 +515,7 @@ module Clerk
       if form && !form.empty?
         body = Utils.encode_form(form)
       elsif Utils.match_content_type(req_content_type, 'application/x-www-form-urlencoded')
-        body = URI.encode_www_form(data)
+        body = ::URI.encode_www_form(data)
       else
         body = data
       end
@@ -532,7 +532,7 @@ module Clerk
         retry_connection_errors: true,
         strategy: 'backoff'
       )
-      retry_options = retries.to_faraday_retry_options(initial_time: Time.now)
+      retry_options = retries.to_faraday_retry_options(initial_time: ::Time.now)
       retry_options[:retry_statuses] = [500, 501, 502, 503, 504, 505]
 
       security = @sdk_configuration.security_source&.call
@@ -573,7 +573,7 @@ module Clerk
             request: req
           )
         end
-      rescue StandardError => e
+      rescue ::StandardError => e
         error = e
       ensure
         if http_response.nil? || Utils.error_status?(http_response.status)
@@ -609,7 +609,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Components::Template)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Components::Template)
           response = Models::Operations::ToggleTemplateDeliveryResponse.new(
             status_code: http_response.status,
             content_type: content_type,
@@ -630,7 +630,7 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::ClerkErrors)
           obj.raw_response = http_response
           raise obj
         else

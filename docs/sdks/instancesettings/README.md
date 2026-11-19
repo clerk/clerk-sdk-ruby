@@ -308,6 +308,8 @@ Changing the domain requires updating the [DNS records](https://clerk.com/docs/d
 
 WARNING: Changing your domain will invalidate all current user sessions (i.e. users will be logged out). Also, while your application is being deployed, a small downtime is expected to occur.
 
+Returns 403 `domain_managed_by_integration` for applications in a Vercel-managed workspace; change the domain from the Vercel integration instead.
+
 ### Example Usage
 
 <!-- UsageSnippet language="ruby" operationID="ChangeProductionInstanceDomain" method="post" path="/instance/change_domain" -->
@@ -344,7 +346,7 @@ end
 
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
-| Models::Errors::ClerkErrors | 400, 422                    | application/json            |
+| Models::Errors::ClerkErrors | 400, 403, 422               | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## get_organization_settings

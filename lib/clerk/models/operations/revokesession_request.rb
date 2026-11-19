@@ -15,15 +15,19 @@ module Clerk
         # The ID of the session
         field :session_id, ::String, { 'path_param': { 'field_name': 'session_id', 'style': 'simple', 'explode': false } }
 
+        field :body, Crystalline::Nilable.new(Models::Operations::RevokeSessionRequestBody), { 'request': { 'media_type': 'application/json' } }
+
         
-        def initialize(session_id:)
+        def initialize(session_id:, body: nil)
           @session_id = session_id
+          @body = body
         end
 
         
         def ==(other)
           return false unless other.is_a? self.class
           return false unless @session_id == other.session_id
+          return false unless @body == other.body
           true
         end
       end

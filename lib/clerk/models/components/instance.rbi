@@ -22,4 +22,6 @@ class Clerk::Models::Components::Instance
   def allowed_origins=(str_); end
   def workspace_id(); end
   def workspace_id=(str_); end
+  def max_allowed_users(); end
+  def max_allowed_users=(str_); end
 end

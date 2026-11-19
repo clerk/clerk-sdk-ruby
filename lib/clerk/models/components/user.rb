@@ -20,7 +20,7 @@ module Clerk
 
         field :has_image, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('has_image'), required: true } }
 
-        field :public_metadata, Crystalline::Hash.new(Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
+        field :public_metadata, Crystalline::Hash.new(::Symbol, ::Object), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('public_metadata'), required: true } }
 
         field :email_addresses, Crystalline::Array.new(Models::Components::EmailAddress), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('email_addresses'), required: true } }
 
@@ -80,7 +80,7 @@ module Clerk
 
         field :image_url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('image_url') } }
 
-        field :unsafe_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('unsafe_metadata') } }
+        field :unsafe_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('unsafe_metadata') } }
         # Unix timestamp of when MFA was last enabled for this user. It should be noted that this field is not nullified if MFA is disabled.
         #
         field :mfa_enabled_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('mfa_enabled_at'), required: true } }
@@ -117,7 +117,9 @@ module Clerk
 
         field :locale, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('locale') } }
 
-        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
+        field :timezone, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('timezone') } }
+
+        field :private_metadata, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('private_metadata') } }
         # Unix timestamp of when the user's password was last updated.
         #
         field :password_last_updated_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('password_last_updated_at') } }
@@ -132,7 +134,7 @@ module Clerk
         field :scim, Crystalline::Nilable.new(Models::Components::UserScim), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('scim') } }
 
         
-        def initialize(id:, object:, has_image:, public_metadata:, email_addresses:, phone_numbers:, web3_wallets:, passkeys:, password_enabled:, two_factor_enabled:, totp_enabled:, backup_code_enabled:, external_accounts:, saml_accounts:, enterprise_accounts:, banned:, locked:, updated_at:, created_at:, delete_self_enabled:, create_organization_enabled:, external_id: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, first_name: nil, last_name: nil, profile_image_url: nil, image_url: nil, unsafe_metadata: nil, mfa_enabled_at: nil, mfa_disabled_at: nil, organization_memberships: nil, last_sign_in_at: nil, deprovisioned: nil, lockout_expires_in_seconds: nil, verification_attempts_remaining: nil, last_active_at: nil, legal_accepted_at: nil, directories: nil, directory: nil, locale: nil, private_metadata: nil, password_last_updated_at: nil, create_organizations_limit: nil, bypass_client_trust: false, scim: nil)
+        def initialize(id:, object:, has_image:, public_metadata:, email_addresses:, phone_numbers:, web3_wallets:, passkeys:, password_enabled:, two_factor_enabled:, totp_enabled:, backup_code_enabled:, external_accounts:, saml_accounts:, enterprise_accounts:, banned:, locked:, updated_at:, created_at:, delete_self_enabled:, create_organization_enabled:, external_id: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, first_name: nil, last_name: nil, profile_image_url: nil, image_url: nil, unsafe_metadata: nil, mfa_enabled_at: nil, mfa_disabled_at: nil, organization_memberships: nil, last_sign_in_at: nil, deprovisioned: nil, lockout_expires_in_seconds: nil, verification_attempts_remaining: nil, last_active_at: nil, legal_accepted_at: nil, directories: nil, directory: nil, locale: nil, timezone: nil, private_metadata: nil, password_last_updated_at: nil, create_organizations_limit: nil, bypass_client_trust: false, scim: nil)
           @id = id
           @object = object
           @has_image = has_image
@@ -176,6 +178,7 @@ module Clerk
           @directories = directories
           @directory = directory
           @locale = locale
+          @timezone = timezone
           @private_metadata = private_metadata
           @password_last_updated_at = password_last_updated_at
           @create_organizations_limit = create_organizations_limit
@@ -229,6 +232,7 @@ module Clerk
           return false unless @directories == other.directories
           return false unless @directory == other.directory
           return false unless @locale == other.locale
+          return false unless @timezone == other.timezone
           return false unless @private_metadata == other.private_metadata
           return false unless @password_last_updated_at == other.password_last_updated_at
           return false unless @create_organizations_limit == other.create_organizations_limit

@@ -139,3 +139,13 @@ Based on:
 - [ruby v8.0.2] .
 ### Releases
 - [Ruby Gems v8.0.2] https://rubygems.org/gems/clerk-sdk-ruby/versions/8.0.2 - .
+
+## 2026-11-19 15:49:30
+### Changes
+Based on:
+- OpenAPI Doc  
+- Speakeasy CLI 1.810.0 (2.961.1) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [ruby v9.0.0] .
+### Releases
+- [Ruby Gems v9.0.0] https://rubygems.org/gems/clerk-sdk-ruby/versions/9.0.0 - .

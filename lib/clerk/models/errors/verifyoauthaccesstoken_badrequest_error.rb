@@ -8,7 +8,7 @@ module Clerk
   module Models
     module Errors
       # 400 Bad Request
-      class VerifyOAuthAccessTokenBadRequestError < StandardError
+      class VerifyOAuthAccessTokenBadRequestError < ::StandardError
         
         include Crystalline::MetadataFields
 
