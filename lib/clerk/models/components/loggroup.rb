@@ -35,9 +35,10 @@ module Clerk
         field :has_more_events, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('has_more_events'), required: true } }
         # How many of the group's events matched the request's event filters. Present only when event filters were applied.
         field :matched_event_count, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('matched_event_count') } }
-        # How the flow ended, `completed` or `failed`. Null while the flow
-        # has not concluded: no status is recorded for a flow that is still
-        # going or was given up.
+        # How the flow ended: `completed`, `failed`, or `abandoned` when
+        # nothing concluded it before its abandon deadline passed (a
+        # sign-in or sign-up nobody finished). Null while the flow is still
+        # going.
         field :status, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status'), required: true } }
         # A display label for `status`. Null when `status` is.
         field :status_label, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('status_label'), required: true } }

@@ -25,17 +25,25 @@ module Clerk
         #
         # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :task_id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('task_id'), required: true } }
+        # Whether the agent task session is restricted. When true, the session can refresh only its own session token and read. Clerk's Frontend API refuses every other write from a browser client that holds the session, including touch, sign-out, profile and organization writes, sign-in and sign-up, and OAuth approval. It also refuses changing the session's workspace (its active organization).
+        #
+        field :session_restricted, Crystalline::Boolean.new, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('session_restricted'), required: true } }
         # The URL that, when visited, creates a session for the user. Only present in the response to a create request.
         #
         field :url, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('url') } }
+        # The organization the agent task session starts in, and the only one a restricted session can use. Null means the personal workspace.
+        #
+        field :session_organization_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('session_organization_id') } }
 
         
-        def initialize(object:, agent_id:, agent_task_id:, task_id:, url: nil)
+        def initialize(object:, agent_id:, agent_task_id:, task_id:, session_restricted:, url: nil, session_organization_id: nil)
           @object = object
           @agent_id = agent_id
           @agent_task_id = agent_task_id
           @task_id = task_id
+          @session_restricted = session_restricted
           @url = url
+          @session_organization_id = session_organization_id
         end
 
         
@@ -45,7 +53,9 @@ module Clerk
           return false unless @agent_id == other.agent_id
           return false unless @agent_task_id == other.agent_task_id
           return false unless @task_id == other.task_id
+          return false unless @session_restricted == other.session_restricted
           return false unless @url == other.url
+          return false unless @session_organization_id == other.session_organization_id
           true
         end
       end

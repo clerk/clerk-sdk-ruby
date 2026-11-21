@@ -15,8 +15,10 @@ module Clerk
         # The ID of the event group, e.g. a sign-in ID.
         field :group_id, ::String, { 'path_param': { 'field_name': 'group_id', 'style': 'simple', 'explode': false } }
         # When the group started (Unix timestamp in milliseconds), the
-        # `started_at` of the group item. It bounds the time range searched.
-        field :started_at, ::Integer, { 'query_param': { 'field_name': 'started_at', 'style': 'form', 'explode': true } }
+        # `started_at` of the group item. Optional: when omitted, it is
+        # looked up from `group_id`, and a group that can't be found or is
+        # past the retention window returns a 404.
+        field :started_at, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'started_at', 'style': 'form', 'explode': true } }
         # The group's `events_cursor` from the grouped view, or the
         # `starting_after` cursor this endpoint returned. Only forward
         # pagination is supported.
@@ -25,7 +27,7 @@ module Clerk
         field :limit, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'limit', 'style': 'form', 'explode': true } }
 
         
-        def initialize(group_id:, started_at:, starting_after: nil, limit: 10)
+        def initialize(group_id:, started_at: nil, starting_after: nil, limit: 10)
           @group_id = group_id
           @started_at = started_at
           @starting_after = starting_after

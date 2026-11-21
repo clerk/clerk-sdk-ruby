@@ -28,4 +28,6 @@ class Clerk::Models::Components::Client
   def last_active_session_id=(str_); end
   def last_authentication_strategy(); end
   def last_authentication_strategy=(str_); end
+  def revoked_at(); end
+  def revoked_at=(str_); end
 end

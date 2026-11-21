@@ -7,7 +7,7 @@
 module Clerk
   module Models
     module Components
-      # Success
+
       class User
         
         include Crystalline::MetadataFields

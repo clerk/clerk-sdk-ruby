@@ -18,6 +18,10 @@ class Clerk::Models::Operations::CreateAgentTaskRequest
   def task_description=(str_); end
   def redirect_url(); end
   def redirect_url=(str_); end
+  def session_organization_id(); end
+  def session_organization_id=(str_); end
   def session_max_duration_in_seconds(); end
   def session_max_duration_in_seconds=(str_); end
+  def session_restricted(); end
+  def session_restricted=(str_); end
 end

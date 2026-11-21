@@ -14,6 +14,6 @@ class Clerk::Models::Operations::GetUserListResponse
   def status_code=(str_); end
   def raw_response(); end
   def raw_response=(str_); end
-  def user_list(); end
-  def user_list=(str_); end
+  def users(); end
+  def users=(str_); end
 end
