@@ -10,6 +10,8 @@ end
 class Clerk::Models::Operations::Actor
   def sub(); end
   def sub=(str_); end
+  def type(); end
+  def type=(str_); end
   def additional_properties(); end
   def additional_properties=(str_); end
 end

@@ -15,12 +15,15 @@ module Clerk
 
         # The ID of the actor.
         field :sub, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sub'), required: true } }
+        # Optional actor type. The value `agent` is reserved for agent task sessions and is rejected.
+        field :type, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('type') } }
 
         field :additional_properties, Crystalline::Nilable.new(Crystalline::Hash.new(::Symbol, ::Object)), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('additional_properties'), 'additional_properties': true } }
 
         
-        def initialize(sub:, additional_properties: nil)
+        def initialize(sub:, type: nil, additional_properties: nil)
           @sub = sub
+          @type = type
           @additional_properties = additional_properties
         end
 
@@ -28,6 +31,7 @@ module Clerk
         def ==(other)
           return false unless other.is_a? self.class
           return false unless @sub == other.sub
+          return false unless @type == other.type
           return false unless @additional_properties == other.additional_properties
           true
         end

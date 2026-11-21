@@ -414,6 +414,7 @@ end
 * [~~list~~](docs/sdks/clients/README.md#list) - List all clients :warning: **Deprecated**
 * [verify](docs/sdks/clients/README.md#verify) - Verify a client
 * [get](docs/sdks/clients/README.md#get) - Get a client
+* [revoke](docs/sdks/clients/README.md#revoke) - Revoke a client
 
 ### [Directories](docs/sdks/directories/README.md)
 
@@ -423,6 +424,7 @@ end
 * [update](docs/sdks/directories/README.md#update) - Update a directory
 * [delete](docs/sdks/directories/README.md#delete) - Delete a directory
 * [rotate_api_key](docs/sdks/directories/README.md#rotate_api_key) - Rotate a directory's API key
+* [list_groups](docs/sdks/directories/README.md#list_groups) - List directory groups
 * [get_group](docs/sdks/directories/README.md#get_group) - Retrieve a directory group
 * [list_group_members](docs/sdks/directories/README.md#list_group_members) - List directory group members
 * [list_group_role_mappings](docs/sdks/directories/README.md#list_group_role_mappings) - List directory group role mappings
@@ -507,6 +509,7 @@ end
 
 * [list](docs/sdks/logs/README.md#list) - List all logs
 * [get_schema](docs/sdks/logs/README.md#get_schema) - Retrieve the payload schema of a log event type
+* [list_types](docs/sdks/logs/README.md#list_types) - List all log event types
 * [list_group_events](docs/sdks/logs/README.md#list_group_events) - List an event group's logs
 * [get](docs/sdks/logs/README.md#get) - Retrieve a single log
 

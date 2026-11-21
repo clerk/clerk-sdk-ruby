@@ -98,7 +98,7 @@ req = Models::Operations::GetUserListRequest.new(
 )
 res = s.users.list(request: req)
 
-unless res.user_list.nil?
+unless res.users.nil?
   # handle response
 end
 
@@ -118,7 +118,8 @@ end
 
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
-| Models::Errors::ClerkErrors | 400, 401, 422               | application/json            |
+| Models::Errors::ClerkErrors | 400, 401, 403, 422          | application/json            |
+| Models::Errors::ClerkErrors | 503                         | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
 
 ## create

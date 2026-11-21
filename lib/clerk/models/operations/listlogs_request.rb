@@ -17,9 +17,13 @@ module Clerk
         # A cursor for pagination. Provide the ending_before cursor from a previous response to fetch the previous page.
         # Only with `view=flat`, since the grouped view only pages forward.
         field :ending_before, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'ending_before', 'style': 'form', 'explode': true } }
-        # Filter logs by subject.
+        # Filter logs by subject: the ID of the resource the event is about,
+        # such as a user, an organization, or the instance when nothing more
+        # specific applies.
         field :subject, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'subject', 'style': 'form', 'explode': true } }
-        # Filter logs by actor
+        # Filter logs by actor: the ID of whoever triggered the event, such as
+        # a user, a Clerk Dashboard user, an instance key, or an API key. In
+        # an impersonated session, the actor is the impersonated user.
         field :actor, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'actor', 'style': 'form', 'explode': true } }
         # Filter logs to events involving one user, as either the actor or
         # the subject. Takes the user's ID.
@@ -122,8 +126,9 @@ module Clerk
         # will be `"unknown"` and a continuation cursor is provided so the caller
         # can paginate through the full range.
         field :event_time_before, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'event_time_before', 'style': 'form', 'explode': true } }
-        # When set to true, only returns events that are marked as end-user facing.
-        # When set to false or omitted, returns all events.
+        # Deprecated. This parameter has no effect.
+        #
+        # @deprecated true: This will be removed in a future release, please migrate away from it as soon as possible.
         field :end_user_facing_only, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'query_param': { 'field_name': 'end_user_facing_only', 'style': 'form', 'explode': true } }
         # Not allowed with `view=flat`. Group types to keep, e.g. `sign_in`,
         # repeated for several (`group_type=sign_in&group_type=sign_up`).
@@ -131,9 +136,9 @@ module Clerk
         field :group_type, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'query_param': { 'field_name': 'group_type', 'style': 'form', 'explode': true } }
         # Not allowed with `view=flat`. Group statuses to keep, e.g. `failed`,
         # repeated for several (`status=failed&status=completed`). Keeps only
-        # groups that concluded that way and drops the logs outside any
-        # group. A status is a conclusion (`completed`, `failed`), so groups
-        # that haven't concluded never match.
+        # groups with one of those statuses and drops the logs outside any
+        # group. A status is `completed`, `failed` or `abandoned`. A group
+        # that is still going has no status and never matches.
         field :status, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'query_param': { 'field_name': 'status', 'style': 'form', 'explode': true } }
         # Applies a limit to the number of results returned.
         # Can be used for paginating the results together with `starting_after` or `ending_before`.
@@ -144,9 +149,8 @@ module Clerk
         # `ip_address`, and `payload_filter` entries
         # are combined: `all` (default) requires every supplied filter to
         # match; `any` returns events that match at least one of the
-        # supplied filters. `event_time_after`, `event_time_before`, and
-        # `end_user_facing_only` are always ANDed with the (possibly OR-ed)
-        # string filter group.
+        # supplied filters. `event_time_after` and `event_time_before` are
+        # always ANDed with the (possibly OR-ed) string filter group.
         field :filter_match, Crystalline::Nilable.new(Models::Operations::FilterMatch), { 'query_param': { 'field_name': 'filter_match', 'style': 'form', 'explode': true } }
         # `grouped`, the default, lists each event group (a flow such as a
         # sign-in) as a single item, next to the logs that belong to no

@@ -19,14 +19,14 @@ module Clerk
         # Raw HTTP response; suitable for custom response parsing
         field :raw_response, ::Faraday::Response
         # Success
-        field :user_list, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::User))
+        field :users, Crystalline::Nilable.new(Crystalline::Array.new(Models::Components::User))
 
         
-        def initialize(content_type:, status_code:, raw_response:, user_list: nil)
+        def initialize(content_type:, status_code:, raw_response:, users: nil)
           @content_type = content_type
           @status_code = status_code
           @raw_response = raw_response
-          @user_list = user_list
+          @users = users
         end
 
         
@@ -35,7 +35,7 @@ module Clerk
           return false unless @content_type == other.content_type
           return false unless @status_code == other.status_code
           return false unless @raw_response == other.raw_response
-          return false unless @user_list == other.user_list
+          return false unless @users == other.users
           true
         end
       end
