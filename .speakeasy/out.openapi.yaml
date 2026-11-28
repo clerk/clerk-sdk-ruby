@@ -356,6 +356,31 @@ paths:
           $ref: '#/components/responses/AuthenticationInvalid'
         '404':
           $ref: '#/components/responses/ResourceNotFound'
+  /clients/{client_id}/revoke:
+    post:
+      operationId: RevokeClient
+      x-speakeasy-group: clients
+      x-speakeasy-name-override: revoke
+      tags:
+        - Clients
+      summary: Revoke a client
+      description: |-
+        Permanently revokes a client in a development or production instance, including its active and pending sessions and its linked development browser tokens. Other clients are unaffected. Repeating the request is safe.
+        Returns the client with a non-null revoked_at timestamp and no current sessions. Revoked development browser tokens receive dev_browser_unauthenticated on authenticated Frontend API routes. Previously issued session JWTs remain valid until their expiration.
+        To sign in again, the browser must initialize a new client. Unlike Frontend API DELETE /client, this operation requires a backend credential and the target client ID, not the affected browser's cookies.
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Client-2'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
   /email_addresses:
     post:
       operationId: CreateEmailAddress
@@ -1988,6 +2013,35 @@ paths:
             Accepts up to 100 provider user IDs.
             Any provider user IDs not found are ignored.
           required: false
+        - name: metadata
+          in: query
+          required: false
+          schema:
+            type: array
+            maxItems: 10
+            items:
+              type: string
+          description: |-
+            Returns users matching every one of the given metadata filters. Repeat it once per filter; each value
+            is a JSON object with these fields:
+
+            - `scope` (required): `public`, `private` or `unsafe`, the metadata to match against.
+            - `key` (required): a dot-separated path into the metadata, e.g. `settings.theme`. Escape a
+              literal dot in a key as `\.`.
+            - `match` (required): `exists` matches users holding the key, whether it holds a value or nested
+              keys. `equals` matches the whole value, case-insensitively.
+            - `value`: required for `equals`; not allowed for `exists`.
+            - `negate`: `true` inverts the filter. With `exists` it returns the users who do not hold the
+              key. With `equals` it returns the users who hold the key with a different value.
+
+            Other fields are rejected.
+
+            With `metadata`, `offset` plus `limit` cannot exceed 1000, and `starting_after` is not accepted.
+            `GET /v1/users/count` does not accept `metadata`.
+
+            Results are eventually consistent. A user created, updated or deleted a short time ago may not
+            yet be reflected in which users are returned or in their order. To read a user right after
+            writing it, fetch it by ID.
         - $ref: '#/components/parameters/LimitParameter'
         - $ref: '#/components/parameters/OffsetParameter'
         - name: starting_after
@@ -2004,6 +2058,66 @@ paths:
           required: false
           schema:
             type: string
+        - name: pagination
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - offset
+              - cursor
+          description: |-
+            `cursor` pages by cursor, with any `order_by` and any filter, including `metadata`. The response is
+            then an object in place of the array of users: `data` holds the users, and `cursor` is
+            `{"starting_after": <string or null>, "ending_before": <string or null>, "has_next_page": <boolean>}`.
+            Pass its `starting_after` back as `starting_after` for the next page, or its `ending_before` back
+            as `ending_before` for the previous one, keeping every other parameter identical. Stop when
+            `has_next_page` is `false`; `ending_before` is null on the first page. In this mode
+            `starting_after` is that cursor, not a user ID; a cursor from a different `order_by` is rejected
+            with a 422, as is a non-zero `offset`.
+
+            Results in this mode are eventually consistent. A user created, updated or deleted a short time
+            ago may not yet be reflected in which users are returned, in their order, or in any count. To
+            read a user right after writing it, fetch it by ID.
+
+            Without this parameter the list pages by offset, and `starting_after` takes a user ID.
+            `offset` pages the same way, except that it does not accept `starting_after`.
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+          description: |-
+            With `pagination=cursor`, the `cursor.ending_before` of a previous response. Returns the page
+            before it, in the same order. Cannot be combined with `starting_after`, and a cursor from a
+            different `order_by` is rejected with a 422. A previous page can hold fewer than `limit` users
+            even when more precede it.
+        - name: remaining_count
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - '100'
+              - '1000'
+              - '10000'
+              - exact
+          description: |-
+            With `pagination=cursor`, also counts the users from the start of this page onward, this page
+            included. On the first page that is every user the request matches.
+
+            A number counts up to that many. The response's `cursor` then carries one of two
+            fields: `remaining_count_exact` when there are fewer users than the number given, and otherwise
+            `remaining_count_at_least`, set to that number. Larger numbers make the request slower.
+
+            `exact` counts them all, with no ceiling, and the `cursor` carries `remaining_count_exact`. The
+            count takes longer the more users match, and a request whose count does not finish in time is
+            rejected with a 422 `users_exact_count_timed_out`; retry it with a number, or without this
+            parameter.
+
+            The count is computed separately from the page and is subject to the same delay. Treat it as a
+            close estimate: it can differ slightly from the number of users that paging through the results
+            returns.
         - name: order_by
           in: query
           description: |-
@@ -2020,13 +2134,17 @@ paths:
           required: false
       responses:
         '200':
-          $ref: '#/components/responses/User.List'
+          $ref: '#/components/responses/User.ListOrCursorPage'
         '400':
           $ref: '#/components/responses/ClerkErrors'
         '401':
           $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/FeatureNotEnabled'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+        '503':
+          $ref: '#/components/responses/ClerkErrors'
     post:
       operationId: CreateUser
       x-speakeasy-group: users
@@ -2618,6 +2736,13 @@ paths:
                 sign_out_of_other_sessions:
                   type: boolean
                   description: Set to `true` to sign out the user from all their active sessions once their password is updated. This parameter can only be used when providing a `password`.
+                  nullable: true
+                reset_client_trust:
+                  type: boolean
+                  description: |-
+                    When set to `true`, also clears Device Trust for the user on every client, whether or not the instance has Device Trust enabled.
+                    The next sign-in by this user on any client counts as a new device: it can require a Device Trust challenge and trigger the new device email.
+                    This parameter can only be used when providing a `password` and setting `sign_out_of_other_sessions` to `true`, otherwise a 422 is returned and the user is not updated.
                   nullable: true
                 totp_secret:
                   type: string
@@ -3422,6 +3547,8 @@ paths:
           description: The user does not exist.
         '422':
           description: The provided password was incorrect.
+        '429':
+          description: Another password check for the user is in progress. Nothing was counted and the check can be retried.
         '500':
           $ref: '#/components/responses/ClerkErrors'
   /users/{user_id}/verify_totp:
@@ -3489,6 +3616,8 @@ paths:
           description: The user does not exist.
         '422':
           description: The provided TOTP or backup code was incorrect.
+        '429':
+          description: Another code check for the user is in progress. Nothing was counted and the check can be retried.
         '500':
           $ref: '#/components/responses/ClerkErrors'
   /users/{user_id}/mfa:
@@ -3804,7 +3933,10 @@ paths:
       x-speakeasy-group: users
       x-speakeasy-name-override: setPasswordCompromised
       summary: Set a user's password as compromised
-      description: Sets the given user's password as compromised. The user will be prompted to reset their password on their next sign-in.
+      description: |-
+        Sets the given user's password as compromised. The user will be prompted to reset their password on their next sign-in.
+        When the password was not already compromised, or when `revoke_all_sessions` is `true`, it also marks all of the user's devices as untrusted. On instances with Device Trust enabled, the next password sign-in on any of those devices can require a Device Trust challenge.
+        Calling it again on a password that is already compromised, without `revoke_all_sessions`, changes nothing.
       tags:
         - Users
       parameters:
@@ -4448,6 +4580,9 @@ paths:
                     sub:
                       type: string
                       description: The ID of the actor.
+                    type:
+                      type: string
+                      description: Optional actor type. The value `agent` is reserved for agent task sessions and is rejected.
                   required:
                     - sub
                   example:
@@ -9258,6 +9393,24 @@ paths:
                     The maximum duration that the session which will be created by the generated agent task should last.
                     By default, the duration of a session created via an agent task lasts 30 minutes.
                   default: 1800
+                session_restricted:
+                  type: boolean
+                  description: |-
+                    When true, the session created by the agent task can refresh only its own session token and read.
+                    Clerk's Frontend API refuses every other write from a browser client that holds the session,
+                    including touch, sign-out through the API (the browser's cookie sign-out GET stays allowed), profile and organization writes, sign-in and sign-up, and OAuth approval.
+                    It also refuses changing the session's workspace (its active organization).
+                    Expect an app that relies on those calls, such as the clerk-js touch and sign-out, to receive 403 errors.
+                    The session token's `agt` claim then carries `rst: true`; it omits `rst` for an unrestricted session.
+                  default: false
+                session_organization_id:
+                  type: string
+                  description: |-
+                    The organization the agent task session starts in. The user must be a member of it.
+                    If omitted, the user's last active organization is used, or the personal workspace
+                    when the user has none. When session_restricted is true, the session cannot use another
+                    workspace and ends when this one is no longer available, and creation fails when
+                    the result is the personal workspace but the user must choose an organization.
               required:
                 - on_behalf_of
                 - permissions
@@ -10614,13 +10767,19 @@ paths:
             type: string
         - name: subject
           in: query
-          description: Filter logs by subject.
+          description: |-
+            Filter logs by subject: the ID of the resource the event is about,
+            such as a user, an organization, or the instance when nothing more
+            specific applies.
           required: false
           schema:
             type: string
         - name: actor
           in: query
-          description: Filter logs by actor
+          description: |-
+            Filter logs by actor: the ID of whoever triggered the event, such as
+            a user, a Clerk Dashboard user, an instance key, or an API key. In
+            an impersonated session, the actor is the impersonated user.
           required: false
           schema:
             type: string
@@ -10767,9 +10926,8 @@ paths:
             `ip_address`, and `payload_filter` entries
             are combined: `all` (default) requires every supplied filter to
             match; `any` returns events that match at least one of the
-            supplied filters. `event_time_after`, `event_time_before`, and
-            `end_user_facing_only` are always ANDed with the (possibly OR-ed)
-            string filter group.
+            supplied filters. `event_time_after` and `event_time_before` are
+            always ANDed with the (possibly OR-ed) string filter group.
           required: false
           schema:
             type: string
@@ -10814,9 +10972,8 @@ paths:
             example: 1705319400000
         - name: end_user_facing_only
           in: query
-          description: |-
-            When set to true, only returns events that are marked as end-user facing.
-            When set to false or omitted, returns all events.
+          deprecated: true
+          description: Deprecated. This parameter has no effect.
           required: false
           schema:
             type: boolean
@@ -10867,9 +11024,9 @@ paths:
           description: |-
             Not allowed with `view=flat`. Group statuses to keep, e.g. `failed`,
             repeated for several (`status=failed&status=completed`). Keeps only
-            groups that concluded that way and drops the logs outside any
-            group. A status is a conclusion (`completed`, `failed`), so groups
-            that haven't concluded never match.
+            groups with one of those statuses and drops the logs outside any
+            group. A status is `completed`, `failed` or `abandoned`. A group
+            that is still going has no status and never matches.
           required: false
           style: form
           explode: true
@@ -10915,8 +11072,6 @@ paths:
         intersection across every matching event type, and `matched_event_types`
         lists what the intersection was computed over; per-type metadata
         (description, severity, docs_group) is present only for concrete types.
-
-        The response is the same for every instance.
       parameters:
         - name: type
           in: query
@@ -10925,7 +11080,7 @@ paths:
             The event type to describe: concrete (`sign_in.completed`),
             trailing-`*` wildcard (`sign_in.*`), or bare family name
             (`sign_in`). Unknown types return a 422. A bare `*` is not
-            accepted.
+            accepted; to list every event type, use `GET /logs/types`.
           schema:
             type: string
             example: sign_in.*
@@ -10938,6 +11093,32 @@ paths:
           $ref: '#/components/responses/AuthorizationInvalid'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /logs/types:
+    get:
+      operationId: ListLogTypes
+      x-speakeasy-group: logs
+      x-speakeasy-name-override: listTypes
+      tags:
+        - Logs
+      summary: List all log event types
+      description: |-
+        Returns every event type the instance can see in its logs, each with
+        its payload schema, sorted by `event_type`. Each entry is the same as
+        the response of `GET /logs/schemas` for that type.
+
+        Use it to discover the values that the `type` parameter of the list
+        endpoint accepts, and the payload fields each one carries. The list is
+        not paginated. Event types whose logs are enabled per instance (such as
+        `sms.*` and `email.*`) are listed only once enabled.
+      responses:
+        '200':
+          $ref: '#/components/responses/Log.TypeList'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
         '429':
           $ref: '#/components/responses/TooManyRequests'
   /logs/groups/{group_id}/events:
@@ -10964,8 +11145,10 @@ paths:
           in: query
           description: |-
             When the group started (Unix timestamp in milliseconds), the
-            `started_at` of the group item. It bounds the time range searched.
-          required: true
+            `started_at` of the group item. Optional: when omitted, it is
+            looked up from `group_id`, and a group that can't be found or is
+            past the retention window returns a 404.
+          required: false
           schema:
             type: integer
             format: int64
@@ -10994,6 +11177,8 @@ paths:
           $ref: '#/components/responses/AuthenticationInvalid'
         '403':
           $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
         '429':
@@ -11657,6 +11842,56 @@ paths:
           $ref: '#/components/responses/ResourceNotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /directories/{directory_id}/groups:
+    get:
+      operationId: ListDirectoryGroups
+      x-speakeasy-group: directories
+      x-speakeasy-name-override: listGroups
+      tags:
+        - Directories
+      summary: List directory groups
+      description: |-
+        Returns the groups available in a directory, as reported by the identity provider,
+        using cursor-based pagination.
+      parameters:
+        - name: directory_id
+          in: path
+          description: The ID of the directory.
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: |-
+            Applies a limit to the number of results returned.
+            Can be used for paginating the results together with `starting_after` or `ending_before`.
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 500
+        - name: starting_after
+          in: query
+          description: A cursor for pagination. Provide the `starting_after` cursor from a previous response to fetch the next page.
+          required: false
+          schema:
+            type: string
+        - name: ending_before
+          in: query
+          description: A cursor for pagination. Provide the `ending_before` cursor from a previous response to fetch the previous page.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/DirectoryGroup.List'
+        '401':
+          $ref: '#/components/responses/AuthenticationInvalid'
+        '403':
+          $ref: '#/components/responses/AuthorizationInvalid'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
   /directories/{directory_id}/groups/{group_id}:
     get:
       operationId: GetDirectoryGroup
@@ -12401,6 +12636,7 @@ paths:
                   nullable: true
                   minimum: 0
                   exclusiveMinimum: true
+                  maximum: 2147483647
               required:
                 - name
                 - subject
@@ -12959,6 +13195,7 @@ paths:
                   nullable: true
                   minimum: 0
                   exclusiveMinimum: true
+                  maximum: 2147483647
               additionalProperties: false
       responses:
         '200':
@@ -13638,6 +13875,7 @@ paths:
                   nullable: true
                   minimum: 0
                   exclusiveMinimum: true
+                  maximum: 2147483647
                 claims:
                   nullable: true
                 min_remaining_ttl_seconds:
@@ -14658,6 +14896,11 @@ components:
           type: string
           description: |
             String representing the identifier of the session.
+        revoked_at:
+          type: integer
+          format: int64
+          nullable: true
+          description: Unix timestamp in milliseconds when this client was revoked.
         session_ids:
           type: array
           items:
@@ -14731,6 +14974,137 @@ components:
           additionalProperties: true
       required:
         - errors
+    Session-2:
+      type: object
+      additionalProperties: false
+      properties:
+        object:
+          type: string
+          description: |
+            String representing the object's type. Objects of the same type share the same value.
+          enum:
+            - session
+        id:
+          type: string
+        user_id:
+          type: string
+        client_id:
+          type: string
+        actor:
+          type: object
+          nullable: true
+        status:
+          type: string
+          enum:
+            - active
+            - revoked
+            - ended
+            - expired
+            - removed
+            - abandoned
+            - replaced
+        last_active_organization_id:
+          type: string
+          nullable: true
+        last_active_at:
+          type: integer
+        latest_activity:
+          $ref: '#/components/schemas/SessionActivityResponse'
+        expire_at:
+          type: integer
+          format: int64
+          description: |
+            Unix timestamp in milliseconds of expiration.
+        abandon_at:
+          type: integer
+          format: int64
+          description: |
+            Unix timestamp in milliseconds of abandonment.
+        updated_at:
+          type: integer
+          format: int64
+          description: |
+            Unix timestamp of last update.
+        created_at:
+          type: integer
+          format: int64
+          description: |
+            Unix timestamp of creation.
+      required:
+        - object
+        - id
+        - user_id
+        - client_id
+        - status
+        - last_active_at
+        - expire_at
+        - abandon_at
+        - updated_at
+        - created_at
+    Client-2:
+      type: object
+      additionalProperties: false
+      properties:
+        object:
+          type: string
+          description: |
+            String representing the object's type. Objects of the same type share the same value.
+          enum:
+            - client
+        id:
+          type: string
+          description: |
+            String representing the identifier of the session.
+        revoked_at:
+          type: integer
+          format: int64
+          nullable: true
+          description: Unix timestamp in milliseconds when this client was revoked.
+        session_ids:
+          type: array
+          items:
+            type: string
+        sessions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Session-2'
+        sign_in_id:
+          type: string
+          nullable: true
+        sign_up_id:
+          type: string
+          nullable: true
+        last_active_session_id:
+          nullable: true
+          type: string
+          description: |
+            Last active session_id.
+        last_authentication_strategy:
+          nullable: true
+          type: string
+          description: |
+            The authentication strategy that was last used to authenticate the user on this client.
+        updated_at:
+          type: integer
+          format: int64
+          description: |
+            Unix timestamp of last update.
+        created_at:
+          type: integer
+          format: int64
+          description: |
+            Unix timestamp of creation.
+      required:
+        - object
+        - id
+        - session_ids
+        - sessions
+        - sign_in_id
+        - sign_up_id
+        - last_active_session_id
+        - last_authentication_strategy
+        - updated_at
+        - created_at
     verification_otp:
       x-speakeasy-name-override: OTP
       type: object
@@ -16316,6 +16690,42 @@ components:
         - mfa_enabled_at
         - mfa_disabled_at
         - legal_accepted_at
+    UserCursorPage:
+      type: object
+      description: A page of users from `GET /v1/users` with `pagination=cursor`.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        cursor:
+          type: object
+          description: Cursor information for pagination.
+          properties:
+            starting_after:
+              type: string
+              nullable: true
+              description: Cursor to fetch the next page of results. Pass it back as `starting_after` on the next request. Null on the last page.
+            ending_before:
+              type: string
+              nullable: true
+              description: Cursor to fetch the previous page of results. Pass it back as `ending_before` on the next request. Null on the first page.
+            has_next_page:
+              type: boolean
+              description: Whether more results can be fetched using the `starting_after` cursor.
+            remaining_count_exact:
+              type: integer
+              description: The number of users from the start of this page onward, this page included. Present when `remaining_count` was `exact`, or was a number and there are fewer users than it.
+            remaining_count_at_least:
+              type: integer
+              description: A lower bound on the number of users from the start of this page onward, this page included. Present when `remaining_count` was a number and the count stopped at it.
+          required:
+            - starting_after
+            - ending_before
+            - has_next_page
+      required:
+        - data
+        - cursor
     PasswordHasher:
       type: string
       description: |-
@@ -19636,6 +20046,15 @@ components:
           deprecated: true
           description: |
             A unique identifier for this agent task. Deprecated: use agent_task_id instead.
+        session_restricted:
+          type: boolean
+          description: |
+            Whether the agent task session is restricted. When true, the session can refresh only its own session token and read. Clerk's Frontend API refuses every other write from a browser client that holds the session, including touch, sign-out, profile and organization writes, sign-in and sign-up, and OAuth approval. It also refuses changing the session's workspace (its active organization).
+        session_organization_id:
+          type: string
+          nullable: true
+          description: |
+            The organization the agent task session starts in, and the only one a restricted session can use. Null means the personal workspace.
         url:
           type: string
           description: |
@@ -19645,6 +20064,7 @@ components:
         - agent_id
         - agent_task_id
         - task_id
+        - session_restricted
     WaitlistEntry:
       type: object
       additionalProperties: false
@@ -21038,7 +21458,12 @@ components:
           description: The timestamp when the event occurred (Unix timestamp in milliseconds).
         actor:
           type: string
-          description: The actor that performed the action (e.g., user ID).
+          description: |-
+            The ID of whoever triggered the event. `actor_type` says what kind
+            of principal it is: an end user, a Clerk Dashboard user, an
+            instance key, an API key, an integration, or Clerk itself. In an
+            impersonated session, it is the impersonated user and
+            `impersonator` holds whoever started the impersonation.
         actor_type:
           type: string
           description: |-
@@ -21058,7 +21483,15 @@ components:
               description: The user ID of the impersonator.
         subject:
           type: string
-          description: The subject of the event (e.g., user ID, resource ID).
+          description: |-
+            The ID of the resource the event is about, such as a user or an
+            organization. A change to a child record, such as an email address
+            or a membership, uses the ID of its parent user or organization.
+            Events that affect several resources use their lowest common
+            parent, and side effects use the primary resource's subject. The
+            instance ID is used when nothing more specific applies.
+            Events in the same flow can have different subjects; use
+            `group_id` to follow a flow.
         type:
           type: string
           description: The type of the log event.
@@ -21155,9 +21588,10 @@ components:
           type: string
           nullable: true
           description: |-
-            How the flow ended, `completed` or `failed`. Null while the flow
-            has not concluded: no status is recorded for a flow that is still
-            going or was given up.
+            How the flow ended: `completed`, `failed`, or `abandoned` when
+            nothing concluded it before its abandon deadline passed (a
+            sign-in or sign-up nobody finished). Null while the flow is still
+            going.
         status_label:
           type: string
           nullable: true
@@ -21294,6 +21728,31 @@ components:
         - object
         - event_type
         - fields
+    LogSchemaList:
+      type: object
+      description: |-
+        The schema of every log event type the instance can see, sorted by
+        `event_type`. Not paginated.
+      properties:
+        object:
+          type: string
+          description: String representing the object's type. Always "list".
+          example: list
+        data:
+          type: array
+          description: |-
+            One schema per concrete event type, each the same as the
+            response to a lookup by that type.
+          items:
+            $ref: '#/components/schemas/LogSchema'
+        total_count:
+          type: integer
+          format: int64
+          description: Total number of event type schemas in the list.
+      required:
+        - object
+        - data
+        - total_count
     LogWithPayload:
       description: |-
         A log entry with the full event payload. Returned by the
@@ -21710,6 +22169,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ClerkErrors'
+    Client-2:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Client-2'
     EmailAddress:
       description: Success
       content:
@@ -21833,14 +22298,22 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ClerkErrors'
-    User.List:
+    User.ListOrCursorPage:
       description: Success
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/User'
+            oneOf:
+              - type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              - $ref: '#/components/schemas/UserCursorPage'
+    FeatureNotEnabled:
+      description: Feature not enabled
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ClerkErrors'
     User:
       description: Success
       content:
@@ -21853,6 +22326,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/TotalCount'
+    User.List:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
     CommerceSubscription:
       description: A commerce subscription.
       content:
@@ -22027,12 +22508,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ActorToken'
-    FeatureNotEnabled:
-      description: Feature not enabled
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ClerkErrors'
     Domains:
       description: A list of domains
       content:
@@ -22589,6 +23064,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/LogSchema'
+    Log.TypeList:
+      description: Every log event type the instance can see, with its payload schema.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LogSchemaList'
     Log.Read:
       description: A single log entry with full payload.
       content:
@@ -22683,6 +23164,37 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Directory'
+    DirectoryGroup.List:
+      description: A cursor-paginated list of groups for a directory.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DirectoryGroup'
+              cursor:
+                type: object
+                description: Cursor information for pagination.
+                properties:
+                  starting_after:
+                    type: string
+                    nullable: true
+                    description: Cursor to fetch the next page of results. Pass it back as `starting_after` on the next request.
+                  ending_before:
+                    type: string
+                    nullable: true
+                    description: Cursor to fetch the previous page of results. Pass it back as `ending_before` on the next request.
+                  has_next_page:
+                    type: boolean
+                    description: Whether more results can be fetched using the `starting_after` cursor.
+                required:
+                  - has_next_page
+            required:
+              - data
+              - cursor
     DirectoryGroup:
       description: A group reported by the identity provider for a directory.
       content:

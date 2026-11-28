@@ -146,19 +146,34 @@ module Clerk
             response: http_response
           )
           response_data = http_response.env.response_body
-          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Crystalline::Array.new(Models::Components::User))
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Crystalline::Union.new(Crystalline::Array.new(Models::Components::User), Models::Components::UserCursorPage))
           response = Models::Operations::GetUserListResponse.new(
             status_code: http_response.status,
             content_type: content_type,
             raw_response: http_response,
-            user_list: obj
+            user_list_or_cursor_page: obj
           )
 
           return response
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['400', '401', '422'])
+      elsif Utils.match_status_code(http_response.status, ['400', '401', '403', '422'])
+        if Utils.match_content_type(content_type, 'application/json')
+          http_response = @sdk_configuration.hooks.after_success(
+            hook_ctx: SDKHooks::AfterSuccessHookContext.new(
+              hook_ctx: hook_ctx
+            ),
+            response: http_response
+          )
+          response_data = http_response.env.response_body
+          obj = Crystalline.unmarshal_json(::JSON.parse(response_data), Models::Errors::ClerkErrors)
+          obj.raw_response = http_response
+          raise obj
+        else
+          raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
+        end
+      elsif Utils.match_status_code(http_response.status, ['503'])
         if Utils.match_content_type(content_type, 'application/json')
           http_response = @sdk_configuration.hooks.after_success(
             hook_ctx: SDKHooks::AfterSuccessHookContext.new(
@@ -3872,7 +3887,7 @@ module Clerk
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['400', '403', '404', '422', '4XX'])
+      elsif Utils.match_status_code(http_response.status, ['400', '403', '404', '422', '429', '4XX'])
         raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
       elsif Utils.match_status_code(http_response.status, ['5XX'])
         raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
@@ -4031,7 +4046,7 @@ module Clerk
         else
           raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'Unknown content type received'
         end
-      elsif Utils.match_status_code(http_response.status, ['400', '403', '404', '422', '4XX'])
+      elsif Utils.match_status_code(http_response.status, ['400', '403', '404', '422', '429', '4XX'])
         raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
       elsif Utils.match_status_code(http_response.status, ['5XX'])
         raise ::Clerk::Models::Errors::APIError.new(status_code: http_response.status, body: http_response.env.response_body, raw_response: http_response), 'API error occurred'
@@ -5645,6 +5660,8 @@ module Clerk
     def set_password_compromised(user_id:, body: nil, retries: nil, timeout_ms: nil, http_headers: nil)
       # set_password_compromised - Set a user's password as compromised
       # Sets the given user's password as compromised. The user will be prompted to reset their password on their next sign-in.
+      # When the password was not already compromised, or when `revoke_all_sessions` is `true`, it also marks all of the user's devices as untrusted. On instances with Device Trust enabled, the next password sign-in on any of those devices can require a Device Trust challenge.
+      # Calling it again on a password that is already compromised, without `revoke_all_sessions`, changes nothing.
       request = Models::Operations::SetUserPasswordCompromisedRequest.new(
         user_id: user_id,
         body: body

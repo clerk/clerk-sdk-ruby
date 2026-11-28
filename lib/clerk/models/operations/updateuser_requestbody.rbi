@@ -40,6 +40,8 @@ class Clerk::Models::Operations::UpdateUserRequestBody
   def skip_password_checks=(str_); end
   def sign_out_of_other_sessions(); end
   def sign_out_of_other_sessions=(str_); end
+  def reset_client_trust(); end
+  def reset_client_trust=(str_); end
   def totp_secret(); end
   def totp_secret=(str_); end
   def delete_self_enabled(); end

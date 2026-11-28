@@ -12,9 +12,8 @@ module Clerk
       # `ip_address`, and `payload_filter` entries
       # are combined: `all` (default) requires every supplied filter to
       # match; `any` returns events that match at least one of the
-      # supplied filters. `event_time_after`, `event_time_before`, and
-      # `end_user_facing_only` are always ANDed with the (possibly OR-ed)
-      # string filter group.
+      # supplied filters. `event_time_after` and `event_time_before` are
+      # always ANDed with the (possibly OR-ed) string filter group.
       class FilterMatch
         include ::Crystalline::Enum
         enums do

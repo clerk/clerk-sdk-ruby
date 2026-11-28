@@ -38,9 +38,11 @@ module Clerk
         # The authentication strategy that was last used to authenticate the user on this client.
         #
         field :last_authentication_strategy, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('last_authentication_strategy'), required: true } }
+        # Unix timestamp in milliseconds when this client was revoked.
+        field :revoked_at, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('revoked_at') } }
 
         
-        def initialize(object:, id:, session_ids:, sessions:, updated_at:, created_at:, sign_in_id: nil, sign_up_id: nil, last_active_session_id: nil, last_authentication_strategy: nil)
+        def initialize(object:, id:, session_ids:, sessions:, updated_at:, created_at:, sign_in_id: nil, sign_up_id: nil, last_active_session_id: nil, last_authentication_strategy: nil, revoked_at: nil)
           @object = object
           @id = id
           @session_ids = session_ids
@@ -51,6 +53,7 @@ module Clerk
           @sign_up_id = sign_up_id
           @last_active_session_id = last_active_session_id
           @last_authentication_strategy = last_authentication_strategy
+          @revoked_at = revoked_at
         end
 
         
@@ -66,6 +69,7 @@ module Clerk
           return false unless @sign_up_id == other.sign_up_id
           return false unless @last_active_session_id == other.last_active_session_id
           return false unless @last_authentication_strategy == other.last_authentication_strategy
+          return false unless @revoked_at == other.revoked_at
           true
         end
       end

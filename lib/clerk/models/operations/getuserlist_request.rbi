@@ -52,8 +52,16 @@ class Clerk::Models::Operations::GetUserListRequest
   def provider=(str_); end
   def provider_user_id(); end
   def provider_user_id=(str_); end
+  def metadata(); end
+  def metadata=(str_); end
   def starting_after(); end
   def starting_after=(str_); end
+  def pagination(); end
+  def pagination=(str_); end
+  def ending_before(); end
+  def ending_before=(str_); end
+  def remaining_count(); end
+  def remaining_count=(str_); end
   def limit(); end
   def limit=(str_); end
   def offset(); end

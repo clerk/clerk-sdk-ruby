@@ -7,6 +7,7 @@
 * [~~list~~](#list) - List all clients :warning: **Deprecated**
 * [verify](#verify) - Verify a client
 * [get](#get) - Get a client
+* [revoke](#revoke) - Revoke a client
 
 ## ~~list~~
 
@@ -133,4 +134,45 @@ end
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
 | Models::Errors::ClerkErrors | 400, 401, 404               | application/json            |
+| Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
+
+## revoke
+
+Permanently revokes a client in a development or production instance, including its active and pending sessions and its linked development browser tokens. Other clients are unaffected. Repeating the request is safe.
+Returns the client with a non-null revoked_at timestamp and no current sessions. Revoked development browser tokens receive dev_browser_unauthenticated on authenticated Frontend API routes. Previously issued session JWTs remain valid until their expiration.
+To sign in again, the browser must initialize a new client. Unlike Frontend API DELETE /client, this operation requires a backend credential and the target client ID, not the affected browser's cookies.
+
+### Example Usage
+
+<!-- UsageSnippet language="ruby" operationID="RevokeClient" method="post" path="/clients/{client_id}/revoke" -->
+```ruby
+require 'clerk_sdk_ruby'
+
+Models = ::Clerk::Models
+s = ::Clerk::OpenAPIClient.new(
+  bearer_auth: '<YOUR_BEARER_TOKEN_HERE>'
+)
+res = s.clients.revoke(client_id: '<id>')
+
+unless res.client_2.nil?
+  # handle response
+end
+
+```
+
+### Parameters
+
+| Parameter          | Type               | Required           | Description        |
+| ------------------ | ------------------ | ------------------ | ------------------ |
+| `client_id`        | *::String*         | :heavy_check_mark: | N/A                |
+
+### Response
+
+**[Crystalline::Nilable.new(Models::Operations::RevokeClientResponse)](../../models/operations/revokeclientresponse.md)**
+
+### Errors
+
+| Error Type                  | Status Code                 | Content Type                |
+| --------------------------- | --------------------------- | --------------------------- |
+| Models::Errors::ClerkErrors | 401, 404                    | application/json            |
 | Errors::APIError            | 4XX, 5XX                    | \*/\*                       |
