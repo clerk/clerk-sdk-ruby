@@ -20,9 +20,20 @@ module Clerk
         field :id, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('id'), required: true } }
         # The timestamp when the event occurred (Unix timestamp in milliseconds).
         field :event_time, ::Integer, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('event_time'), required: true } }
-        # The actor that performed the action (e.g., user ID).
+        # The ID of whoever triggered the event. `actor_type` says what kind
+        # of principal it is: an end user, a Clerk Dashboard user, an
+        # instance key, an API key, an integration, or Clerk itself. In an
+        # impersonated session, it is the impersonated user and
+        # `impersonator` holds whoever started the impersonation.
         field :actor, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('actor'), required: true } }
-        # The subject of the event (e.g., user ID, resource ID).
+        # The ID of the resource the event is about, such as a user or an
+        # organization. A change to a child record, such as an email address
+        # or a membership, uses the ID of its parent user or organization.
+        # Events that affect several resources use their lowest common
+        # parent, and side effects use the primary resource's subject. The
+        # instance ID is used when nothing more specific applies.
+        # Events in the same flow can have different subjects; use
+        # `group_id` to follow a flow.
         field :subject, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('subject'), required: true } }
         # The type of the log event.
         field :type, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('type'), required: true } }

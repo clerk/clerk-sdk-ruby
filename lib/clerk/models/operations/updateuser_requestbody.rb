@@ -60,6 +60,10 @@ module Clerk
         field :skip_password_checks, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('skip_password_checks') } }
         # Set to `true` to sign out the user from all their active sessions once their password is updated. This parameter can only be used when providing a `password`.
         field :sign_out_of_other_sessions, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('sign_out_of_other_sessions') } }
+        # When set to `true`, also clears Device Trust for the user on every client, whether or not the instance has Device Trust enabled.
+        # The next sign-in by this user on any client counts as a new device: it can require a Device Trust challenge and trigger the new device email.
+        # This parameter can only be used when providing a `password` and setting `sign_out_of_other_sessions` to `true`, otherwise a 422 is returned and the user is not updated.
+        field :reset_client_trust, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('reset_client_trust') } }
         # In case TOTP is configured on the instance, you can provide the secret to enable it on the specific user without the need to reset it.
         field :totp_secret, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('totp_secret') } }
         # If true, the user can delete themselves with the Frontend API.
@@ -81,7 +85,7 @@ module Clerk
         field :notify_primary_email_address_changed, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('notify_primary_email_address_changed') } }
 
         
-        def initialize(password_digest: nil, password_hasher: nil, backup_codes: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, timezone: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, profile_image_id: nil, password: nil, skip_password_checks: nil, sign_out_of_other_sessions: nil, totp_secret: nil, delete_self_enabled: nil, create_organization_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil, notify_primary_email_address_changed: false)
+        def initialize(password_digest: nil, password_hasher: nil, backup_codes: nil, external_id: nil, first_name: nil, last_name: nil, locale: nil, timezone: nil, primary_email_address_id: nil, primary_phone_number_id: nil, primary_web3_wallet_id: nil, username: nil, profile_image_id: nil, password: nil, skip_password_checks: nil, sign_out_of_other_sessions: nil, reset_client_trust: nil, totp_secret: nil, delete_self_enabled: nil, create_organization_enabled: nil, legal_accepted_at: nil, skip_legal_checks: nil, create_organizations_limit: nil, created_at: nil, bypass_client_trust: nil, notify_primary_email_address_changed: false)
           @password_digest = password_digest
           @password_hasher = password_hasher
           @backup_codes = backup_codes
@@ -98,6 +102,7 @@ module Clerk
           @password = password
           @skip_password_checks = skip_password_checks
           @sign_out_of_other_sessions = sign_out_of_other_sessions
+          @reset_client_trust = reset_client_trust
           @totp_secret = totp_secret
           @delete_self_enabled = delete_self_enabled
           @create_organization_enabled = create_organization_enabled
@@ -128,6 +133,7 @@ module Clerk
           return false unless @password == other.password
           return false unless @skip_password_checks == other.skip_password_checks
           return false unless @sign_out_of_other_sessions == other.sign_out_of_other_sessions
+          return false unless @reset_client_trust == other.reset_client_trust
           return false unless @totp_secret == other.totp_secret
           return false unless @delete_self_enabled == other.delete_self_enabled
           return false unless @create_organization_enabled == other.create_organization_enabled

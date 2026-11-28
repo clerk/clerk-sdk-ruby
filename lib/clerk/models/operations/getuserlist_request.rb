@@ -103,6 +103,27 @@ module Clerk
         # Accepts up to 100 provider user IDs.
         # Any provider user IDs not found are ignored.
         field :provider_user_id, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'query_param': { 'field_name': 'provider_user_id', 'style': 'form', 'explode': true } }
+        # Returns users matching every one of the given metadata filters. Repeat it once per filter; each value
+        # is a JSON object with these fields:
+        #
+        # - `scope` (required): `public`, `private` or `unsafe`, the metadata to match against.
+        # - `key` (required): a dot-separated path into the metadata, e.g. `settings.theme`. Escape a
+        #   literal dot in a key as `\.`.
+        # - `match` (required): `exists` matches users holding the key, whether it holds a value or nested
+        #   keys. `equals` matches the whole value, case-insensitively.
+        # - `value`: required for `equals`; not allowed for `exists`.
+        # - `negate`: `true` inverts the filter. With `exists` it returns the users who do not hold the
+        #   key. With `equals` it returns the users who hold the key with a different value.
+        #
+        # Other fields are rejected.
+        #
+        # With `metadata`, `offset` plus `limit` cannot exceed 1000, and `starting_after` is not accepted.
+        # `GET /v1/users/count` does not accept `metadata`.
+        #
+        # Results are eventually consistent. A user created, updated or deleted a short time ago may not
+        # yet be reflected in which users are returned or in their order. To read a user right after
+        # writing it, fetch it by ID.
+        field :metadata, Crystalline::Nilable.new(Crystalline::Array.new(::String)), { 'query_param': { 'field_name': 'metadata', 'style': 'form', 'explode': true } }
         # A cursor for pagination: the `id` of the last user on the previous page. Returns the users that follow it.
         #
         # **Requires ordering by `created_at`** — that is, `order_by` omitted, or set to `created_at`, `+created_at`
@@ -112,6 +133,43 @@ module Clerk
         # Cannot be combined with a non-zero `offset`, which is also a 422. Keep every other parameter identical
         # across requests, and stop when a page returns fewer than `limit` users.
         field :starting_after, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'starting_after', 'style': 'form', 'explode': true } }
+        # `cursor` pages by cursor, with any `order_by` and any filter, including `metadata`. The response is
+        # then an object in place of the array of users: `data` holds the users, and `cursor` is
+        # `{"starting_after": <string or null>, "ending_before": <string or null>, "has_next_page": <boolean>}`.
+        # Pass its `starting_after` back as `starting_after` for the next page, or its `ending_before` back
+        # as `ending_before` for the previous one, keeping every other parameter identical. Stop when
+        # `has_next_page` is `false`; `ending_before` is null on the first page. In this mode
+        # `starting_after` is that cursor, not a user ID; a cursor from a different `order_by` is rejected
+        # with a 422, as is a non-zero `offset`.
+        #
+        # Results in this mode are eventually consistent. A user created, updated or deleted a short time
+        # ago may not yet be reflected in which users are returned, in their order, or in any count. To
+        # read a user right after writing it, fetch it by ID.
+        #
+        # Without this parameter the list pages by offset, and `starting_after` takes a user ID.
+        # `offset` pages the same way, except that it does not accept `starting_after`.
+        field :pagination, Crystalline::Nilable.new(Models::Operations::Pagination), { 'query_param': { 'field_name': 'pagination', 'style': 'form', 'explode': true } }
+        # With `pagination=cursor`, the `cursor.ending_before` of a previous response. Returns the page
+        # before it, in the same order. Cannot be combined with `starting_after`, and a cursor from a
+        # different `order_by` is rejected with a 422. A previous page can hold fewer than `limit` users
+        # even when more precede it.
+        field :ending_before, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'ending_before', 'style': 'form', 'explode': true } }
+        # With `pagination=cursor`, also counts the users from the start of this page onward, this page
+        # included. On the first page that is every user the request matches.
+        #
+        # A number counts up to that many. The response's `cursor` then carries one of two
+        # fields: `remaining_count_exact` when there are fewer users than the number given, and otherwise
+        # `remaining_count_at_least`, set to that number. Larger numbers make the request slower.
+        #
+        # `exact` counts them all, with no ceiling, and the `cursor` carries `remaining_count_exact`. The
+        # count takes longer the more users match, and a request whose count does not finish in time is
+        # rejected with a 422 `users_exact_count_timed_out`; retry it with a number, or without this
+        # parameter.
+        #
+        # The count is computed separately from the page and is subject to the same delay. Treat it as a
+        # close estimate: it can differ slightly from the number of users that paging through the results
+        # returns.
+        field :remaining_count, Crystalline::Nilable.new(Models::Operations::RemainingCount), { 'query_param': { 'field_name': 'remaining_count', 'style': 'form', 'explode': true } }
         # Applies a limit to the number of results returned.
         # Can be used for paginating the results together with `offset`.
         field :limit, Crystalline::Nilable.new(::Integer), { 'query_param': { 'field_name': 'limit', 'style': 'form', 'explode': true } }
@@ -129,7 +187,7 @@ module Clerk
         field :order_by, Crystalline::Nilable.new(::String), { 'query_param': { 'field_name': 'order_by', 'style': 'form', 'explode': true } }
 
         
-        def initialize(email_address: nil, phone_number: nil, external_id: nil, username: nil, web3_wallet: nil, user_id: nil, organization_id: nil, query: nil, email_address_query: nil, phone_number_query: nil, username_query: nil, name_query: nil, banned: nil, last_active_at_before: nil, last_active_at_after: nil, last_active_at_since: nil, created_at_before: nil, created_at_after: nil, last_sign_in_at_before: nil, last_sign_in_at_after: nil, provider: nil, provider_user_id: nil, starting_after: nil, limit: 10, offset: 0, order_by: '-created_at')
+        def initialize(email_address: nil, phone_number: nil, external_id: nil, username: nil, web3_wallet: nil, user_id: nil, organization_id: nil, query: nil, email_address_query: nil, phone_number_query: nil, username_query: nil, name_query: nil, banned: nil, last_active_at_before: nil, last_active_at_after: nil, last_active_at_since: nil, created_at_before: nil, created_at_after: nil, last_sign_in_at_before: nil, last_sign_in_at_after: nil, provider: nil, provider_user_id: nil, metadata: nil, starting_after: nil, pagination: nil, ending_before: nil, remaining_count: nil, limit: 10, offset: 0, order_by: '-created_at')
           @email_address = email_address
           @phone_number = phone_number
           @external_id = external_id
@@ -152,7 +210,11 @@ module Clerk
           @last_sign_in_at_after = last_sign_in_at_after
           @provider = provider
           @provider_user_id = provider_user_id
+          @metadata = metadata
           @starting_after = starting_after
+          @pagination = pagination
+          @ending_before = ending_before
+          @remaining_count = remaining_count
           @limit = limit
           @offset = offset
           @order_by = order_by
@@ -183,7 +245,11 @@ module Clerk
           return false unless @last_sign_in_at_after == other.last_sign_in_at_after
           return false unless @provider == other.provider
           return false unless @provider_user_id == other.provider_user_id
+          return false unless @metadata == other.metadata
           return false unless @starting_after == other.starting_after
+          return false unless @pagination == other.pagination
+          return false unless @ending_before == other.ending_before
+          return false unless @remaining_count == other.remaining_count
           return false unless @limit == other.limit
           return false unless @offset == other.offset
           return false unless @order_by == other.order_by

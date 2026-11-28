@@ -16,6 +16,10 @@ class Clerk::Models::Components::AgentTask
   def agent_task_id=(str_); end
   def task_id(); end
   def task_id=(str_); end
+  def session_restricted(); end
+  def session_restricted=(str_); end
   def url(); end
   def url=(str_); end
+  def session_organization_id(); end
+  def session_organization_id=(str_); end
 end

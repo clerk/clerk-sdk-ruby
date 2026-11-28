@@ -29,18 +29,33 @@ module Clerk
         # (primary or satellite); otherwise the redirect will be rejected when the
         # task ticket is consumed.
         field :redirect_url, ::String, { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('redirect_url'), required: true } }
+        # The organization the agent task session starts in. The user must be a member of it.
+        # If omitted, the user's last active organization is used, or the personal workspace
+        # when the user has none. When session_restricted is true, the session cannot use another
+        # workspace and ends when this one is no longer available, and creation fails when
+        # the result is the personal workspace but the user must choose an organization.
+        field :session_organization_id, Crystalline::Nilable.new(::String), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('session_organization_id') } }
         # The maximum duration that the session which will be created by the generated agent task should last.
         # By default, the duration of a session created via an agent task lasts 30 minutes.
         field :session_max_duration_in_seconds, Crystalline::Nilable.new(::Integer), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('session_max_duration_in_seconds') } }
+        # When true, the session created by the agent task can refresh only its own session token and read.
+        # Clerk's Frontend API refuses every other write from a browser client that holds the session,
+        # including touch, sign-out through the API (the browser's cookie sign-out GET stays allowed), profile and organization writes, sign-in and sign-up, and OAuth approval.
+        # It also refuses changing the session's workspace (its active organization).
+        # Expect an app that relies on those calls, such as the clerk-js touch and sign-out, to receive 403 errors.
+        # The session token's `agt` claim then carries `rst: true`; it omits `rst` for an unrestricted session.
+        field :session_restricted, Crystalline::Nilable.new(Crystalline::Boolean.new), { 'format_json': { 'letter_case': ::Clerk::Utils.field_name('session_restricted') } }
 
         
-        def initialize(on_behalf_of:, permissions:, agent_name:, task_description:, redirect_url:, session_max_duration_in_seconds: 1800)
+        def initialize(on_behalf_of:, permissions:, agent_name:, task_description:, redirect_url:, session_organization_id: nil, session_max_duration_in_seconds: 1800, session_restricted: false)
           @on_behalf_of = on_behalf_of
           @permissions = permissions
           @agent_name = agent_name
           @task_description = task_description
           @redirect_url = redirect_url
+          @session_organization_id = session_organization_id
           @session_max_duration_in_seconds = session_max_duration_in_seconds
+          @session_restricted = session_restricted
         end
 
         
@@ -51,7 +66,9 @@ module Clerk
           return false unless @agent_name == other.agent_name
           return false unless @task_description == other.task_description
           return false unless @redirect_url == other.redirect_url
+          return false unless @session_organization_id == other.session_organization_id
           return false unless @session_max_duration_in_seconds == other.session_max_duration_in_seconds
+          return false unless @session_restricted == other.session_restricted
           true
         end
       end
